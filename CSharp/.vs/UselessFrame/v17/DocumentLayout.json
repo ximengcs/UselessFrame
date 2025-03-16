@@ -1,7 +1,49 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "E:\\Github\\Project\\UselessFrame\\CSharp\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{F5EE8BD6-52B9-411E-9F1C-9BDE6404D810}|..\\Test\\UselessFrameTest.csproj|e:\\github\\project\\uselessframe\\test\\unittest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|e:\\github\\project\\uselessframe\\csharp\\runtime\\imoduledriver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\imoduledriver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|e:\\github\\project\\uselessframe\\csharp\\runtime\\moduledriver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\moduledriver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|e:\\github\\project\\uselessframe\\csharp\\runtime\\collection\\modulecollection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\collection\\modulecollection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|e:\\github\\project\\uselessframe\\csharp\\runtime\\modulebase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\modulebase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|e:\\github\\project\\uselessframe\\csharp\\runtime\\moduleattribute.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\moduleattribute.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|e:\\github\\project\\uselessframe\\csharp\\runtime\\imodule.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\imodule.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|e:\\github\\project\\uselessframe\\csharp\\runtime\\collection\\modulecollection.enumerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\collection\\modulecollection.enumerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F5EE8BD6-52B9-411E-9F1C-9BDE6404D810}|..\\Test\\UselessFrameTest.csproj|e:\\github\\project\\uselessframe\\test\\modules\\testmodule1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F5EE8BD6-52B9-411E-9F1C-9BDE6404D810}|..\\Test\\UselessFrameTest.csproj|e:\\github\\project\\uselessframe\\test\\modules\\testmodule2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|e:\\github\\project\\uselessframe\\csharp\\runtime\\diagnotics\\log.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\diagnotics\\log.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 1,
@@ -9,11 +51,154 @@
       "DocumentGroups": [
         {
           "DockedHeight": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 4,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ModuleDriver.cs",
+              "DocumentMoniker": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\ModuleDriver.cs",
+              "RelativeDocumentMoniker": "Runtime\\ModuleDriver.cs",
+              "ToolTip": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\ModuleDriver.cs",
+              "RelativeToolTip": "Runtime\\ModuleDriver.cs",
+              "ViewState": "AQIAABUAAAAAAAAAAAAowCgAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T09:44:52.579Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "IModuleDriver.cs",
+              "DocumentMoniker": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\IModuleDriver.cs",
+              "RelativeDocumentMoniker": "Runtime\\IModuleDriver.cs",
+              "ToolTip": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\IModuleDriver.cs",
+              "RelativeToolTip": "Runtime\\IModuleDriver.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T09:41:28.776Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "TestModule2.cs",
+              "DocumentMoniker": "E:\\Github\\Project\\UselessFrame\\Test\\Modules\\TestModule2.cs",
+              "RelativeDocumentMoniker": "..\\Test\\Modules\\TestModule2.cs",
+              "ToolTip": "E:\\Github\\Project\\UselessFrame\\Test\\Modules\\TestModule2.cs",
+              "RelativeToolTip": "..\\Test\\Modules\\TestModule2.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T09:36:40.956Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "TestModule1.cs",
+              "DocumentMoniker": "E:\\Github\\Project\\UselessFrame\\Test\\Modules\\TestModule1.cs",
+              "RelativeDocumentMoniker": "..\\Test\\Modules\\TestModule1.cs",
+              "ToolTip": "E:\\Github\\Project\\UselessFrame\\Test\\Modules\\TestModule1.cs",
+              "RelativeToolTip": "..\\Test\\Modules\\TestModule1.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAuwAsAAAA4AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T09:31:10.961Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UnitTest1.cs",
+              "DocumentMoniker": "E:\\Github\\Project\\UselessFrame\\Test\\UnitTest1.cs",
+              "RelativeDocumentMoniker": "..\\Test\\UnitTest1.cs",
+              "ToolTip": "E:\\Github\\Project\\UselessFrame\\Test\\UnitTest1.cs",
+              "RelativeToolTip": "..\\Test\\UnitTest1.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAADwvwsAAAAdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T09:30:15.146Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ModuleCollection.Enumerator.cs",
+              "DocumentMoniker": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\Collection\\ModuleCollection.Enumerator.cs",
+              "RelativeDocumentMoniker": "Runtime\\Collection\\ModuleCollection.Enumerator.cs",
+              "ToolTip": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\Collection\\ModuleCollection.Enumerator.cs",
+              "RelativeToolTip": "Runtime\\Collection\\ModuleCollection.Enumerator.cs",
+              "ViewState": "AQIAABkAAAAAAAAAAAAMwB8AAAAhAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T09:16:17.139Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "IModule.cs",
+              "DocumentMoniker": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\IModule.cs",
+              "RelativeDocumentMoniker": "Runtime\\IModule.cs",
+              "ToolTip": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\IModule.cs",
+              "RelativeToolTip": "Runtime\\IModule.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAuwAQAAAAcAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T09:03:10.467Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ModuleBase.cs",
+              "DocumentMoniker": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\ModuleBase.cs",
+              "RelativeDocumentMoniker": "Runtime\\ModuleBase.cs",
+              "ToolTip": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\ModuleBase.cs",
+              "RelativeToolTip": "Runtime\\ModuleBase.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAADoAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T08:59:49.166Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Log.cs",
+              "DocumentMoniker": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\Diagnotics\\Log.cs",
+              "RelativeDocumentMoniker": "Runtime\\Diagnotics\\Log.cs",
+              "ToolTip": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\Diagnotics\\Log.cs",
+              "RelativeToolTip": "Runtime\\Diagnotics\\Log.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAnAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T08:52:31.337Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ModuleAttribute.cs",
+              "DocumentMoniker": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\ModuleAttribute.cs",
+              "RelativeDocumentMoniker": "Runtime\\ModuleAttribute.cs",
+              "ToolTip": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\ModuleAttribute.cs",
+              "RelativeToolTip": "Runtime\\ModuleAttribute.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAuwAUAAAAsAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T08:48:56.565Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ModuleCollection.cs",
+              "DocumentMoniker": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\Collection\\ModuleCollection.cs",
+              "RelativeDocumentMoniker": "Runtime\\Collection\\ModuleCollection.cs",
+              "ToolTip": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\Collection\\ModuleCollection.cs",
+              "RelativeToolTip": "Runtime\\Collection\\ModuleCollection.cs",
+              "ViewState": "AQIAACkAAAAAAAAAAAAwwEYAAAAYAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T08:45:58.447Z",
+              "EditorCaption": ""
             }
           ]
         }
