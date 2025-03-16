@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34902.65
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UselessFrame", "UselessFrame.csproj", "{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UselessFrameTest", "..\Test\UselessFrameTest.csproj", "{F5EE8BD6-52B9-411E-9F1C-9BDE6404D810}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5EE8BD6-52B9-411E-9F1C-9BDE6404D810}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5EE8BD6-52B9-411E-9F1C-9BDE6404D810}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5EE8BD6-52B9-411E-9F1C-9BDE6404D810}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5EE8BD6-52B9-411E-9F1C-9BDE6404D810}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0CE0CD86-C361-49BD-B49C-AEFC10B479B8}
+	EndGlobalSection
+EndGlobal
