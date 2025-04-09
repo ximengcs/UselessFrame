@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="UniTask" Version="2.5.10" />
+    <PackageReference Include="UniTask" Version="2.5.10" Culture="neutral" PublicKeyToken="7a576c6e8fde454a" />
   </ItemGroup>
 
 </Project>
