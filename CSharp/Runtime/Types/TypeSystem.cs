@@ -14,6 +14,8 @@ namespace UselessFrame.Runtime.Types
         private ConcurrentDictionary<Type, TypeCollection> _classRegister;
         private ConcurrentDictionary<Type, ConstructorInfo[]> _constructors;
 
+        public IReadOnlyList<Type> Types => _types;
+
         public TypeSystem(ITypeFilter typeFilter)
         {
             InnerInit(typeFilter);

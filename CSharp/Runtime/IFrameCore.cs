@@ -1,5 +1,5 @@
-﻿
-using Cysharp.Threading.Tasks;
+﻿using System;
+using UselessFrame.Runtime.Types;
 
 namespace UselessFrame.Runtime
 {
@@ -7,8 +7,12 @@ namespace UselessFrame.Runtime
     {
         int Id { get; }
 
-        UniTask Start();
+        ITypeSystem TypeSystem { get; }
 
-        UniTask Destroy();
+        void Trigger<T>(object data);
+
+        void Trigger<T>(float data);
+
+        void AddHandler(Type handleType);
     }
 }

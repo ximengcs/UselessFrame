@@ -45,7 +45,7 @@ namespace UselessFrame.Runtime
 
             if (!moduleList.ContainsKey(id))
             {
-                ModuleBase module = (ModuleBase)_driver.TypeSystem.CreateInstance(type, null);
+                ModuleBase module = (ModuleBase)_driver.Core.TypeSystem.CreateInstance(type);
                 moduleList.Add(id, module);
                 _moduleList.Add(module);
                 return module;

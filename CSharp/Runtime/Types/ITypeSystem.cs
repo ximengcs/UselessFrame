@@ -6,6 +6,8 @@ namespace UselessFrame.Runtime.Types
 {
     public interface ITypeSystem
     {
+        IReadOnlyList<Type> Types { get; }
+
         object CreateInstance(Type type, params object[] args);
 
         ITypeCollection GetOrNewWithAttr(Type pType);

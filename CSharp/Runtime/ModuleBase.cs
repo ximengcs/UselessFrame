@@ -8,20 +8,20 @@ namespace UselessFrame.Runtime
     {
         private int _id;
         private bool _start;
-        private ModuleDriver _driver;
+        private IFrameCore _core;
 
         protected CancellationTokenSource _destroyTokenSource;
 
         public int Id => _id;
 
-        public IModuleDriver Driver => _driver;
+        public IFrameCore Core => _core;
 
-        internal void OnModuleInit(ModuleDriver driver, int id, object param)
+        internal void OnModuleInit(IFrameCore core, int id, object param)
         {
             Log.Debug($"{GetType().Name} OnInit");
             _id = id;
             _start = false;
-            _driver = driver;
+            _core = core;
             _destroyTokenSource = new CancellationTokenSource();
             OnInit(param);
         }

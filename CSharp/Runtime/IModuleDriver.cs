@@ -8,7 +8,7 @@ namespace UselessFrame.Runtime
     {
         IModule GetModule(Type type, int id = default);
 
-        UniTask<IModule> AddModule(Type type, object param);
+        UniTask<IModule> AddModule(Type type, object param = null);
 
         UniTask RemoveModule(Type type, int id = default);
     }

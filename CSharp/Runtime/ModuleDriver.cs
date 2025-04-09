@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using Cysharp.Threading.Tasks;
-using UselessFrame.Runtime.Types;
 using System.Collections.Generic;
 
 namespace UselessFrame.Runtime
@@ -9,20 +8,49 @@ namespace UselessFrame.Runtime
     internal class ModuleDriver : IModuleDriver
     {
         private bool _start;
+        private IFrameCore _core;
         private ModuleCollection _modules;
-        private ITypeSystem _typeSys;
+        private Dictionary<Type, ModuleHandle> m_ModulesWithEvents;
 
-        public ITypeSystem TypeSystem => _typeSys;
+        public IFrameCore Core => _core;
 
-        public ModuleDriver(ITypeSystem typeSys)
+        public ModuleDriver(IFrameCore core)
         {
-            _typeSys = typeSys;
+            _core = core;
             _modules = new ModuleCollection(this);
+            m_ModulesWithEvents = new Dictionary<Type, ModuleHandle>();
         }
 
-        public void Trigger<T>()
+        public void Trigger(Type handlerType, object data)
         {
+            if (m_ModulesWithEvents.TryGetValue(handlerType, out ModuleHandle handle))
+            {
+                foreach (IModule module in handle.Modules)
+                {
+                    handle.Handler.Handle(module, data);
+                }
+            }
+        }
 
+        public void Trigger(Type handlerType, float data)
+        {
+            if (m_ModulesWithEvents.TryGetValue(handlerType, out ModuleHandle handle))
+            {
+                foreach (IModule module in handle.Modules)
+                {
+                    handle.Handler.Handle(module, data);
+                }
+            }
+        }
+
+        public void AddHandle(IModuleHandler handler)
+        {
+            Type handleType = handler.Target;
+            if (!m_ModulesWithEvents.ContainsKey(handleType))
+            {
+                ModuleHandle handle = new ModuleHandle(handler, new List<IModule>());
+                m_ModulesWithEvents[handleType] = handle;
+            }
         }
 
         public IModule GetModule(Type type, int id)
@@ -43,7 +71,16 @@ namespace UselessFrame.Runtime
             ModuleBase module = _modules.Add(type, id);
             if (module != null)
             {
-                module.OnModuleInit(this, id, param);
+                module.OnModuleInit(_core, id, param);
+
+                foreach (var entry in m_ModulesWithEvents)
+                {
+                    if (entry.Key.IsAssignableFrom(type))
+                    {
+                        entry.Value.Modules.Add(module);
+                    }
+                }
+
                 if (_start)
                     await module.OnModuleStart();
             }
@@ -57,6 +94,13 @@ namespace UselessFrame.Runtime
             if (module)
             {
                 await module.OnModuleDestroy();
+                foreach (var entry in m_ModulesWithEvents)
+                {
+                    if (entry.Key.IsAssignableFrom(type))
+                    {
+                        entry.Value.Modules.Remove(module);
+                    }
+                }
             }
         }
 

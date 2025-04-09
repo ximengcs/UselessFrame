@@ -12,13 +12,31 @@ namespace UselessFrame.Runtime
         private TypeSystem _typeSystem;
         private ModuleDriver _driver;
 
+        public ITypeSystem TypeSystem => _typeSystem;
+
         public int Id => _id;
 
         public FrameCore(int id, FrameConfig config)
         {
             _id = id;
             _typeSystem = new TypeSystem(config.TypeFilter);
-            _driver = new ModuleDriver(_typeSystem);
+            _driver = new ModuleDriver(this);
+        }
+
+        public void Trigger<T>(object data)
+        {
+            _driver.Trigger(typeof(T), data);
+        }
+
+        public void Trigger<T>(float data)
+        {
+            _driver.Trigger(typeof(T), data);
+        }
+
+        public void AddHandler(Type handleType)
+        {
+            IModuleHandler handler = (IModuleHandler)TypeSystem.CreateInstance(handleType);
+            _driver.AddHandle(handler);
         }
 
         public async UniTask Start()
