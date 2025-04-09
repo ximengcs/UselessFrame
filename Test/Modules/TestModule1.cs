@@ -6,7 +6,7 @@ namespace UselessFrameTest.Modules
 {
     public class TestModule1 : ModuleBase
     {
-        public override void OnInit(object param)
+        protected override void OnInit(object param)
         {
             Log.Debug($"TestModule1 OnInit 2");
             Driver.AddModule(typeof(TestModule2), null);

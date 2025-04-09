@@ -16,7 +16,7 @@ namespace UselessFrame.Runtime
 
         public IModuleDriver Driver => _driver;
 
-        internal void OnInit(ModuleDriver driver, int id, object param)
+        internal void OnModuleInit(ModuleDriver driver, int id, object param)
         {
             Log.Debug($"{GetType().Name} OnInit");
             _id = id;
@@ -26,7 +26,7 @@ namespace UselessFrame.Runtime
             OnInit(param);
         }
 
-        public virtual void OnInit(object param) { }
+        protected virtual void OnInit(object param) { }
 
         internal async UniTask OnModuleStart()
         {

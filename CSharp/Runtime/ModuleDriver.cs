@@ -1,17 +1,28 @@
 ﻿using System;
 using System.Reflection;
 using Cysharp.Threading.Tasks;
+using UselessFrame.Runtime.Types;
+using System.Collections.Generic;
 
 namespace UselessFrame.Runtime
 {
-    public class ModuleDriver : IModuleDriver
+    internal class ModuleDriver : IModuleDriver
     {
         private bool _start;
         private ModuleCollection _modules;
+        private ITypeSystem _typeSys;
 
-        public ModuleDriver()
+        public ITypeSystem TypeSystem => _typeSys;
+
+        public ModuleDriver(ITypeSystem typeSys)
         {
-            _modules = new ModuleCollection();
+            _typeSys = typeSys;
+            _modules = new ModuleCollection(this);
+        }
+
+        public void Trigger<T>()
+        {
+
         }
 
         public IModule GetModule(Type type, int id)
@@ -32,7 +43,7 @@ namespace UselessFrame.Runtime
             ModuleBase module = _modules.Add(type, id);
             if (module != null)
             {
-                module.OnInit(this, id, param);
+                module.OnModuleInit(this, id, param);
                 if (_start)
                     await module.OnModuleStart();
             }
@@ -40,7 +51,7 @@ namespace UselessFrame.Runtime
             return module;
         }
 
-        public async UniTask Remove(Type type, int id)
+        public async UniTask RemoveModule(Type type, int id)
         {
             ModuleBase module = _modules.Remove(type, id);
             if (module)
@@ -55,12 +66,15 @@ namespace UselessFrame.Runtime
             {
                 await module.OnModuleStart();
             }
+            _start = true;
         }
 
         public async UniTask Destroy()
         {
-            foreach (ModuleBase module in _modules)
+            IEnumerator<ModuleBase> it = _modules.GetBackEnumerator();
+            while (it.MoveNext())
             {
+                ModuleBase module = it.Current;
                 await module.OnModuleDestroy();
             }
         }

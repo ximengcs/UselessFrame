@@ -1,8 +1,7 @@
-﻿
-using Cysharp.Threading.Tasks;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UselessFrame.Runtime.Diagnotics;
 using UselessFrame.Runtime.Pools;
 
@@ -10,12 +9,14 @@ namespace UselessFrame.Runtime
 {
     internal partial class ModuleCollection
     {
+        private ModuleDriver _driver;
         private Dictionary<Type, Dictionary<int, ModuleBase>> _modules;
         private List<ModuleBase> _moduleList;
         private PurePool<List<ModuleBase>> _listPool;
 
-        public ModuleCollection()
+        public ModuleCollection(ModuleDriver driver)
         {
+            _driver = driver;
             _moduleList = new List<ModuleBase>();
             _modules = new Dictionary<Type, Dictionary<int, ModuleBase>>();
             _listPool = new PurePool<List<ModuleBase>>();
@@ -44,7 +45,7 @@ namespace UselessFrame.Runtime
 
             if (!moduleList.ContainsKey(id))
             {
-                ModuleBase module = (ModuleBase)Activator.CreateInstance(type);
+                ModuleBase module = (ModuleBase)_driver.TypeSystem.CreateInstance(type, null);
                 moduleList.Add(id, module);
                 _moduleList.Add(module);
                 return module;
@@ -74,6 +75,11 @@ namespace UselessFrame.Runtime
         public IEnumerator GetEnumerator()
         {
             return new Enumerator(_listPool, _moduleList);
+        }
+
+        public IEnumerator<ModuleBase> GetBackEnumerator()
+        {
+            return new BackEnumerator(_listPool, _moduleList);
         }
     }
 }

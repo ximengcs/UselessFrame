@@ -7,7 +7,7 @@ namespace UselessFrame.Runtime
 {
     internal partial class ModuleCollection
     {
-        public struct Enumerator : IEnumerator<ModuleBase>
+        public struct BackEnumerator : IEnumerator<ModuleBase>
         {
             private PurePool<List<ModuleBase>> _pool;
             private List<ModuleBase> _list;
@@ -17,7 +17,7 @@ namespace UselessFrame.Runtime
 
             object IEnumerator.Current => _list[_index];
 
-            public Enumerator(PurePool<List<ModuleBase>> pool, List<ModuleBase> target)
+            public BackEnumerator(PurePool<List<ModuleBase>> pool, List<ModuleBase> target)
             {
                 _pool = pool;
                 _list = pool.Require();
@@ -26,7 +26,7 @@ namespace UselessFrame.Runtime
 
                 for (int i = target.Count - 1; i >= 0; i--)
                     _list.Add(target[i]);
-                _index = _list.Count;
+                _index = -1;
             }
 
             public void Dispose()
@@ -37,12 +37,12 @@ namespace UselessFrame.Runtime
 
             public bool MoveNext()
             {
-                return --_index >= 0;
+                return ++_index < _list.Count;
             }
 
             public void Reset()
             {
-                _index = _list.Count;
+                _index = -1;
             }
         }
     }

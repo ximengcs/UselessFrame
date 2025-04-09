@@ -1,6 +1,7 @@
 
 using Cysharp.Threading.Tasks;
 using UselessFrame.Runtime;
+using UselessFrame.Runtime.Configs;
 using UselessFrameTest.Modules;
 
 namespace UselessFrameTest
@@ -11,10 +12,10 @@ namespace UselessFrameTest
         [TestMethod]
         public async Task TestMethod1()
         {
-            ModuleDriver driver = new ModuleDriver();
-            await driver.AddModule(typeof(TestModule1), null);
-            await driver.Start();
-            await driver.Destroy();
+            IFrameCore core = FrameManager.Create(FrameConfig.Default);
+            await core.AddModule(typeof(TestModule1), null);
+            await core.Start();
+            await core.Destroy();
         }
     }
 }

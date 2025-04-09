@@ -1,203 +1,252 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "E:\\Github\\Project\\UselessFrame\\CSharp\\",
+  "WorkspaceRootPath": "D:\\Github\\UselessFrame\\CSharp\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F5EE8BD6-52B9-411E-9F1C-9BDE6404D810}|..\\Test\\UselessFrameTest.csproj|e:\\github\\project\\uselessframe\\test\\unittest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F5EE8BD6-52B9-411E-9F1C-9BDE6404D810}|..\\Test\\UselessFrameTest.csproj|d:\\github\\uselessframe\\test\\unittest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|e:\\github\\project\\uselessframe\\csharp\\runtime\\imoduledriver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\imoduledriver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\types\\typesystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\types\\typesystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|e:\\github\\project\\uselessframe\\csharp\\runtime\\moduledriver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\moduledriver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\moduledriver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|e:\\github\\project\\uselessframe\\csharp\\runtime\\collection\\modulecollection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\collection\\modulecollection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\collection\\modulecollection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|e:\\github\\project\\uselessframe\\csharp\\runtime\\modulebase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\modulebase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\collection\\modulecollection.backenumerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\collection\\modulecollection.backenumerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|e:\\github\\project\\uselessframe\\csharp\\runtime\\moduleattribute.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\moduleattribute.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|e:\\github\\project\\uselessframe\\csharp\\runtime\\imodule.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\imodule.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|e:\\github\\project\\uselessframe\\csharp\\runtime\\collection\\modulecollection.enumerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\collection\\modulecollection.enumerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\collection\\modulecollection.enumerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F5EE8BD6-52B9-411E-9F1C-9BDE6404D810}|..\\Test\\UselessFrameTest.csproj|e:\\github\\project\\uselessframe\\test\\modules\\testmodule1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\framecore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\framecore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F5EE8BD6-52B9-411E-9F1C-9BDE6404D810}|..\\Test\\UselessFrameTest.csproj|e:\\github\\project\\uselessframe\\test\\modules\\testmodule2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\iframecore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\iframecore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|e:\\github\\project\\uselessframe\\csharp\\runtime\\diagnotics\\log.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\diagnotics\\log.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\modulebase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\modulebase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\framemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\framemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\imoduledriver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\imoduledriver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\config\\frameconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\config\\frameconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\types\\itypefilter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\types\\itypefilter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\types\\itypesystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\types\\itypesystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
     {
-      "Orientation": 1,
+      "Orientation": 0,
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedHeight": 200,
+          "DockedWidth": 200,
           "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ModuleDriver.cs",
-              "DocumentMoniker": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\ModuleDriver.cs",
-              "RelativeDocumentMoniker": "Runtime\\ModuleDriver.cs",
-              "ToolTip": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\ModuleDriver.cs",
-              "RelativeToolTip": "Runtime\\ModuleDriver.cs",
-              "ViewState": "AQIAABUAAAAAAAAAAAAowCgAAAAJAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T09:44:52.579Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "IModuleDriver.cs",
-              "DocumentMoniker": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\IModuleDriver.cs",
-              "RelativeDocumentMoniker": "Runtime\\IModuleDriver.cs",
-              "ToolTip": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\IModuleDriver.cs",
-              "RelativeToolTip": "Runtime\\IModuleDriver.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T09:41:28.776Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "TestModule2.cs",
-              "DocumentMoniker": "E:\\Github\\Project\\UselessFrame\\Test\\Modules\\TestModule2.cs",
-              "RelativeDocumentMoniker": "..\\Test\\Modules\\TestModule2.cs",
-              "ToolTip": "E:\\Github\\Project\\UselessFrame\\Test\\Modules\\TestModule2.cs",
-              "RelativeToolTip": "..\\Test\\Modules\\TestModule2.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAFAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T09:36:40.956Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "TestModule1.cs",
-              "DocumentMoniker": "E:\\Github\\Project\\UselessFrame\\Test\\Modules\\TestModule1.cs",
-              "RelativeDocumentMoniker": "..\\Test\\Modules\\TestModule1.cs",
-              "ToolTip": "E:\\Github\\Project\\UselessFrame\\Test\\Modules\\TestModule1.cs",
-              "RelativeToolTip": "..\\Test\\Modules\\TestModule1.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAuwAsAAAA4AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T09:31:10.961Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "UnitTest1.cs",
-              "DocumentMoniker": "E:\\Github\\Project\\UselessFrame\\Test\\UnitTest1.cs",
-              "RelativeDocumentMoniker": "..\\Test\\UnitTest1.cs",
-              "ToolTip": "E:\\Github\\Project\\UselessFrame\\Test\\UnitTest1.cs",
-              "RelativeToolTip": "..\\Test\\UnitTest1.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAADwvwsAAAAdAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T09:30:15.146Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "ModuleCollection.Enumerator.cs",
-              "DocumentMoniker": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\Collection\\ModuleCollection.Enumerator.cs",
-              "RelativeDocumentMoniker": "Runtime\\Collection\\ModuleCollection.Enumerator.cs",
-              "ToolTip": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\Collection\\ModuleCollection.Enumerator.cs",
-              "RelativeToolTip": "Runtime\\Collection\\ModuleCollection.Enumerator.cs",
-              "ViewState": "AQIAABkAAAAAAAAAAAAMwB8AAAAhAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T09:16:17.139Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "IModule.cs",
-              "DocumentMoniker": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\IModule.cs",
-              "RelativeDocumentMoniker": "Runtime\\IModule.cs",
-              "ToolTip": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\IModule.cs",
-              "RelativeToolTip": "Runtime\\IModule.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAuwAQAAAAcAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T09:03:10.467Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "ModuleBase.cs",
-              "DocumentMoniker": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\ModuleBase.cs",
-              "RelativeDocumentMoniker": "Runtime\\ModuleBase.cs",
-              "ToolTip": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\ModuleBase.cs",
-              "RelativeToolTip": "Runtime\\ModuleBase.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAADoAAAAAAAAA",
+              "Title": "ModuleCollection.BackEnumerator.cs",
+              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Collection\\ModuleCollection.BackEnumerator.cs",
+              "RelativeDocumentMoniker": "Runtime\\Collection\\ModuleCollection.BackEnumerator.cs",
+              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Collection\\ModuleCollection.BackEnumerator.cs",
+              "RelativeToolTip": "Runtime\\Collection\\ModuleCollection.BackEnumerator.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T08:59:49.166Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "Log.cs",
-              "DocumentMoniker": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\Diagnotics\\Log.cs",
-              "RelativeDocumentMoniker": "Runtime\\Diagnotics\\Log.cs",
-              "ToolTip": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\Diagnotics\\Log.cs",
-              "RelativeToolTip": "Runtime\\Diagnotics\\Log.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAnAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T08:52:31.337Z",
+              "WhenOpened": "2025-04-09T06:20:21.177Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "ModuleAttribute.cs",
-              "DocumentMoniker": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\ModuleAttribute.cs",
-              "RelativeDocumentMoniker": "Runtime\\ModuleAttribute.cs",
-              "ToolTip": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\ModuleAttribute.cs",
-              "RelativeToolTip": "Runtime\\ModuleAttribute.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAuwAUAAAAsAAAA",
+              "Title": "ModuleCollection.Enumerator.cs",
+              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Collection\\ModuleCollection.Enumerator.cs",
+              "RelativeDocumentMoniker": "Runtime\\Collection\\ModuleCollection.Enumerator.cs",
+              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Collection\\ModuleCollection.Enumerator.cs",
+              "RelativeToolTip": "Runtime\\Collection\\ModuleCollection.Enumerator.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAAACwAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T08:48:56.565Z",
+              "WhenOpened": "2025-04-09T06:19:50.51Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
               "Title": "ModuleCollection.cs",
-              "DocumentMoniker": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\Collection\\ModuleCollection.cs",
+              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Collection\\ModuleCollection.cs",
               "RelativeDocumentMoniker": "Runtime\\Collection\\ModuleCollection.cs",
-              "ToolTip": "E:\\Github\\Project\\UselessFrame\\CSharp\\Runtime\\Collection\\ModuleCollection.cs",
+              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Collection\\ModuleCollection.cs",
               "RelativeToolTip": "Runtime\\Collection\\ModuleCollection.cs",
-              "ViewState": "AQIAACkAAAAAAAAAAAAwwEYAAAAYAAAA",
+              "ViewState": "AgIAAEYAAAAAAAAAAAAQwFQAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T08:45:58.447Z",
+              "WhenOpened": "2025-04-09T06:19:27.051Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "TypeSystem.cs",
+              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Types\\TypeSystem.cs",
+              "RelativeDocumentMoniker": "Runtime\\Types\\TypeSystem.cs",
+              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Types\\TypeSystem.cs",
+              "RelativeToolTip": "Runtime\\Types\\TypeSystem.cs",
+              "ViewState": "AgIAAGkAAAAAAAAAAAAUwHUAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T06:17:24.993Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UnitTest1.cs",
+              "DocumentMoniker": "D:\\Github\\UselessFrame\\Test\\UnitTest1.cs",
+              "RelativeDocumentMoniker": "..\\Test\\UnitTest1.cs",
+              "ToolTip": "D:\\Github\\UselessFrame\\Test\\UnitTest1.cs",
+              "RelativeToolTip": "..\\Test\\UnitTest1.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAEwAwAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T06:09:29.828Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "IFrameCore.cs",
+              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\IFrameCore.cs",
+              "RelativeDocumentMoniker": "Runtime\\IFrameCore.cs",
+              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\IFrameCore.cs",
+              "RelativeToolTip": "Runtime\\IFrameCore.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAuwAsAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T06:05:49.584Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "FrameManager.cs",
+              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\FrameManager.cs",
+              "RelativeDocumentMoniker": "Runtime\\FrameManager.cs",
+              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\FrameManager.cs",
+              "RelativeToolTip": "Runtime\\FrameManager.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAQwAwAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T06:05:20.573Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "FrameCore.cs",
+              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\FrameCore.cs",
+              "RelativeDocumentMoniker": "Runtime\\FrameCore.cs",
+              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\FrameCore.cs",
+              "RelativeToolTip": "Runtime\\FrameCore.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAAQwCQAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T06:02:35.064Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "ITypeFilter.cs",
+              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Types\\ITypeFilter.cs",
+              "RelativeDocumentMoniker": "Runtime\\Types\\ITypeFilter.cs",
+              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Types\\ITypeFilter.cs",
+              "RelativeToolTip": "Runtime\\Types\\ITypeFilter.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAQAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T03:23:55.227Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "FrameConfig.cs",
+              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Config\\FrameConfig.cs",
+              "RelativeDocumentMoniker": "Runtime\\Config\\FrameConfig.cs",
+              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Config\\FrameConfig.cs",
+              "RelativeToolTip": "Runtime\\Config\\FrameConfig.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAMAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T03:23:26.967Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ITypeSystem.cs",
+              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Types\\ITypeSystem.cs",
+              "RelativeDocumentMoniker": "Runtime\\Types\\ITypeSystem.cs",
+              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Types\\ITypeSystem.cs",
+              "RelativeToolTip": "Runtime\\Types\\ITypeSystem.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAYAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T03:13:29.803Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ModuleDriver.cs",
+              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\ModuleDriver.cs",
+              "RelativeDocumentMoniker": "Runtime\\ModuleDriver.cs",
+              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\ModuleDriver.cs",
+              "RelativeToolTip": "Runtime\\ModuleDriver.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-08T07:03:33.855Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "IModuleDriver.cs",
+              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\IModuleDriver.cs",
+              "RelativeDocumentMoniker": "Runtime\\IModuleDriver.cs",
+              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\IModuleDriver.cs",
+              "RelativeToolTip": "Runtime\\IModuleDriver.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAYAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-08T07:03:31.087Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ModuleBase.cs",
+              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\ModuleBase.cs",
+              "RelativeDocumentMoniker": "Runtime\\ModuleBase.cs",
+              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\ModuleBase.cs",
+              "RelativeToolTip": "Runtime\\ModuleBase.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAuwAYAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-08T07:02:18.103Z",
               "EditorCaption": ""
             }
           ]
