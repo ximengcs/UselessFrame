@@ -2,6 +2,7 @@
 using Cysharp.Threading.Tasks;
 using UselessFrame.Runtime.Types;
 using UselessFrame.Runtime.Configs;
+using UselessFrame.Runtime.Diagnotics;
 
 namespace UselessFrame.Runtime
 {
@@ -10,9 +11,12 @@ namespace UselessFrame.Runtime
         private int _id;
         private bool _starting;
         private TypeSystem _typeSystem;
+        private LogSystem _logSystem;
         private ModuleDriver _driver;
 
         public ITypeSystem TypeSystem => _typeSystem;
+
+        public ILogSystem Log => _logSystem;
 
         public int Id => _id;
 
@@ -20,6 +24,7 @@ namespace UselessFrame.Runtime
         {
             _id = id;
             _typeSystem = new TypeSystem(config.TypeFilter);
+            _logSystem = new LogSystem(this);
             _driver = new ModuleDriver(this);
         }
 

@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UselessFrame", "UselessFram
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UselessFrameTest", "..\Test\UselessFrameTest.csproj", "{F5EE8BD6-52B9-411E-9F1C-9BDE6404D810}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvHelper", "..\CsvHelper\CsvHelper.csproj", "{AF385DF6-CE0F-448D-87A6-67FAEAB36DDB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{F5EE8BD6-52B9-411E-9F1C-9BDE6404D810}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5EE8BD6-52B9-411E-9F1C-9BDE6404D810}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5EE8BD6-52B9-411E-9F1C-9BDE6404D810}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF385DF6-CE0F-448D-87A6-67FAEAB36DDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF385DF6-CE0F-448D-87A6-67FAEAB36DDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF385DF6-CE0F-448D-87A6-67FAEAB36DDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF385DF6-CE0F-448D-87A6-67FAEAB36DDB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

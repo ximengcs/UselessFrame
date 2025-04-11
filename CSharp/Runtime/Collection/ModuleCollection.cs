@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using UselessFrame.Runtime.Diagnotics;
 using UselessFrame.Runtime.Pools;
 
-namespace UselessFrame.Runtime
+namespace UselessFrame.Runtime.Collections
 {
     internal partial class ModuleCollection
     {
@@ -52,7 +50,6 @@ namespace UselessFrame.Runtime
             }
             else
             {
-                Log.Debug("contains same module");
                 return null;
             }
         }

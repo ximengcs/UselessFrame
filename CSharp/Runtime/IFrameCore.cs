@@ -1,4 +1,5 @@
 ﻿using System;
+using UselessFrame.Runtime.Diagnotics;
 using UselessFrame.Runtime.Types;
 
 namespace UselessFrame.Runtime
@@ -8,6 +9,8 @@ namespace UselessFrame.Runtime
         int Id { get; }
 
         ITypeSystem TypeSystem { get; }
+
+        ILogSystem Log { get; }
 
         void Trigger<T>(object data);
 

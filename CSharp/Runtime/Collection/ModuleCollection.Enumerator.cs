@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UselessFrame.Runtime.Pools;
 
-namespace UselessFrame.Runtime
+namespace UselessFrame.Runtime.Collections
 {
     internal partial class ModuleCollection
     {

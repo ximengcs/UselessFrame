@@ -9,4 +9,8 @@
     <PackageReference Include="UniTask" Version="2.5.10" Culture="neutral" PublicKeyToken="7a576c6e8fde454a" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Runtime\Parser\" />
+  </ItemGroup>
+
 </Project>

@@ -18,7 +18,6 @@ namespace UselessFrame.Runtime
 
         internal void OnModuleInit(IFrameCore core, int id, object param)
         {
-            Log.Debug($"{GetType().Name} OnInit");
             _id = id;
             _start = false;
             _core = core;
@@ -33,7 +32,6 @@ namespace UselessFrame.Runtime
             if (_start)
                 return;
 
-            Log.Debug($"{GetType().Name} OnStart");
             _start = true;
             await OnStart();
         }
@@ -42,11 +40,8 @@ namespace UselessFrame.Runtime
 
         internal async UniTask OnModuleDestroy()
         {
-            Log.Debug($"{GetType().Name} OnDestroy");
-
             if (_destroyTokenSource.IsCancellationRequested)
             {
-                Log.Debug($"module already destroy {GetType().Name}");
                 return;
             }
 
