@@ -30,9 +30,7 @@ namespace UselessFrameTest
         [TestMethod]
         public void TestListPool()
         {
-            ListPool<int> pool = new ListPool<int>();
-            List<int> t1 = new List<int>();
-            Console.WriteLine($"t1 {t1.Capacity}");
+
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿
-using System.Collections.Generic;
+using UselessFrame.Runtime.Collections;
 
 namespace UselessFrame.Runtime
 {

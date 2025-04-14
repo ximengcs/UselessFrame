@@ -12,6 +12,8 @@ namespace UselessFrame.Runtime.Pools
         private Dictionary<Type, IPool> m_PoolContainers;
         private IFrameCore _core;
 
+        public IFrameCore Core => _core;
+
         public PoolSystem(IFrameCore core)
         {
             _core = core;

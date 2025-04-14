@@ -3,6 +3,7 @@ using System.Reflection;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UselessFrame.Runtime.Collections;
+using ModuleList = UselessFrame.Runtime.Collections.List<UselessFrame.Runtime.IModule>;
 
 namespace UselessFrame.Runtime
 {
@@ -49,7 +50,7 @@ namespace UselessFrame.Runtime
             Type handleType = handler.Target;
             if (!m_ModulesWithEvents.ContainsKey(handleType))
             {
-                ModuleHandle handle = new ModuleHandle(handler, new List<IModule>());
+                ModuleHandle handle = new ModuleHandle(handler, new ModuleList());
                 m_ModulesWithEvents[handleType] = handle;
             }
         }

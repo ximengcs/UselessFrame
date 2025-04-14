@@ -14,7 +14,6 @@ namespace XFrame.Core
         private float m_FloatValue;
         private bool m_BoolValue;
         private IPool _pool;
-        private IPool<IParser<string>> _valuePool;
         private Dictionary<Type, IParser> m_Parsers;
 
         /// <summary>
@@ -42,7 +41,7 @@ namespace XFrame.Core
         int IPoolObject.PoolKey => default;
 
         /// <inheritdoc/>
-        public string MarkName { get; set; }
+        public string Name { get; set; }
 
         IPool IPoolObject.InPool
         {
@@ -88,7 +87,8 @@ namespace XFrame.Core
             if (m_Parsers.TryGetValue(type, out IParser parser))
             {
                 m_Parsers.Remove(type);
-                _valuePool.Release(parser);
+                IPool pool = _pool.System.GetOrNew(type);
+                pool.Release(parser);
             }
         }
 
@@ -107,7 +107,8 @@ namespace XFrame.Core
                 if (m_Parsers.TryGetValue(type, out IParser oldParser))
                 {
                     //Log.Warning(Log.XFrame, $"Universal parser already has parser {type.Name}. will release old.");
-                    _valuePool.Release(oldParser);
+                    IPool pool = _pool.System.GetOrNew(type);
+                    pool.Release(oldParser);
                     m_Parsers[type] = parser;
                 }
                 else
@@ -127,7 +128,8 @@ namespace XFrame.Core
         {
             if (!m_Parsers.TryGetValue(parserType, out IParser parser))
             {
-                parser = (IParser)References.Require(parserType);
+                IPool pool = _pool.System.GetOrNew(parserType);
+                parser = (IParser)pool.Require();
                 parser.Parse(m_Value);
                 m_Parsers.Add(parserType, parser);
             }
@@ -178,26 +180,34 @@ namespace XFrame.Core
             Parse(value);
         }
 
+        private IPool<IntParser> _intPool;
+        private IPool<FloatParser> _floatPool;
+        private IPool<BoolParser> _boolPool;
+
         /// <inheritdoc/>
         public string Parse(string pattern)
         {
             m_Value = pattern;
 
-            IntParser p1 = References.Require<IntParser>();
-            FloatParser p2 = References.Require<FloatParser>();
-            BoolParser p3 = References.Require<BoolParser>();
+            if (_intPool == null)
+            {
+                IPoolSystem poolSys = _pool.System;
+                _intPool = poolSys.GetOrNew<IntParser>();
+                _floatPool = poolSys.GetOrNew<FloatParser>();
+                _boolPool = poolSys.GetOrNew<BoolParser>();
+            }
 
-            p1.LogLv = LogLevel.Ignore;
-            p2.LogLv = LogLevel.Ignore;
-            p3.LogLv = LogLevel.Ignore;
+            IntParser p1 = _intPool.Require();
+            FloatParser p2 = _floatPool.Require();
+            BoolParser p3 = _boolPool.Require();
 
             m_IntValue = p1.Parse(m_Value);
             m_FloatValue = p2.Parse(m_Value);
             m_BoolValue = p3.Parse(m_Value);
 
-            References.Release(p1);
-            References.Release(p2);
-            References.Release(p3);
+            _intPool.Release(p1);
+            _floatPool.Release(p2);
+            _boolPool.Release(p3);
 
             return m_Value;
         }
@@ -254,7 +264,7 @@ namespace XFrame.Core
         /// </summary>
         public void Release()
         {
-            References.Release(this);
+            _pool.Release(this);
         }
 
         void IPoolObject.OnCreate()
@@ -270,7 +280,10 @@ namespace XFrame.Core
         void IPoolObject.OnRelease()
         {
             foreach (var item in m_Parsers)
-                References.Release(item.Value);
+            {
+                IPool pool = _pool.System.GetOrNew(item.Key);
+                pool.Release(item.Value);
+            }
             m_Parsers.Clear();
             m_Value = default;
             m_IntValue = default;
@@ -334,7 +347,7 @@ namespace XFrame.Core
         /// <param name="value">字符串值</param>
         public static implicit operator UniversalParser(string value)
         {
-            UniversalParser parser = References.Require<UniversalParser>();
+            UniversalParser parser = new UniversalParser();
             parser.InnerInitStringValue(value);
             return parser;
         }
@@ -354,7 +367,7 @@ namespace XFrame.Core
         /// <param name="value">解析器</param>
         public static implicit operator UniversalParser(int value)
         {
-            UniversalParser parser = References.Require<UniversalParser>();
+            UniversalParser parser = new UniversalParser();
             parser.InnerInitIntValue(value);
             return parser;
         }
@@ -374,7 +387,7 @@ namespace XFrame.Core
         /// <param name="value">解析器</param>
         public static implicit operator UniversalParser(float value)
         {
-            UniversalParser parser = References.Require<UniversalParser>();
+            UniversalParser parser = new UniversalParser();
             parser.InnerInitFloatValue(value);
             return parser;
         }
@@ -394,7 +407,7 @@ namespace XFrame.Core
         /// <param name="value">解析器</param>
         public static implicit operator UniversalParser(bool value)
         {
-            UniversalParser parser = References.Require<UniversalParser>();
+            UniversalParser parser = new UniversalParser();
             parser.InnerInitBoolValue(value);
             return parser;
         }

@@ -21,7 +21,7 @@ namespace XFrame.Core
         int IPoolObject.PoolKey => default;
 
         /// <inheritdoc/>
-        public string MarkName { get; set; }
+        public string Name { get; set; }
 
         IPool IPoolObject.InPool
         {

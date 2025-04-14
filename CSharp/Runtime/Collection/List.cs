@@ -17,9 +17,9 @@ namespace UselessFrame.Runtime.Collections
             remove => _onChange -= value;
         }
 
-        public T this[int index] 
-        { 
-            get => _list[index]; 
+        public T this[int index]
+        {
+            get => _list[index];
             set
             {
                 _list[index] = value;
@@ -36,6 +36,16 @@ namespace UselessFrame.Runtime.Collections
         public string Name { get; set; }
 
         IPool IPoolObject.InPool { get; set; }
+
+        public List()
+        {
+            _list = new System.Collections.Generic.List<T>();
+        }
+
+        public List(int capacity)
+        {
+            _list = new System.Collections.Generic.List<T>(capacity);
+        }
 
         public void Add(T item)
         {

@@ -42,17 +42,6 @@ namespace XFrame.Core
         public PairParser()
         {
             m_Split = SPLIT;
-            InnerInitParser();
-        }
-
-        /// <summary>
-        /// 构造器
-        /// </summary>
-        /// <param name="splitchar">键值分隔符</param>
-        public PairParser(char splitchar)
-        {
-            m_Split = splitchar;
-            InnerInitParser();
         }
 
         private void InnerInitParser()
@@ -148,7 +137,7 @@ namespace XFrame.Core
 
         void IPoolObject.OnCreate()
         {
-
+            InnerInitParser();
         }
 
         void IPoolObject.OnRequest()

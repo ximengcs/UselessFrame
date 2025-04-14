@@ -3,20 +3,23 @@
   "WorkspaceRootPath": "D:\\Github\\UselessFrame\\CSharp\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\parser\\pairparser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\parser\\pairparser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\moduledriver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\moduledriver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\parser\\pair.const.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\parser\\pair.const.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\collection\\csv.line.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\collection\\csv.line.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\parser\\names.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\parser\\names.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F5EE8BD6-52B9-411E-9F1C-9BDE6404D810}|..\\Test\\UselessFrameTest.csproj|d:\\github\\uselessframe\\test\\unittest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\parser\\mapparser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\parser\\mapparser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\pool\\poolsystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\pool\\poolsystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\parser\\floatparser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\parser\\floatparser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -31,53 +34,66 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "PairParser.cs",
-              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Parser\\PairParser.cs",
-              "RelativeDocumentMoniker": "Runtime\\Parser\\PairParser.cs",
-              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Parser\\PairParser.cs",
-              "RelativeToolTip": "Runtime\\Parser\\PairParser.cs",
-              "ViewState": "AgIAAEcAAAAAAAAAAAAUwFIAAAAhAAAAAAAAAA==",
+              "Title": "ModuleDriver.cs",
+              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\ModuleDriver.cs",
+              "RelativeDocumentMoniker": "Runtime\\ModuleDriver.cs",
+              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\ModuleDriver.cs",
+              "RelativeToolTip": "Runtime\\ModuleDriver.cs",
+              "ViewState": "AgIAACwAAAAAAAAAAADwvzYAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-14T08:18:19.21Z",
+              "WhenOpened": "2025-04-14T09:14:01.192Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Pair.Const.cs",
-              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Parser\\Pair.Const.cs",
-              "RelativeDocumentMoniker": "Runtime\\Parser\\Pair.Const.cs",
-              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Parser\\Pair.Const.cs",
-              "RelativeToolTip": "Runtime\\Parser\\Pair.Const.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAADwvwAAAAAAAAAAAAAAAA==",
+              "Title": "Csv.Line.cs",
+              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Collection\\Csv.Line.cs",
+              "RelativeDocumentMoniker": "Runtime\\Collection\\Csv.Line.cs",
+              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Collection\\Csv.Line.cs",
+              "RelativeToolTip": "Runtime\\Collection\\Csv.Line.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAQwBoAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-14T08:18:05.789Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "MapParser.cs",
-              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Parser\\MapParser.cs",
-              "RelativeDocumentMoniker": "Runtime\\Parser\\MapParser.cs",
-              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Parser\\MapParser.cs",
-              "RelativeToolTip": "Runtime\\Parser\\MapParser.cs",
-              "ViewState": "AgIAANIAAAAAAAAAAAAzwN8AAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-14T08:15:39.552Z",
+              "WhenOpened": "2025-04-14T09:12:23.993Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Names.cs",
-              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Parser\\Names.cs",
-              "RelativeDocumentMoniker": "Runtime\\Parser\\Names.cs",
-              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Parser\\Names.cs",
-              "RelativeToolTip": "Runtime\\Parser\\Names.cs",
-              "ViewState": "AgIAAMQAAAAAAAAAAAAiwNMAAAAkAAAAAAAAAA==",
+              "Title": "UnitTest1.cs",
+              "DocumentMoniker": "D:\\Github\\UselessFrame\\Test\\UnitTest1.cs",
+              "RelativeDocumentMoniker": "..\\Test\\UnitTest1.cs",
+              "ToolTip": "D:\\Github\\UselessFrame\\Test\\UnitTest1.cs",
+              "RelativeToolTip": "..\\Test\\UnitTest1.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAApwCAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-14T08:13:54.422Z",
+              "WhenOpened": "2025-04-14T09:12:16.962Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PoolSystem.cs",
+              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Pool\\PoolSystem.cs",
+              "RelativeDocumentMoniker": "Runtime\\Pool\\PoolSystem.cs",
+              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Pool\\PoolSystem.cs",
+              "RelativeToolTip": "Runtime\\Pool\\PoolSystem.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-14T09:12:04.44Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "FloatParser.cs",
+              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Parser\\FloatParser.cs",
+              "RelativeDocumentMoniker": "Runtime\\Parser\\FloatParser.cs",
+              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Parser\\FloatParser.cs",
+              "RelativeToolTip": "Runtime\\Parser\\FloatParser.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAQwBgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-14T09:11:56.229Z",
               "EditorCaption": ""
             }
           ]
