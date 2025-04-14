@@ -181,5 +181,12 @@ namespace XFrame.Core
         {
             return value != null ? value.m_Value : default;
         }
+
+        public static implicit operator EnumParser<T>(string valueStr)
+        {
+            EnumParser<T> parser = new EnumParser<T>();
+            parser.Parse(valueStr);
+            return parser;
+        }
     }
 }

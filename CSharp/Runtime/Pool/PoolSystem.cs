@@ -19,16 +19,18 @@ namespace UselessFrame.Runtime.Pools
             _core = core;
             m_ParamCache = new object[2];
             m_PoolContainers = new Dictionary<Type, IPool>();
+            ITypeSystem typeSys = _core.TypeSystem;
+            _defaultHelper = new DefaultPoolHelper(typeSys);
 
             Type helperType = typeof(IPoolHelper);
             Type helperPType = typeof(PoolHelperAttribute);
-            ITypeCollection typeSys = _core.TypeSystem.GetOrNewWithAttr(helperPType);
-            foreach (Type type in typeSys)
+            ITypeCollection typeSet = typeSys.GetOrNewWithAttr(helperPType);
+            foreach (Type type in typeSet)
             {
                 if (helperType.IsAssignableFrom(type))
                 {
-                    PoolHelperAttribute attr = (PoolHelperAttribute)_core.TypeSystem.GetAttribute(type, helperPType);
-                    IPoolHelper helper = _core.TypeSystem.CreateInstance(type) as IPoolHelper;
+                    PoolHelperAttribute attr = (PoolHelperAttribute)typeSys.GetAttribute(type, helperPType);
+                    IPoolHelper helper = typeSys.CreateInstance(type) as IPoolHelper;
                     InnerGetOrNew(attr.Target, helper);
                 }
             }

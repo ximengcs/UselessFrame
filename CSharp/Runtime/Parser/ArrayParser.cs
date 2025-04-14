@@ -8,7 +8,7 @@ namespace XFrame.Core
     /// 数组解析器
     /// </summary>
     /// <typeparam name="T">持有对象类型</typeparam>
-    public class ArrayParser<T> : IParser<List<T>> where T : IParser
+    public class ArrayParser<T> : IParser<List<T>> where T : IParser, new()
     {
         /// <summary>
         /// 默认元素分隔符
@@ -102,7 +102,7 @@ namespace XFrame.Core
             else
                 Value.Clear();
 
-            if (_childPool == null)
+            if (_pool != null && _childPool == null)
                 _childPool = _pool.System.GetOrNew<T>();
 
             if (!string.IsNullOrEmpty(pattern))
@@ -111,7 +111,11 @@ namespace XFrame.Core
                 Type type = typeof(T);
                 for (int i = 0; i < pArray.Length; i++)
                 {
-                    T parser = _childPool.Require();
+                    T parser;
+                    if (_childPool != null)
+                        parser = _childPool.Require();
+                    else
+                        parser = new T();
                     parser.Parse(pArray[i]);
                     Value.Add(parser);
                 }
@@ -258,8 +262,12 @@ namespace XFrame.Core
 
         void IPoolObject.OnRelease()
         {
-            foreach (T v in Value)
-                _childPool.Release(v);
+            if (_childPool != null)
+            {
+                foreach (T v in Value)
+                    _childPool.Release(v);
+            }
+            
             Value.Clear();
         }
 

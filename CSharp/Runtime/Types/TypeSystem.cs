@@ -112,11 +112,15 @@ namespace UselessFrame.Runtime.Types
                     {
                         while (i < paramInfos.Length)
                         {
-                            Type argType = args[i].GetType();
-                            Type paramType = paramInfos[i].ParameterType;
-                            if (argType != paramType && !paramType.IsAssignableFrom(argType))
+                            object v = args[i];
+                            if (v != null)
                             {
-                                break;
+                                Type argType = args[i].GetType();
+                                Type paramType = paramInfos[i].ParameterType;
+                                if (argType != paramType && !paramType.IsAssignableFrom(argType))
+                                {
+                                    break;
+                                }
                             }
                             i++;
                         }
