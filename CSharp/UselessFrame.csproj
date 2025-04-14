@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Runtime\Parser\" />
+    <ProjectReference Include="..\CsvHelper\CsvHelper.csproj" />
   </ItemGroup>
 
 </Project>

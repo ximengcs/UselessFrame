@@ -1,14 +1,15 @@
 ﻿using System.Globalization;
-using XFrame.Modules.Diagnotics;
-using XFrame.Modules.Pools;
+using UselessFrame.Runtime.Pools;
 
 namespace XFrame.Core
 {
     /// <summary>
     /// 整数解析器
     /// </summary>
-    public class IntParser : IParser<int>, ICanConfigLog
+    public class IntParser : IParser<int>
     {
+        private IPool _pool;
+
         /// <summary>
         /// 持有值
         /// </summary>
@@ -19,17 +20,18 @@ namespace XFrame.Core
         /// </summary>
         public int Value => m_Value;
 
-        /// <summary>
-        /// Log等级
-        /// </summary>
-        public LogLevel LogLv { get; set; }
-
         object IParser.Value => m_Value;
 
         int IPoolObject.PoolKey => default;
+
         /// <inheritdoc/>
-        public string MarkName { get; set; }
-        IPool IPoolObject.InPool { get; set; }
+        public string Name { get; set; }
+
+        IPool IPoolObject.InPool
+        {
+            get => _pool;
+            set => _pool = value;
+        }
 
         /// <summary>
         /// 解析
@@ -41,7 +43,7 @@ namespace XFrame.Core
             if (string.IsNullOrEmpty(pattern) || !TryParse(pattern, out m_Value))
             {
                 m_Value = default;
-                Log.Print(LogLv, Log.XFrame, $"IntParser parse failure. {pattern}");
+                throw new InputFormatException($"IntParser parse failure. {pattern}");
             }
 
             return m_Value;
@@ -97,7 +99,7 @@ namespace XFrame.Core
         /// </summary>
         public void Release()
         {
-            References.Release(this);
+            _pool.Release(this);
         }
 
         void IPoolObject.OnCreate()
@@ -107,7 +109,6 @@ namespace XFrame.Core
 
         void IPoolObject.OnRequest()
         {
-            LogLv = LogLevel.Warning;
             m_Value = default;
         }
 
@@ -172,7 +173,7 @@ namespace XFrame.Core
         /// <param name="value">待转换的值</param>
         public static implicit operator IntParser(int value)
         {
-            IntParser parser = References.Require<IntParser>();
+            IntParser parser = new IntParser();
             parser.m_Value = value;
             return parser;
         }

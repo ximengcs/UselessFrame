@@ -1,25 +1,20 @@
 ﻿using System.Globalization;
-using XFrame.Modules.Diagnotics;
-using XFrame.Modules.Pools;
+using UselessFrame.Runtime.Pools;
 
 namespace XFrame.Core
 {
     /// <summary>
     /// 浮点值解析器
     /// </summary>
-    public class FloatParser : IParser<float>, ICanConfigLog
+    public class FloatParser : IParser<float>
     {
         private float m_Value;
+        private IPool _pool;
 
         /// <summary>
         /// 解析到的值
         /// </summary>
         public float Value => m_Value;
-
-        /// <summary>
-        /// Log等级
-        /// </summary>
-        public LogLevel LogLv { get; set; }
 
         object IParser.Value => m_Value;
 
@@ -27,7 +22,12 @@ namespace XFrame.Core
 
         /// <inheritdoc/>
         public string MarkName { get; set; }
-        IPool IPoolObject.InPool { get; set; }
+
+        IPool IPoolObject.InPool
+        {
+            get => _pool;
+            set => _pool = value;
+        }
 
         /// <inheritdoc/>
         public float Parse(string pattern)
@@ -35,7 +35,7 @@ namespace XFrame.Core
             if (string.IsNullOrEmpty(pattern) || !TryParse(pattern, out m_Value))
             {
                 m_Value = default;
-                Log.Print(LogLv, Log.XFrame, $"FloatParser parse failure. {pattern}");
+                throw new InputFormatException($"FloatParser parse failure. {pattern}");
             }
 
             return m_Value;
@@ -101,7 +101,7 @@ namespace XFrame.Core
         /// </summary>
         public void Release()
         {
-            References.Release(this);
+            _pool.Release(this);
         }
 
         void IPoolObject.OnCreate()
@@ -112,7 +112,6 @@ namespace XFrame.Core
         void IPoolObject.OnRequest()
         {
             m_Value = default;
-            LogLv = LogLevel.Warning;
         }
 
         void IPoolObject.OnRelease()
@@ -176,7 +175,7 @@ namespace XFrame.Core
         /// <param name="value">浮点值</param>
         public static implicit operator FloatParser(float value)
         {
-            FloatParser parser = References.Require<FloatParser>();
+            FloatParser parser = new FloatParser();
             parser.m_Value = value;
             return parser;
         }

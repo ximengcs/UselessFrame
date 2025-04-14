@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
-using XFrame.Modules.Diagnotics;
-using XFrame.Modules.Pools;
+using UselessFrame.Runtime.Pools;
+using UselessFrame.Runtime.Types;
 
 namespace XFrame.Core
 {
@@ -9,9 +9,10 @@ namespace XFrame.Core
     /// 枚举解析器
     /// </summary>
     /// <typeparam name="T">枚举类型</typeparam>
-    public class EnumParser<T> : IParser<T>, ICanConfigLog where T : Enum
+    public class EnumParser<T> : IParser<T> where T : Enum
     {
-        private IPoolModule m_Module;
+        private IPoolSystem _poolSystem;
+        private IPool _pool;
         private T m_Value;
 
         /// <summary>
@@ -19,18 +20,18 @@ namespace XFrame.Core
         /// </summary>
         public T Value => m_Value;
 
-        /// <summary>
-        /// Log等级
-        /// </summary>
-        public LogLevel LogLv { get; set; }
-
         object IParser.Value => m_Value;
 
         int IPoolObject.PoolKey => default;
 
         /// <inheritdoc/>
-        public string MarkName { get; set; }
-        IPool IPoolObject.InPool { get; set; }
+        public string Name { get; set; }
+
+        IPool IPoolObject.InPool
+        {
+            get => _pool;
+            set => _pool = value;
+        }
 
         /// <summary>
         /// 解析值
@@ -46,7 +47,7 @@ namespace XFrame.Core
             else
             {
                 InnerSetDefault();
-                Log.Print(LogLv, Log.XFrame, $"EnumParser {typeof(T).Name} parse failure. {pattern}");
+                throw new InputFormatException($"EnumParser {typeof(T).Name} parse failure. {pattern}");
             }
 
             return m_Value;
@@ -54,7 +55,8 @@ namespace XFrame.Core
 
         private void InnerSetDefault()
         {
-            DefaultValueAttribute attr = m_Module.Domain.TypeModule.GetAttribute<DefaultValueAttribute>(typeof(T));
+            ITypeSystem typeSys = _poolSystem.Core.TypeSystem;
+            var attr = (DefaultValueAttribute)typeSys.GetAttribute(typeof(T), typeof(DefaultValueAttribute));
             if (attr != null)
                 m_Value = (T)attr.Value;
             else
@@ -71,7 +73,7 @@ namespace XFrame.Core
         /// </summary>
         public void Release()
         {
-            References.Release(this);
+            _pool.Release(this);
         }
 
         /// <summary>
@@ -106,12 +108,11 @@ namespace XFrame.Core
         void IPoolObject.OnCreate()
         {
             IPoolObject poolObj = this;
-            m_Module = poolObj.InPool.Module;
+            _poolSystem = poolObj.InPool.System;
         }
 
         void IPoolObject.OnRequest()
         {
-            LogLv = LogLevel.Warning;
             InnerSetDefault();
         }
 
@@ -167,7 +168,7 @@ namespace XFrame.Core
         /// <param name="value">枚举值</param>
         public static implicit operator EnumParser<T>(T value)
         {
-            EnumParser<T> parser = References.Require<EnumParser<T>>();
+            EnumParser<T> parser = new EnumParser<T>();
             parser.m_Value = value;
             return parser;
         }

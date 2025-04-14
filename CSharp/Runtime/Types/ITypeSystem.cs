@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace UselessFrame.Runtime.Types
 {
-    public interface ITypeSystem
+    public interface ITypeSystem : IFrameSystem
     {
         IReadOnlyList<Type> Types { get; }
 

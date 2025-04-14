@@ -1,6 +1,7 @@
 using UselessFrame.Runtime;
 using UselessFrame.Runtime.Configs;
 using UselessFrame.Runtime.Extensions;
+using UselessFrame.Runtime.Pools;
 using UselessFrame.Runtime.Types;
 using UselessFrameTest.Modules;
 
@@ -24,6 +25,14 @@ namespace UselessFrameTest
             }
             core.Trigger<IUpdater>(0.16f);
             await core.Destroy();
+        }
+
+        [TestMethod]
+        public void TestListPool()
+        {
+            ListPool<int> pool = new ListPool<int>();
+            List<int> t1 = new List<int>();
+            Console.WriteLine($"t1 {t1.Capacity}");
         }
     }
 }

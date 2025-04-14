@@ -3,32 +3,20 @@
   "WorkspaceRootPath": "D:\\Github\\UselessFrame\\CSharp\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\collection\\modulecollection.enumerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\collection\\modulecollection.enumerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\parser\\pairparser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\parser\\pairparser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\collection\\modulecollection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\collection\\modulecollection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\parser\\pair.const.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\parser\\pair.const.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\collection\\modulecollection.backenumerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\collection\\modulecollection.backenumerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\parser\\names.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\parser\\names.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\collection\\imultienumerable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\collection\\imultienumerable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\collection\\enumeratortype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\collection\\enumeratortype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\collection\\csv.line.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\collection\\csv.line.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\collection\\csv.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\collection\\csv.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|d:\\github\\uselessframe\\csharp\\runtime\\parser\\mapparser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8A07F1E-7CBE-42D3-8E26-C201CA49FE9A}|UselessFrame.csproj|solutionrelative:runtime\\parser\\mapparser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,97 +26,58 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "EnumeratorType.cs",
-              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Collection\\EnumeratorType.cs",
-              "RelativeDocumentMoniker": "Runtime\\Collection\\EnumeratorType.cs",
-              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Collection\\EnumeratorType.cs",
-              "RelativeToolTip": "Runtime\\Collection\\EnumeratorType.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAADwvwQAAAAKAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-11T07:45:51.228Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ModuleCollection.BackEnumerator.cs",
-              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Collection\\ModuleCollection.BackEnumerator.cs",
-              "RelativeDocumentMoniker": "Runtime\\Collection\\ModuleCollection.BackEnumerator.cs",
-              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Collection\\ModuleCollection.BackEnumerator.cs",
-              "RelativeToolTip": "Runtime\\Collection\\ModuleCollection.BackEnumerator.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAADwvwUAAAAqAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-11T07:45:23.082Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "IMultiEnumerable.cs",
-              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Collection\\IMultiEnumerable.cs",
-              "RelativeDocumentMoniker": "Runtime\\Collection\\IMultiEnumerable.cs",
-              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Collection\\IMultiEnumerable.cs",
-              "RelativeToolTip": "Runtime\\Collection\\IMultiEnumerable.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAqAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-11T07:45:15.72Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ModuleCollection.Enumerator.cs",
-              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Collection\\ModuleCollection.Enumerator.cs",
-              "RelativeDocumentMoniker": "Runtime\\Collection\\ModuleCollection.Enumerator.cs",
-              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Collection\\ModuleCollection.Enumerator.cs",
-              "RelativeToolTip": "Runtime\\Collection\\ModuleCollection.Enumerator.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAArAAAAAAAAAA==",
+              "Title": "PairParser.cs",
+              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Parser\\PairParser.cs",
+              "RelativeDocumentMoniker": "Runtime\\Parser\\PairParser.cs",
+              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Parser\\PairParser.cs",
+              "RelativeToolTip": "Runtime\\Parser\\PairParser.cs",
+              "ViewState": "AgIAAEcAAAAAAAAAAAAUwFIAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-11T07:42:12.313Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Csv.Line.cs",
-              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Collection\\Csv.Line.cs",
-              "RelativeDocumentMoniker": "Runtime\\Collection\\Csv.Line.cs",
-              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Collection\\Csv.Line.cs",
-              "RelativeToolTip": "Runtime\\Collection\\Csv.Line.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAqAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-11T07:34:02.146Z",
+              "WhenOpened": "2025-04-14T08:18:19.21Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "ModuleCollection.cs",
-              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Collection\\ModuleCollection.cs",
-              "RelativeDocumentMoniker": "Runtime\\Collection\\ModuleCollection.cs",
-              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Collection\\ModuleCollection.cs",
-              "RelativeToolTip": "Runtime\\Collection\\ModuleCollection.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAADwvwUAAAAqAAAAAAAAAA==",
+              "Title": "Pair.Const.cs",
+              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Parser\\Pair.Const.cs",
+              "RelativeDocumentMoniker": "Runtime\\Parser\\Pair.Const.cs",
+              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Parser\\Pair.Const.cs",
+              "RelativeToolTip": "Runtime\\Parser\\Pair.Const.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvwAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-11T07:32:55.874Z",
+              "WhenOpened": "2025-04-14T08:18:05.789Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Csv.cs",
-              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Collection\\Csv.cs",
-              "RelativeDocumentMoniker": "Runtime\\Collection\\Csv.cs",
-              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Collection\\Csv.cs",
-              "RelativeToolTip": "Runtime\\Collection\\Csv.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAqAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "MapParser.cs",
+              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Parser\\MapParser.cs",
+              "RelativeDocumentMoniker": "Runtime\\Parser\\MapParser.cs",
+              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Parser\\MapParser.cs",
+              "RelativeToolTip": "Runtime\\Parser\\MapParser.cs",
+              "ViewState": "AgIAANIAAAAAAAAAAAAzwN8AAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-11T07:32:42.448Z",
+              "WhenOpened": "2025-04-14T08:15:39.552Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Names.cs",
+              "DocumentMoniker": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Parser\\Names.cs",
+              "RelativeDocumentMoniker": "Runtime\\Parser\\Names.cs",
+              "ToolTip": "D:\\Github\\UselessFrame\\CSharp\\Runtime\\Parser\\Names.cs",
+              "RelativeToolTip": "Runtime\\Parser\\Names.cs",
+              "ViewState": "AgIAAMQAAAAAAAAAAAAiwNMAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-14T08:13:54.422Z",
               "EditorCaption": ""
             }
           ]

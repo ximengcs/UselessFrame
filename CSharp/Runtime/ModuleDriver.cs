@@ -2,6 +2,7 @@
 using System.Reflection;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using UselessFrame.Runtime.Collections;
 
 namespace UselessFrame.Runtime
 {
@@ -115,7 +116,7 @@ namespace UselessFrame.Runtime
 
         public async UniTask Destroy()
         {
-            IEnumerator<ModuleBase> it = _modules.GetBackEnumerator();
+            IEnumerator<ModuleBase> it = _modules.GetEnumerator(EnumeratorType.Front);
             while (it.MoveNext())
             {
                 ModuleBase module = it.Current;

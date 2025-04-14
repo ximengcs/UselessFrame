@@ -1,6 +1,5 @@
-﻿using XFrame.Modules.Pools;
-using System.Collections.Generic;
-using XFrame.Modules.Diagnotics;
+﻿using System.Collections.Generic;
+using UselessFrame.Runtime.Pools;
 
 namespace XFrame.Core
 {
@@ -10,7 +9,7 @@ namespace XFrame.Core
     /// 例:包含1-10(剔除3)，190-192，可写作 add#1-10@remove#3@add#190-192
     /// </para>
     /// </summary>
-    public partial class AreaParser : PoolObjectBase, IParser<IEnumerable<string>>
+    public partial class AreaParser : IParser<IEnumerable<string>>
     {
         /// <summary>
         /// 通用单项分割符
@@ -43,6 +42,7 @@ namespace XFrame.Core
         private HashSet<string> m_MapValues;
         private List<Info> m_AddInfos;
         private List<Info> m_RemoveInfos;
+        private IPool _pool;
 
         /// <summary>
         /// 单项分割符
@@ -73,6 +73,18 @@ namespace XFrame.Core
             }
         }
 
+        IEnumerable<string> IParser<IEnumerable<string>>.Value => m_Values;
+
+        int IPoolObject.PoolKey => default;
+
+        string IPoolObject.Name { get; set; }
+
+        IPool IPoolObject.InPool
+        {
+            get => _pool;
+            set => _pool = value;
+        }
+
         /// <summary>
         /// 检查单项文本项是否有效
         /// </summary>
@@ -83,33 +95,32 @@ namespace XFrame.Core
             return content.StartsWith(KEY1) || content.StartsWith(KEY2);
         }
 
-        /// <inheritdoc/>
-        protected internal override void OnCreateFromPool()
+        void IPoolObject.OnCreate()
         {
-            base.OnCreateFromPool();
             m_MapValues = new HashSet<string>();
             m_Values = new List<string>();
             m_AddInfos = new List<Info>();
             m_RemoveInfos = new List<Info>();
         }
 
-        /// <inheritdoc/>
-        protected internal override void OnRequestFromPool()
+        void IPoolObject.OnRequest()
         {
-            base.OnRequestFromPool();
             Split = SPLIT;
             Split2 = SPLIT2;
             Split3 = SPLIT3;
         }
 
-        /// <inheritdoc/>
-        protected internal override void OnReleaseFromPool()
+        void IPoolObject.OnRelease()
         {
-            base.OnReleaseFromPool();
             m_Values.Clear();
             m_MapValues.Clear();
             m_AddInfos.Clear();
             m_RemoveInfos.Clear();
+        }
+
+        void IPoolObject.OnDelete()
+        {
+
         }
 
         /// <inheritdoc/>
@@ -137,7 +148,7 @@ namespace XFrame.Core
                         }
                         else
                         {
-                            Log.Error(Log.XFrame, $"NumAreaParse Error {pattern}");
+                            throw new InputFormatException($"NumAreaParse Error {pattern}");
                         }
                     }
                     else
@@ -215,7 +226,8 @@ namespace XFrame.Core
         /// </summary>
         public void Release()
         {
-            References.Release(this);
+            if (_pool != null)
+                _pool.Release(this);
         }
 
         /// <summary>
@@ -235,6 +247,11 @@ namespace XFrame.Core
                 string strValue = obj as string;
                 return strValue == m_RawValue;
             }
+        }
+
+        IEnumerable<string> IParser<IEnumerable<string>>.Parse(string pattern)
+        {
+            throw new System.NotImplementedException();
         }
 
         /// <summary>
@@ -288,7 +305,7 @@ namespace XFrame.Core
         /// <param name="value"></param>
         public static implicit operator AreaParser(string value)
         {
-            AreaParser parser = References.Require<AreaParser>();
+            AreaParser parser = new AreaParser();
             parser.Parse(value);
             return parser;
         }

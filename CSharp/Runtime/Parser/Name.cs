@@ -1,6 +1,4 @@
-﻿using XFrame.Modules.Pools;
-using XFrame.Modules.Diagnotics;
-
+﻿
 namespace XFrame.Core
 {
     /// <summary>
@@ -34,15 +32,15 @@ namespace XFrame.Core
             {
                 IntOrHashParser key = AVATAR;
                 if (Has(key))
-                    Log.Error(Log.XFrame, $"Name format error, multi type 0");
+                    throw new InputFormatException($"Name format error, multi type 0");
                 kParser = key;
-                vParser = References.Require<UniversalParser>();
+                vParser = _valuePool.Require();
                 vParser.Parse(pItem[0]);
             }
             else
             {
-                kParser = References.Require<IntOrHashParser>();
-                vParser = References.Require<UniversalParser>();
+                kParser = _keyPool.Require();
+                vParser = _valuePool.Require();
                 kParser.Parse(pItem[0]);
                 vParser.Parse(pItem[1]);
             }
@@ -148,7 +146,7 @@ namespace XFrame.Core
         /// <returns>标识符解析器</returns>
         public static Name Create(string pattern)
         {
-            Name name = References.Require<Name>();
+            Name name = new Name();
             name.Split = SPLIT3;
             name.Split2 = SPLIT4;
             name.Parse(pattern);

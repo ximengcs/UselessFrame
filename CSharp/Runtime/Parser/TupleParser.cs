@@ -1,6 +1,4 @@
 ﻿using System;
-using XFrame.Modules.Pools;
-using XFrame.Modules.Serialize;
 
 namespace XFrame.Core
 {

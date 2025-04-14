@@ -6,5 +6,7 @@ namespace UselessFrame.Runtime.Collections
 {
     public enum EnumeratorType
     {
+        Front,
+        Back
     }
 }

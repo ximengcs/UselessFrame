@@ -1,32 +1,33 @@
-﻿using XFrame.Modules.Pools;
-using XFrame.Modules.Diagnotics;
+﻿
+using UselessFrame.Runtime.Pools;
 
 namespace XFrame.Core
 {
     /// <summary>
     /// 布尔值解析器
     /// </summary>
-    public class BoolParser : IParser<bool>, ICanConfigLog
+    public class BoolParser : IParser<bool>
     {
         private bool m_Value;
+        private IPool _pool;
 
         /// <summary>
         /// 值
         /// </summary>
         public bool Value => m_Value;
 
-        /// <summary>
-        /// Log级别
-        /// </summary>
-        public LogLevel LogLv { get; set; }
-
         object IParser.Value => m_Value;
 
         int IPoolObject.PoolKey => default;
 
         /// <inheritdoc/>
-        public string MarkName { get; set; }
-        IPool IPoolObject.InPool { get; set; }
+        public string Name { get; set; }
+
+        IPool IPoolObject.InPool
+        {
+            get => _pool;
+            set => _pool = value;
+        }
 
         /// <inheritdoc/>
         public bool Parse(string pattern)
@@ -34,7 +35,7 @@ namespace XFrame.Core
             if (string.IsNullOrEmpty(pattern) || !TryParse(pattern, out m_Value))
             {
                 m_Value = default;
-                Log.Print(LogLv, Log.XFrame, $"BoolParser parse failure. {pattern}");
+                throw new InputFormatException($"BoolParser parse failure. {pattern}");
             }
 
             return m_Value;
@@ -71,7 +72,7 @@ namespace XFrame.Core
         /// </summary>
         public void Release()
         {
-            References.Release(this);
+            _pool.Release(this);
         }
 
         /// <summary>
@@ -115,7 +116,6 @@ namespace XFrame.Core
 
         void IPoolObject.OnRelease()
         {
-            LogLv = LogLevel.Warning;
             m_Value = default;
         }
 
@@ -175,7 +175,7 @@ namespace XFrame.Core
         /// <param name="value">布尔值</param>
         public static implicit operator BoolParser(bool value)
         {
-            BoolParser parser = References.Require<BoolParser>();
+            BoolParser parser = new BoolParser();
             parser.m_Value = value;
             return parser;
         }

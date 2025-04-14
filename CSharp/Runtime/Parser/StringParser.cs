@@ -1,5 +1,5 @@
 ﻿
-using XFrame.Modules.Pools;
+using UselessFrame.Runtime.Pools;
 
 namespace XFrame.Core
 {
@@ -8,6 +8,8 @@ namespace XFrame.Core
     /// </summary>
     public class StringParser : IParser<string>
     {
+        private IPool _pool;
+
         /// <summary>
         /// 持有值
         /// </summary>
@@ -16,9 +18,15 @@ namespace XFrame.Core
         object IParser.Value => Value;
 
         int IPoolObject.PoolKey => default;
+
         /// <inheritdoc/>
-        public string MarkName { get; set; }
-        IPool IPoolObject.InPool { get; set; }
+        public string Name { get; set; }
+
+        IPool IPoolObject.InPool
+        {
+            get => _pool;
+            set => _pool = value;
+        }
 
         /// <summary>
         /// 解析
@@ -67,7 +75,7 @@ namespace XFrame.Core
         /// </summary>
         public void Release()
         {
-            References.Release(this);
+            _pool.Release(this);
         }
 
         void IPoolObject.OnCreate()
@@ -141,7 +149,7 @@ namespace XFrame.Core
         /// <param name="value">字符串</param>
         public static implicit operator StringParser(string value)
         {
-            StringParser parser = References.Require<StringParser>();
+            StringParser parser = new StringParser();
             parser.Value = string.IsNullOrEmpty(value) ? string.Empty : value;
             return parser;
         }

@@ -1,6 +1,6 @@
 ﻿using System;
-using XFrame.Modules.Pools;
 using System.Collections.Generic;
+using UselessFrame.Runtime.Pools;
 
 namespace XFrame.Core
 {
@@ -9,8 +9,12 @@ namespace XFrame.Core
     /// </summary>
     /// <typeparam name="K">键解析器</typeparam>
     /// <typeparam name="V">值解析器</typeparam>
-    public class MapParser<K, V> : PoolObjectBase, IParser<Dictionary<K, V>> where K : IParser where V : IParser
+    public class MapParser<K, V> : IParser<Dictionary<K, V>> where K : IParser where V : IParser
     {
+        protected IPool _pool;
+        protected IPool<K> _keyPool;
+        protected IPool<V> _valuePool;
+
         /// <summary>
         /// 默认列表项分隔符
         /// </summary>
@@ -28,7 +32,12 @@ namespace XFrame.Core
         public Dictionary<K, V> Value => m_Value;
 
         object IParser.Value => m_Value;
-        IPool IPoolObject.InPool { get; set; }
+
+        IPool IPoolObject.InPool
+        {
+            get => _pool;
+            set => _pool = value;
+        }
 
         /// <summary>
         /// 原始字符串
@@ -81,6 +90,12 @@ namespace XFrame.Core
         /// </summary>
         public int Count => m_Value.Count;
 
+        Dictionary<K, V> IParser<Dictionary<K, V>>.Value => m_Value;
+
+        int IPoolObject.PoolKey => default;
+
+        string IPoolObject.Name { get; set; }
+
         /// <summary>
         /// 构造器
         /// </summary>
@@ -89,20 +104,6 @@ namespace XFrame.Core
             m_Split = SPLIT;
             m_Split2 = SPLIT2;
             m_Value = new Dictionary<K, V>();
-        }
-
-        /// <summary>
-        /// 创建键值对解析器
-        /// </summary>
-        /// <param name="splitchar">键值分割符</param>
-        /// <param name="splitchar2">根据键检索值</param>
-        /// <returns>键值解析器</returns>
-        public static MapParser<K, V> Create(char splitchar, char splitchar2)
-        {
-            MapParser<K, V> parser = References.Require<MapParser<K, V>>();
-            parser.m_Split = splitchar;
-            parser.m_Split2 = splitchar2;
-            return parser;
         }
 
         /// <summary>
@@ -147,12 +148,19 @@ namespace XFrame.Core
         {
             m_Origin = pattern;
 
+            if (_keyPool == null)
+            {
+                Type kType = typeof(K);
+                Type vType = typeof(V);
+                _keyPool = (IPool<K>)_pool.System.GetOrNew(kType);
+                _valuePool = (IPool<V>)_pool.System.GetOrNew(vType);
+            }
+            
+
             if (!string.IsNullOrEmpty(pattern))
             {
                 pattern = pattern.Trim('{', '}');
                 string[] pMap = pattern.Split(m_Split);
-                Type kType = typeof(K);
-                Type vType = typeof(V);
                 for (int i = 0; i < pMap.Length; i++)
                 {
                     string pItemStr = pMap[i];
@@ -165,11 +173,11 @@ namespace XFrame.Core
                     }
                     else
                     {
-                        kParser = (K)References.Require(kType);
-                        vParser = (V)References.Require(vType);
+                        kParser = _keyPool.Require();
+                        vParser = _valuePool.Require();
                     }
                     if (m_Value.ContainsKey(kParser))
-                        References.Release(kParser);
+                        _keyPool.Release(kParser);
                     m_Value[kParser] = vParser;
                 }
             }
@@ -182,7 +190,7 @@ namespace XFrame.Core
         /// </summary>
         public void Release()
         {
-            References.Release(this);
+            _pool.Release(this);
         }
 
         /// <summary>
@@ -193,8 +201,8 @@ namespace XFrame.Core
         /// <param name="pItem">分隔到的字符串值</param>
         protected virtual void InnerParseItem(out K kParser, out V vParser, string[] pItem)
         {
-            kParser = References.Require<K>();
-            vParser = References.Require<V>();
+            kParser = _keyPool.Require();
+            vParser = _valuePool.Require();
             kParser.Parse(pItem[0]);
             if (pItem.Length > 1)
                 vParser.Parse(pItem[1]);
@@ -205,13 +213,20 @@ namespace XFrame.Core
             return Parse(pattern);
         }
 
-        /// <inheritdoc/>
-        protected internal override void OnReleaseFromPool()
+        void IPoolObject.OnRelease()
         {
-            base.OnReleaseFromPool();
-            foreach (IParser parser in m_Value.Values)
-                References.Release(parser);
+            foreach (var item in m_Value)
+            {
+                _keyPool.Release(item.Key);
+                _valuePool.Release(item.Value);
+            }
             m_Value.Clear();
+            OnRelease();
+        }
+
+        protected virtual void OnRelease()
+        {
+
         }
 
         /// <summary>
@@ -221,6 +236,30 @@ namespace XFrame.Core
         public override string ToString()
         {
             return m_Origin;
+        }
+
+        Dictionary<K, V> IParser<Dictionary<K, V>>.Parse(string pattern)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IPoolObject.OnCreate()
+        {
+            OnCreate();
+        }
+
+        protected virtual void OnCreate()
+        {
+        }
+
+        void IPoolObject.OnRequest()
+        {
+
+        }
+
+        void IPoolObject.OnDelete()
+        {
+
         }
     }
 }

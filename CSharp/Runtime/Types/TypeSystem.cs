@@ -7,6 +7,7 @@ namespace UselessFrame.Runtime.Types
 {
     internal class TypeSystem : ITypeSystem
     {
+        private FrameCore _core;
         private IReadOnlyList<Type> _types;
         private IReadOnlyList<Assembly> _assemblys;
         private IReadOnlyDictionary<Type, Attribute[]> _typesAllAttrs;
@@ -15,6 +16,8 @@ namespace UselessFrame.Runtime.Types
         private ConcurrentDictionary<Type, ConstructorInfo[]> _constructors;
 
         public IReadOnlyList<Type> Types => _types;
+
+        public IFrameCore Core => _core;
 
         public TypeSystem(ITypeFilter typeFilter)
         {

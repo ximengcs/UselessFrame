@@ -1,12 +1,10 @@
-﻿using XFrame.Modules.Pools;
-using XFrame.Modules.Diagnotics;
-
+﻿
 namespace XFrame.Core
 {
     /// <summary>
     /// 整形或哈希值解析器
     /// <para>
-    /// 当解析整形成功时结果为整形，失败时返回字符串哈希值
+    /// 当解析整形成功时结果为整型，失败时返回字符串哈希值
     /// </para>
     /// </summary>
     public class IntOrHashParser : IntParser
@@ -21,7 +19,7 @@ namespace XFrame.Core
             if (string.IsNullOrEmpty(pattern))
             {
                 m_Value = default;
-                Log.Print(LogLv, Log.XFrame, $"IntParser parse failure. {pattern}");
+                throw new InputFormatException($"IntParser parse failure. {pattern}");
             }
             else
             {
@@ -125,7 +123,7 @@ namespace XFrame.Core
         /// <param name="value">整形值</param>
         public static implicit operator IntOrHashParser(int value)
         {
-            IntOrHashParser parser = References.Require<IntOrHashParser>();
+            IntOrHashParser parser = new IntOrHashParser();
             parser.m_Value = value;
             parser.m_Origin = value.ToString();
             return parser;
@@ -146,7 +144,7 @@ namespace XFrame.Core
         /// <param name="value">解析器</param>
         public static implicit operator IntOrHashParser(string value)
         {
-            IntOrHashParser parser = References.Require<IntOrHashParser>();
+            IntOrHashParser parser = new IntOrHashParser();
             parser.Parse(value);
             return parser;
         }

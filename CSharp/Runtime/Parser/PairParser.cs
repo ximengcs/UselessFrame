@@ -1,6 +1,5 @@
 ﻿using System;
-using XFrame.Modules.Diagnotics;
-using XFrame.Modules.Pools;
+using UselessFrame.Runtime.Pools;
 
 namespace XFrame.Core
 {
@@ -9,30 +8,17 @@ namespace XFrame.Core
     /// </summary>
     /// <typeparam name="K">键解析器类型</typeparam>
     /// <typeparam name="V">值解析器类型</typeparam>
-    public class PairParser<K, V> : IParser<Pair<K, V>>, ICanConfigLog where K : IParser where V : IParser
+    public class PairParser<K, V> : IParser<Pair<K, V>> where K : IParser where V : IParser
     {
+        private IPool _pool;
+        private IPool<K> _keyPool;
+        private IPool<V> _valuePool;
+
         private const char SPLIT = '|';
         private char m_Split;
         private string m_Origin;
         private IParser m_KParser;
         private IParser m_VParser;
-
-        /// <summary>
-        /// Log等级
-        /// </summary>
-        public LogLevel LogLv
-        {
-            get => throw new NotSupportedException();
-            set
-            {
-                ICanConfigLog configer = m_KParser as ICanConfigLog;
-                if (configer != null)
-                    configer.LogLv = value;
-                configer = m_VParser as ICanConfigLog;
-                if (configer != null)
-                    configer.LogLv = value;
-            }
-        }
 
         /// <summary>
         /// 键值分割符
@@ -71,8 +57,11 @@ namespace XFrame.Core
 
         private void InnerInitParser()
         {
-            m_KParser = (IParser)References.Require(typeof(K));
-            m_VParser = (IParser)References.Require(typeof(V));
+            _keyPool = (IPool<K>)_pool.System.GetOrNew(typeof(K));
+            _valuePool = (IPool<V>)_pool.System.GetOrNew(typeof(V));
+
+            m_KParser = _keyPool.Require();
+            m_VParser = _valuePool.Require();
             Value = new Pair<K, V>((K)m_KParser, (V)m_VParser);
         }
 
@@ -86,9 +75,13 @@ namespace XFrame.Core
         int IPoolObject.PoolKey => default;
 
         /// <inheritdoc/>
-        public string MarkName { get; set; }
+        public string Name { get; set; }
 
-        IPool IPoolObject.InPool { get; set; }
+        IPool IPoolObject.InPool
+        {
+            get => _pool;
+            set => _pool = value;
+        }
 
         /// <inheritdoc/>
         public Pair<K, V> Parse(string pattern)
@@ -150,7 +143,7 @@ namespace XFrame.Core
         /// </summary>
         public void Release()
         {
-            References.Release(this);
+            _pool.Release(this);
         }
 
         void IPoolObject.OnCreate()
@@ -216,7 +209,7 @@ namespace XFrame.Core
         /// <param name="value">键值项</param>
         public static implicit operator PairParser<K, V>(Pair<K, V> value)
         {
-            PairParser<K, V> parser = References.Require<PairParser<K, V>>();
+            PairParser<K, V> parser = new PairParser<K, V>();
             parser.Value = value;
             return parser;
         }

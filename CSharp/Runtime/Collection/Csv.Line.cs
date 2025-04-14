@@ -1,4 +1,5 @@
 ﻿
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,11 +10,10 @@ namespace UselessFrame.Runtime.Collections
         /// <summary>
         /// 行数据类
         /// </summary>
-        public class Line : IXEnumerable<T>
+        public class Line : IEnumerable<T>
         {
             #region Inner Fields
-            private XItType m_ItType;
-            private T[] m_Data;
+            private List<T> m_Data;
             #endregion
 
             #region Constructor
@@ -23,7 +23,7 @@ namespace UselessFrame.Runtime.Collections
             /// <param name="count">列数</param>
             public Line(int count)
             {
-                m_Data = new T[count];
+                m_Data = new List<T>(count);
             }
             #endregion
 
@@ -31,7 +31,7 @@ namespace UselessFrame.Runtime.Collections
             /// <summary>
             /// 列数
             /// </summary>
-            public int Count => m_Data.Length;
+            public int Count => m_Data.Count;
 
             /// <summary>
             /// 获取或设置数据项
@@ -52,21 +52,12 @@ namespace UselessFrame.Runtime.Collections
             /// <returns>迭代器</returns>
             public IEnumerator<T> GetEnumerator()
             {
-                switch (m_ItType)
-                {
-                    case XItType.Forward: return new LineForwardIt(m_Data);
-                    case XItType.Backward: return new LineForwardIt(m_Data);
-                    default: return default;
-                }
+                return m_Data.GetEnumerator();
             }
 
-            /// <summary>
-            /// 设置迭代器类型
-            /// </summary>
-            /// <param name="type">迭代器类型</param>
-            public void SetIt(XItType type)
+            IEnumerator IEnumerable.GetEnumerator()
             {
-                m_ItType = type;
+                return GetEnumerator();
             }
             #endregion
             /// <summary>

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections;
-using XFrame.Modules.Pools;
-using XFrame.Modules.Diagnotics;
 using System.Collections.Generic;
+using UselessFrame.Runtime.Pools;
 
 namespace XFrame.Core
 {
@@ -73,10 +72,9 @@ namespace XFrame.Core
             return true;
         }
 
-        /// <inheritdoc/>>
-        protected internal override void OnCreateFromPool()
+        protected override void OnCreate()
         {
-            base.OnCreateFromPool();
+            base.OnCreate();
             Split = Name.SPLIT3;
             Split2 = Name.SPLIT4;
             m_Keys = new List<IntOrHashParser>();
@@ -84,10 +82,9 @@ namespace XFrame.Core
             m_ValueMap = new HashSet<string>();
         }
 
-        /// <inheritdoc/>>
-        protected internal override void OnReleaseFromPool()
+        protected override void OnRelease()
         {
-            base.OnReleaseFromPool();
+            base.OnRelease();
             m_Keys.Clear();
         }
 
@@ -99,15 +96,15 @@ namespace XFrame.Core
             {
                 IntOrHashParser key = Name.AVATAR;
                 if (Has(key))
-                    Log.Error(Log.XFrame, $"Name format error, multi type 0");
+                    throw new InputFormatException($"Name format error, multi type 0");
                 kParser = key;
-                vParser = References.Require<AreaParser>();
+                vParser = _valuePool.Require();
                 vParser.Parse(pItem[0]);
             }
             else
             {
-                kParser = References.Require<IntOrHashParser>();
-                vParser = References.Require<AreaParser>();
+                kParser = _keyPool.Require();
+                vParser = _valuePool.Require();
                 kParser.Parse(pItem[0]);
                 vParser.Parse(pItem[1]);
             }
@@ -212,7 +209,7 @@ namespace XFrame.Core
         /// <returns>解析器</returns>
         public static Names Create(string pattern)
         {
-            Names name = References.Require<Names>();
+            Names name = new Names();
             name.Split = Name.SPLIT3;
             name.Split2 = Name.SPLIT4;
             name.Parse(pattern);

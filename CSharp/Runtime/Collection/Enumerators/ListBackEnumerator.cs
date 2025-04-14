@@ -5,7 +5,7 @@ using UselessFrame.Runtime.Pools;
 
 namespace UselessFrame.Runtime.Collections
 {
-    public struct ListEnumerator<T> : IEnumerator<T>
+    public struct ListBackEnumerator<T> : IEnumerator<T>
     {
         private List<T> _list;
         private int _index;
@@ -16,7 +16,7 @@ namespace UselessFrame.Runtime.Collections
 
         object IEnumerator.Current => _list[_index];
 
-        public ListEnumerator(IList<T> target, bool clone = true, IPool<List<T>> pool = null)
+        public ListBackEnumerator(IList<T> target, bool clone = true, IPool<List<T>> pool = null)
         {
             _pool = pool;
             _list = pool.Require();
@@ -26,7 +26,7 @@ namespace UselessFrame.Runtime.Collections
             foreach (T item in _list)
                 _list.Add(item);
             _count = _list.Count;
-            _index = -1;
+            _index = _count;
         }
 
         public void Dispose()
@@ -42,12 +42,12 @@ namespace UselessFrame.Runtime.Collections
 
         public bool MoveNext()
         {
-            return ++_index < _count;
+            return --_index >= 0;
         }
 
         public void Reset()
         {
-            _index = -1;
+            _index = _count;
         }
     }
 }

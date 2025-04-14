@@ -1,6 +1,6 @@
 ﻿using System;
-using XFrame.Collections;
-using XFrame.Modules.Pools;
+using System.Collections.Generic;
+using UselessFrame.Runtime.Pools;
 
 namespace XFrame.Core
 {
@@ -8,7 +8,7 @@ namespace XFrame.Core
     /// 数组解析器
     /// </summary>
     /// <typeparam name="T">持有对象类型</typeparam>
-    public class ArrayParser<T> : IParser<XLinkList<T>> where T : IParser
+    public class ArrayParser<T> : IParser<List<T>> where T : IParser
     {
         /// <summary>
         /// 默认元素分隔符
@@ -16,6 +16,8 @@ namespace XFrame.Core
         public const char SPLIT = ',';
         private char m_Split;
         private string m_Origin;
+        private IPool _pool;
+        private IPool<T> _childPool;
 
         /// <summary>
         /// 元素数量
@@ -30,15 +32,20 @@ namespace XFrame.Core
         /// <summary>
         /// 获取元素列表
         /// </summary>
-        public XLinkList<T> Value { get; private set; }
+        public List<T> Value { get; private set; }
 
         object IParser.Value => Value;
 
         int IPoolObject.PoolKey => default;
 
         /// <inheritdoc/>
-        public string MarkName { get; set; }
-        IPool IPoolObject.InPool { get; set; }
+        public string Name { get; set; }
+
+        IPool IPoolObject.InPool
+        {
+            get => _pool;
+            set => _pool = value;
+        }
 
         /// <summary>
         /// 分割符
@@ -78,7 +85,8 @@ namespace XFrame.Core
         /// </summary>
         public void Release()
         {
-            References.Release(this);
+            if (_pool != null)
+                _pool.Release(this);
         }
 
         /// <summary>
@@ -86,13 +94,16 @@ namespace XFrame.Core
         /// </summary>
         /// <param name="pattern">文本</param>
         /// <returns>解析的元素列表</returns>
-        public XLinkList<T> Parse(string pattern)
+        public List<T> Parse(string pattern)
         {
             m_Origin = pattern;
             if (Value == null)
-                Value = new XLinkList<T>();
+                Value = new List<T>();
             else
                 Value.Clear();
+
+            if (_childPool == null)
+                _childPool = _pool.System.GetOrNew<T>();
 
             if (!string.IsNullOrEmpty(pattern))
             {
@@ -100,9 +111,9 @@ namespace XFrame.Core
                 Type type = typeof(T);
                 for (int i = 0; i < pArray.Length; i++)
                 {
-                    T parser = (T)References.Require(type);
+                    T parser = _childPool.Require();
                     parser.Parse(pArray[i]);
-                    Value.AddLast(parser);
+                    Value.Add(parser);
                 }
             }
 
@@ -119,7 +130,7 @@ namespace XFrame.Core
             if (Value == null)
                 return -1;
             int index = 0;
-            foreach (XLinkNode<T> node in Value)
+            foreach (T node in Value)
             {
                 object other = node.Value;
                 if (other != null && other.Equals(value))
@@ -149,10 +160,10 @@ namespace XFrame.Core
             if (Value == null)
                 return default;
             int current = 0;
-            foreach (XLinkNode<T> node in Value)
+            foreach (T node in Value)
             {
                 if (index == current)
-                    return node.Value;
+                    return (T)node.Value;
                 current++;
             }
             return default;
@@ -169,9 +180,9 @@ namespace XFrame.Core
             if (Value == null)
                 return -1;
             int index = 0;
-            foreach (XLinkNode<T> node in Value)
+            foreach (T node in Value)
             {
-                object other = node.Value.Value;
+                object other = node.Value;
                 if (other != null && action(value, other))
                     return index;
                 index++;
@@ -227,7 +238,7 @@ namespace XFrame.Core
                 else
                     return true;
             }
-            foreach (XLinkNode<T> v in Value)
+            foreach (T v in Value)
             {
                 if (!v.Equals(obj))
                     return false;
@@ -247,8 +258,8 @@ namespace XFrame.Core
 
         void IPoolObject.OnRelease()
         {
-            foreach (XLinkNode<T> v in Value)
-                References.Release(v.Value);
+            foreach (T v in Value)
+                _childPool.Release(v);
             Value.Clear();
         }
 

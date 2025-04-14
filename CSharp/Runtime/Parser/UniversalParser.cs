@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using XFrame.Modules.Diagnotics;
-using XFrame.Modules.Pools;
+using UselessFrame.Runtime.Pools;
 
 namespace XFrame.Core
 {
@@ -14,6 +13,8 @@ namespace XFrame.Core
         private int m_IntValue;
         private float m_FloatValue;
         private bool m_BoolValue;
+        private IPool _pool;
+        private IPool<IParser<string>> _valuePool;
         private Dictionary<Type, IParser> m_Parsers;
 
         /// <summary>
@@ -42,7 +43,12 @@ namespace XFrame.Core
 
         /// <inheritdoc/>
         public string MarkName { get; set; }
-        IPool IPoolObject.InPool { get; set; }
+
+        IPool IPoolObject.InPool
+        {
+            get => _pool;
+            set => _pool = value;
+        }
 
         /// <summary>
         /// 获取或添加解析器
@@ -82,7 +88,7 @@ namespace XFrame.Core
             if (m_Parsers.TryGetValue(type, out IParser parser))
             {
                 m_Parsers.Remove(type);
-                References.Release(parser);
+                _valuePool.Release(parser);
             }
         }
 
@@ -100,8 +106,8 @@ namespace XFrame.Core
                 parser.Parse(m_Value);
                 if (m_Parsers.TryGetValue(type, out IParser oldParser))
                 {
-                    Log.Warning(Log.XFrame, $"Universal parser already has parser {type.Name}. will release old.");
-                    References.Release(oldParser);
+                    //Log.Warning(Log.XFrame, $"Universal parser already has parser {type.Name}. will release old.");
+                    _valuePool.Release(oldParser);
                     m_Parsers[type] = parser;
                 }
                 else

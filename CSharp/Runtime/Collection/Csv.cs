@@ -5,6 +5,8 @@ using System.IO;
 using System.Text;
 using System;
 using XFrame.Core;
+using CsvHelper;
+using System.Collections;
 
 namespace UselessFrame.Runtime.Collections
 {
@@ -93,19 +95,11 @@ namespace UselessFrame.Runtime.Collections
         /// <returns>迭代器</returns>
         public IEnumerator<Line> GetEnumerator()
         {
-            return new Enumerator(m_Lines);
+            return m_Lines.GetEnumerator();
         }
         #endregion
 
         #region Inner Implement
-        private void InnerRefreshMap()
-        {
-            int column = 1;
-            m_LinesWithIndex.Clear();
-            foreach (XLinkNode<Line> node in m_Lines)
-                m_LinesWithIndex.Add(column++, node);
-        }
-
         private void InnerInit(string raw, IParser<T> parser)
         {
             m_Row = 0;
@@ -120,10 +114,9 @@ namespace UselessFrame.Runtime.Collections
                     string value = csvReader[j].ToString();
                     line[j] = parser.Parse(value);
                 }
-                XLinkNode<Line> node = m_Lines.AddLast(line);
-                m_LinesWithIndex.Add(++m_Row, node);
+                m_Lines.Add(line);
+                ++m_Row;
             }
-            References.Release(parser);
             csvReader.Dispose();
         }
         #endregion
@@ -135,11 +128,10 @@ namespace UselessFrame.Runtime.Collections
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            foreach (XLinkNode<Line> node in m_Lines)
+            foreach (Line line in m_Lines)
             {
-                sb.Append(node.Value.ToString());
-                if (node.Next != null)
-                    sb.Append('\n');
+                sb.Append(line.ToString());
+                sb.Append('\n');
             }
             return sb.ToString();
         }
@@ -149,9 +141,12 @@ namespace UselessFrame.Runtime.Collections
         /// </summary>
         public void Dispose()
         {
-            References.Release(m_Lines);
             m_Lines = null;
-            m_LinesWithIndex = null;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         /// <summary>

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using XFrame.Modules.Diagnotics;
 
 namespace XFrame.Core
 {
@@ -34,9 +33,9 @@ namespace XFrame.Core
                 {
                     IsNum = true;
                     if (!IntParser.TryParse(vList[0], out Min))
-                        Log.Error(Log.XFrame, $"AreaParser Error min {vList[0]} -> {Min}");
+                        throw new InputFormatException($"AreaParser Error min {vList[0]} -> {Min}");
                     if (!IntParser.TryParse(vList[1], out Max))
-                        Log.Error(Log.XFrame, $"AreaParser Error max {vList[1]} -> {Max}");
+                        throw new InputFormatException($"AreaParser Error max {vList[1]} -> {Max}");
                 }
             }
 
