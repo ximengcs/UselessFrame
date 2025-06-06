@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace XFrameShare.Network
+namespace UselessFrame.Net
 {
     public class Crc16CcittKermit
     {
@@ -54,17 +54,14 @@ namespace XFrameShare.Network
             return crc;
         }
 
-        public static byte[] ComputeChecksumBytes(byte[] buffer)
+        public static ushort ComputeChecksum(Span<byte> buffer)
         {
-            return BitConverter.GetBytes(ComputeChecksum(buffer));
+            ushort crc = 0;
+            for (int i = 0; i < buffer.Length; ++i)
+                crc = (ushort)((crc >> 8) ^ table[(crc ^ buffer[i]) & 0xff]);
+            return crc;
         }
 
-        public static void ComputeChecksumBytes(byte[] buffer, int checkStartIndex, int length, int copyStartIndex)
-        {
-            Span<byte> bytes = new Span<byte>(buffer, copyStartIndex, CRCLength);
-            ushort crc = ComputeChecksum(buffer, checkStartIndex, checkStartIndex + length);
-            BitConverter.TryWriteBytes(bytes, crc);
-        }
         public static bool Check(byte[] buffer, out ushort src, out ushort cur)
         {
             src = BitConverter.ToUInt16(buffer, 0);

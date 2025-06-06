@@ -1,17 +1,19 @@
 ﻿
 using System.Collections.Generic;
 
-namespace Core.Network
+namespace UselessFrame.Net
 {
-    public class SpanPool
+    public class ByteBufferPool
     {
+        private Queue<byte[]> _queue0;
         private Queue<byte[]> _queue1;
         private Queue<byte[]> _queue2;
         private Queue<byte[]> _queue3;
         private Queue<byte[]> _queue4;
 
-        public SpanPool()
+        public ByteBufferPool()
         {
+            _queue0 = new Queue<byte[]>(128);
             _queue1 = new Queue<byte[]>(1024);
             _queue2 = new Queue<byte[]>(512);
             _queue3 = new Queue<byte[]>(256);
@@ -22,7 +24,11 @@ namespace Core.Network
         {
             queue = null;
             targetCount = count;
-            if (count <= 128)
+            if (count == 4)
+            {
+                queue = _queue0;
+            }
+            else if (count <= 128)
             {
                 queue = _queue1;
                 targetCount = 128;
