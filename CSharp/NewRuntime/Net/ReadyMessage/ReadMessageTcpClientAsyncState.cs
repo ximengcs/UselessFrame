@@ -38,6 +38,7 @@ namespace UselessFrame.Net
 
         private void Begin(int offset, int size)
         {
+            Console.WriteLine($"Begin offset : {offset}, size : {size}");
             try
             {
                 _stream.BeginRead(_buffer, offset, size, OnReceive, null);
@@ -99,7 +100,6 @@ namespace UselessFrame.Net
             }
 
             _bytesReceived += count;
-
             // reading the size of the data 
             if (_messageSize == -1)
             {
@@ -119,6 +119,7 @@ namespace UselessFrame.Net
                         return;
                     }
 
+                    Console.WriteLine($"ready receive _messageSize : {_messageSize}");
                     //we should do some size validation here also (e.g. restrict incoming messages to x bytes long)
                     _bufferPool.Release(_buffer);
                     _buffer = _bufferPool.Require(_messageSize);
@@ -132,7 +133,7 @@ namespace UselessFrame.Net
                     //we need more data - could be more of the message size information
                     //or it could be the message body. The only time we won't need to
                     //read more data is if the message size == 0
-                    Begin(_bytesReceived, _buffer.Length - _bytesReceived); //how much data can be read into remaining buffer
+                    Begin(_bytesReceived, _messageSize - _bytesReceived); //how much data can be read into remaining buffer
                 }
                 else
                 {
@@ -142,15 +143,16 @@ namespace UselessFrame.Net
             }
             else //we are reading the body of the message
             {
+                Console.WriteLine($"ready receive _messageSize : {_messageSize}, _bytesReceived : {_bytesReceived}");
                 if (_bytesReceived == _messageSize) //we have the entire message
                 {
-                    if (Crc16CcittKermit.Check(_buffer, out ushort src, out ushort cur))
+                    if (Crc16CcittKermit.Check(_buffer, _messageSize, out ushort src, out ushort cur))
                     {
                         Complete(new ReadMessageResult(_buffer, _messageSize, _bufferPool, NetMessageState.OK));
                     }
                     else
                     {
-                        Complete(new ReadMessageResult(NetMessageState.DataError, $"[Net]socket receive data bit eror, buffer size {_buffer.Length}, source crc {src}, current crc {cur}"));
+                        Complete(new ReadMessageResult(NetMessageState.DataError, $"[Net]socket receive data bit eror, buffer size {_buffer.Length}, message size {_messageSize}, source crc {src}, current crc {cur}"));
                     }
                 }
                 else //need more data.
@@ -160,7 +162,7 @@ namespace UselessFrame.Net
                         Complete(new ReadMessageResult(NetMessageState.DataError, "[Net]The remote peer closed the connection before the entire message was received."));
                         return;
                     }
-                    Begin(_bytesReceived, _buffer.Length - _bytesReceived);
+                    Begin(_bytesReceived, _messageSize - _bytesReceived);
                 }
             }
         }

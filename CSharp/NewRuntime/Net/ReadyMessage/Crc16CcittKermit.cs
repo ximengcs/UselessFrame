@@ -62,10 +62,10 @@ namespace UselessFrame.Net
             return crc;
         }
 
-        public static bool Check(byte[] buffer, out ushort src, out ushort cur)
+        public static bool Check(byte[] buffer, int size, out ushort src, out ushort cur)
         {
             src = BitConverter.ToUInt16(buffer, 0);
-            cur = ComputeChecksum(buffer, CRCLength);
+            cur = ComputeChecksum(buffer, CRCLength, size);
             return src == cur;
         }
     }

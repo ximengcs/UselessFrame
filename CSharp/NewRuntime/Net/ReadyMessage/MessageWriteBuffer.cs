@@ -12,9 +12,9 @@ namespace UselessFrame.Net
 
         public Span<byte> LengthHead => _buffer.AsSpan(0, sizeof(int));
 
-        public Span<byte> CrcHead => new Span<byte>(_buffer, sizeof(int), Crc16CcittKermit.CRCLength);
+        public Span<byte> CrcHead => _buffer.AsSpan(sizeof(int), Crc16CcittKermit.CRCLength);
 
-        public Span<byte> Message => new Span<byte>(_buffer, sizeof(int) + Crc16CcittKermit.CRCLength, _msgSize);
+        public Span<byte> Message => _buffer.AsSpan(sizeof(int) + Crc16CcittKermit.CRCLength, _msgSize);
 
         public byte[] Package => _buffer;
 
@@ -26,7 +26,7 @@ namespace UselessFrame.Net
             _packageSize = sizeof(int) + Crc16CcittKermit.CRCLength + msgSize;
             _buffer = pool.Require(_packageSize);
             _msgSize = msgSize;
-            BitConverter.TryWriteBytes(LengthHead, _packageSize);
+            BitConverter.TryWriteBytes(LengthHead, Crc16CcittKermit.CRCLength + msgSize);
         }
 
         public void Dispose()
