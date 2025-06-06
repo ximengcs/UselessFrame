@@ -1,4 +1,5 @@
 ﻿using System;
+using UselessFrame.Runtime.Pools;
 
 namespace UselessFrame.Net
 {
@@ -6,18 +7,27 @@ namespace UselessFrame.Net
     {
         private ByteBufferPool _pool;
 
-        public readonly Exception Error;
         public readonly byte[] MessageData;
         public readonly int MessageSize;
         public readonly NetMessageState State;
+        public readonly string StateMessage;
 
-        internal ReadMessageResult(byte[] msgData, int msgSize, ByteBufferPool pool, NetMessageState state, Exception err = null)
+        internal ReadMessageResult(byte[] msgData, int msgSize, ByteBufferPool pool, NetMessageState state, string stateMsg = null)
         {
             _pool = pool;
             MessageSize = msgSize;
             MessageData = msgData;
             State = state;
-            Error = err;
+            StateMessage = stateMsg;
+        }
+
+        internal ReadMessageResult(NetMessageState state, string stateMsg)
+        {
+            _pool = default;
+            MessageSize = default;
+            MessageData = default;
+            State = state;
+            StateMessage = stateMsg;
         }
 
         public void Dispose()

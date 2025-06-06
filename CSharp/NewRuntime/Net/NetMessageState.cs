@@ -4,6 +4,12 @@ namespace UselessFrame.Net
     public enum NetMessageState
     {
         OK,
-        Close
+        NormalClose,
+        Disconnect,
+        ParamError,
+        SocketError,
+        Cancel,
+        DataError,
+        Unknown
     }
 }
