@@ -18,6 +18,7 @@ namespace Core.Application
         private CommandList _cmdList;
         private ImGuiRenderer _render;
         private Action _onGUIHandler;
+        private Action<float> _onUpdateHandler;
         private bool _closeTaskSource;
         private Stopwatch _sw;
 
@@ -48,15 +49,20 @@ namespace Core.Application
             _onGUIHandler = null;
         }
 
+        public void OnUpdate(Action<float> updateHandler)
+        {
+            _onUpdateHandler += updateHandler;
+        }
+
         public void Update()
         {
             if (_sw == null)
                 _sw = Stopwatch.StartNew();
 
+            float deltaTime = _sw.ElapsedTicks / (float)Stopwatch.Frequency;
             if (_window.Exists && !_closeTaskSource)
             {
                 InputSnapshot input = _window.PumpEvents();
-                float deltaTime = _sw.ElapsedTicks / (float)Stopwatch.Frequency;
                 _render.Update(deltaTime, input);
                 _onGUIHandler?.Invoke();
                 _cmdList.Begin();
@@ -75,7 +81,9 @@ namespace Core.Application
                 _cmdList.Dispose();
                 _graphicsDevice.Dispose();
                 _closeTaskSource = true;
-            }   
+            }
+
+            _onUpdateHandler?.Invoke(deltaTime);
         }
 
         public void OnGUI(Action handler)

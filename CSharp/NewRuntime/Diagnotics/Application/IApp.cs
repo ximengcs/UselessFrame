@@ -10,6 +10,7 @@ namespace Core.Application
         void Update();
 
         void OnGUI(Action handler);
+        void OnUpdate(Action<float> handler);
 
         public static IApp Create(string title, int width, int height)
         {
