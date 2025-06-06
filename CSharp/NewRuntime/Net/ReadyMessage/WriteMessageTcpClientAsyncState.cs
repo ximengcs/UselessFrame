@@ -63,6 +63,12 @@ namespace UselessFrame.Net
 
         private void OnWrite(IAsyncResult ar)
         {
+            if (_cancelToken.IsCancellationRequested)
+            {
+                Complete(new WriteMessageResult(NetMessageState.Cancel, "[Net]write messge cancel."));
+                return;
+            }
+
             try
             {
                 _stream.EndWrite(ar);
