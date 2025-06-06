@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using UselessFrame.NewRuntime.Scene;
+﻿using UselessFrame.NewRuntime.Router;
 
 namespace UselessFrame.NewRuntime.World
 {
-    public interface IWorldManager
+    public interface IWorldManager : IRouter
     {
-        ISceneManager Scene { get; }
-
-        IRouter Router { get; }
+        IWorld GetWorld(int worldId);
     }
 }

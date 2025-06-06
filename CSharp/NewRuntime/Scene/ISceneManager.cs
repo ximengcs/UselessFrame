@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using UselessFrame.NewRuntime.Entity;
+using UselessFrame.NewRuntime.Router;
 
 namespace UselessFrame.NewRuntime.Scene
 {
-    public interface ISceneManager
+    public interface ISceneManager : IRouter
     {
-        IRouter Router { get; }
+
     }
 }

@@ -1,9 +1,12 @@
 ﻿
+using UselessFrame.NewRuntime.Router;
+using UselessFrame.NewRuntime.Scene;
+
 namespace UselessFrame.NewRuntime.World
 {
-    public interface IWorld
+    public interface IWorld : IRouter
     {
         WorldType Type { get; }
-        IRouter Router { get; }
+        ISceneManager Scene { get; }
     }
 }

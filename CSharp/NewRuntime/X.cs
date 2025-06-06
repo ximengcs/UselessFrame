@@ -1,4 +1,5 @@
 ﻿
+using UselessFrame.NewRuntime.Router;
 using UselessFrame.NewRuntime.World;
 
 namespace UselessFrame.NewRuntime
@@ -11,8 +12,6 @@ namespace UselessFrame.NewRuntime
         public static ITypeManager Type => _typeManager;
 
         public static IWorldManager World => _worldManager;
-
-        public static IRouter Router { get; }
 
         public static void Initialize(XSetting setting)
         {
