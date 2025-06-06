@@ -3,11 +3,12 @@ using System;
 
 namespace UselessFrame.Net
 {
-    public struct MessageWriteBuffer
+    public partial struct MessageWriteBuffer : IDisposable
     {
         private byte[] _buffer;
         private int _msgSize;
         private int _packageSize;
+        private ByteBufferPool _pool;
 
         public Span<byte> LengthHead => _buffer.AsSpan(0, sizeof(int));
 
@@ -19,12 +20,23 @@ namespace UselessFrame.Net
 
         public int PackageSize => _packageSize;
 
-        public MessageWriteBuffer(byte[] buffer, int msgSize)
+        public MessageWriteBuffer(ByteBufferPool pool, int msgSize)
         {
-            _buffer = buffer;
+            _pool = pool;
+            _packageSize = sizeof(int) + Crc16CcittKermit.CRCLength + msgSize;
+            _buffer = pool.Require(_packageSize);
             _msgSize = msgSize;
-            _packageSize = sizeof(int) + Crc16CcittKermit.CRCLength + _msgSize;
             BitConverter.TryWriteBytes(LengthHead, _packageSize);
+        }
+
+        public void Dispose()
+        {
+            if (_pool != null)
+            {
+                _pool.Release(_buffer);
+                _buffer = null;
+                _pool = null;
+            }
         }
     }
 }

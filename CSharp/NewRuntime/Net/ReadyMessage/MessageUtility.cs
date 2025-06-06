@@ -6,16 +6,10 @@ namespace UselessFrame.Net
 {
     public class MessageUtility
     {
-        public readonly static byte[] CloseData = new byte[0];
-
-        public static bool IsCloseMessage(byte[] message)
+        public static async UniTask<WriteMessageResult> WriteCloseMessageAsync(TcpClient client)
         {
-            return message.Length == 0;
-        }
-
-        public static MessageWriteBuffer RequestWriteBuffer(int msgSize, ByteBufferPool pool)
-        {
-            return new MessageWriteBuffer(pool.Require(msgSize + Crc16CcittKermit.CRCLength + sizeof(int)), msgSize);
+            WriteMessageTcpClientAsyncState state = new WriteMessageTcpClientAsyncState(client, MessageWriteBuffer.CloseBuffer);
+            return await state.CompleteTask;
         }
 
         public static async UniTask<WriteMessageResult> WriteMessageAsync(TcpClient client, MessageWriteBuffer buffer)

@@ -1,9 +1,10 @@
 ﻿
+using System;
 using System.Collections.Generic;
 
 namespace UselessFrame.Net
 {
-    public class ByteBufferPool
+    public class ByteBufferPool : IDisposable
     {
         private Queue<byte[]> _queue0;
         private Queue<byte[]> _queue1;
@@ -69,6 +70,15 @@ namespace UselessFrame.Net
             {
                 queue.Enqueue(data);
             }
+        }
+
+        public void Dispose()
+        {
+            _queue0 = null;
+            _queue1 = null;
+            _queue2 = null;
+            _queue3 = null;
+            _queue4 = null;
         }
     }
 }

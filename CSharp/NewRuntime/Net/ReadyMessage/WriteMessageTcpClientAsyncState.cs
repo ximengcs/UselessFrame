@@ -20,6 +20,11 @@ namespace UselessFrame.Net
             Begin(0, buffer.PackageSize);
         }
 
+        private void Complete(WriteMessageResult result)
+        {
+            _completeTaskSource.TrySetResult(result);
+        }
+
         private void Begin(int offset, int size)
         {
             _stream.BeginWrite(_buffer.Package, offset, size, OnWrite, null);
@@ -30,7 +35,7 @@ namespace UselessFrame.Net
             try
             {
                 _stream.EndWrite(ar);
-                _completeTaskSource.TrySetResult(new WriteMessageResult(NetErrorCode.OK));
+                Complete(new WriteMessageResult(NetMessageState.OK));
             }
             catch (Exception ex)
             {

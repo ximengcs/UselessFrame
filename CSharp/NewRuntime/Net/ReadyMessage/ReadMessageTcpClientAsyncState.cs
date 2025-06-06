@@ -75,7 +75,7 @@ namespace UselessFrame.Net
                     else
                     {
                         //we have received a zero length message, notify the user...
-                        Complete(new ReadMessageResult(MessageUtility.CloseData, _messageSize, _bufferPool));
+                        Complete(new ReadMessageResult(null, _messageSize, _bufferPool, NetMessageState.Close));
                     }
                 }
                 else //we are reading the body of the message

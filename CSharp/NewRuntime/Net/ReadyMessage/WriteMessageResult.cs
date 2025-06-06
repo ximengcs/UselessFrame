@@ -3,9 +3,9 @@ namespace UselessFrame.Net
 {
     public struct WriteMessageResult
     {
-        public readonly NetErrorCode ErrorCode;
+        public readonly NetMessageState ErrorCode;
 
-        public WriteMessageResult(NetErrorCode code)
+        public WriteMessageResult(NetMessageState code)
         {
             ErrorCode = code;
         }
