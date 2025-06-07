@@ -13,7 +13,7 @@ namespace TestIMGUI.Core
         private async UniTaskVoid RequestMessage()
         {
             ReadMessageResult result = await MessageUtility.ReadMessageAsync(_client, _pool, _closeTokenSource.Token);
-            if (_state == ConnectionState.Normal)
+            if (_state.Value == ConnectionState.Normal)
             {
                 switch (result.State)
                 {
@@ -21,7 +21,16 @@ namespace TestIMGUI.Core
                         SuccessHandler(result);
                         RequestMessage().Forget();
                         break;
+
+                    case NetOperateState.NormalClose:
+                        ReadyClose();
+                        Dispose();
+                        break;
                 }
+            }
+            else
+            {
+                _state.Value = ConnectionState.FatalErrorClose;
             }
         }
 
@@ -30,6 +39,7 @@ namespace TestIMGUI.Core
             Memory<byte> datas = result.Bytes;
             string content = Encoding.UTF8.GetString(datas.Span);
             result.Dispose();
+            OnReceiveMessage?.Invoke(content);
             Console.WriteLine($"read success {content}");
         }
     }

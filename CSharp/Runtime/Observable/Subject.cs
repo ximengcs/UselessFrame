@@ -27,8 +27,15 @@ namespace UselessFrame.Runtime.Observable
             {
                 T oldValue = _value;
                 if (_setter != null)
+                {
                     _setter(value);
-                _value = Value;
+                    _value = Value;
+                }
+                else
+                {
+                    _value = value;
+                }
+               
                 _changeEvent?.Invoke(_value);
                 _changeEventWithOldValue?.Invoke(oldValue, _value);
                 _changeEventWithOwner?.Invoke(_owner, _value);
@@ -47,7 +54,7 @@ namespace UselessFrame.Runtime.Observable
         public Subject(object owner, T value = default)
         {
             _owner = owner;
-            _value = default;
+            _value = value;
             _getter = null;
             _setter = null;
         }

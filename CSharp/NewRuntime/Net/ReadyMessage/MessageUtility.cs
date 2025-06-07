@@ -7,9 +7,9 @@ namespace UselessFrame.Net
 {
     public class MessageUtility
     {
-        public static async UniTask<WriteMessageResult> WriteCloseMessageAsync(TcpClient client, CancellationToken cancelToken = default)
+        public static async UniTask<WriteMessageResult> WriteCloseMessageAsync(TcpClient client)
         {
-            WriteMessageTcpClientAsyncState state = new WriteMessageTcpClientAsyncState(client, MessageWriteBuffer.CloseBuffer, cancelToken);
+            WriteMessageTcpClientAsyncState state = new WriteMessageTcpClientAsyncState(client, MessageWriteBuffer.CloseBuffer, CancellationToken.None);
             return await state.CompleteTask;
         }
 
