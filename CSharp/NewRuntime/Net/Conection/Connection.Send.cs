@@ -13,11 +13,32 @@ namespace TestIMGUI.Core
             WriteMessageResult result = await MessageUtility.WriteMessageAsync(_client, buffer, _closeTokenSource.Token);
             if (_state.Value == ConnectionState.Normal)
             {
-                buffer.Dispose();
-            }
-            else
-            {
-                _state.Value = ConnectionState.FatalErrorClose;
+                switch (result.State)
+                {
+                    case NetOperateState.OK:
+                        buffer.Dispose();
+                        break;
+
+                    case NetOperateState.NormalClose:
+                        _state.Value = ConnectionState.NormalClose;
+                        _closeTokenSource.Cancel();
+                        Dispose();
+                        break;
+
+                    case NetOperateState.Disconnect:
+                    case NetOperateState.DataError:
+                    case NetOperateState.ParamError:
+                    case NetOperateState.PermissionError:
+                    case NetOperateState.Unknown:
+                        _state.Value = ConnectionState.FatalErrorClose;
+                        _closeTokenSource.Cancel();
+                        Dispose();
+                        break;
+
+                    case NetOperateState.SocketError:
+                        _state.Value = ConnectionState.SocketError;
+                        break;
+                }
             }
         }
     }

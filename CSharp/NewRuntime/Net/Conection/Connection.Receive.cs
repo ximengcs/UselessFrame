@@ -27,11 +27,21 @@ namespace TestIMGUI.Core
                         _closeTokenSource.Cancel();
                         Dispose();
                         break;
+
+                    case NetOperateState.Disconnect:
+                    case NetOperateState.DataError:
+                    case NetOperateState.ParamError:
+                    case NetOperateState.PermissionError:
+                    case NetOperateState.Unknown:
+                        _state.Value = ConnectionState.FatalErrorClose;
+                        _closeTokenSource.Cancel();
+                        Dispose();
+                        break;
+
+                    case NetOperateState.SocketError:
+                        _state.Value = ConnectionState.SocketError;
+                        break;
                 }
-            }
-            else
-            {
-                _state.Value = ConnectionState.FatalErrorClose;
             }
         }
 

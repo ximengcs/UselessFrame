@@ -6,6 +6,7 @@ namespace TestIMGUI.Core
         Known,
         Normal,
         Reconnect,
+        SocketError,
         NormalClose,
         FatalErrorClose,
         ReconnectErrorClose
