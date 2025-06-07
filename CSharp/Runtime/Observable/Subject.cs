@@ -3,17 +3,17 @@ using System;
 
 namespace UselessFrame.Runtime.Observable
 {
-    public class Subject<T>
+    public class Subject<OwnerT, T>
     {
         private T _value;
-        private object _owner;
+        private OwnerT _owner;
         private Func<T> _getter;
         private Action<T> _setter;
 
         private Action<T> _changeEvent;
         private Action<T, T> _changeEventWithOldValue;
-        private Action<object, T> _changeEventWithOwner;
-        private Action<object, T, T> _changeEventWithOwnerAndOldValue;
+        private Action<OwnerT, T> _changeEventWithOwner;
+        private Action<OwnerT, T, T> _changeEventWithOwnerAndOldValue;
 
         public T Value
         {
@@ -43,7 +43,7 @@ namespace UselessFrame.Runtime.Observable
             }
         }
 
-        public Subject(object owner, Func<T> getter, Action<T> setter)
+        public Subject(OwnerT owner, Func<T> getter, Action<T> setter)
         {
             _owner = owner;
             _getter = getter;
@@ -51,7 +51,7 @@ namespace UselessFrame.Runtime.Observable
             _value = _getter();
         }
 
-        public Subject(object owner, T value = default)
+        public Subject(OwnerT owner, T value = default)
         {
             _owner = owner;
             _value = value;
@@ -59,14 +59,14 @@ namespace UselessFrame.Runtime.Observable
             _setter = null;
         }
 
-        public void Subscribe(Action<object, T> changeHandler, bool onceTrigger = false)
+        public void Subscribe(Action<OwnerT, T> changeHandler, bool onceTrigger = false)
         {
             _changeEventWithOwner += changeHandler;
             if (onceTrigger)
                 changeHandler(_owner, Value);
         }
 
-        public void Subscribe(Action<object, T, T> changeHandler, bool onceTrigger = false)
+        public void Subscribe(Action<OwnerT, T, T> changeHandler, bool onceTrigger = false)
         {
             _changeEventWithOwnerAndOldValue += changeHandler;
             if (onceTrigger)
@@ -103,12 +103,12 @@ namespace UselessFrame.Runtime.Observable
             _changeEventWithOldValue -= changeHandler;
         }
 
-        public void Unsubscribe(Action<object, T> changeHandler)
+        public void Unsubscribe(Action<OwnerT, T> changeHandler)
         {
             _changeEventWithOwner -= changeHandler;
         }
 
-        public void Unsubscribe(Action<object, T, T> changeHandler)
+        public void Unsubscribe(Action<OwnerT, T, T> changeHandler)
         {
             _changeEventWithOwnerAndOldValue -= changeHandler;
         }

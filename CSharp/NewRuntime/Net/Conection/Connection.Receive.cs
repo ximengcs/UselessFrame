@@ -23,7 +23,8 @@ namespace TestIMGUI.Core
                         break;
 
                     case NetOperateState.NormalClose:
-                        ReadyClose();
+                        _state.Value = ConnectionState.NormalClose;
+                        _closeTokenSource.Cancel();
                         Dispose();
                         break;
                 }

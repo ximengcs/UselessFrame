@@ -38,7 +38,17 @@ namespace UselessFrame.Net
 
         public static async UniTask<RequestConnectResult> RequestConnectAsync(IPEndPoint ipEndPoint, CancellationToken cancelToken = default)
         {
-            RequestConnectTcpClientAsyncState state = new RequestConnectTcpClientAsyncState(ipEndPoint, cancelToken);
+            RequestConnectTcpClientAsyncState state = new RequestConnectTcpClientAsyncState(new TcpClient(), ipEndPoint, cancelToken);
+            return await state.CompleteTask;
+        }
+
+        public static async UniTask<RequestConnectResult> ReConnectAsync(TcpClient client, CancellationToken cancelToken = default)
+        {
+            if (client.Client.RemoteEndPoint == null)
+                return new RequestConnectResult(NetOperateState.Unknown, "[Net]reconnect error, remote is null");
+
+            IPEndPoint remoteEndPoint = (IPEndPoint)client.Client.RemoteEndPoint;
+            RequestConnectTcpClientAsyncState state = new RequestConnectTcpClientAsyncState(client, remoteEndPoint, cancelToken);
             return await state.CompleteTask;
         }
     }

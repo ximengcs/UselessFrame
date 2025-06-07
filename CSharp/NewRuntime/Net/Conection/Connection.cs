@@ -1,9 +1,9 @@
-﻿using UselessFrame.Net;
-using System.Net.Sockets;
-using System;
+﻿using System;
+using UselessFrame.Net;
 using System.Threading;
-using UselessFrame.Runtime.Observable;
+using System.Net.Sockets;
 using Cysharp.Threading.Tasks;
+using UselessFrame.Runtime.Observable;
 
 namespace TestIMGUI.Core
 {
@@ -12,21 +12,21 @@ namespace TestIMGUI.Core
         private Guid _guid;
         private TcpClient _client;
         private ByteBufferPool _pool;
-        private Subject<ConnectionState> _state;
+        private Subject<Connection, ConnectionState> _state;
         private CancellationTokenSource _closeTokenSource;
 
         public Action<string> OnReceiveMessage;
 
         public Guid Id => _guid;
 
-        public Subject<ConnectionState> State => _state;
+        public Subject<Connection, ConnectionState> State => _state;
 
         public Connection(Guid guid, TcpClient client)
         {
             _guid = guid;
             _client = client;
             _pool = new ByteBufferPool();
-            _state = new Subject<ConnectionState>(this, ConnectionState.Normal);
+            _state = new Subject<Connection, ConnectionState>(this, ConnectionState.Normal);
             _closeTokenSource = new CancellationTokenSource();
             Console.WriteLine($"connect client success");
             RequestMessage().Forget();
@@ -34,7 +34,8 @@ namespace TestIMGUI.Core
 
         public async UniTask Close()
         {
-            ReadyClose();
+            _state.Value = ConnectionState.NormalClose;
+            _closeTokenSource.Cancel();
 
             WriteMessageResult result = await MessageUtility.WriteCloseMessageAsync(_client);
             if (result.State != NetOperateState.OK)
@@ -47,12 +48,6 @@ namespace TestIMGUI.Core
             }
 
             Dispose();
-        }
-
-        private void ReadyClose()
-        {
-            _state.Value = ConnectionState.NormalClose;
-            _closeTokenSource.Cancel();
         }
 
         private void Dispose()

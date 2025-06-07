@@ -18,12 +18,12 @@ namespace UselessFrame.Net
 
         public UniTask<RequestConnectResult> CompleteTask => _completeTaskSource.Task;
 
-        public RequestConnectTcpClientAsyncState(IPEndPoint ipEndPoint, CancellationToken cancelToken)
+        public RequestConnectTcpClientAsyncState(TcpClient client, IPEndPoint ipEndPoint, CancellationToken cancelToken)
         {
             _ipEndPoint = ipEndPoint;
             _cancelToken = cancelToken;
             _completeTaskSource = AutoResetUniTaskCompletionSource<RequestConnectResult>.Create();
-            _client = new TcpClient();
+            _client = client;
             Begin();
         }
 
