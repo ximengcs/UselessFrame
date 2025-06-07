@@ -57,7 +57,9 @@ namespace UselessFrame.Net
 
             if (queue != null && queue.Count > 0)
             {
-                return queue.Dequeue();
+                byte[] bytes = queue.Dequeue();
+                Console.WriteLine($"ByteBufferPool Reuse {bytes.GetHashCode()} {count} {bytes.Length} {_queue0.Count} {_queue1.Count} {_queue2.Count} {_queue3.Count} {_queue4.Count}");
+                return bytes;
             }
 
             return new byte[targetCount];

@@ -25,7 +25,21 @@ namespace UselessFrame.Net
             _bytesReceived = 0;
             _messageSize = -1;
             _completeTaskSource = AutoResetUniTaskCompletionSource<ReadMessageResult>.Create();
-            _stream = socket.GetStream();
+            _stream = null;
+            try
+            {
+                _stream = socket.GetStream();
+            }
+            catch (ObjectDisposedException e)
+            {
+                Complete(new ReadMessageResult(NetOperateState.SocketError, $"[Net]read message begin socket error exception:{e}"));
+                return;
+            }
+            catch (InvalidOperationException e)
+            {
+                Complete(new ReadMessageResult(NetOperateState.SocketError, $"[Net]read message begin socket error exception:{e}"));
+                return;
+            }
             _cancelToken = cancelToken;
             Begin(0, _buffer.Length);
         }
@@ -38,32 +52,31 @@ namespace UselessFrame.Net
 
         private void Begin(int offset, int size)
         {
-            Console.WriteLine($"Begin offset : {offset}, size : {size}");
             try
             {
                 _stream.BeginRead(_buffer, offset, size, OnReceive, null);
             }
             catch (ArgumentNullException e)
             {
-                Complete(new ReadMessageResult(NetMessageState.ParamError, $"[Net]read message begin param is null, exception:{e}"));
+                Complete(new ReadMessageResult(NetOperateState.ParamError, $"[Net]read message begin param is null, exception:{e}"));
             }
             catch (ArgumentOutOfRangeException e)
             {
-                Complete(new ReadMessageResult(NetMessageState.ParamError, $"[Net]read message begin param error, exception:{e}"));
+                Complete(new ReadMessageResult(NetOperateState.ParamError, $"[Net]read message begin param error, exception:{e}"));
             }
             catch (ObjectDisposedException e)
             {
-                Complete(new ReadMessageResult(NetMessageState.Disconnect, $"[Net]read message begin stream closing, exception:{e}"));
+                Complete(new ReadMessageResult(NetOperateState.Disconnect, $"[Net]read message begin stream closing, exception:{e}"));
             }
             catch (IOException e)
             {
                 if (e.InnerException is SocketException)
                 {
-                    Complete(new ReadMessageResult(NetMessageState.SocketError, $"[Net]read message begin socket error exception:{e}"));
+                    Complete(new ReadMessageResult(NetOperateState.SocketError, $"[Net]read message begin socket error exception:{e}"));
                 }
                 else
                 {
-                    Complete(new ReadMessageResult(NetMessageState.Unknown, $"[Net]read message begin io error exception:{e}"));
+                    Complete(new ReadMessageResult(NetOperateState.Unknown, $"[Net]read message begin io error exception:{e}"));
                 }
             }
         }
@@ -72,7 +85,7 @@ namespace UselessFrame.Net
         {
             if (_cancelToken.IsCancellationRequested)
             {
-                Complete(new ReadMessageResult(NetMessageState.Cancel, "[Net]read messge cancel."));
+                Complete(new ReadMessageResult(NetOperateState.Cancel, "[Net]read messge cancel."));
                 return;
             }
 
@@ -83,18 +96,18 @@ namespace UselessFrame.Net
             }
             catch (ObjectDisposedException e)
             {
-                Complete(new ReadMessageResult(NetMessageState.Disconnect, $"[Net]read message begin stream closing, exception:{e}"));
+                Complete(new ReadMessageResult(NetOperateState.Disconnect, $"[Net]read message begin stream closing, exception:{e}"));
                 return;
             }
             catch (IOException e)
             {
                 if (e.InnerException is SocketException)
                 {
-                    Complete(new ReadMessageResult(NetMessageState.SocketError, $"[Net]read message begin socket error exception:{e}"));
+                    Complete(new ReadMessageResult(NetOperateState.SocketError, $"[Net]read message begin socket error exception:{e}"));
                 }
                 else
                 {
-                    Complete(new ReadMessageResult(NetMessageState.Unknown, $"[Net]read message begin io error exception:{e}"));
+                    Complete(new ReadMessageResult(NetOperateState.Unknown, $"[Net]read message begin io error exception:{e}"));
                 }
                 return;
             }
@@ -105,7 +118,7 @@ namespace UselessFrame.Net
             {
                 if (count == 0)
                 {
-                    Complete(new ReadMessageResult(NetMessageState.DataError, "[Net]The remote peer closed the connection while reading the message size."));
+                    Complete(new ReadMessageResult(NetOperateState.DataError, "[Net]The remote peer closed the connection while reading the message size."));
                     return;
                 }
 
@@ -115,11 +128,10 @@ namespace UselessFrame.Net
                     _messageSize = BitConverter.ToInt32(_buffer, 0);
                     if (_messageSize < 0)
                     {
-                        Complete(new ReadMessageResult(NetMessageState.DataError, "[Net]The remote peer sent a negative message size."));
+                        Complete(new ReadMessageResult(NetOperateState.DataError, "[Net]The remote peer sent a negative message size."));
                         return;
                     }
 
-                    Console.WriteLine($"ready receive _messageSize : {_messageSize}");
                     //we should do some size validation here also (e.g. restrict incoming messages to x bytes long)
                     _bufferPool.Release(_buffer);
                     _buffer = _bufferPool.Require(_messageSize);
@@ -138,28 +150,27 @@ namespace UselessFrame.Net
                 else
                 {
                     //we have received a zero length message, notify the user...
-                    Complete(new ReadMessageResult(null, _messageSize, _bufferPool, NetMessageState.NormalClose));
+                    Complete(new ReadMessageResult(null, _messageSize, _bufferPool, NetOperateState.NormalClose));
                 }
             }
             else //we are reading the body of the message
             {
-                Console.WriteLine($"ready receive _messageSize : {_messageSize}, _bytesReceived : {_bytesReceived}");
                 if (_bytesReceived == _messageSize) //we have the entire message
                 {
                     if (Crc16CcittKermit.Check(_buffer, _messageSize, out ushort src, out ushort cur))
                     {
-                        Complete(new ReadMessageResult(_buffer, _messageSize, _bufferPool, NetMessageState.OK));
+                        Complete(new ReadMessageResult(_buffer, _messageSize, _bufferPool, NetOperateState.OK));
                     }
                     else
                     {
-                        Complete(new ReadMessageResult(NetMessageState.DataError, $"[Net]socket receive data bit eror, buffer size {_buffer.Length}, message size {_messageSize}, source crc {src}, current crc {cur}"));
+                        Complete(new ReadMessageResult(NetOperateState.DataError, $"[Net]socket receive data bit eror, buffer size {_buffer.Length}, message size {_messageSize}, source crc {src}, current crc {cur}"));
                     }
                 }
                 else //need more data.
                 {
                     if (count == 0)
                     {
-                        Complete(new ReadMessageResult(NetMessageState.DataError, "[Net]The remote peer closed the connection before the entire message was received."));
+                        Complete(new ReadMessageResult(NetOperateState.DataError, "[Net]The remote peer closed the connection before the entire message was received."));
                         return;
                     }
                     Begin(_bytesReceived, _messageSize - _bytesReceived);

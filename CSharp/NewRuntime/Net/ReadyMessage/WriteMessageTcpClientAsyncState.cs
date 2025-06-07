@@ -18,9 +18,25 @@ namespace UselessFrame.Net
         public WriteMessageTcpClientAsyncState(TcpClient client, MessageWriteBuffer buffer, CancellationToken cancelToken)
         {
             _cancelToken = cancelToken;
-            _stream = client.GetStream();
             _buffer = buffer;
             _completeTaskSource = AutoResetUniTaskCompletionSource<WriteMessageResult>.Create();
+
+            _stream = null;
+            try
+            {
+                _stream = client.GetStream();
+            }
+            catch (ObjectDisposedException e)
+            {
+                Complete(new WriteMessageResult(NetOperateState.SocketError, $"[Net]write message begin socket error exception:{e}"));
+                return;
+            }
+            catch (InvalidOperationException e)
+            {
+                Complete(new WriteMessageResult(NetOperateState.SocketError, $"[Net]write message begin socket error exception:{e}"));
+                return;
+            }
+
             Begin(0, buffer.PackageSize);
         }
 
@@ -38,25 +54,25 @@ namespace UselessFrame.Net
             }
             catch (ArgumentNullException e)
             {
-                Complete(new WriteMessageResult(NetMessageState.ParamError, $"[Net]write message begin param is null, exception:{e}"));
+                Complete(new WriteMessageResult(NetOperateState.ParamError, $"[Net]write message begin param is null, exception:{e}"));
             }
             catch (ArgumentOutOfRangeException e)
             {
-                Complete(new WriteMessageResult(NetMessageState.ParamError, $"[Net]write message begin param error, exception:{e}"));
+                Complete(new WriteMessageResult(NetOperateState.ParamError, $"[Net]write message begin param error, exception:{e}"));
             }
             catch (ObjectDisposedException e)
             {
-                Complete(new WriteMessageResult(NetMessageState.Disconnect, $"[Net]write message begin stream closing, exception:{e}"));
+                Complete(new WriteMessageResult(NetOperateState.Disconnect, $"[Net]write message begin stream closing, exception:{e}"));
             }
             catch (IOException e)
             {
                 if (e.InnerException is SocketException)
                 {
-                    Complete(new WriteMessageResult(NetMessageState.SocketError, $"[Net]write message begin socket error exception:{e}"));
+                    Complete(new WriteMessageResult(NetOperateState.SocketError, $"[Net]write message begin socket error exception:{e}"));
                 }
                 else
                 {
-                    Complete(new WriteMessageResult(NetMessageState.Unknown, $"[Net]write message begin io error exception:{e}"));
+                    Complete(new WriteMessageResult(NetOperateState.Unknown, $"[Net]write message begin io error exception:{e}"));
                 }
             }
         }
@@ -65,28 +81,28 @@ namespace UselessFrame.Net
         {
             if (_cancelToken.IsCancellationRequested)
             {
-                Complete(new WriteMessageResult(NetMessageState.Cancel, "[Net]write messge cancel."));
+                Complete(new WriteMessageResult(NetOperateState.Cancel, "[Net]write messge cancel."));
                 return;
             }
 
             try
             {
                 _stream.EndWrite(ar);
-                Complete(new WriteMessageResult(NetMessageState.OK));
+                Complete(new WriteMessageResult(NetOperateState.OK));
             }
             catch (ObjectDisposedException e)
             {
-                Complete(new WriteMessageResult(NetMessageState.Disconnect, $"[Net]write message begin stream closing, exception:{e}"));
+                Complete(new WriteMessageResult(NetOperateState.Disconnect, $"[Net]write message begin stream closing, exception:{e}"));
             }
             catch (IOException e)
             {
                 if (e.InnerException is SocketException)
                 {
-                    Complete(new WriteMessageResult(NetMessageState.SocketError, $"[Net]write message begin socket error exception:{e}"));
+                    Complete(new WriteMessageResult(NetOperateState.SocketError, $"[Net]write message begin socket error exception:{e}"));
                 }
                 else
                 {
-                    Complete(new WriteMessageResult(NetMessageState.Unknown, $"[Net]write message begin io error exception:{e}"));
+                    Complete(new WriteMessageResult(NetOperateState.Unknown, $"[Net]write message begin io error exception:{e}"));
                 }
             }
         }

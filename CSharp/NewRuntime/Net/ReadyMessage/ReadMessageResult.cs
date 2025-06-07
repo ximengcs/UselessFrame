@@ -10,12 +10,12 @@ namespace UselessFrame.Net
         private byte[] _buffer;
         private int _messageSize;
 
-        public readonly NetMessageState State;
+        public readonly NetOperateState State;
         public readonly string StateMessage;
 
         public Memory<byte> Bytes => _buffer.AsMemory(Crc16CcittKermit.CRCLength, _messageSize - Crc16CcittKermit.CRCLength);
 
-        internal ReadMessageResult(byte[] msgData, int msgSize, ByteBufferPool pool, NetMessageState state, string stateMsg = null)
+        internal ReadMessageResult(byte[] msgData, int msgSize, ByteBufferPool pool, NetOperateState state, string stateMsg = null)
         {
             _pool = pool;
             State = state;
@@ -24,7 +24,7 @@ namespace UselessFrame.Net
             StateMessage = stateMsg;
         }
 
-        internal ReadMessageResult(NetMessageState state, string stateMsg)
+        internal ReadMessageResult(NetOperateState state, string stateMsg)
         {
             _pool = default;
             _buffer = null;

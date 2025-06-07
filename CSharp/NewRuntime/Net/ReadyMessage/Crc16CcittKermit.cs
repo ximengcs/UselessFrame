@@ -42,15 +42,11 @@ namespace UselessFrame.Net
 
         public const int CRCLength = sizeof(ushort);
 
-        private static ushort ComputeChecksum(byte[] buffer, int start = 0, int end = -1)
+        private static ushort ComputeChecksum(byte[] buffer, int start, int end)
         {
             ushort crc = 0;
-            if (end == -1)
-                end = buffer.Length;
             for (int i = start; i < end; ++i)
-            {
                 crc = (ushort)((crc >> 8) ^ table[(crc ^ buffer[i]) & 0xff]);
-            }
             return crc;
         }
 

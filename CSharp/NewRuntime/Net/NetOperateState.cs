@@ -1,7 +1,7 @@
 ﻿
 namespace UselessFrame.Net
 {
-    public enum NetMessageState
+    public enum NetOperateState
     {
         OK,
         NormalClose,
@@ -10,6 +10,7 @@ namespace UselessFrame.Net
         SocketError,
         Cancel,
         DataError,
+        PermissionError,
         Unknown
     }
 }

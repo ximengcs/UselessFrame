@@ -3,12 +3,12 @@ namespace UselessFrame.Net
 {
     public struct WriteMessageResult
     {
-        public readonly NetMessageState ErrorCode;
+        public readonly NetOperateState State;
         public readonly string Message;
 
-        public WriteMessageResult(NetMessageState code, string msg = null)
+        public WriteMessageResult(NetOperateState code, string msg = null)
         {
-            ErrorCode = code;
+            State = code;
             Message = msg;
         }
     }
