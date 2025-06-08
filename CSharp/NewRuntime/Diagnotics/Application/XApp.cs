@@ -21,8 +21,11 @@ namespace Core.Application
         private Action<float> _onUpdateHandler;
         private bool _closeTaskSource;
         private Stopwatch _sw;
+        private float _deltaTime;
 
         public bool Disposed => _closeTaskSource;
+
+        public float DeltaTime => _deltaTime;
 
         public XApp(string title, int width, int height)
         {
@@ -30,8 +33,8 @@ namespace Core.Application
             _height = height;
             WindowCreateInfo windowInfo = new WindowCreateInfo()
             {
-                X = 100,
-                Y = 100,
+                X = 1000,
+                Y = 500,
                 WindowWidth = _width,
                 WindowHeight = _height,
                 WindowTitle = title
@@ -49,6 +52,12 @@ namespace Core.Application
             _onGUIHandler = null;
         }
 
+        public void Resize(int width, int height)
+        {
+            _window.Width = width;
+            _window.Height = height;
+        }
+
         public void OnUpdate(Action<float> updateHandler)
         {
             _onUpdateHandler += updateHandler;
@@ -59,11 +68,11 @@ namespace Core.Application
             if (_sw == null)
                 _sw = Stopwatch.StartNew();
 
-            float deltaTime = _sw.ElapsedTicks / (float)Stopwatch.Frequency;
+            _deltaTime = _sw.ElapsedTicks / (float)Stopwatch.Frequency;
             if (_window.Exists && !_closeTaskSource)
             {
                 InputSnapshot input = _window.PumpEvents();
-                _render.Update(deltaTime, input);
+                _render.Update(_deltaTime, input);
                 _onGUIHandler?.Invoke();
                 _cmdList.Begin();
                 _cmdList.SetFramebuffer(_graphicsDevice.MainSwapchain.Framebuffer);
@@ -72,7 +81,7 @@ namespace Core.Application
                 _cmdList.End();
                 _graphicsDevice.SubmitCommands(_cmdList);
                 _graphicsDevice.SwapBuffers(_graphicsDevice.MainSwapchain);
-                Thread.Sleep((int)(deltaTime * 1000));
+                Thread.Sleep((int)(_deltaTime * 1000));
                 _sw.Restart();
             }
             else
@@ -83,7 +92,7 @@ namespace Core.Application
                 _closeTaskSource = true;
             }
 
-            _onUpdateHandler?.Invoke(deltaTime);
+            _onUpdateHandler?.Invoke(_deltaTime);
         }
 
         public void OnGUI(Action handler)

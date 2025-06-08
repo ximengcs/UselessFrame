@@ -16,11 +16,8 @@ namespace UselessFrameTest
         [TestMethod]
         public void NewTest1()
         {
-            X.Initialize(new XSetting() { TypeFilter = new DefaultTypeFilter() });
-            foreach (Type type in X.Type.Types)
-            {
-                Console.WriteLine(type.FullName);
-            }
+            ServerToken token = new ServerToken();
+
         }
 
         [TestMethod]

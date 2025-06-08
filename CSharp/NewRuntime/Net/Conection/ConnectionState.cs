@@ -3,12 +3,15 @@ namespace TestIMGUI.Core
 {
     public enum ConnectionState
     {
-        Known,
+        None,
+        Connecting,
+        UnKnown,
         Normal,
         Reconnect,
         SocketError,
         NormalClose,
         FatalErrorClose,
-        ReconnectErrorClose
+        ReconnectErrorClose,
+        FatalConnect
     }
 }

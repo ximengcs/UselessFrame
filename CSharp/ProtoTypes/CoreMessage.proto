@@ -1,0 +1,17 @@
+
+message ServerToken
+{
+    required bytes Id = 1;
+}
+
+message MessageTarget
+{
+    required int32 World = 1;
+    required int32 Scene = 2;
+}
+
+message StringMessage
+{
+    required MessageTarget Target = 1;
+    required string Content = 2;
+}

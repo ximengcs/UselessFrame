@@ -5,10 +5,11 @@ namespace Core.Application
 {
     public interface IApp
     {
+        float DeltaTime { get; }
         bool Disposed { get; }
 
         void Update();
-
+        void Resize(int width, int height);
         void OnGUI(Action handler);
         void OnUpdate(Action<float> handler);
 

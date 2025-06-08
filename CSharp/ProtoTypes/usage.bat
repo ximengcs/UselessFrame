@@ -1,1 +1,1 @@
- .\protoc.exe .\test.proto  --csharp_out=./
+ .\protoc.exe .\CoreMessage.proto  --csharp_out=./

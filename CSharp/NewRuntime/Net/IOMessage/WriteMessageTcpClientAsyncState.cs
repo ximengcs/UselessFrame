@@ -88,6 +88,7 @@ namespace UselessFrame.Net
             try
             {
                 _stream.EndWrite(ar);
+                //Console.WriteLine($"[Net] write success {_buffer.PackageSize}");
                 Complete(new WriteMessageResult(NetOperateState.OK));
             }
             catch (ObjectDisposedException e)

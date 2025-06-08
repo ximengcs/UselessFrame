@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using UselessFrame.Runtime.Types;
 using System.Collections.Concurrent;
+using System.Linq;
 
 namespace UselessFrame.NewRuntime
 {
@@ -49,6 +50,8 @@ namespace UselessFrame.NewRuntime
             _typesWithAttrs = typesWithAttrs;
             _assemblys = AppDomain.CurrentDomain.GetAssemblies();
 
+            string[] excludeList = new string[] { "System", "Microsoft" };
+
             string[] assemblyList = typeFilter != null ? typeFilter.AssemblyList : null;
             List<Type> tmpList = new List<Type>(1024);
             foreach (Assembly assembly in _assemblys)
@@ -56,6 +59,18 @@ namespace UselessFrame.NewRuntime
                 bool find = false;
                 AssemblyName aName = assembly.GetName();
                 string assemblyName = aName.Name;
+                bool skip = false;
+                foreach (string excludeName in excludeList)
+                {
+                    if (assemblyName.StartsWith(excludeName))
+                    {
+                        skip = true;
+                        break;
+                    }
+                }
+                if (skip)
+                    continue;
+
                 if (assemblyList != null)
                 {
                     foreach (string name in assemblyList)
@@ -99,7 +114,7 @@ namespace UselessFrame.NewRuntime
                     }
                     else
                     {
-                        Console.WriteLine($"addtype {type.FullName} {type.GetHashCode()} {typesDictionary[type.FullName].GetHashCode()}");
+                        Console.WriteLine($"already addtype {type.FullName} {type.GetHashCode()} {typesDictionary[type.FullName].GetHashCode()}");
                     }
                 }
             }

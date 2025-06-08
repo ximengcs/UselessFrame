@@ -1,15 +1,42 @@
 ﻿
 using Cysharp.Threading.Tasks;
-using SharpGen.Runtime;
+using Google.Protobuf;
 using System;
 using System.Net;
 using UselessFrame.Net;
 using UselessFrame.NewRuntime.Net.Conection;
+using Vortice;
 
 namespace TestIMGUI.Core
 {
     public partial class Connection
     {
+        private async UniTaskVoid Connect()
+        {
+            _state.Value = ConnectionState.Connecting;
+            RequestConnectResult result = await ConnectionUtility.RequestConnectAsync(_ip, _closeTokenSource.Token);
+            if (_closeTokenSource.IsCancellationRequested)
+                return;
+
+            if (_state.Value == ConnectionState.Connecting)
+            {
+                switch (result.State)
+                {
+                    case NetOperateState.OK:
+                        Console.WriteLine($"connect success target {_ip.Address}:{_ip.Port} {result.State}");
+                        _client = result.Remote;
+                        _state.Value = ConnectionState.Normal;
+                        RequestToken().Forget();
+                        break;
+
+                    default:
+                        Console.WriteLine($"connect error {result.State} {result.Message}");
+                        _state.Value = ConnectionState.FatalConnect;
+                        break;
+                }
+            }
+        }
+
         public void Reconnect()
         {
             switch (_state.Value)
@@ -19,10 +46,14 @@ namespace TestIMGUI.Core
                     TryReconnect().Forget();
                     break;
 
-                case ConnectionState.Known:
+                case ConnectionState.UnKnown:
                 case ConnectionState.FatalErrorClose:
                     _state.Value = ConnectionState.Reconnect;
                     TryReconnectWithNew().Forget();
+                    break;
+
+                case ConnectionState.FatalConnect:
+                    Connect().Forget();
                     break;
             }
         }
@@ -32,41 +63,82 @@ namespace TestIMGUI.Core
             RequestConnectResult result = await ConnectionUtility.ReConnectAsync(_client);
             if (_closeTokenSource.IsCancellationRequested)
                 return;
-            HandleReconnectResult(result);
+            if (_state.Value == ConnectionState.Reconnect)
+                HandleReconnectResult(result);
         }
 
         private async UniTaskVoid TryReconnectWithNew()
         {
-            if (_client.Client.RemoteEndPoint == null)
+            if (_ip == null)
             {
-                Console.WriteLine($"reconnect with new failure");
+                Console.WriteLine($"reconnect with new failure, because ip is null");
                 _state.Value = ConnectionState.ReconnectErrorClose;
                 Dispose();
                 return;
             }
 
-            IPEndPoint remoteEndPoint = (IPEndPoint)_client.Client.RemoteEndPoint;
-            Dispose();
-            _pool = new ByteBufferPool();
-            RequestConnectResult result = await ConnectionUtility.RequestConnectAsync(remoteEndPoint, _closeTokenSource.Token);
+            _client.Dispose();
+            _client = null;
+            RequestConnectResult result = await ConnectionUtility.RequestConnectAsync(_ip, _closeTokenSource.Token);
             if (_closeTokenSource.IsCancellationRequested)
                 return;
-            HandleReconnectResult(result);
+            if (_state.Value == ConnectionState.Reconnect)
+                HandleReconnectResult(result);
         }
 
         private void HandleReconnectResult(RequestConnectResult result)
         {
             if (result.State == NetOperateState.OK)
             {
-                Console.WriteLine($"reconnect success");
                 _client = result.Remote;
+                _ip = (IPEndPoint)_client.Client.RemoteEndPoint;
+                Console.WriteLine($"reconnect success target {_ip.Address}:{_ip.Port}");
                 _state.Value = ConnectionState.Normal;
+                RequestToken().Forget();
             }
             else
             {
                 Console.WriteLine($"reconnect failure {result.State} {result.Message}");
                 _state.Value = ConnectionState.ReconnectErrorClose;
                 Dispose();
+            }
+        }
+
+        private async UniTaskVoid RequestToken()
+        {
+            ReadMessageResult result = await MessageUtility.ReadMessageAsync(_client, _pool, _closeTokenSource.Token);
+            if (_state.Value == ConnectionState.Normal)
+            {
+                switch (result.State)
+                {
+                    case NetOperateState.OK:
+                        IMessage msg = result.Bytes.ToMessage();
+                        ServerToken token = (ServerToken)msg;
+                        _guid = token.GetId();
+                        RequestMessage().Forget();
+                        break;
+
+                    case NetOperateState.NormalClose:
+                        _state.Value = ConnectionState.NormalClose;
+                        _closeTokenSource.Cancel();
+                        Dispose();
+                        break;
+
+                    case NetOperateState.Disconnect:
+                    case NetOperateState.DataError:
+                    case NetOperateState.ParamError:
+                    case NetOperateState.PermissionError:
+                    case NetOperateState.Unknown:
+                        _state.Value = ConnectionState.FatalErrorClose;
+                        Console.WriteLine($"[Net] request token error {result.State} {result.StateMessage}");
+                        _closeTokenSource.Cancel();
+                        Dispose();
+                        break;
+
+                    case NetOperateState.SocketError:
+                        _state.Value = ConnectionState.SocketError;
+                        break;
+                }
             }
         }
     }

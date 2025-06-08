@@ -1,15 +1,28 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
 using System.Text;
+using Google.Protobuf;
 using UselessFrame.Net;
+using Cysharp.Threading.Tasks;
 
 namespace TestIMGUI.Core
 {
     public partial class Connection
     {
-        public async UniTask Send(string msg)
+        public async UniTask Send(IMessage message)
         {
-            MessageWriteBuffer buffer = new MessageWriteBuffer(_pool, Encoding.UTF8.GetByteCount(msg));
-            Encoding.UTF8.GetBytes(msg, buffer.Message);
+            string typeName = message.Descriptor.FullName;
+            int typeNameSize = Encoding.UTF8.GetByteCount(typeName);
+            int msgSize = message.CalculateSize() + sizeof(int) + typeNameSize;
+
+            MessageWriteBuffer buffer = new MessageWriteBuffer(_pool, msgSize);
+            BitConverter.TryWriteBytes(buffer.Message, typeNameSize);
+            Encoding.UTF8.GetBytes(typeName, buffer.Message.Slice(sizeof(int), typeNameSize));
+            message.WriteTo(buffer.Message.Slice(sizeof(int) + typeNameSize));
+            await Send(buffer);
+        }
+
+        private async UniTask Send(MessageWriteBuffer buffer)
+        {
             WriteMessageResult result = await MessageUtility.WriteMessageAsync(_client, buffer, _closeTokenSource.Token);
             if (_state.Value == ConnectionState.Normal)
             {
@@ -31,6 +44,7 @@ namespace TestIMGUI.Core
                     case NetOperateState.PermissionError:
                     case NetOperateState.Unknown:
                         _state.Value = ConnectionState.FatalErrorClose;
+                        Console.WriteLine($"[Net] send message error {result.State} {result.StateMessage}");
                         _closeTokenSource.Cancel();
                         Dispose();
                         break;

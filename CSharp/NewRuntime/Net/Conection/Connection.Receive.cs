@@ -1,10 +1,8 @@
-﻿using Cysharp.Threading.Tasks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Google.Protobuf;
 using UselessFrame.Net;
+using Cysharp.Threading.Tasks;
+using static UselessFrame.Net.NetUtility;
+using System;
 
 namespace TestIMGUI.Core
 {
@@ -34,6 +32,7 @@ namespace TestIMGUI.Core
                     case NetOperateState.PermissionError:
                     case NetOperateState.Unknown:
                         _state.Value = ConnectionState.FatalErrorClose;
+                        Console.WriteLine($"[Net] request message error {result.State} {result.StateMessage}");
                         _closeTokenSource.Cancel();
                         Dispose();
                         break;
@@ -47,11 +46,9 @@ namespace TestIMGUI.Core
 
         private void SuccessHandler(ReadMessageResult result)
         {
-            Memory<byte> datas = result.Bytes;
-            string content = Encoding.UTF8.GetString(datas.Span);
+            IMessage message = result.Bytes.ToMessage();
             result.Dispose();
-            OnReceiveMessage?.Invoke(content);
-            Console.WriteLine($"read success {content}");
+            OnReceiveMessage?.Invoke(message);
         }
     }
 }

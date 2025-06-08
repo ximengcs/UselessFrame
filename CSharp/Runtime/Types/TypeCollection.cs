@@ -9,6 +9,7 @@ namespace UselessFrame.Runtime.Types
     {
         private Type _mainType;
         private List<Type> _subClasses;
+        private Dictionary<string, Type> _typesMap;
 
         public Type MainType => _mainType;
 
@@ -28,11 +29,20 @@ namespace UselessFrame.Runtime.Types
         {
             _mainType = pType;
             _subClasses = new List<Type>();
+            _typesMap = new Dictionary<string, Type>();
+        }
+
+        public Type Get(string typeFullName)
+        {
+            if (_typesMap.TryGetValue(typeFullName, out Type type))
+                return type;
+            return default;
         }
 
         public void Add(Type subClass)
         {
             _subClasses.Add(subClass);
+            _typesMap.Add(subClass.FullName, subClass);
         }
 
         public IEnumerator<Type> GetEnumerator()

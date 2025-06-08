@@ -1,27 +1,28 @@
 ﻿
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace UselessFrame.Net
 {
     public class ByteBufferPool : IDisposable
     {
-        private Queue<byte[]> _queue0;
-        private Queue<byte[]> _queue1;
-        private Queue<byte[]> _queue2;
-        private Queue<byte[]> _queue3;
-        private Queue<byte[]> _queue4;
+        private ConcurrentQueue<byte[]> _queue0;
+        private ConcurrentQueue<byte[]> _queue1;
+        private ConcurrentQueue<byte[]> _queue2;
+        private ConcurrentQueue<byte[]> _queue3;
+        private ConcurrentQueue<byte[]> _queue4;
 
         public ByteBufferPool()
         {
-            _queue0 = new Queue<byte[]>(128);
-            _queue1 = new Queue<byte[]>(1024);
-            _queue2 = new Queue<byte[]>(512);
-            _queue3 = new Queue<byte[]>(256);
-            _queue4 = new Queue<byte[]>(128);
+            _queue0 = new ConcurrentQueue<byte[]>();
+            _queue1 = new ConcurrentQueue<byte[]>();
+            _queue2 = new ConcurrentQueue<byte[]>();
+            _queue3 = new ConcurrentQueue<byte[]>();
+            _queue4 = new ConcurrentQueue<byte[]>();
         }
 
-        private void GetQueue(int count, out Queue<byte[]> queue, out int targetCount)
+        private void GetQueue(int count, out ConcurrentQueue<byte[]> queue, out int targetCount)
         {
             queue = null;
             targetCount = count;
@@ -53,13 +54,12 @@ namespace UselessFrame.Net
 
         public byte[] Require(int count)
         {
-            GetQueue(count, out Queue<byte[]> queue, out int targetCount);
+            GetQueue(count, out ConcurrentQueue<byte[]> queue, out int targetCount);
 
             if (queue != null && queue.Count > 0)
             {
-                byte[] bytes = queue.Dequeue();
-                Console.WriteLine($"ByteBufferPool Reuse {bytes.GetHashCode()} {count} {bytes.Length} {_queue0.Count} {_queue1.Count} {_queue2.Count} {_queue3.Count} {_queue4.Count}");
-                return bytes;
+                if (queue.TryDequeue(out byte[] bytes))
+                    return bytes;
             }
 
             return new byte[targetCount];
@@ -67,7 +67,7 @@ namespace UselessFrame.Net
 
         public void Release(byte[] data)
         {
-            GetQueue(data.Length, out Queue<byte[]> queue, out int targetCount);
+            GetQueue(data.Length, out ConcurrentQueue<byte[]> queue, out int targetCount);
             if (queue != null)
             {
                 queue.Enqueue(data);
