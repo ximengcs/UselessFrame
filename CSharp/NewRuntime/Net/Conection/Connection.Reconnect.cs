@@ -30,7 +30,7 @@ namespace TestIMGUI.Core
                         break;
 
                     default:
-                        X.SystemLog.Error("Net", $"connect error {result.State} {result.Message}");
+                        X.SystemLog.Debug("Net", $"connect error {result.State} {result.Message}");
                         _state.Value = ConnectionState.FatalConnect;
                         break;
                 }
@@ -71,7 +71,7 @@ namespace TestIMGUI.Core
         {
             if (_ip == null)
             {
-                X.SystemLog.Error("Net", $"reconnect with new failure, because ip is null");
+                X.SystemLog.Debug("Net", $"reconnect with new failure, because ip is null");
                 _state.Value = ConnectionState.ReconnectErrorClose;
                 Dispose();
                 return;
@@ -98,7 +98,7 @@ namespace TestIMGUI.Core
             }
             else
             {
-                X.SystemLog.Error("Net", $"reconnect failure {result.State} {result.Message}");
+                X.SystemLog.Debug("Net", $"reconnect failure {result.State} {result.Message}");
                 _state.Value = ConnectionState.ReconnectErrorClose;
                 Dispose();
             }
@@ -132,13 +132,14 @@ namespace TestIMGUI.Core
                     case NetOperateState.PermissionError:
                     case NetOperateState.RemoteClose:
                     case NetOperateState.Unknown:
+                        X.SystemLog.Debug("Net", $"request token error {result.State} {result.StateMessage}");
                         _state.Value = ConnectionState.FatalErrorClose;
-                        X.SystemLog.Error("Net", $"request token error {result.State} {result.StateMessage}");
                         _closeTokenSource.Cancel();
                         Dispose();
                         break;
 
                     case NetOperateState.SocketError:
+                        X.SystemLog.Debug("Net", $"request token socket error {result.State} {result.StateMessage}");
                         _state.Value = ConnectionState.SocketError;
                         break;
                 }

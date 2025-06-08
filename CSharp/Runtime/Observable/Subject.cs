@@ -35,7 +35,7 @@ namespace UselessFrame.Runtime.Observable
                 {
                     _value = value;
                 }
-               
+
                 _changeEvent?.Invoke(_value);
                 _changeEventWithOldValue?.Invoke(oldValue, _value);
                 _changeEventWithOwner?.Invoke(_owner, _value);

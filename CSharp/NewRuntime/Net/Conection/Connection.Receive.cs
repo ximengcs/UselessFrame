@@ -22,7 +22,7 @@ namespace TestIMGUI.Core
                         break;
 
                     case NetOperateState.InValidRequest:
-                        X.SystemLog.Warning("Net", $"reqeust message happend invalid {result.State} {result.StateMessage}");
+                        X.SystemLog.Debug("Net", $"reqeust message happend invalid {result.State} {result.StateMessage}");
                         RequestMessage().Forget();
                         break;
 
@@ -38,13 +38,14 @@ namespace TestIMGUI.Core
                     case NetOperateState.PermissionError:
                     case NetOperateState.RemoteClose:
                     case NetOperateState.Unknown:
+                        X.SystemLog.Debug("Net", $"request message error {result.State} {result.StateMessage}");
                         _state.Value = ConnectionState.FatalErrorClose;
-                        X.SystemLog.Error("Net", $"request message error {result.State} {result.StateMessage}");
                         _closeTokenSource.Cancel();
                         Dispose();
                         break;
 
                     case NetOperateState.SocketError:
+                        X.SystemLog.Debug("Net", $"request message socket error {result.State} {result.StateMessage}");
                         _state.Value = ConnectionState.SocketError;
                         break;
                 }

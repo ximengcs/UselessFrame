@@ -10,6 +10,9 @@ using UselessFrame.Runtime.Observable;
 
 namespace TestIMGUI.Core
 {
+    /// <summary>
+    /// 单个Connect只能在一个线程中
+    /// </summary>
     public partial class Connection
     {
         private Guid _guid;
@@ -59,7 +62,7 @@ namespace TestIMGUI.Core
             WriteMessageResult result = await MessageUtility.WriteCloseMessageAsync(_client);
             if (result.State != NetOperateState.OK)
             {
-                X.SystemLog.Error("Net", $"notify server close error happen. {result.StateMessage}");
+                X.SystemLog.Debug("Net", $"notify server close error happen. {result.StateMessage}");
             }
             else
             {

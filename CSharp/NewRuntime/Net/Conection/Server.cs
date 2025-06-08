@@ -51,7 +51,7 @@ namespace UselessFrame.Net
             }
             catch (SocketException e)
             {
-                X.SystemLog.Error("Net", $"server start error happen, {e}");
+                X.SystemLog.Debug("Net", $"server start error happen, {e}");
                 _state = new Subject<Server, ServerState>(this, ServerState.SocketError);
             }
 
@@ -100,18 +100,19 @@ namespace UselessFrame.Net
                         break;
 
                     case NetOperateState.InValidRequest:
-                        X.SystemLog.Warning("Net", $"request invalid {result.State} {result.Message}");
+                        X.SystemLog.Debug("Net", $"request invalid {result.State} {result.Message}");
                         Run().Forget();
                         break;
 
                     case NetOperateState.SocketError:
-                        X.SystemLog.Error("Net", $"accept error {result.State} {result.Message}");
+                        X.SystemLog.Debug("Net", $"accept error {result.State} {result.Message}");
                         _state.Value = ServerState.SocketError;
                         break;
 
                     case NetOperateState.DataError:
                     case NetOperateState.PermissionError:
                     case NetOperateState.Unknown:
+                        X.SystemLog.Debug("Net", $"accept unkown error {result.State} {result.Message}");
                         _state.Value = ServerState.FatalErrorClose;
                         Dispose();
                         break;
@@ -124,14 +125,17 @@ namespace UselessFrame.Net
             Connection connect = new Connection(Guid.NewGuid(), result.Client);
             ServerToken token = NetUtility.CreateToken(connect.Id);
             await connect.Send(token);
-            connect.OnReceiveMessage += OnReceiveMessage;
-            connect.State.Subscribe(ConnectStateHandler, true);
-            _connections.Add(connect.Id, connect);
+            if (_state.Value == ServerState.Normal)
+            {
+                connect.OnReceiveMessage += OnReceiveMessage;
+                connect.State.Subscribe(ConnectStateHandler, true);
+                _connections.Add(connect.Id, connect);
+            }
         }
 
         private void ConnectStateHandler(Connection connect, ConnectionState state)
         {
-            X.SystemLog.Debug("Net", $"target {connect.Id}, state {state}");
+            X.SystemLog.Debug("Net", $"target state change {connect.LocalIP.Address}:{connect.LocalIP.Port} -> {connect.RemoteIP.Address}:{connect.RemoteIP.Port} {connect.Id}, state {state}");
         }
     }
 }
