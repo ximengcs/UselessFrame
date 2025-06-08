@@ -8,5 +8,6 @@ namespace UselessFrame.NewRuntime.World
     {
         WorldType Type { get; }
         ISceneManager Scene { get; }
+        ILogManager Log { get; }
     }
 }

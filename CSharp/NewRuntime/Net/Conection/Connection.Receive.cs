@@ -1,8 +1,9 @@
-﻿using Google.Protobuf;
-using UselessFrame.Net;
-using Cysharp.Threading.Tasks;
-using static UselessFrame.Net.NetUtility;
+﻿using Cysharp.Threading.Tasks;
+using Google.Protobuf;
 using System;
+using UselessFrame.Net;
+using UselessFrame.NewRuntime;
+using static UselessFrame.Net.NetUtility;
 
 namespace TestIMGUI.Core
 {
@@ -32,7 +33,7 @@ namespace TestIMGUI.Core
                     case NetOperateState.PermissionError:
                     case NetOperateState.Unknown:
                         _state.Value = ConnectionState.FatalErrorClose;
-                        Console.WriteLine($"[Net] request message error {result.State} {result.StateMessage}");
+                        X.SystemLog.Error("Net", $"request message error {result.State} {result.StateMessage}");
                         _closeTokenSource.Cancel();
                         Dispose();
                         break;

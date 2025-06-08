@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using UselessFrame.Net;
+using UselessFrame.NewRuntime;
 using UselessFrame.Runtime.Observable;
 
 namespace TestIMGUI.Core
@@ -36,7 +37,7 @@ namespace TestIMGUI.Core
             _pool = new ByteBufferPool();
             _state = new Subject<Connection, ConnectionState>(this, ConnectionState.Normal);
             _closeTokenSource = new CancellationTokenSource();
-            Console.WriteLine($"connect success target {_ip.Address}:{_ip.Port}");
+            X.SystemLog.Debug("Net", $"connect success target {_ip.Address}:{_ip.Port}");
             RequestMessage().Forget();
         }
 
@@ -58,11 +59,11 @@ namespace TestIMGUI.Core
             WriteMessageResult result = await MessageUtility.WriteCloseMessageAsync(_client);
             if (result.State != NetOperateState.OK)
             {
-                Console.WriteLine($"notify server close error happen.");
+                X.SystemLog.Error("Net", $"notify server close error happen. {result.StateMessage}");
             }
             else
             {
-                Console.WriteLine($"notify server close.");
+                X.SystemLog.Debug("Net", $"notify server close.");
             }
 
             Dispose();

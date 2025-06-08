@@ -114,7 +114,7 @@ namespace UselessFrame.NewRuntime
                     }
                     else
                     {
-                        Console.WriteLine($"already addtype {type.FullName} {type.GetHashCode()} {typesDictionary[type.FullName].GetHashCode()}");
+                        //Console.WriteLine($"already addtype {type.FullName} {type.GetHashCode()} {typesDictionary[type.FullName].GetHashCode()}");
                     }
                 }
             }
