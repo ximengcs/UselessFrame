@@ -55,6 +55,14 @@ namespace UselessFrame.Net
             try
             {
                 TcpClient client = _listener.EndAcceptTcpClient(ar);
+
+                if (client == null || client.Client == null || !client.Connected)
+                {
+                    client?.Close();
+                    Complete(new AcceptConnectResult(NetOperateState.InValidRequest, $"accept connect is invalid"));
+                    return;
+                }
+
                 Complete(new AcceptConnectResult(client, NetOperateState.OK));
             }
             catch (ObjectDisposedException e)

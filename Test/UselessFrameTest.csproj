@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -17,15 +17,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+    <ProjectReference Include="..\CSharp\UselessFrame.csproj" />
+    <ProjectReference Include="..\CsvHelper\CsvHelper.csproj" />
+    <ProjectReference Include="..\XApplication\XApplication.csproj" />
+    <ProjectReference Include="..\XGraphics\XGraphics.csproj" />
   </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="UniTask" Version="2.5.10" />
-	</ItemGroup>
+  <ItemGroup>
+    <Reference Include="UniTask">
+      <HintPath>..\Dlls\UniTask.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\CSharp\UselessFrame.csproj" />
-	</ItemGroup>
+  <ItemGroup>
+    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+  </ItemGroup>
 
 </Project>

@@ -7,11 +7,16 @@
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.31.1" />
-    <PackageReference Include="UniTask" Version="2.5.10" Culture="neutral" PublicKeyToken="7a576c6e8fde454a" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CsvHelper\CsvHelper.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="UniTask">
+      <HintPath>..\Dlls\UniTask.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

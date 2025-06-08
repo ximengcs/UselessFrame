@@ -38,7 +38,7 @@ namespace UselessFrame.Net
 
         public static async UniTask<RequestConnectResult> RequestConnectAsync(IPEndPoint ipEndPoint, CancellationToken cancelToken = default)
         {
-            RequestConnectTcpClientAsyncState state = new RequestConnectTcpClientAsyncState(new TcpClient(), ipEndPoint, cancelToken);
+            RequestConnectTcpClientAsyncState state = new RequestConnectTcpClientAsyncState(new TcpClient(AddressFamily.InterNetwork), ipEndPoint, cancelToken);
             return await state.CompleteTask;
         }
 

@@ -96,6 +96,12 @@ namespace UselessFrame.Net
                 {
                     case NetOperateState.OK:
                         CreateNewConnect(result).Forget();
+                        Run().Forget();
+                        break;
+
+                    case NetOperateState.InValidRequest:
+                        X.SystemLog.Warning("Net", $"request invalid {result.State} {result.Message}");
+                        Run().Forget();
                         break;
 
                     case NetOperateState.SocketError:
@@ -103,8 +109,10 @@ namespace UselessFrame.Net
                         _state.Value = ServerState.SocketError;
                         break;
 
+                    case NetOperateState.Disconnect:
                     case NetOperateState.DataError:
                     case NetOperateState.PermissionError:
+                    case NetOperateState.RemoteClose:
                     case NetOperateState.Unknown:
                         _state.Value = ServerState.FatalErrorClose;
                         Dispose();
@@ -119,9 +127,8 @@ namespace UselessFrame.Net
             ServerToken token = NetUtility.CreateToken(connect.Id);
             await connect.Send(token);
             connect.OnReceiveMessage += OnReceiveMessage;
-            connect.State.Subscribe(ConnectStateHandler);
+            connect.State.Subscribe(ConnectStateHandler, true);
             _connections.Add(connect.Id, connect);
-            Run().Forget();
         }
 
         private void ConnectStateHandler(Connection connect, ConnectionState state)

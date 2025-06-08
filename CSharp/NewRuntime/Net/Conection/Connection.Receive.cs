@@ -31,6 +31,7 @@ namespace TestIMGUI.Core
                     case NetOperateState.DataError:
                     case NetOperateState.ParamError:
                     case NetOperateState.PermissionError:
+                    case NetOperateState.RemoteClose:
                     case NetOperateState.Unknown:
                         _state.Value = ConnectionState.FatalErrorClose;
                         X.SystemLog.Error("Net", $"request message error {result.State} {result.StateMessage}");

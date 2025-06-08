@@ -118,7 +118,7 @@ namespace UselessFrame.Net
             {
                 if (count == 0)
                 {
-                    Complete(new ReadMessageResult(NetOperateState.DataError, "[Net]The remote peer closed the connection while reading the message size."));
+                    Complete(new ReadMessageResult(NetOperateState.RemoteClose, "[Net]The remote peer closed the connection while reading the message size."));
                     return;
                 }
 
@@ -126,7 +126,7 @@ namespace UselessFrame.Net
                 {
                     //read the size of the message
                     _messageSize = BitConverter.ToInt32(_buffer, 0);
-                    //Console.WriteLine($"[Net] read size success -> {_messageSize}");
+                    Console.WriteLine($"[Net] read size success -> {_messageSize}");
                     if (_messageSize < 0)
                     {
                         Complete(new ReadMessageResult(NetOperateState.DataError, "[Net]The remote peer sent a negative message size."));
@@ -160,7 +160,7 @@ namespace UselessFrame.Net
                 {
                     if (Crc16CcittKermit.Check(_buffer, _messageSize, out ushort src, out ushort cur))
                     {
-                        //Console.WriteLine($"[Net] read data success -> {_messageSize}");
+                        Console.WriteLine($"[Net] read data success -> {_messageSize}");
                         Complete(new ReadMessageResult(_buffer, _messageSize, _bufferPool, NetOperateState.OK));
                     }
                     else
@@ -172,7 +172,7 @@ namespace UselessFrame.Net
                 {
                     if (count == 0)
                     {
-                        Complete(new ReadMessageResult(NetOperateState.DataError, "[Net]The remote peer closed the connection before the entire message was received."));
+                        Complete(new ReadMessageResult(NetOperateState.RemoteClose, "[Net]The remote peer closed the connection before the entire message was received."));
                         return;
                     }
                     Begin(_bytesReceived, _messageSize - _bytesReceived);

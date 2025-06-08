@@ -6,11 +6,13 @@ namespace UselessFrame.Net
         OK,
         NormalClose,
         Disconnect,
+        RemoteClose,
         ParamError,
         SocketError,
         Cancel,
         DataError,
         PermissionError,
+        InValidRequest,
         Unknown
     }
 }
