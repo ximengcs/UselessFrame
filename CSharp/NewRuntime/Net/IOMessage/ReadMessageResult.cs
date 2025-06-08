@@ -1,6 +1,4 @@
 ﻿using System;
-using UselessFrame.Runtime.Pools;
-using Vulkan;
 
 namespace UselessFrame.Net
 {

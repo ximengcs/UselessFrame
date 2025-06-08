@@ -6,7 +6,6 @@ using System.Net;
 using UselessFrame.Net;
 using UselessFrame.NewRuntime;
 using UselessFrame.NewRuntime.Net.Conection;
-using Vortice;
 
 namespace TestIMGUI.Core
 {

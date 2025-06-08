@@ -1,7 +1,4 @@
 ﻿
-using System;
-using System.Collections.Generic;
-
 namespace Core.Application
 {
     public partial class ConsoleLogger

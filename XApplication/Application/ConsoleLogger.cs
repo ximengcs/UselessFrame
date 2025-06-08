@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading;
-using UselessFrame.NewRuntime;
+﻿using UselessFrame.NewRuntime;
 
 namespace Core.Application
 {

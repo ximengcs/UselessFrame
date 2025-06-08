@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Veldrid" Version="4.9.0" />
+		<PackageReference Include="Veldrid.ImGui" Version="5.72.0" />
+		<PackageReference Include="Veldrid.SPIRV" Version="1.0.15" />
+		<PackageReference Include="Veldrid.StartupUtilities" Version="4.9.0" />
+		<PackageReference Include="Google.Protobuf" Version="3.31.1" />
+		<PackageReference Include="UniTask" Version="2.5.10" Culture="neutral" PublicKeyToken="7a576c6e8fde454a" />
+	</ItemGroup>
+</Project>
