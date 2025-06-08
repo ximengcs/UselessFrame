@@ -109,10 +109,8 @@ namespace UselessFrame.Net
                         _state.Value = ServerState.SocketError;
                         break;
 
-                    case NetOperateState.Disconnect:
                     case NetOperateState.DataError:
                     case NetOperateState.PermissionError:
-                    case NetOperateState.RemoteClose:
                     case NetOperateState.Unknown:
                         _state.Value = ServerState.FatalErrorClose;
                         Dispose();

@@ -5,6 +5,7 @@ namespace TestIMGUI.Core
     {
         None,
         Connecting,
+        TokenPending,
         UnKnown,
         Normal,
         Reconnect,

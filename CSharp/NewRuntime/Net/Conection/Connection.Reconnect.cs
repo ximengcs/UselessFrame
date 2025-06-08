@@ -25,7 +25,7 @@ namespace TestIMGUI.Core
                     case NetOperateState.OK:
                         X.SystemLog.Debug("Net", $"connect success target {_ip.Address}:{_ip.Port} {result.State}");
                         _client = result.Remote;
-                        _state.Value = ConnectionState.Normal;
+                        _state.Value = ConnectionState.TokenPending;
                         RequestToken().Forget();
                         break;
 
@@ -107,7 +107,7 @@ namespace TestIMGUI.Core
         private async UniTaskVoid RequestToken()
         {
             ReadMessageResult result = await MessageUtility.ReadMessageAsync(_client, _pool, _closeTokenSource.Token);
-            if (_state.Value == ConnectionState.Normal)
+            if (_state.Value == ConnectionState.TokenPending)
             {
                 switch (result.State)
                 {
@@ -115,6 +115,7 @@ namespace TestIMGUI.Core
                         IMessage msg = result.Bytes.ToMessage();
                         ServerToken token = (ServerToken)msg;
                         _guid = token.GetId();
+                        _state.Value = ConnectionState.Normal;
                         RequestMessage().Forget();
                         break;
 
