@@ -125,6 +125,7 @@ namespace TestIMGUI.Core
                         Dispose();
                         break;
 
+                    case NetOperateState.InValidRequest:
                     case NetOperateState.Disconnect:
                     case NetOperateState.DataError:
                     case NetOperateState.ParamError:

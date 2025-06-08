@@ -21,6 +21,11 @@ namespace TestIMGUI.Core
                         RequestMessage().Forget();
                         break;
 
+                    case NetOperateState.InValidRequest:
+                        X.SystemLog.Warning("Net", $"reqeust message happend invalid {result.State} {result.StateMessage}");
+                        RequestMessage().Forget();
+                        break;
+
                     case NetOperateState.NormalClose:
                         _state.Value = ConnectionState.NormalClose;
                         _closeTokenSource.Cancel();

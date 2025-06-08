@@ -62,7 +62,7 @@ namespace UselessFrame.Net
             }
             catch (ArgumentOutOfRangeException e)
             {
-                Complete(new ReadMessageResult(NetOperateState.ParamError, $"[Net]read message begin param error, exception:{e}"));
+                Complete(new ReadMessageResult(NetOperateState.InValidRequest, $"[Net]read message begin param error, buffer length {_buffer.Length}, offset {offset}, size {size}, bytesReceived {_bytesReceived}, messageSize{_messageSize}, exception:{e}"));
             }
             catch (ObjectDisposedException e)
             {
