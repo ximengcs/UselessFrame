@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace Core.Application
 {
-    public class AppUtility
+    public class AppUtility 
     {
         public static readonly Vector4 Red = new Vector4(1.0f, 0.0f, 0.0f, 1.0f);       // 纯红
         public static readonly Vector4 Green = new Vector4(0.0f, 1.0f, 0.0f, 1.0f);     // 纯绿
