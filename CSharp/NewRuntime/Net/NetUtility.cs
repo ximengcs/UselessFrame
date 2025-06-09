@@ -28,11 +28,15 @@ namespace UselessFrame.Net
             if (_types.TryGetValue(messageTypeFullName, out MessageTypeInfo messageTypeInfo))
                 return messageTypeInfo;
 
-            ITypeCollection typeMap = X.Type.GetCollection(typeof(IMessage));
-            Type type = typeMap.Get(messageTypeFullName);
-            MessageParser parser = (MessageParser)type.GetProperty("Parser", BindingFlags.Static | BindingFlags.Public).GetValue(null);
-            messageTypeInfo = new MessageTypeInfo(type, parser);
-            _types.Add(messageTypeFullName, messageTypeInfo);
+            lock (_types)
+            {
+                ITypeCollection typeMap = X.Type.GetCollection(typeof(IMessage));
+                Type type = typeMap.Get(messageTypeFullName);
+                MessageParser parser = (MessageParser)type.GetProperty("Parser", BindingFlags.Static | BindingFlags.Public).GetValue(null);
+                messageTypeInfo = new MessageTypeInfo(type, parser);
+                _types.TryAdd(messageTypeFullName, messageTypeInfo);
+            }
+
             return messageTypeInfo;
         }
 

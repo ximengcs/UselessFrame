@@ -23,14 +23,14 @@ namespace TestIMGUI.Core
                 switch (result.State)
                 {
                     case NetOperateState.OK:
-                        X.SystemLog.Debug("Net", $"connect success target {_ip.Address}:{_ip.Port} {result.State}");
+                        X.SystemLog.Debug("Net", $" {Id} connect success target {_ip.Address}:{_ip.Port} {result.State}");
                         _client = result.Remote;
                         _state.Value = ConnectionState.TokenPending;
                         RequestToken().Forget();
                         break;
 
                     default:
-                        X.SystemLog.Debug("Net", $"connect error {result.State} {result.Message}");
+                        X.SystemLog.Debug("Net", $" {Id} connect error {result.State} {result.Message}");
                         _state.Value = ConnectionState.FatalConnect;
                         break;
                 }
@@ -71,7 +71,7 @@ namespace TestIMGUI.Core
         {
             if (_ip == null)
             {
-                X.SystemLog.Debug("Net", $"reconnect with new failure, because ip is null");
+                X.SystemLog.Debug("Net", $" {Id} reconnect with new failure, because ip is null");
                 _state.Value = ConnectionState.ReconnectErrorClose;
                 Dispose();
                 return;
@@ -92,13 +92,13 @@ namespace TestIMGUI.Core
             {
                 _client = result.Remote;
                 _ip = (IPEndPoint)_client.Client.RemoteEndPoint;
-                X.SystemLog.Debug("Net", $"reconnect success target {_ip.Address}:{_ip.Port}");
+                X.SystemLog.Debug("Net", $" {Id} reconnect success target {_ip.Address}:{_ip.Port}");
                 _state.Value = ConnectionState.Normal;
                 RequestToken().Forget();
             }
             else
             {
-                X.SystemLog.Debug("Net", $"reconnect failure {result.State} {result.Message}");
+                X.SystemLog.Debug("Net", $" {Id} reconnect failure {result.State} {result.Message}");
                 _state.Value = ConnectionState.ReconnectErrorClose;
                 Dispose();
             }
@@ -132,14 +132,14 @@ namespace TestIMGUI.Core
                     case NetOperateState.PermissionError:
                     case NetOperateState.RemoteClose:
                     case NetOperateState.Unknown:
-                        X.SystemLog.Debug("Net", $"request token error {result.State} {result.StateMessage}");
+                        X.SystemLog.Debug("Net", $" {Id} request token error {result.State} {result.StateMessage}");
                         _state.Value = ConnectionState.FatalErrorClose;
                         _closeTokenSource.Cancel();
                         Dispose();
                         break;
 
                     case NetOperateState.SocketError:
-                        X.SystemLog.Debug("Net", $"request token socket error {result.State} {result.StateMessage}");
+                        X.SystemLog.Debug("Net", $" {Id} request token socket error {result.State} {result.StateMessage}");
                         _state.Value = ConnectionState.SocketError;
                         break;
                 }

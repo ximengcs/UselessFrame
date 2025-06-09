@@ -28,7 +28,15 @@ namespace TestIMGUI.Core
 
         public IPEndPoint RemoteIP => _ip;
 
-        public IPEndPoint LocalIP => (IPEndPoint)_client.Client.LocalEndPoint;
+        public IPEndPoint LocalIP
+        {
+            get
+            {
+                if (_client == null || _client.Client == null)
+                    return new IPEndPoint(0, 0);
+                return (IPEndPoint)_client.Client.LocalEndPoint;
+            }
+        }
 
         public Guid Id => _guid;
 
@@ -43,7 +51,7 @@ namespace TestIMGUI.Core
             _pool = new ByteBufferPool();
             _state = new EventToFiberEnumSubject<Connection, ConnectionState>(this, ConnectionState.Normal, dataFiber);
             _closeTokenSource = new CancellationTokenSource();
-            X.SystemLog.Debug("Net", $"connect success target {_ip.Address}:{_ip.Port}");
+            X.SystemLog.Debug("Net", $"connect success target {Id} {_ip.Address}:{_ip.Port}");
             RequestMessage().Forget();
         }
 
@@ -65,11 +73,11 @@ namespace TestIMGUI.Core
             WriteMessageResult result = await MessageUtility.WriteCloseMessageAsync(_client);
             if (result.State != NetOperateState.OK)
             {
-                X.SystemLog.Debug("Net", $"notify server close error happen. {result.StateMessage}");
+                X.SystemLog.Debug("Net", $" {Id} notify server close error happen. {result.StateMessage}");
             }
             else
             {
-                X.SystemLog.Debug("Net", $"notify server close.");
+                X.SystemLog.Debug("Net", $" {Id} notify server close.");
             }
 
             Dispose();
@@ -80,9 +88,7 @@ namespace TestIMGUI.Core
             _client.Close();
             _client.Dispose();
             _pool.Dispose();
-            _client = null;
             _pool = null;
-            _ip = null;
         }
     }
 }

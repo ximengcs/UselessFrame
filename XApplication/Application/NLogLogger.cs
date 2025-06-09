@@ -15,7 +15,7 @@ namespace XFrameServer.Core.Logs
             {
                 string time = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
                 Layout layout = "${longdate}|${level:uppercase=true}|${message:withexception=true}";
-                builder.ForLogger().FilterLevel(LogLevel.Debug).WriteToFile($"logs/nlog-debug-{time}.log", layout, null, null, true, true, 1073741824, 1);
+                builder.ForLogger().FilterLevel(LogLevel.Debug).WriteToFile($"logs/nlog-debug-{time}.log", layout, null, null, true, true, 107374182, 1);
                 builder.ForLogger().FilterLevel(LogLevel.Warn).WriteToFile($"logs/nlog-warning-{time}.log", layout);
                 builder.ForLogger().FilterLevel(LogLevel.Error).WriteToFile($"logs/nlog-error-{time}.log", layout);
                 builder.ForLogger().FilterLevel(LogLevel.Fatal).WriteToFile($"logs/nlog-fatal-{time}.log", layout);

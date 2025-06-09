@@ -45,14 +45,14 @@ namespace TestIMGUI.Core
                     case NetOperateState.PermissionError:
                     case NetOperateState.RemoteClose:
                     case NetOperateState.Unknown:
-                        X.SystemLog.Debug("Net", $"send message error {result.State} {result.StateMessage}");
+                        X.SystemLog.Debug("Net", $" {Id} send message error {result.State} {result.StateMessage}");
                         _state.Value = ConnectionState.FatalErrorClose;
                         _closeTokenSource.Cancel();
                         Dispose();
                         break;
 
                     case NetOperateState.SocketError:
-                        X.SystemLog.Debug("Net", $"send message socket error {result.State} {result.StateMessage}");
+                        X.SystemLog.Debug("Net", $" {Id} send message socket error {result.State} {result.StateMessage}");
                         _state.Value = ConnectionState.SocketError;
                         break;
                 }
