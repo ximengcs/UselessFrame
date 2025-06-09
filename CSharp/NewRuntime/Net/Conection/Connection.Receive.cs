@@ -56,7 +56,20 @@ namespace TestIMGUI.Core
         {
             IMessage message = result.Bytes.ToMessage();
             result.Dispose();
-            OnReceiveMessage?.Invoke(message);
+            PostMessage(message);
         }
+
+        private void PostMessage(IMessage message)
+        {
+            if (OnReceiveMessage == null)
+                return;
+            _dataFiber.Post(TriggerMessage, message);
+        }
+
+        private void TriggerMessage(object state)
+        {
+            OnReceiveMessage.Invoke((IMessage)state);
+        }
+
     }
 }

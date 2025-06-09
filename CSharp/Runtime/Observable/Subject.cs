@@ -3,7 +3,7 @@ using System;
 
 namespace UselessFrame.Runtime.Observable
 {
-    public class Subject<OwnerT, T>
+    public class Subject<OwnerT, T> : ISubject<OwnerT, T>
     {
         private T _value;
         private OwnerT _owner;

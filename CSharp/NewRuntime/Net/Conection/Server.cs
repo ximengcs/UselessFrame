@@ -1,12 +1,13 @@
-﻿using Cysharp.Threading.Tasks;
-using Google.Protobuf;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Net;
-using System.Net.Sockets;
-using System.Threading;
 using TestIMGUI.Core;
+using Google.Protobuf;
+using System.Threading;
+using System.Net.Sockets;
 using UselessFrame.NewRuntime;
+using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
+using UselessFrame.NewRuntime.Fiber;
 using UselessFrame.Runtime.Observable;
 
 namespace UselessFrame.Net
@@ -18,13 +19,14 @@ namespace UselessFrame.Net
         private CancellationTokenSource _closeTokenSource;
         private Dictionary<Guid, Connection> _connections;
         private List<Connection> _connectionsList;
-        private Subject<Server, ServerState> _state;
+        private EventToFiberEnumSubject<Server, ServerState> _state;
+        private IFiber _dataFiber;
 
         public Action<IMessage> OnReceiveMessage;
 
         public IPEndPoint Host => _host;
 
-        public Subject<Server, ServerState> State => _state;
+        public ISubject<Server, ServerState> State => _state;
 
         public IEnumerable<Connection> Connections
         {
@@ -36,8 +38,9 @@ namespace UselessFrame.Net
             }
         }
 
-        public Server(int port)
+        public Server(int port, IFiber dataFiber)
         {
+            _dataFiber = dataFiber;
             _connectionsList = new List<Connection>();
             _connections = new Dictionary<Guid, Connection>();
             _closeTokenSource = new CancellationTokenSource();
@@ -47,12 +50,12 @@ namespace UselessFrame.Net
             {
                 _tcpListener.Start();
                 X.SystemLog.Debug("Net", $"server start");
-                _state = new Subject<Server, ServerState>(this, ServerState.Normal);
+                _state = new EventToFiberEnumSubject<Server, ServerState>(this, ServerState.Normal, dataFiber);
             }
             catch (SocketException e)
             {
                 X.SystemLog.Debug("Net", $"server start error happen, {e}");
-                _state = new Subject<Server, ServerState>(this, ServerState.SocketError);
+                _state = new EventToFiberEnumSubject<Server, ServerState>(this, ServerState.SocketError, dataFiber);
             }
 
             Run().Forget();
@@ -122,15 +125,27 @@ namespace UselessFrame.Net
 
         private async UniTaskVoid CreateNewConnect(AcceptConnectResult result)
         {
-            Connection connect = new Connection(Guid.NewGuid(), result.Client);
+            Connection connect = new Connection(Guid.NewGuid(), result.Client, _dataFiber);
             ServerToken token = NetUtility.CreateToken(connect.Id);
             await connect.Send(token);
             if (_state.Value == ServerState.Normal)
             {
-                connect.OnReceiveMessage += OnReceiveMessage;
+                connect.OnReceiveMessage += PostMessage;
                 connect.State.Subscribe(ConnectStateHandler, true);
                 _connections.Add(connect.Id, connect);
             }
+        }
+
+        private void PostMessage(IMessage message)
+        {
+            if (OnReceiveMessage == null)
+                return;
+            _dataFiber.Post(TriggerMessage, message);
+        }
+
+        private void TriggerMessage(object state)
+        {
+            OnReceiveMessage.Invoke((IMessage)state);
         }
 
         private void ConnectStateHandler(Connection connect, ConnectionState state)

@@ -6,7 +6,7 @@ namespace XFrame.Core
     /// <summary>
     /// 键值
     /// </summary>
-    public class Pair
+    public struct Pair
     {
         /// <summary>
         /// 创建键值项

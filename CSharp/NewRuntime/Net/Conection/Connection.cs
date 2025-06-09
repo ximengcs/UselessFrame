@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Threading;
 using UselessFrame.Net;
 using UselessFrame.NewRuntime;
+using UselessFrame.NewRuntime.Fiber;
 using UselessFrame.Runtime.Observable;
 
 namespace TestIMGUI.Core
@@ -19,8 +20,9 @@ namespace TestIMGUI.Core
         private TcpClient _client;
         private IPEndPoint _ip;
         private ByteBufferPool _pool;
-        private Subject<Connection, ConnectionState> _state;
+        private EventToFiberEnumSubject<Connection, ConnectionState> _state;
         private CancellationTokenSource _closeTokenSource;
+        private IFiber _dataFiber;
 
         public Action<IMessage> OnReceiveMessage;
 
@@ -30,26 +32,28 @@ namespace TestIMGUI.Core
 
         public Guid Id => _guid;
 
-        public Subject<Connection, ConnectionState> State => _state;
+        public ISubject<Connection, ConnectionState> State => _state;
 
-        public Connection(Guid guid, TcpClient client)
+        public Connection(Guid guid, TcpClient client, IFiber dataFiber)
         {
             _guid = guid;
             _client = client;
+            _dataFiber = dataFiber;
             _ip = (IPEndPoint)client.Client.RemoteEndPoint;
             _pool = new ByteBufferPool();
-            _state = new Subject<Connection, ConnectionState>(this, ConnectionState.Normal);
+            _state = new EventToFiberEnumSubject<Connection, ConnectionState>(this, ConnectionState.Normal, dataFiber);
             _closeTokenSource = new CancellationTokenSource();
             X.SystemLog.Debug("Net", $"connect success target {_ip.Address}:{_ip.Port}");
             RequestMessage().Forget();
         }
 
-        public Connection(IPEndPoint ip)
+        public Connection(IPEndPoint ip, IFiber dataFiber)
         {
             _ip = ip;
             _guid = Guid.Empty;
+            _dataFiber = dataFiber;
             _pool = new ByteBufferPool();
-            _state = new Subject<Connection, ConnectionState>(this, ConnectionState.None);
+            _state = new EventToFiberEnumSubject<Connection, ConnectionState>(this, ConnectionState.None, dataFiber);
             _closeTokenSource = new CancellationTokenSource();
             Connect().Forget();
         }
@@ -58,7 +62,6 @@ namespace TestIMGUI.Core
         {
             _state.Value = ConnectionState.NormalClose;
             _closeTokenSource.Cancel();
-
             WriteMessageResult result = await MessageUtility.WriteCloseMessageAsync(_client);
             if (result.State != NetOperateState.OK)
             {
