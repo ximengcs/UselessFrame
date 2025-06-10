@@ -11,18 +11,18 @@ namespace TestIMGUI.Core
     public struct MessageResult
     {
         private AutoResetUniTaskCompletionSource<IMessage> _responseTaskSource;
-        private Connection _connection;
         private Guid _token;
 
         public readonly IMessage Message;
         public readonly bool RequireResponse;
+        public readonly Connection Connection;
 
         internal UniTask<IMessage> ResponseTask => _responseTaskSource.Task;
 
         internal MessageResult(IMessage message, Connection connection)
         {
             Message = message;
-            _connection = connection;
+            Connection = connection;
 
             MessageTypeInfo typeInfo = NetUtility.GetMessageTypeInfo(message);
             if (typeInfo.HasRequestToken)
@@ -51,7 +51,7 @@ namespace TestIMGUI.Core
             if (typeInfo.HasRequestToken)
             {
                 typeInfo.SetRequestToken(message, _token);
-                _connection.Send(message).Forget();
+                Connection.Send(message).Forget();
             }
             else
             {

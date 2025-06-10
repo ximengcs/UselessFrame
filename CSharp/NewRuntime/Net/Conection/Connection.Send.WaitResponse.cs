@@ -1,8 +1,8 @@
 ﻿
-using Cysharp.Threading.Tasks;
-using Google.Protobuf;
 using System;
+using Google.Protobuf;
 using UselessFrame.Net;
+using Cysharp.Threading.Tasks;
 using static UselessFrame.Net.NetUtility;
 
 namespace TestIMGUI.Core
@@ -28,6 +28,11 @@ namespace TestIMGUI.Core
             public void SetResponse(IMessage message)
             {
                 _responseTaskSource.TrySetResult(message);
+            }
+
+            public void Dispose()
+            {
+                _responseTaskSource.TrySetCanceled();
             }
         }
     }

@@ -24,6 +24,9 @@ namespace TestIMGUI.Core
         private CancellationTokenSource _closeTokenSource;
         private IFiber _dataFiber;
 
+        private bool _disposed;
+        private readonly object _disposeLock = new object();
+
         public Action<MessageResult> OnReceiveMessage;
 
         public IPEndPoint RemoteIP => _ip;
@@ -62,6 +65,7 @@ namespace TestIMGUI.Core
             _pool = new ByteBufferPool();
             _state = new EventToFiberEnumSubject<Connection, ConnectionState>(this, ConnectionState.None, dataFiber);
             _closeTokenSource = new CancellationTokenSource();
+            _client = new TcpClient(AddressFamily.InterNetwork);
             Connect().Forget();
         }
 
@@ -73,6 +77,13 @@ namespace TestIMGUI.Core
 
         public async UniTask Close()
         {
+            lock (_disposeLock)
+            {
+                if (_disposed)
+                    return;
+                _disposed = true;
+            }
+
             _state.Value = ConnectionState.NormalClose;
             _closeTokenSource.Cancel();
             WriteMessageResult result = await MessageUtility.WriteCloseMessageAsync(_client);
@@ -88,10 +99,25 @@ namespace TestIMGUI.Core
             Dispose();
         }
 
+        internal void InnerClose()
+        {
+            lock (_disposeLock)
+            {
+                if (_disposed)
+                    return;
+                _disposed = true;
+            }
+
+            X.SystemLog.Debug("Net", $" {Id} will inner close.");
+            _closeTokenSource.Cancel();
+            Dispose();
+        }
+
         private void Dispose()
         {
+            _waitResponseList = null;
+            OnReceiveMessage = null;
             _client.Close();
-            _client.Dispose();
             _pool.Dispose();
             _pool = null;
         }

@@ -4,6 +4,8 @@ using Google.Protobuf.Reflection;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Net;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 using UselessFrame.NewRuntime;
@@ -60,7 +62,7 @@ namespace UselessFrame.Net
             return messageTypeInfo;
         }
 
-        public static ServerToken CreateToken(Guid guid)
+        internal static ServerToken CreateToken(Guid guid)
         {
             ServerToken token = new ServerToken()
             {
@@ -69,9 +71,31 @@ namespace UselessFrame.Net
             return token;
         }
 
-        public static Guid GetId(this ServerToken token)
+        internal static Guid GetId(this ServerToken token)
         {
             return new Guid(token.Id.Memory.Span);
         }
+
+        public static IPEndPoint GetLocalIPEndPoint(int port, AddressFamily addressFamily = AddressFamily.InterNetwork)
+        {
+            IPAddress ip = GetLocalIPAddress(addressFamily);
+            return new IPEndPoint(ip, port);
+        }
+
+        public static IPAddress GetLocalIPAddress(AddressFamily addressFamily = AddressFamily.InterNetwork)
+        {
+            IPHostEntry ipHost = Dns.GetHostEntry(Dns.GetHostName());
+            IPAddress ipAddress = null;
+            foreach (IPAddress address in ipHost.AddressList)
+            {
+                if (address.AddressFamily == addressFamily)
+                {
+                    ipAddress = address;
+                    break;
+                }
+            }
+            return ipAddress;
+        }
+
     }
 }

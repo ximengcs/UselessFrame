@@ -76,8 +76,12 @@ namespace UselessFrame.Net
                 }
                 else
                 {
-                    Complete(new WriteMessageResult(NetOperateState.Unknown, $"[Net]write message begin io error exception:{e}"));
+                    Complete(new WriteMessageResult(NetOperateState.Unknown, $"[Net]write message begin unkown error exception:{e}"));
                 }
+            }
+            catch (Exception e)
+            {
+                Complete(new WriteMessageResult(NetOperateState.Unknown, $"[Net]write message begin unkown error!!! exception:{e}"));
             }
         }
 
@@ -92,7 +96,6 @@ namespace UselessFrame.Net
             try
             {
                 _stream.EndWrite(ar);
-                //Console.WriteLine($"[Net] write success {_buffer.PackageSize}");
                 Complete(new WriteMessageResult(NetOperateState.OK));
             }
             catch (ObjectDisposedException e)

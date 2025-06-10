@@ -75,6 +75,11 @@ namespace UselessFrame.Net
 
         public void Dispose()
         {
+            _queue0.Clear();
+            _queue1.Clear();
+            _queue2.Clear();
+            _queue3.Clear();
+            _queue4.Clear();
             _queue0 = null;
             _queue1 = null;
             _queue2 = null;

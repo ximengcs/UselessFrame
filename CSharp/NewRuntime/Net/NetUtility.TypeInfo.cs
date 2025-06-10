@@ -9,8 +9,6 @@ namespace UselessFrame.Net
     {
         internal struct MessageTypeInfo
         {
-            private bool _requestTokenFiledCheck;
-            private bool _responseTokenFiledCheck;
             private IFieldAccessor _requestTokenFiled;
             private IFieldAccessor _responseTokenFiled;
 
@@ -22,7 +20,6 @@ namespace UselessFrame.Net
             {
                 get
                 {
-                    EnsureRequestToken();
                     return _requestTokenFiled != null;
                 }
             }
@@ -31,7 +28,6 @@ namespace UselessFrame.Net
             {
                 get
                 {
-                    EnsureResponseToken();
                     return _responseTokenFiled != null;
                 }
             }
@@ -43,13 +39,12 @@ namespace UselessFrame.Net
                 Descriptor = descriptor;
                 _requestTokenFiled = null;
                 _responseTokenFiled = null;
-                _requestTokenFiledCheck = false;
-                _responseTokenFiledCheck = false;
+                EnsureRequestToken();
+                EnsureResponseToken();
             }
 
             public Guid GetResponseToken(IMessage message)
             {
-                EnsureResponseToken();
                 if (_responseTokenFiled == null)
                     return Guid.Empty;
 
@@ -59,7 +54,6 @@ namespace UselessFrame.Net
 
             public void SetResponseToken(IMessage message, Guid token)
             {
-                EnsureResponseToken();
                 if (_responseTokenFiled == null)
                     return;
 
@@ -69,10 +63,6 @@ namespace UselessFrame.Net
 
             private void EnsureResponseToken()
             {
-                if (_responseTokenFiledCheck)
-                    return;
-                _responseTokenFiledCheck = true;
-
                 if (_responseTokenFiled == null)
                 {
                     FieldDescriptor field = Descriptor.FindFieldByName("ResponseToken");
@@ -82,7 +72,7 @@ namespace UselessFrame.Net
                     }
                     else
                     {
-                        X.SystemLog.Debug($"response do not has token");
+                        X.SystemLog.Debug($"response do not has response token {Descriptor.FullName}");
                         return;
                     }
                 }
@@ -90,7 +80,6 @@ namespace UselessFrame.Net
 
             public Guid GetRequestToken(IMessage message)
             {
-                EnsureRequestToken();
                 if (_requestTokenFiled == null)
                     return Guid.Empty;
 
@@ -100,7 +89,6 @@ namespace UselessFrame.Net
 
             public void SetRequestToken(IMessage message, Guid token)
             {
-                EnsureRequestToken();
                 if (_requestTokenFiled == null)
                     return;
 
@@ -110,10 +98,6 @@ namespace UselessFrame.Net
 
             private void EnsureRequestToken()
             {
-                if (_requestTokenFiledCheck)
-                    return;
-                _requestTokenFiledCheck = true;
-
                 if (_requestTokenFiled == null)
                 {
                     FieldDescriptor field = Descriptor.FindFieldByName("RequestToken");
@@ -123,7 +107,7 @@ namespace UselessFrame.Net
                     }
                     else
                     {
-                        X.SystemLog.Debug($"response do not has token");
+                        X.SystemLog.Debug($"response do not has request token {Descriptor.FullName}");
                         return;
                     }
                 }

@@ -1,7 +1,6 @@
-﻿using Cysharp.Threading.Tasks;
-using Google.Protobuf;
-using System;
+﻿using Google.Protobuf;
 using UselessFrame.Net;
+using Cysharp.Threading.Tasks;
 using UselessFrame.NewRuntime;
 using static UselessFrame.Net.NetUtility;
 
@@ -9,9 +8,14 @@ namespace TestIMGUI.Core
 {
     public partial class Connection
     {
+        private int _requestMessageInvalidRetryTimes;
+
         private async UniTaskVoid RequestMessage()
         {
             ReadMessageResult result = await MessageUtility.ReadMessageAsync(_client, _pool, _closeTokenSource.Token);
+            if (_closeTokenSource.IsCancellationRequested)
+                return;
+
             switch (_state.Value)
             {
                 case ConnectionState.TokenPending:
@@ -25,13 +29,24 @@ namespace TestIMGUI.Core
 
                         case NetOperateState.InValidRequest:
                             X.SystemLog.Debug("Net", $" {Id} reqeust message happend invalid {result.State} {result.StateMessage}");
-                            RequestMessage().Forget();
+                            if (_requestMessageInvalidRetryTimes > 0)
+                            {
+                                X.SystemLog.Debug("Net", $" {Id} will retry request message ({_requestMessageInvalidRetryTimes})");
+                                _requestMessageInvalidRetryTimes--;
+                                RequestMessage().Forget();
+                            }
+                            else
+                            {
+                                X.SystemLog.Debug("Net", $" {Id} will retry times is ({_requestMessageInvalidRetryTimes}), will close");
+                                _state.Value = ConnectionState.FatalErrorClose;
+                                InnerClose();
+                            }
                             break;
 
                         case NetOperateState.NormalClose:
+                            X.SystemLog.Debug("Net", $" {Id} will normal close ");
                             _state.Value = ConnectionState.NormalClose;
-                            _closeTokenSource.Cancel();
-                            Dispose();
+                            InnerClose();
                             break;
 
                         case NetOperateState.Disconnect:
@@ -40,17 +55,27 @@ namespace TestIMGUI.Core
                         case NetOperateState.PermissionError:
                         case NetOperateState.RemoteClose:
                         case NetOperateState.Unknown:
-                            X.SystemLog.Debug("Net", $" {Id} request message error {result.State} {result.StateMessage}");
+                            X.SystemLog.Debug("Net", $" {Id} request message fatal error {result.State} {result.StateMessage}");
                             _state.Value = ConnectionState.FatalErrorClose;
-                            _closeTokenSource.Cancel();
-                            Dispose();
+                            InnerClose();
                             break;
 
                         case NetOperateState.SocketError:
                             X.SystemLog.Debug("Net", $" {Id} request message socket error {result.State} {result.StateMessage}");
                             _state.Value = ConnectionState.SocketError;
+                            InnerClose();
+                            break;
+
+                        default:
+                            X.SystemLog.Debug("Net", $" {Id} request message unkown error {result.State} {result.StateMessage}");
+                            _state.Value = ConnectionState.FatalErrorClose;
+                            InnerClose();
                             break;
                     }
+                    break;
+
+                default:
+                    X.SystemLog.Debug("Net", $" {Id} reqeust message in error state {_state.Value}, {result.State} {result.StateMessage}");
                     break;
             }
         }
@@ -73,7 +98,7 @@ namespace TestIMGUI.Core
                 }
                 else
                 {
-                    X.SystemLog.Debug("waitResponseList TryRemove ERROR");
+                    X.SystemLog.Debug($"{Id} waitResponseList TryRemove ERROR");
                 }
                 return;
             }
@@ -83,11 +108,15 @@ namespace TestIMGUI.Core
 
             if (OnReceiveMessage == null)
                 return;
+
             _dataFiber.Post(TriggerMessage, message);
         }
 
         private void TriggerMessage(object state)
         {
+            if (_closeTokenSource.IsCancellationRequested)
+                return;
+
             MessageResult result = new MessageResult((IMessage)state, this);
             OnReceiveMessage.Invoke(result);
         }

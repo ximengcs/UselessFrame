@@ -14,9 +14,21 @@ namespace TestIMGUI.Core
 
         public async UniTask<T> SendWait<T>(IMessage message) where T : class, IMessage
         {
+            if (message == null)
+            {
+                X.SystemLog.Debug($"{Id} SendWait message is null");
+                return default;
+            }
+
             WaitResponseHandle waitHandle = new WaitResponseHandle(message);
             _waitResponseList.TryAdd(waitHandle.Id, waitHandle);
             await Send(message);
+            if (_closeTokenSource.IsCancellationRequested)
+            {
+                waitHandle.Dispose();
+                return default;
+            }
+
             IMessage response = await waitHandle.ResponseTask;
             if (response == null)
                 return default;
@@ -25,6 +37,12 @@ namespace TestIMGUI.Core
 
         public async UniTask Send(IMessage message)
         {
+            if (message == null)
+            {
+                X.SystemLog.Debug($"{Id} Send message is null");
+                return;
+            }
+
             string typeName = message.Descriptor.FullName;
             int typeNameSize = Encoding.UTF8.GetByteCount(typeName);
             int msgSize = message.CalculateSize() + sizeof(int) + typeNameSize;
@@ -39,6 +57,8 @@ namespace TestIMGUI.Core
         private async UniTask Send(MessageWriteBuffer buffer)
         {
             WriteMessageResult result = await MessageUtility.WriteMessageAsync(_client, buffer, _closeTokenSource.Token);
+            if (_closeTokenSource.IsCancellationRequested)
+                return;
 
             switch (_state.Value)
             {
@@ -50,27 +70,27 @@ namespace TestIMGUI.Core
                             buffer.Dispose();
                             break;
 
-                        case NetOperateState.NormalClose:
-                            _state.Value = ConnectionState.NormalClose;
-                            _closeTokenSource.Cancel();
-                            Dispose();
-                            break;
-
                         case NetOperateState.Disconnect:
                         case NetOperateState.DataError:
                         case NetOperateState.ParamError:
                         case NetOperateState.PermissionError:
                         case NetOperateState.RemoteClose:
                         case NetOperateState.Unknown:
-                            X.SystemLog.Debug("Net", $" {Id} send message error {result.State} {result.StateMessage}");
+                            X.SystemLog.Debug("Net", $" {Id} send message fatal error {result.State} {result.StateMessage}");
                             _state.Value = ConnectionState.FatalErrorClose;
-                            _closeTokenSource.Cancel();
-                            Dispose();
+                            InnerClose();
                             break;
 
                         case NetOperateState.SocketError:
                             X.SystemLog.Debug("Net", $" {Id} send message socket error {result.State} {result.StateMessage}");
                             _state.Value = ConnectionState.SocketError;
+                            InnerClose();
+                            break;
+
+                        default:
+                            X.SystemLog.Debug("Net", $" {Id} send message unkown error {result.State} {result.StateMessage}");
+                            _state.Value = ConnectionState.FatalErrorClose;
+                            InnerClose();
                             break;
                     }
                     break;
