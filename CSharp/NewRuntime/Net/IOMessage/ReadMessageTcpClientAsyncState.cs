@@ -64,6 +64,10 @@ namespace UselessFrame.Net
             {
                 Complete(new ReadMessageResult(NetOperateState.InValidRequest, $"[Net]read message begin param error, buffer length {_buffer.Length}, offset {offset}, size {size}, bytesReceived {_bytesReceived}, messageSize{_messageSize}, exception:{e}"));
             }
+            catch (SocketException e)
+            {
+                Complete(new ReadMessageResult(NetOperateState.SocketError, $"[Net]read message begin socket error exception:{e}"));
+            }
             catch (ObjectDisposedException e)
             {
                 Complete(new ReadMessageResult(NetOperateState.Disconnect, $"[Net]read message begin stream closing, exception:{e}"));
@@ -72,7 +76,7 @@ namespace UselessFrame.Net
             {
                 if (e.InnerException is SocketException)
                 {
-                    Complete(new ReadMessageResult(NetOperateState.SocketError, $"[Net]read message begin socket error exception:{e}"));
+                    Complete(new ReadMessageResult(NetOperateState.SocketError, $"[Net]read message begin io socket error exception:{e}"));
                 }
                 else
                 {

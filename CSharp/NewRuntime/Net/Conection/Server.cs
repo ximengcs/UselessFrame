@@ -22,7 +22,7 @@ namespace UselessFrame.Net
         private EventToFiberEnumSubject<Server, ServerState> _state;
         private IFiber _dataFiber;
 
-        public Action<IMessage> OnReceiveMessage;
+        public Action<MessageResult> OnReceiveMessage;
 
         public IPEndPoint Host => _host;
 
@@ -93,6 +93,7 @@ namespace UselessFrame.Net
             if (_closeTokenSource.IsCancellationRequested)
                 return;
 
+            X.SystemLog.Debug("Net", $"find new client, result : {result.State}, server : {_host.Address}:{_host.Port} {_state.Value} ");
             if (_state.Value == ServerState.Normal)
             {
                 switch (result.State)
@@ -127,30 +128,30 @@ namespace UselessFrame.Net
         {
             Connection connect = new Connection(Guid.NewGuid(), result.Client, _dataFiber);
             ServerToken token = NetUtility.CreateToken(connect.Id);
-            await connect.Send(token);
-            if (_state.Value == ServerState.Normal)
+            X.SystemLog.Debug("Net", $"create new client {connect.Id} {new Guid(token.Id.Span)}");
+            ServerTokenVerify tokenVerify = await connect.SendWait<ServerTokenVerify>(token);
+            if (tokenVerify != null)
             {
+                X.SystemLog.Debug("Net", $"verify success {connect.Id} {new Guid(token.Id.Span)}");
                 connect.OnReceiveMessage += PostMessage;
                 connect.State.Subscribe(ConnectStateHandler, true);
                 _connections.Add(connect.Id, connect);
+                connect.Start();
+            }
+            else
+            {
+                X.SystemLog.Debug("Net", $"tokenVerify error -> {_host.Address}:{_host.Port}");
             }
         }
 
-        private void PostMessage(IMessage message)
+        private void PostMessage(MessageResult message)
         {
-            if (OnReceiveMessage == null)
-                return;
-            _dataFiber.Post(TriggerMessage, message);
-        }
-
-        private void TriggerMessage(object state)
-        {
-            OnReceiveMessage.Invoke((IMessage)state);
+            OnReceiveMessage.Invoke(message);
         }
 
         private void ConnectStateHandler(Connection connect, ConnectionState state)
         {
-            X.SystemLog.Debug("Net", $"target state change {connect.LocalIP.Address}:{connect.LocalIP.Port} -> {connect.RemoteIP.Address}:{connect.RemoteIP.Port} {connect.Id}, state {state}");
+            X.SystemLog.Debug("Net", $"target state change, state {state}, {connect.LocalIP.Address}:{connect.LocalIP.Port} -> {connect.RemoteIP.Address}:{connect.RemoteIP.Port} {connect.Id}");
         }
     }
 }

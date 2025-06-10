@@ -25,7 +25,7 @@ namespace Core.Application
                 if (!string.IsNullOrEmpty(head))
                 {
                     m_Formater.Head();
-                    Console.Write($"[{head}]".PadRight(12, ' '));
+                    Console.Write($"[{head}]".PadRight(8, ' '));
                     m_Formater.End();
                 }
 

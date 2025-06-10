@@ -24,7 +24,7 @@ namespace TestIMGUI.Core
         private CancellationTokenSource _closeTokenSource;
         private IFiber _dataFiber;
 
-        public Action<IMessage> OnReceiveMessage;
+        public Action<MessageResult> OnReceiveMessage;
 
         public IPEndPoint RemoteIP => _ip;
 
@@ -49,9 +49,8 @@ namespace TestIMGUI.Core
             _dataFiber = dataFiber;
             _ip = (IPEndPoint)client.Client.RemoteEndPoint;
             _pool = new ByteBufferPool();
-            _state = new EventToFiberEnumSubject<Connection, ConnectionState>(this, ConnectionState.Normal, dataFiber);
+            _state = new EventToFiberEnumSubject<Connection, ConnectionState>(this, ConnectionState.TokenPending, dataFiber);
             _closeTokenSource = new CancellationTokenSource();
-            X.SystemLog.Debug("Net", $"connect success target {Id} {_ip.Address}:{_ip.Port}");
             RequestMessage().Forget();
         }
 
@@ -64,6 +63,12 @@ namespace TestIMGUI.Core
             _state = new EventToFiberEnumSubject<Connection, ConnectionState>(this, ConnectionState.None, dataFiber);
             _closeTokenSource = new CancellationTokenSource();
             Connect().Forget();
+        }
+
+        internal void Start()
+        {
+            _state.Value = ConnectionState.Normal;
+            X.SystemLog.Debug("Net", $"connect success target {Id} {_ip.Address}:{_ip.Port} {_state.Value}");
         }
 
         public async UniTask Close()

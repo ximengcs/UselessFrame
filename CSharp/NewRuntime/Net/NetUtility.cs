@@ -1,5 +1,6 @@
 ﻿
 using Google.Protobuf;
+using Google.Protobuf.Reflection;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -23,6 +24,24 @@ namespace UselessFrame.Net
             return message;
         }
 
+        internal static MessageTypeInfo GetMessageTypeInfo(IMessage message)
+        {
+            Type type = message.GetType();
+            string messageTypeFullName = type.FullName;
+            if (_types.TryGetValue(messageTypeFullName, out MessageTypeInfo messageTypeInfo))
+                return messageTypeInfo;
+
+            lock (_types)
+            {
+                MessageParser parser = (MessageParser)type.GetProperty("Parser", BindingFlags.Static | BindingFlags.Public).GetValue(null);
+                MessageDescriptor descriptor = (MessageDescriptor)type.GetProperty("Descriptor", BindingFlags.Static | BindingFlags.Public).GetValue(null);
+                messageTypeInfo = new MessageTypeInfo(type, parser, descriptor);
+                _types.TryAdd(messageTypeFullName, messageTypeInfo);
+            }
+
+            return messageTypeInfo;
+        }
+
         internal static MessageTypeInfo GetMessageTypeInfo(string messageTypeFullName)
         {
             if (_types.TryGetValue(messageTypeFullName, out MessageTypeInfo messageTypeInfo))
@@ -33,7 +52,8 @@ namespace UselessFrame.Net
                 ITypeCollection typeMap = X.Type.GetCollection(typeof(IMessage));
                 Type type = typeMap.Get(messageTypeFullName);
                 MessageParser parser = (MessageParser)type.GetProperty("Parser", BindingFlags.Static | BindingFlags.Public).GetValue(null);
-                messageTypeInfo = new MessageTypeInfo(type, parser);
+                MessageDescriptor descriptor = (MessageDescriptor)type.GetProperty("Descriptor", BindingFlags.Static | BindingFlags.Public).GetValue(null);
+                messageTypeInfo = new MessageTypeInfo(type, parser, descriptor);
                 _types.TryAdd(messageTypeFullName, messageTypeInfo);
             }
 

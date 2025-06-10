@@ -13,17 +13,18 @@ namespace TestIMGUI.Core
     {
         private async UniTaskVoid Connect()
         {
+            X.SystemLog.Debug("Net", $"request connect -> {_ip.Address}:{_ip.Port}");
             _state.Value = ConnectionState.Connecting;
             RequestConnectResult result = await ConnectionUtility.RequestConnectAsync(_ip, _closeTokenSource.Token);
             if (_closeTokenSource.IsCancellationRequested)
                 return;
 
+            X.SystemLog.Debug("Net", $"request connect complete -> {_ip.Address}:{_ip.Port}, result {result.State}");
             if (_state.Value == ConnectionState.Connecting)
             {
                 switch (result.State)
                 {
                     case NetOperateState.OK:
-                        X.SystemLog.Debug("Net", $" {Id} connect success target {_ip.Address}:{_ip.Port} {result.State}");
                         _client = result.Remote;
                         _state.Value = ConnectionState.TokenPending;
                         RequestToken().Forget();
@@ -93,7 +94,6 @@ namespace TestIMGUI.Core
                 _client = result.Remote;
                 _ip = (IPEndPoint)_client.Client.RemoteEndPoint;
                 X.SystemLog.Debug("Net", $" {Id} reconnect success target {_ip.Address}:{_ip.Port}");
-                _state.Value = ConnectionState.Normal;
                 RequestToken().Forget();
             }
             else
@@ -106,7 +106,12 @@ namespace TestIMGUI.Core
 
         private async UniTaskVoid RequestToken()
         {
+            X.SystemLog.Debug("Net", $" request token {_ip.Address}:{_ip.Port}");
             ReadMessageResult result = await MessageUtility.ReadMessageAsync(_client, _pool, _closeTokenSource.Token);
+            if (_closeTokenSource.IsCancellationRequested)
+                return;
+
+            X.SystemLog.Debug("Net", $" request token complete, {_ip.Address}:{_ip.Port}, state {result.State}");
             if (_state.Value == ConnectionState.TokenPending)
             {
                 switch (result.State)
@@ -115,8 +120,10 @@ namespace TestIMGUI.Core
                         IMessage msg = result.Bytes.ToMessage();
                         ServerToken token = (ServerToken)msg;
                         _guid = token.GetId();
-                        _state.Value = ConnectionState.Normal;
+                        X.SystemLog.Debug("Net", $" receive token {token.Id}, {_ip.Address}:{_ip.Port}");
+                        SendTokenVerify(token.RequestToken);
                         RequestMessage().Forget();
+                        Start();
                         break;
 
                     case NetOperateState.NormalClose:

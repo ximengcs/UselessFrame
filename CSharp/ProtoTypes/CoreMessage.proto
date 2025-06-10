@@ -2,12 +2,18 @@
 message ServerToken
 {
     required bytes Id = 1;
+    required bytes RequestToken = 2;
+}
+
+message ServerTokenVerify
+{
+    required bytes ResponseToken = 1;
 }
 
 message MessageTarget
 {
-    required int32 World = 1;
-    required int32 Scene = 2;
+    required int32 World = 2;
+    required int32 Scene = 3;
 }
 
 message StringMessage

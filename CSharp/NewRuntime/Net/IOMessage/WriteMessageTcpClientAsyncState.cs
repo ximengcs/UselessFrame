@@ -60,6 +60,10 @@ namespace UselessFrame.Net
             {
                 Complete(new WriteMessageResult(NetOperateState.ParamError, $"[Net]write message begin param error, exception:{e}"));
             }
+            catch (SocketException e)
+            {
+                Complete(new WriteMessageResult(NetOperateState.SocketError, $"[Net]write message begin socket error exception:{e}"));
+            }
             catch (ObjectDisposedException e)
             {
                 Complete(new WriteMessageResult(NetOperateState.Disconnect, $"[Net]write message begin stream closing, exception:{e}"));
@@ -68,7 +72,7 @@ namespace UselessFrame.Net
             {
                 if (e.InnerException is SocketException)
                 {
-                    Complete(new WriteMessageResult(NetOperateState.SocketError, $"[Net]write message begin socket error exception:{e}"));
+                    Complete(new WriteMessageResult(NetOperateState.SocketError, $"[Net]write message begin io socket error exception:{e}"));
                 }
                 else
                 {
