@@ -48,7 +48,17 @@ namespace UselessFrame.Net
         {
             if (_cancelToken.IsCancellationRequested)
             {
-                Complete(new AcceptConnectResult(NetOperateState.Cancel, "[Net]accept connect cancel."));
+                try
+                {
+                    TcpClient client = _listener.EndAcceptTcpClient(ar);
+                    if (client != null)
+                        client.Dispose();
+                    Complete(new AcceptConnectResult(NetOperateState.Cancel, "[Net]accept connect cancel."));
+                }
+                catch (Exception e)
+                {
+                    Complete(new AcceptConnectResult(NetOperateState.Cancel, $"[Net]accept connect cancel. catch exception {e}"));
+                }
                 return;
             }
 

@@ -79,17 +79,21 @@ namespace UselessFrame.Net
                     Complete(new WriteMessageResult(NetOperateState.Unknown, $"[Net]write message begin unkown error exception:{e}"));
                 }
             }
-            catch (Exception e)
-            {
-                Complete(new WriteMessageResult(NetOperateState.Unknown, $"[Net]write message begin unkown error!!! exception:{e}"));
-            }
         }
 
         private void OnWrite(IAsyncResult ar)
         {
             if (_cancelToken.IsCancellationRequested)
             {
-                Complete(new WriteMessageResult(NetOperateState.Cancel, "[Net]write messge cancel."));
+                try
+                {
+                    _stream.EndWrite(ar);
+                    Complete(new WriteMessageResult(NetOperateState.Cancel, "[Net]write messge cancel."));
+                }
+                catch (Exception e)
+                {
+                    Complete(new WriteMessageResult(NetOperateState.Cancel, $"[Net]write messge cancel., catch exception {e}"));
+                }
                 return;
             }
 
@@ -98,19 +102,23 @@ namespace UselessFrame.Net
                 _stream.EndWrite(ar);
                 Complete(new WriteMessageResult(NetOperateState.OK));
             }
+            catch (SocketException e)
+            {
+                Complete(new WriteMessageResult(NetOperateState.SocketError, $"[Net]write message end socket error exception:{e}"));
+            }
             catch (ObjectDisposedException e)
             {
-                Complete(new WriteMessageResult(NetOperateState.Disconnect, $"[Net]write message begin stream closing, exception:{e}"));
+                Complete(new WriteMessageResult(NetOperateState.Disconnect, $"[Net]write message end stream closing, exception:{e}"));
             }
             catch (IOException e)
             {
                 if (e.InnerException is SocketException)
                 {
-                    Complete(new WriteMessageResult(NetOperateState.SocketError, $"[Net]write message begin socket error exception:{e}"));
+                    Complete(new WriteMessageResult(NetOperateState.SocketError, $"[Net]write message end socket error exception:{e}"));
                 }
                 else
                 {
-                    Complete(new WriteMessageResult(NetOperateState.Unknown, $"[Net]write message begin io error exception:{e}"));
+                    Complete(new WriteMessageResult(NetOperateState.Unknown, $"[Net]write message end io error exception:{e}"));
                 }
             }
         }

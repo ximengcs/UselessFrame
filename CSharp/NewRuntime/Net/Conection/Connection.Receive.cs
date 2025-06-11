@@ -10,7 +10,7 @@ namespace TestIMGUI.Core
     {
         private int _requestMessageInvalidRetryTimes;
 
-        private async UniTaskVoid RequestMessage()
+        private async UniTask RequestMessage()
         {
             ReadMessageResult result = await MessageUtility.ReadMessageAsync(_client, _pool, _closeTokenSource.Token);
             if (_closeTokenSource.IsCancellationRequested)
@@ -82,6 +82,7 @@ namespace TestIMGUI.Core
 
         private void SuccessHandler(ReadMessageResult result)
         {
+            _receiveTimes++;
             IMessage message = result.Bytes.ToMessage();
             result.Dispose();
             PostMessage(message);

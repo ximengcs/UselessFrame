@@ -30,18 +30,16 @@ namespace UselessFrame.Net
         {
             Type type = message.GetType();
             string messageTypeFullName = type.FullName;
-            if (_types.TryGetValue(messageTypeFullName, out MessageTypeInfo messageTypeInfo))
-                return messageTypeInfo;
-
             lock (_types)
             {
+                if (_types.TryGetValue(messageTypeFullName, out MessageTypeInfo messageTypeInfo))
+                    return messageTypeInfo;
                 MessageParser parser = (MessageParser)type.GetProperty("Parser", BindingFlags.Static | BindingFlags.Public).GetValue(null);
                 MessageDescriptor descriptor = (MessageDescriptor)type.GetProperty("Descriptor", BindingFlags.Static | BindingFlags.Public).GetValue(null);
                 messageTypeInfo = new MessageTypeInfo(type, parser, descriptor);
                 _types.TryAdd(messageTypeFullName, messageTypeInfo);
+                return messageTypeInfo;
             }
-
-            return messageTypeInfo;
         }
 
         internal static MessageTypeInfo GetMessageTypeInfo(string messageTypeFullName)

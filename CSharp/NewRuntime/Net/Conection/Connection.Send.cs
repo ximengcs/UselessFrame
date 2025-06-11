@@ -56,6 +56,7 @@ namespace TestIMGUI.Core
 
         private async UniTask Send(MessageWriteBuffer buffer)
         {
+            _sendTimes++;
             WriteMessageResult result = await MessageUtility.WriteMessageAsync(_client, buffer, _closeTokenSource.Token);
             if (_closeTokenSource.IsCancellationRequested)
                 return;

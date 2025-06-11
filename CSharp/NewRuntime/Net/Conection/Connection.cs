@@ -27,7 +27,18 @@ namespace TestIMGUI.Core
         private bool _disposed;
         private readonly object _disposeLock = new object();
 
+        private int _sendTimes;
+        private int _receiveTimes;
+
         public Action<MessageResult> OnReceiveMessage;
+
+        public DebugInfo Info
+        {
+            get
+            {
+                return new DebugInfo(_sendTimes, _receiveTimes);
+            }
+        }
 
         public IPEndPoint RemoteIP => _ip;
 

@@ -67,7 +67,15 @@ namespace UselessFrame.Net
         {
             if (_cancelToken.IsCancellationRequested)
             {
-                Complete(new RequestConnectResult(NetOperateState.Cancel, "[Net]connect cancel."));
+                try
+                {
+                    _client.EndConnect(ar);
+                    Complete(new RequestConnectResult(NetOperateState.Cancel, "[Net]connect cancel."));
+                }
+                catch (Exception e)
+                {
+                    Complete(new RequestConnectResult(NetOperateState.Cancel, $"[Net]connect cancel. catch exception {e}"));
+                }
                 return;
             }
 

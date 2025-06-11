@@ -12,7 +12,7 @@ namespace TestIMGUI.Core
 {
     public partial class Connection
     {
-        private async UniTaskVoid Connect()
+        private async UniTask Connect()
         {
             X.SystemLog.Debug("Net", $"request connect -> {_ip}");
             _state.Value = ConnectionState.Connecting;
@@ -60,7 +60,7 @@ namespace TestIMGUI.Core
             }
         }
 
-        private async UniTaskVoid TryReconnect()
+        private async UniTask TryReconnect()
         {
             RequestConnectResult result = await ConnectionUtility.ReConnectAsync(_client);
             if (_closeTokenSource.IsCancellationRequested)
@@ -69,7 +69,7 @@ namespace TestIMGUI.Core
                 HandleReconnectResult(result);
         }
 
-        private async UniTaskVoid TryReconnectWithNew()
+        private async UniTask TryReconnectWithNew()
         {
             if (_ip == null)
             {
@@ -105,7 +105,7 @@ namespace TestIMGUI.Core
             }
         }
 
-        private async UniTaskVoid RequestToken()
+        private async UniTask RequestToken()
         {
             X.SystemLog.Debug("Net", $" request token {_ip.Address}:{_ip.Port}");
             ReadMessageResult result = await MessageUtility.ReadMessageAsync(_client, _pool, _closeTokenSource.Token);

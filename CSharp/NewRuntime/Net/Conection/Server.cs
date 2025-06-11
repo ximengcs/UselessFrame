@@ -96,7 +96,7 @@ namespace UselessFrame.Net
             _connections = null;
         }
 
-        private async UniTaskVoid Run()
+        private async UniTask Run()
         {
             if (_state.Value != ServerState.Normal)
                 return;
@@ -147,7 +147,7 @@ namespace UselessFrame.Net
             }
         }
 
-        private async UniTaskVoid CreateNewConnect(AcceptConnectResult result)
+        private async UniTask CreateNewConnect(AcceptConnectResult result)
         {
             Connection connect = new Connection(Guid.NewGuid(), result.Client, _dataFiber);
             ServerToken token = NetUtility.CreateToken(connect.Id);
