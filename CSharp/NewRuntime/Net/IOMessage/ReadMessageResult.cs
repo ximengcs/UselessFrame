@@ -1,40 +1,39 @@
-﻿using System;
+﻿using Google.Protobuf;
+using System;
+using System.Net.Sockets;
 
 namespace UselessFrame.Net
 {
-    public struct ReadMessageResult : IDisposable
+    public struct ReadMessageResult
     {
-        private ByteBufferPool _pool;
-        private byte[] _buffer;
-        private int _messageSize;
-
         public readonly NetOperateState State;
         public readonly string StateMessage;
-
-        public Memory<byte> Bytes => _buffer.AsMemory(Crc16CcittKermit.CRCLength, _messageSize - Crc16CcittKermit.CRCLength);
+        public readonly IMessage Message;
+        public readonly SocketException Exception;
 
         internal ReadMessageResult(byte[] msgData, int msgSize, ByteBufferPool pool, NetOperateState state, string stateMsg = null)
         {
-            _pool = pool;
             State = state;
-            _buffer = msgData;
-            _messageSize = msgSize;
             StateMessage = stateMsg;
+            Message = msgData.AsMemory(Crc16CcittKermit.CRCLength, msgSize - Crc16CcittKermit.CRCLength).ToMessage();
+            pool.Release(msgData);
+            Exception = null;
         }
 
         internal ReadMessageResult(NetOperateState state, string stateMsg)
         {
-            _pool = default;
-            _buffer = null;
-            _messageSize = default;
             State = state;
             StateMessage = stateMsg;
+            Message = null;
+            Exception = null;
         }
 
-        public void Dispose()
+        internal ReadMessageResult(SocketException socketEx)
         {
-            _pool.Release(_buffer);
-            _pool = null;
+            Exception = socketEx;
+            State = NetOperateState.SocketError;
+            StateMessage = socketEx.Message;
+            Message = null;
         }
     }
 }

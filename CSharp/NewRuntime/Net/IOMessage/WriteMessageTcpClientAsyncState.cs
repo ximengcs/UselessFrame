@@ -1,8 +1,7 @@
-﻿using Cysharp.Threading.Tasks;
-using System;
+﻿using System;
 using System.IO;
 using System.Net.Sockets;
-using System.Threading;
+using Cysharp.Threading.Tasks;
 
 namespace UselessFrame.Net
 {
@@ -10,14 +9,12 @@ namespace UselessFrame.Net
     {
         private NetworkStream _stream;
         private MessageWriteBuffer _buffer;
-        private CancellationToken _cancelToken;
         private AutoResetUniTaskCompletionSource<WriteMessageResult> _completeTaskSource;
 
         public UniTask<WriteMessageResult> CompleteTask => _completeTaskSource.Task;
 
-        public WriteMessageTcpClientAsyncState(TcpClient client, MessageWriteBuffer buffer, CancellationToken cancelToken)
+        public WriteMessageTcpClientAsyncState(TcpClient client, MessageWriteBuffer buffer)
         {
-            _cancelToken = cancelToken;
             _buffer = buffer;
             _completeTaskSource = AutoResetUniTaskCompletionSource<WriteMessageResult>.Create();
 
@@ -28,12 +25,12 @@ namespace UselessFrame.Net
             }
             catch (ObjectDisposedException e)
             {
-                Complete(new WriteMessageResult(NetOperateState.SocketError, $"[Net]write message begin socket error exception:{e}"));
+                Complete(new WriteMessageResult(NetOperateState.FatalError, $"[Net]write message ready error, exception:{e}"));
                 return;
             }
             catch (InvalidOperationException e)
             {
-                Complete(new WriteMessageResult(NetOperateState.SocketError, $"[Net]write message begin socket error exception:{e}"));
+                Complete(new WriteMessageResult(NetOperateState.FatalError, $"[Net]write message ready error, exception:{e}"));
                 return;
             }
 
@@ -54,11 +51,11 @@ namespace UselessFrame.Net
             }
             catch (ArgumentNullException e)
             {
-                Complete(new WriteMessageResult(NetOperateState.ParamError, $"[Net]write message begin param is null, exception:{e}"));
+                Complete(new WriteMessageResult(NetOperateState.FatalError, $"[Net]write message begin param is null, exception:{e}"));
             }
             catch (ArgumentOutOfRangeException e)
             {
-                Complete(new WriteMessageResult(NetOperateState.ParamError, $"[Net]write message begin param error, exception:{e}"));
+                Complete(new WriteMessageResult(NetOperateState.FatalError, $"[Net]write message begin param error, exception:{e}"));
             }
             catch (SocketException e)
             {
@@ -66,7 +63,7 @@ namespace UselessFrame.Net
             }
             catch (ObjectDisposedException e)
             {
-                Complete(new WriteMessageResult(NetOperateState.Disconnect, $"[Net]write message begin stream closing, exception:{e}"));
+                Complete(new WriteMessageResult(NetOperateState.FatalError, $"[Net]write message begin stream closing, exception:{e}"));
             }
             catch (IOException e)
             {
@@ -76,27 +73,13 @@ namespace UselessFrame.Net
                 }
                 else
                 {
-                    Complete(new WriteMessageResult(NetOperateState.Unknown, $"[Net]write message begin unkown error exception:{e}"));
+                    Complete(new WriteMessageResult(NetOperateState.FatalError, $"[Net]write message begin unkown error exception:{e}"));
                 }
             }
         }
 
         private void OnWrite(IAsyncResult ar)
         {
-            if (_cancelToken.IsCancellationRequested)
-            {
-                try
-                {
-                    _stream.EndWrite(ar);
-                    Complete(new WriteMessageResult(NetOperateState.Cancel, "[Net]write messge cancel."));
-                }
-                catch (Exception e)
-                {
-                    Complete(new WriteMessageResult(NetOperateState.Cancel, $"[Net]write messge cancel., catch exception {e}"));
-                }
-                return;
-            }
-
             try
             {
                 _stream.EndWrite(ar);
@@ -108,7 +91,7 @@ namespace UselessFrame.Net
             }
             catch (ObjectDisposedException e)
             {
-                Complete(new WriteMessageResult(NetOperateState.Disconnect, $"[Net]write message end stream closing, exception:{e}"));
+                Complete(new WriteMessageResult(NetOperateState.FatalError, $"[Net]write message end stream closing, exception:{e}"));
             }
             catch (IOException e)
             {
@@ -118,7 +101,7 @@ namespace UselessFrame.Net
                 }
                 else
                 {
-                    Complete(new WriteMessageResult(NetOperateState.Unknown, $"[Net]write message end io error exception:{e}"));
+                    Complete(new WriteMessageResult(NetOperateState.FatalError, $"[Net]write message end io error exception:{e}"));
                 }
             }
         }
