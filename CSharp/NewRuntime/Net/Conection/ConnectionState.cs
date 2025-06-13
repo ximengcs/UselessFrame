@@ -1,18 +1,16 @@
 ﻿
-namespace TestIMGUI.Core
+namespace UselessFrame.Net
 {
     public enum ConnectionState
     {
         None,
-        Connecting,
-        TokenPending,
-        UnKnown,
-        Normal,
-        Reconnect,
-        SocketError,
-        NormalClose,
-        FatalErrorClose,
-        ReconnectErrorClose,
-        FatalConnect
+        Connect,
+        CheckConnect,
+        CloseRequest,
+        CloseResponse,
+        Dispose,
+        Run,
+        TokenResponse,
+        VerifyToken
     }
 }

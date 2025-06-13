@@ -1,136 +1,98 @@
-﻿using Cysharp.Threading.Tasks;
+﻿
+using Cysharp.Threading.Tasks;
 using Google.Protobuf;
 using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading;
-using UselessFrame.Net;
-using UselessFrame.NewRuntime;
-using UselessFrame.NewRuntime.Fiber;
-using UselessFrame.Runtime.Observable;
+using System.Collections.Generic;
 
-namespace TestIMGUI.Core
+namespace UselessFrame.Net
 {
-    /// <summary>
-    /// 单个Connect只能在一个线程中
-    /// </summary>
-    public partial class Connection
+    internal partial class Connection : IConnection, INetStateTrigger
     {
-        private Guid _guid;
+        private Guid _id;
         private TcpClient _client;
-        private IPEndPoint _ip;
+        private IPEndPoint _localIP;
+        private IPEndPoint _remoteIP;
         private ByteBufferPool _pool;
-        private EventToFiberEnumSubject<Connection, ConnectionState> _state;
-        private CancellationTokenSource _closeTokenSource;
-        private IFiber _dataFiber;
+        private MessageStream _stream;
+        private NetFsm<Connection> _fsm;
+        private Action<MessageResult> _onReceiveMessage;
+        private Action<ConnectionState, ConnectionState> _onStateChange;
 
-        private bool _disposed;
-        private readonly object _disposeLock = new object();
+        public Guid Id => _id;
 
-        private int _sendTimes;
-        private int _receiveTimes;
+        public IPEndPoint LocalIP => _localIP;
 
-        public Action<MessageResult> OnReceiveMessage;
+        public IPEndPoint RemoteIP => _remoteIP;
 
-        public DebugInfo Info
+        public event Action<MessageResult> ReceiveMessageEvent
         {
-            get
-            {
-                return new DebugInfo(_sendTimes, _receiveTimes);
-            }
+            add { _onReceiveMessage += value; }
+            remove { _onReceiveMessage -= value; }
         }
 
-        public IPEndPoint RemoteIP => _ip;
-
-        public IPEndPoint LocalIP
+        public event Action<ConnectionState, ConnectionState> StateChangeEvent
         {
-            get
-            {
-                if (_client == null || _client.Client == null)
-                    return new IPEndPoint(0, 0);
-                return (IPEndPoint)_client.Client.LocalEndPoint;
-            }
+            add { _onStateChange += value; }
+            remove { _onStateChange -= value; }
         }
 
-        public Guid Id => _guid;
-
-        public ISubject<Connection, ConnectionState> State => _state;
-
-        public Connection(Guid guid, TcpClient client, IFiber dataFiber)
+        public Connection(Guid id, TcpClient client)
         {
-            _guid = guid;
+            _id = id;
             _client = client;
-            _dataFiber = dataFiber;
-            _ip = (IPEndPoint)client.Client.RemoteEndPoint;
-            _pool = new ByteBufferPool();
-            _state = new EventToFiberEnumSubject<Connection, ConnectionState>(this, ConnectionState.TokenPending, dataFiber);
-            _closeTokenSource = new CancellationTokenSource();
-            RequestMessage().Forget();
+            _localIP = (IPEndPoint)client.Client.LocalEndPoint;
+            _remoteIP = (IPEndPoint)client.Client.RemoteEndPoint;
+            _stream = new MessageStream(this);
+            _fsm = new NetFsm<Connection>(this, new Dictionary<Type, NetFsmState<Connection>>
+            {
+                { typeof(ConnectState), new ConnectState() },
+                { typeof(CheckConnectState), new CheckConnectState() },
+                { typeof(CloseRequestState), new CloseRequestState() },
+                { typeof(CloseResponseState), new CloseResponseState() },
+                { typeof(DisposeState), new DisposeState() },
+                { typeof(RunState), new RunState() },
+                { typeof(TokenVerifyState), new TokenVerifyState() }
+
+            });
+            _fsm.Start<TokenVerifyState>();
         }
 
-        public Connection(IPEndPoint ip, IFiber dataFiber)
+        public Connection(IPEndPoint remoteIP)
         {
-            _ip = ip;
-            _guid = Guid.Empty;
-            _dataFiber = dataFiber;
-            _pool = new ByteBufferPool();
-            _state = new EventToFiberEnumSubject<Connection, ConnectionState>(this, ConnectionState.None, dataFiber);
-            _closeTokenSource = new CancellationTokenSource();
+            _id = Guid.Empty;
             _client = new TcpClient(AddressFamily.InterNetwork);
-            Connect().Forget();
+            _localIP = (IPEndPoint)_client.Client.LocalEndPoint;
+            _remoteIP = remoteIP;
+            _stream = new MessageStream(this);
+            _fsm = new NetFsm<Connection>(this, new Dictionary<Type, NetFsmState<Connection>>
+            {
+                { typeof(ConnectState), new ConnectState() },
+                { typeof(CheckConnectState), new CheckConnectState() },
+                { typeof(CloseRequestState), new CloseRequestState() },
+                { typeof(CloseResponseState), new CloseResponseState() },
+                { typeof(DisposeState), new DisposeState() },
+                { typeof(RunState), new RunState() },
+                { typeof(TokenResponseState), new TokenResponseState() }
+
+            });
+            _fsm.Start<ConnectState>();
         }
 
-        internal void Start()
+        public void Send(IMessage message)
         {
-            _state.Value = ConnectionState.Normal;
-            X.SystemLog.Debug("Net", $"connect success target {Id} {_ip.Address}:{_ip.Port} {_state.Value}");
+            _fsm.Current.OnSendMessage(message).Forget();
         }
 
-        public async UniTask Close()
+        public async UniTask<MessageResult> SendWait(IMessage message)
         {
-            lock (_disposeLock)
-            {
-                if (_disposed)
-                    return;
-                _disposed = true;
-            }
-
-            _state.Value = ConnectionState.NormalClose;
-            _closeTokenSource.Cancel();
-            WriteMessageResult result = await MessageUtility.WriteCloseMessageAsync(_client);
-            if (result.State != NetOperateState.OK)
-            {
-                X.SystemLog.Debug("Net", $" {Id} notify server close error happen. {result.StateMessage}");
-            }
-            else
-            {
-                X.SystemLog.Debug("Net", $" {Id} notify server close.");
-            }
-
-            Dispose();
+            return await _fsm.Current.OnSendWaitMessage(message);
         }
 
-        internal void InnerClose()
+        public void TriggerState(int oldState, int newState)
         {
-            lock (_disposeLock)
-            {
-                if (_disposed)
-                    return;
-                _disposed = true;
-            }
-
-            X.SystemLog.Debug("Net", $" {Id} will inner close.");
-            _closeTokenSource.Cancel();
-            Dispose();
-        }
-
-        private void Dispose()
-        {
-            _waitResponseList = null;
-            OnReceiveMessage = null;
-            _client.Close();
-            _pool.Dispose();
-            _pool = null;
+            _onStateChange?.Invoke((ConnectionState)oldState, (ConnectionState)newState);
         }
     }
 }
