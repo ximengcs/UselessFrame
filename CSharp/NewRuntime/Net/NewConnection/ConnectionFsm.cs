@@ -4,45 +4,48 @@ using System.Collections.Generic;
 
 namespace NewConnection
 {
-    internal class ConnectionFsm
+    internal partial class ServerConnection
     {
-        private ConnectionState _current;
-        private Dictionary<Type, ConnectionState> _states;
-
-        public ConnectionState Current => _current;
-
-        public ConnectionFsm(ServerConnection owner, ConnectionState[] types)
+        internal class ConnectionFsm
         {
-            _states = new Dictionary<Type, ConnectionState>();
-            foreach (ConnectionState t in types)
+            private ConnectionState _current;
+            private Dictionary<Type, ConnectionState> _states;
+
+            public ConnectionState Current => _current;
+
+            public ConnectionFsm(ServerConnection owner, ConnectionState[] types)
             {
-                t.OnInit(owner, this);
-                _states.Add(t.GetType(), t);
+                _states = new Dictionary<Type, ConnectionState>();
+                foreach (ConnectionState t in types)
+                {
+                    t.OnInit(owner, this);
+                    _states.Add(t.GetType(), t);
+                }
             }
-        }
 
-        public void Start<T>() where T : ConnectionState
-        {
-            ChangeState(typeof(T)).Forget();
-        }
-
-        public async UniTask ChangeState(Type type)
-        {
-            ConnectionState oldState = _current;
-            if (oldState != null)
+            public void Start<T>() where T : ConnectionState
             {
-                await oldState.OnWaitEnd();
-                oldState.OnExit();
+                ChangeState(typeof(T)).Forget();
             }
-            _current = _states[type];
-            _current.OnEnter(oldState);
-        }
 
-        public void Dispose()
-        {
-            _current?.OnExit();
-            foreach (var entry in _states)
-                entry.Value.OnDispose();
+            public async UniTask ChangeState(Type type)
+            {
+                ConnectionState oldState = _current;
+                if (oldState != null)
+                {
+                    await oldState.OnWaitEnd();
+                    oldState.OnExit();
+                }
+                _current = _states[type];
+                _current.OnEnter(oldState);
+            }
+
+            public void Dispose()
+            {
+                _current?.OnExit();
+                foreach (var entry in _states)
+                    entry.Value.OnDispose();
+            }
         }
     }
 }

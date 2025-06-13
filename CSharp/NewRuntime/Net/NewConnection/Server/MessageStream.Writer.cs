@@ -31,9 +31,6 @@ namespace NewConnection
                 WaitResponseHandle waitHandle = new WaitResponseHandle(message);
                 _waitResponseList.TryAdd(waitHandle.Id, waitHandle);
                 WriteMessageResult result = await Send(message, force);
-                if (result.State != NetOperateState.OK)
-                    waitHandle.Dispose();
-
                 ReadMessageResult response = await waitHandle.ResponseTask;
                 return response;
             }

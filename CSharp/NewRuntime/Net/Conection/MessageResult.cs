@@ -4,6 +4,7 @@ using Google.Protobuf;
 using System;
 using UselessFrame.Net;
 using UselessFrame.NewRuntime;
+using static NewConnection.ServerConnection;
 using static UselessFrame.Net.NetUtility;
 
 namespace TestIMGUI.Core
@@ -12,17 +13,17 @@ namespace TestIMGUI.Core
     {
         private AutoResetUniTaskCompletionSource<IMessage> _responseTaskSource;
         private Guid _token;
+        private MessageStream _stream;
 
         public readonly IMessage Message;
         public readonly bool RequireResponse;
-        public readonly Connection Connection;
 
         internal UniTask<IMessage> ResponseTask => _responseTaskSource.Task;
 
-        internal MessageResult(IMessage message, Connection connection)
+        internal MessageResult(IMessage message, MessageStream stream)
         {
             Message = message;
-            Connection = connection;
+            _stream = stream;
 
             MessageTypeInfo typeInfo = NetUtility.GetMessageTypeInfo(message);
             if (typeInfo.HasRequestToken)
@@ -51,7 +52,7 @@ namespace TestIMGUI.Core
             if (typeInfo.HasRequestToken)
             {
                 typeInfo.SetRequestToken(message, _token);
-                Connection.Send(message).Forget();
+                _stream.Send(message, false).Forget();
             }
             else
             {

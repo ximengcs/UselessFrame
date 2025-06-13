@@ -3,7 +3,7 @@ namespace NewConnection
 {
     internal partial class ServerConnection
     {
-        internal class CloseState : ConnectionState
+        internal class CloseRequestState : ConnectionState
         {
         }
     }

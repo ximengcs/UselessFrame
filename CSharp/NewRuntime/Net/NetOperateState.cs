@@ -7,5 +7,6 @@ namespace UselessFrame.Net
         SocketError,
         FatalError,
         CloseRequest,
+        Cancel
     }
 }

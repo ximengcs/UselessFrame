@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
+using TestIMGUI.Core;
 using UselessFrame.Net;
 using UselessFrame.NewRuntime;
-using Cysharp.Threading.Tasks;
 
 namespace NewConnection
 {
@@ -42,47 +43,78 @@ namespace NewConnection
                 _connection._stream.StartRead();
                 ReadMessageResult result = await _connection._stream.SendWait(token, true);
 
-                if (_waitCancel)
+                if (result.State == NetOperateState.Cancel)
                 {
                     AsyncEnd();
                     return;
                 }
 
-                switch (result.State)
+                ServerTokenVerify tokenVerify = result.Message as ServerTokenVerify;
+                if (tokenVerify != null)
                 {
-                    case NetOperateState.OK:
-                        {
-                            ServerTokenVerify tokenVerify = result.Message as ServerTokenVerify;
-                            if (tokenVerify != null)
-                            {
-                                X.SystemLog.Debug("Net", $"verify success {_connection._id} {new Guid(token.Id.Span)}");
-                                ChangeState<RunState>().Forget();
-                            }
-                            else
-                            {
-                                X.SystemLog.Debug("Net", $"tokenVerify error -> {_connection._client}");
-                                if (_tryTimes > 0)
-                                {
-                                    Verify().Forget();
-                                }
-                                else
-                                {
-                                    ChangeState<CloseState>().Forget();
-                                }
-                            }
-                        }
-                        break;
-
-                    case NetOperateState.FatalError:
-                        ChangeState<CloseState>().Forget();
-                        break;
-
-                    case NetOperateState.SocketError:
-
-                        break;
+                    X.SystemLog.Debug("Net", $"verify success {_connection._id} {new Guid(token.Id.Span)}");
+                    ChangeState<RunState>().Forget();
+                }
+                else
+                {
+                    X.SystemLog.Debug("Net", $"tokenVerify error -> {_connection._client}");
+                    if (_tryTimes > 0)
+                    {
+                        Verify().Forget();
+                    }
+                    else
+                    {
+                        ChangeState<CloseRequestState>().Forget();
+                    }
                 }
 
                 AsyncEnd();
+            }
+
+            public override async UniTask<bool> OnReceiveMessage(ReadMessageResult messageResult, MessageStream.WaitResponseHandle responseHandle)
+            {
+                switch (messageResult.State)
+                {
+                    case NetOperateState.OK:
+                        {
+                            if (responseHandle.HasResponse)
+                                responseHandle.SetResponse(messageResult);
+
+                            MessageResult result = new MessageResult(messageResult.Message, _connection._stream);
+                            _connection._onReceiveMessage?.Invoke(result);
+                            return false;
+                        }
+
+                    case NetOperateState.FatalError:
+                        {
+                            if (responseHandle.HasResponse)
+                                responseHandle.SetCancel();
+
+                            ChangeState<CloseRequestState>().Forget();
+                            return false;
+                        }
+
+                    case NetOperateState.SocketError:
+                        {
+                            if (responseHandle.HasResponse)
+                                responseHandle.SetCancel();
+
+                            X.SystemLog.Debug($"verify socket error {messageResult.Exception.ErrorCode}");
+                            ChangeState<CloseRequestState>().Forget();
+                            return false;
+                        }
+
+                    case NetOperateState.CloseRequest:
+                        {
+                            if (responseHandle.HasResponse)
+                                responseHandle.SetCancel();
+
+                            ChangeState<CloseResponseState>().Forget();
+                            return false;
+                        }
+
+                    default: return false;
+                }
             }
         }
     }

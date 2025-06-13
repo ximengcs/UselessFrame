@@ -15,33 +15,31 @@ namespace NewConnection
 
             public void StartRead()
             {
+                if (_reading)
+                    return;
                 _reading = true;
-                RequestMessage().Forget();
-            }
 
-            public void StopRead()
-            {
-                _reading = false;
+                RequestMessage().Forget();
             }
 
             private async UniTask RequestMessage()
             {
                 ReadMessageResult result = await MessageUtility.ReadMessageAsync(_connection._client, _connection._pool);
                 IMessage message = result.Message;
-                MessageTypeInfo typeInfo = NetUtility.GetMessageTypeInfo(message);
-                if (typeInfo.HasResponseToken)
+                WaitResponseHandle handle = default;
+                if (message != null)
                 {
-                    if (_waitResponseList.Remove(typeInfo.GetResponseToken(message), out WaitResponseHandle handle))
+                    MessageTypeInfo typeInfo = NetUtility.GetMessageTypeInfo(message);
+                    if (typeInfo.HasResponseToken)
                     {
-                        handle.SetResponse(result);
-                    }
-                    else
-                    {
-                        X.SystemLog.Debug($"waitResponseList TryRemove ERROR");
+                        if (!_waitResponseList.Remove(typeInfo.GetResponseToken(message), out handle))
+                        {
+                            X.SystemLog.Debug($"waitResponseList TryRemove ERROR");
+                        }
                     }
                 }
 
-                _connection._fsm.Current.OnReceiveMessage(result);
+                _reading = await _connection._fsm.Current.OnReceiveMessage(result, handle);
                 if (_reading)
                 {
                     RequestMessage().Forget();
