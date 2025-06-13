@@ -5,7 +5,7 @@ namespace UselessFrame.Net
     {
         public class CloseState : NetFsmState<Server>
         {
-            public override int State => throw new System.NotImplementedException();
+            public override int State => (int)ServerState.Close;
         }
     }
 }

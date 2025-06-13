@@ -12,15 +12,13 @@ namespace UselessFrame.Net
     {
         private TcpClient _client;
         private IPEndPoint _ipEndPoint;
-        private CancellationToken _cancelToken;
         private AutoResetUniTaskCompletionSource<RequestConnectResult> _completeTaskSource;
 
         public UniTask<RequestConnectResult> CompleteTask => _completeTaskSource.Task;
 
-        public RequestConnectTcpClientAsyncState(TcpClient client, IPEndPoint ipEndPoint, CancellationToken cancelToken)
+        public RequestConnectTcpClientAsyncState(TcpClient client, IPEndPoint ipEndPoint)
         {
             _ipEndPoint = ipEndPoint;
-            _cancelToken = cancelToken;
             _completeTaskSource = AutoResetUniTaskCompletionSource<RequestConnectResult>.Create();
             _client = client;
             Begin();
@@ -64,20 +62,6 @@ namespace UselessFrame.Net
 
         private void OnConnect(IAsyncResult ar)
         {
-            if (_cancelToken.IsCancellationRequested)
-            {
-                try
-                {
-                    _client.EndConnect(ar);
-                    Complete(new RequestConnectResult(NetOperateState.Cancel, "[Net]connect cancel."));
-                }
-                catch (Exception e)
-                {
-                    Complete(new RequestConnectResult(NetOperateState.Cancel, $"[Net]connect cancel. catch exception {e}"));
-                }
-                return;
-            }
-
             try
             {
                 _client.EndConnect(ar);

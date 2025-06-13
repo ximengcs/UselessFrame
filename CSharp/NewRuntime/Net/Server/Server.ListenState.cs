@@ -10,7 +10,7 @@ namespace UselessFrame.Net
     {
         public class ListenState : NetFsmState<Server>
         {
-            public override int State => throw new System.NotImplementedException();
+            public override int State => (int)ServerState.Listen;
 
             public override void OnEnter(NetFsmState<Server> preState)
             {
@@ -21,7 +21,7 @@ namespace UselessFrame.Net
             private async UniTask TryListen()
             {
                 X.SystemLog.Debug("Net", $"ready accept {_connection._host}");
-                AcceptConnectResult result = await ConnectionUtility.AcceptConnectAsync(_connection._listener);
+                AcceptConnectResult result = await AsyncStateUtility.AcceptConnectAsync(_connection._listener);
                 X.SystemLog.Debug("Net", $"find new client, result : {result.State}, server : {_connection._host} {result.State} ");
                 switch (result.State)
                 {

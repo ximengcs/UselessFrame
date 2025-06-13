@@ -11,6 +11,6 @@ namespace UselessFrame.Net
         Dispose,
         Run,
         TokenResponse,
-        VerifyToken
+        TokenVerify
     }
 }

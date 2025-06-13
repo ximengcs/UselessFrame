@@ -8,7 +8,7 @@ namespace UselessFrame.Net
     {
         internal class TokenVerifyState : NetFsmState<Connection>
         {
-            public override int State => (int)ConnectionState.VerifyToken;
+            public override int State => (int)ConnectionState.TokenVerify;
 
             private Guid _token;
 

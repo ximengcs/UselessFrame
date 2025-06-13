@@ -3,8 +3,10 @@ namespace UselessFrame.Net
 {
     public enum ServerState
     {
+        None,
         Start,
-        ListenState,
-        DisposeState
+        Listen,
+        Dispose,
+        Close
     }
 }

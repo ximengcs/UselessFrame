@@ -51,7 +51,7 @@ namespace UselessFrame.Net
                 BitConverter.TryWriteBytes(buffer.Message, typeNameSize);
                 Encoding.UTF8.GetBytes(typeName, buffer.Message.Slice(sizeof(int), typeNameSize));
                 message.WriteTo(buffer.Message.Slice(sizeof(int) + typeNameSize));
-                WriteMessageResult result = await MessageUtility.WriteMessageAsync(_connection._client, buffer);
+                WriteMessageResult result = await AsyncStateUtility.WriteMessageAsync(_connection._client, buffer);
                 return result;
             }
         }

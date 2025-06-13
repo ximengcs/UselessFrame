@@ -1,12 +1,26 @@
-﻿using System;
-using System.Net.Sockets;
+﻿
+using System;
+using System.Net;
 using System.Threading;
+using System.Net.Sockets;
 using Cysharp.Threading.Tasks;
 
 namespace UselessFrame.Net
 {
-    public class MessageUtility
+    internal class AsyncStateUtility
     {
+        public static async UniTask<AcceptConnectResult> AcceptConnectAsync(TcpListener listener)
+        {
+            WaitConnectTcpClientAsyncState state = new WaitConnectTcpClientAsyncState(listener);
+            return await state.CompleteTask;
+        }
+
+        public static async UniTask<RequestConnectResult> RequestConnectAsync(TcpClient remote, IPEndPoint ipEndPoint)
+        {
+            RequestConnectTcpClientAsyncState state = new RequestConnectTcpClientAsyncState(remote, ipEndPoint);
+            return await state.CompleteTask;
+        }
+
         public static async UniTask<WriteMessageResult> WriteCloseMessageAsync(TcpClient client)
         {
             WriteMessageTcpClientAsyncState state = new WriteMessageTcpClientAsyncState(client, MessageWriteBuffer.CloseBuffer);
