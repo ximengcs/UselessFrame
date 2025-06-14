@@ -26,7 +26,7 @@ namespace UselessFrame.Net
                 switch (result.State)
                 {
                     case NetOperateState.OK:
-                        _connection.AddConnection(new Connection(Guid.NewGuid(), result.Client));
+                        _connection.AddConnection(new Connection(Guid.NewGuid(), result.Client, _connection._fiber));
                         TryListen().Forget();
                         break;
 

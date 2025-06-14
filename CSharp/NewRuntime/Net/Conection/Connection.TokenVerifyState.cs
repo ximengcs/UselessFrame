@@ -71,8 +71,8 @@ namespace UselessFrame.Net
                             if (responseHandle.HasResponse)
                                 responseHandle.SetResponse(messageResult);
 
-                            MessageResult result = new MessageResult(messageResult.Message, _connection._stream);
-                            _connection._onReceiveMessage?.Invoke(result);
+                            MessageResult result = new MessageResult(messageResult.Message, _connection);
+                            _connection.TriggerNewMessage(result);
                             return false;
                         }
 

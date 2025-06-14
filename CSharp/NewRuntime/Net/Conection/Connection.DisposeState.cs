@@ -13,6 +13,7 @@ namespace UselessFrame.Net
                 _connection._client.Close();
                 _connection._pool.Dispose();
                 _connection._onReceiveMessage = null;
+                _connection._runFiber.Dispose();
             }
         }
     }

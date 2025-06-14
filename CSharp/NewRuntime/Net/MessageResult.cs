@@ -8,22 +8,23 @@ using static UselessFrame.Net.Connection;
 
 namespace UselessFrame.Net
 {
-    public struct MessageResult
+    internal class MessageResult : IMessageResult
     {
         private AutoResetUniTaskCompletionSource<IMessage> _responseTaskSource;
         private Guid _token;
-        private MessageStream _stream;
 
-        public readonly IMessage Message;
-        public readonly bool RequireResponse;
-        public readonly Type MessageType;
+        public IMessage Message { get; }
+        public bool RequireResponse { get; }
+        public Type MessageType { get; }
+
+        public IConnection From { get; }
 
         internal UniTask<IMessage> ResponseTask => _responseTaskSource.Task;
 
-        internal MessageResult(IMessage message, MessageStream stream)
+        internal MessageResult(IMessage message, Connection connection)
         {
             Message = message;
-            _stream = stream;
+            From = connection;
 
             MessageTypeInfo typeInfo = NetUtility.GetMessageTypeInfo(message);
             MessageType = typeInfo.Type;
@@ -53,7 +54,7 @@ namespace UselessFrame.Net
             if (typeInfo.HasRequestToken)
             {
                 typeInfo.SetRequestToken(message, _token);
-                _stream.Send(message, false).Forget();
+                From.Send(message);
             }
             else
             {

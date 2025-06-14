@@ -39,8 +39,7 @@ namespace UselessFrame.Net
             }
             _current = _states[type];
             _current.OnEnter(oldState);
-            int old = oldState != null ? oldState.State : 0;
-            _connection.TriggerState(old, _current.State);
+            _connection.TriggerState(_current.State);
         }
 
         public void Dispose()

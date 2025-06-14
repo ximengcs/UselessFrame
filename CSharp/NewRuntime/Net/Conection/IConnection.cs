@@ -1,8 +1,9 @@
 ﻿
+using Cysharp.Threading.Tasks;
+using Google.Protobuf;
 using System;
 using System.Net;
-using Google.Protobuf;
-using Cysharp.Threading.Tasks;
+using UselessFrame.Runtime.Observable;
 
 namespace UselessFrame.Net
 {
@@ -14,12 +15,12 @@ namespace UselessFrame.Net
 
         IPEndPoint RemoteIP { get; }
 
-        event Action<MessageResult> ReceiveMessageEvent;
+        ISubject<IConnection, ConnectionState> State { get; }
 
-        event Action<ConnectionState, ConnectionState> StateChangeEvent;
+        event Action<IMessageResult> ReceiveMessageEvent;
 
         void Send(IMessage message);
 
-        UniTask<MessageResult> SendWait(IMessage message);
+        UniTask<IMessageResult> SendWait(IMessage message);
     }
 }

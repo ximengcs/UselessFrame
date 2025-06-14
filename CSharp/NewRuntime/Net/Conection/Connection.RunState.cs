@@ -1,5 +1,6 @@
 ﻿
 using Cysharp.Threading.Tasks;
+using System.Data.Common;
 using UselessFrame.NewRuntime;
 
 namespace UselessFrame.Net
@@ -28,13 +29,13 @@ namespace UselessFrame.Net
                             }
                             else
                             {
-                                MessageResult result = new MessageResult(messageResult.Message, _connection._stream);
+                                MessageResult result = new MessageResult(messageResult.Message, _connection);
                                 if (result.RequireResponse && result.MessageType == typeof(CloseRequest))
                                 {
                                     ChangeState<CloseResponseState>().Forget();
                                     return false;
                                 }
-                                _connection._onReceiveMessage?.Invoke(result);
+                                _connection.TriggerNewMessage(result);
                             }
                             return true;
                         }

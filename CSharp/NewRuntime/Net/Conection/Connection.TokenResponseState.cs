@@ -48,7 +48,7 @@ namespace UselessFrame.Net
                             }
                             else
                             {
-                                MessageResult result = new MessageResult(messageResult.Message, _connection._stream);
+                                MessageResult result = new MessageResult(messageResult.Message, _connection);
                                 if (result.RequireResponse && result.MessageType == typeof(ServerToken))
                                 {
                                     ServerToken token = result.Message as ServerToken;
