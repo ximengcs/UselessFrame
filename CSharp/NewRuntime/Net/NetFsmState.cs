@@ -25,9 +25,9 @@ namespace UselessFrame.Net
             OnInit();
         }
 
-        public async UniTask ChangeState<ConnectionT>() where ConnectionT : NetFsmState<T>
+        public async UniTask ChangeState<ConnectionT>(MessageResult passMessage = null) where ConnectionT : NetFsmState<T>
         {
-            await _fsm.ChangeState(typeof(ConnectionT));
+            await _fsm.ChangeState(typeof(ConnectionT), passMessage);
         }
 
         protected void AsyncBegin()
@@ -49,7 +49,7 @@ namespace UselessFrame.Net
             X.SystemLog.Debug($"{DebugPrefix}-----Init-----");
         }
 
-        public virtual void OnEnter(NetFsmState<T> preState)
+        public virtual void OnEnter(NetFsmState<T> preState, MessageResult passMessage)
         {
             X.SystemLog.Debug($"{DebugPrefix}-----Enter-----");
         }

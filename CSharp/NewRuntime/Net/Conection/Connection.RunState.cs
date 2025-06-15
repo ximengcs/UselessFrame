@@ -13,9 +13,9 @@ namespace UselessFrame.Net
         {
             public override int State => (int)ConnectionState.Run;
 
-            public override void OnEnter(NetFsmState<Connection> preState)
+            public override void OnEnter(NetFsmState<Connection> preState, MessageResult passMessage)
             {
-                base.OnEnter(preState);
+                base.OnEnter(preState, passMessage);
                 _connection._stream.StartRead();
                 _connection._stream.SetWriteActive(true);
             }
@@ -50,7 +50,7 @@ namespace UselessFrame.Net
                                 MessageResult result = new MessageResult(messageResult.Message, _connection);
                                 if (result.RequireResponse && result.MessageType == typeof(CloseRequest))
                                 {
-                                    ChangeState<CloseResponseState>().Forget();
+                                    ChangeState<CloseResponseState>(result).Forget();
                                     return false;
                                 }
                                 _connection.TriggerNewMessage(result);

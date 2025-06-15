@@ -11,9 +11,9 @@ namespace UselessFrame.Net
         {
             public override int State => (int)ConnectionState.CloseRequest;
 
-            public override void OnEnter(NetFsmState<Connection> preState)
+            public override void OnEnter(NetFsmState<Connection> preState, MessageResult passMessage)
             {
-                base.OnEnter(preState);
+                base.OnEnter(preState, passMessage);
 
                 TryRequest().Forget();
             }

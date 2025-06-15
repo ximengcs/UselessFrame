@@ -7,9 +7,9 @@ namespace UselessFrame.Net
         {
             public override int State => (int)ServerState.Dispose;
 
-            public override void OnEnter(NetFsmState<Server> preState)
+            public override void OnEnter(NetFsmState<Server> preState, MessageResult passMessage)
             {
-                base.OnEnter(preState);
+                base.OnEnter(preState, passMessage);
                 _connection._listener = null;
                 _connection._connections = null;
                 _connection._onConnectionListChange = null;

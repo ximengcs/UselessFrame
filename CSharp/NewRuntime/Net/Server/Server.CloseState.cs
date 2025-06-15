@@ -9,9 +9,9 @@ namespace UselessFrame.Net
         {
             public override int State => (int)ServerState.Close;
 
-            public override void OnEnter(NetFsmState<Server> preState)
+            public override void OnEnter(NetFsmState<Server> preState, MessageResult passMessage)
             {
-                base.OnEnter(preState);
+                base.OnEnter(preState, passMessage);
                 TryClose().Forget();
             }
 

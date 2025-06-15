@@ -18,9 +18,9 @@ namespace UselessFrame.Net
                 _token = Guid.Empty;
             }
 
-            public override void OnEnter(NetFsmState<Connection> preState)
+            public override void OnEnter(NetFsmState<Connection> preState, MessageResult passMessage)
             {
-                base.OnEnter(preState);
+                base.OnEnter(preState, passMessage);
                 if (_token != Guid.Empty)
                 {
                     ChangeState<RunState>().Forget();

@@ -10,10 +10,14 @@ namespace UselessFrame.Net
         {
             public override int State => (int)ConnectionState.TokenResponse;
 
-            public override void OnEnter(NetFsmState<Connection> preState)
+            public override void OnEnter(NetFsmState<Connection> preState, MessageResult passMessage)
             {
-                base.OnEnter(preState);
-                _connection._stream.StartRead();
+                base.OnEnter(preState, passMessage);
+
+                if (passMessage != null)
+                    SuccessHandler(passMessage).Forget();
+                else
+                    _connection._stream.StartRead();
             }
 
             private async UniTask<bool> SuccessHandler(MessageResult result)

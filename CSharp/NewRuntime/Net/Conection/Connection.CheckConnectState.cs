@@ -14,17 +14,17 @@ namespace UselessFrame.Net
 
             private int _tryTimes;
 
-            public override void OnEnter(NetFsmState<Connection> preState)
+            public override void OnEnter(NetFsmState<Connection> preState, MessageResult passMessage)
             {
-                base.OnEnter(preState);
+                base.OnEnter(preState, passMessage);
                 _tryTimes = 3;
                 RetryHandler();
             }
 
-            private void SuccessHandler()
+            private void SuccessHandler(MessageResult tokenMessage)
             {
                 X.SystemLog.Debug($"{DebugPrefix}check success");
-                ChangeState<TokenCheck>().Forget();
+                ChangeState<TokenCheck>(tokenMessage).Forget();
             }
 
             private void FailureHandler()
@@ -38,8 +38,8 @@ namespace UselessFrame.Net
                 X.SystemLog.Debug($"{DebugPrefix}try check connect, times {_tryTimes}");
                 if (_tryTimes > 0)
                 {
-                    CheckStep1();
                     _tryTimes--;
+                    CheckStep1();
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace UselessFrame.Net
                 {
                     case NetOperateState.OK:
                         {
-                            SuccessHandler();
+                            SuccessHandler(null);
                         }
                         break;
 
@@ -126,7 +126,7 @@ namespace UselessFrame.Net
                     case SocketError.Success:
                     case SocketError.WouldBlock:
                         {
-                            SuccessHandler();
+                            SuccessHandler(null);
                         }
                         break;
 
@@ -157,6 +157,13 @@ namespace UselessFrame.Net
                             else if (result.MessageType == typeof(TestConnectResponse))
                             {
                                 responseHandle.SetResponse(messageResult);
+                            }
+                            else if (result.MessageType == typeof(ServerToken))
+                            {
+                                SuccessHandler(result);
+                                if (responseHandle.HasResponse)
+                                    responseHandle.SetCancel();
+                                return false;
                             }
                             else
                             {

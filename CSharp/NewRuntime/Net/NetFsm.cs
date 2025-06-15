@@ -1,8 +1,6 @@
-﻿using Cysharp.Threading.Tasks;
-using System;
+﻿using System;
+using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
-using System.Threading;
-using UselessFrame.NewRuntime;
 
 namespace UselessFrame.Net
 {
@@ -30,7 +28,7 @@ namespace UselessFrame.Net
             ChangeState(typeof(TState)).Forget();
         }
 
-        public async UniTask ChangeState(Type type)
+        public async UniTask ChangeState(Type type, MessageResult passMessage = null)
         {
             await UniTask.Yield();
             NetFsmState<T> oldState = _current;
@@ -41,7 +39,7 @@ namespace UselessFrame.Net
             }
             _current = _states[type];
             _connection.TriggerState(_current.State);
-            _current.OnEnter(oldState);
+            _current.OnEnter(oldState, passMessage);
         }
 
         public void Dispose()
