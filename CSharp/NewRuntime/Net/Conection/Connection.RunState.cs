@@ -1,5 +1,7 @@
 ﻿
 using Cysharp.Threading.Tasks;
+using Google.Protobuf;
+using System;
 using System.Data.Common;
 using UselessFrame.NewRuntime;
 
@@ -15,6 +17,22 @@ namespace UselessFrame.Net
             {
                 base.OnEnter(preState);
                 _connection._stream.StartRead();
+                _connection._stream.SetWriteActive(true);
+            }
+
+            public override async UniTask OnSendMessage(IMessage message)
+            {
+                WriteMessageResult result = await _connection.Stream.Send(message, false);
+                switch (result.State)
+                {
+                    case NetOperateState.OK:
+
+                        break;
+
+                    default:
+
+                        break;
+                }
             }
 
             public override async UniTask<bool> OnReceiveMessage(ReadMessageResult messageResult, MessageStream.WaitResponseHandle responseHandle)

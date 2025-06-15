@@ -119,9 +119,14 @@ namespace UselessFrame.Net
             _fsm.Start<ConnectState>();
         }
 
-        public void Send(IMessage message)
+        public void Close()
         {
-            _fsm.Current.OnSendMessage(message).Forget();
+            _fsm.ChangeState(typeof(CloseRequestState)).Forget();
+        }
+
+        public async UniTask Send(IMessage message)
+        {
+            await _fsm.Current.OnSendMessage(message);
         }
 
         public async UniTask<IMessageResult> SendWait(IMessage message)

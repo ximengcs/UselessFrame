@@ -16,6 +16,19 @@ namespace UselessFrame.Net
                 _connection._stream.StartRead();
             }
 
+            private async UniTask<bool> SuccessHandler(MessageResult result)
+            {
+                ServerToken token = result.Message as ServerToken;
+                _connection._id = token.GetId();
+                X.SystemLog.Debug($"{DebugPrefix}receive server token {_connection._id}");
+                bool success = await result.Response(new ServerTokenVerify() { ResponseToken = token.RequestToken });
+                if (success)
+                {
+                    ChangeState<RunState>().Forget();
+                }
+                return success;
+            }
+
             public override async UniTask<bool> OnReceiveMessage(ReadMessageResult messageResult, MessageStream.WaitResponseHandle responseHandle)
             {
                 switch (messageResult.State)
@@ -31,10 +44,7 @@ namespace UselessFrame.Net
                                 MessageResult result = new MessageResult(messageResult.Message, _connection);
                                 if (result.RequireResponse && result.MessageType == typeof(ServerToken))
                                 {
-                                    ServerToken token = result.Message as ServerToken;
-                                    _connection._id = token.GetId();
-                                    X.SystemLog.Debug($"{DebugPrefix}receive server token {_connection._id}");
-                                    result.Response(new ServerTokenVerify() { ResponseToken = token.RequestToken });
+                                    await SuccessHandler(result);
                                     return false;
                                 }
                             }

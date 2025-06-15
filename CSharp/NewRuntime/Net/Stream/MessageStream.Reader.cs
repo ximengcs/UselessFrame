@@ -4,6 +4,7 @@ using UselessFrame.Net;
 using UselessFrame.NewRuntime;
 using Cysharp.Threading.Tasks;
 using static UselessFrame.Net.NetUtility;
+using System;
 
 namespace UselessFrame.Net
 {

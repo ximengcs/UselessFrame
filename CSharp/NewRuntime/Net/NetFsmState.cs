@@ -72,6 +72,7 @@ namespace UselessFrame.Net
                 await _waitPendingSource.Task;
                 _waitPendingSource = null;
             }
+            await UniTask.Yield();
         }
 
         public virtual UniTask<bool> OnReceiveMessage(ReadMessageResult messageResult, WaitResponseHandle responseHandle)

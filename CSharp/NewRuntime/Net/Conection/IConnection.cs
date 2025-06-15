@@ -19,8 +19,10 @@ namespace UselessFrame.Net
 
         event Action<IMessageResult> ReceiveMessageEvent;
 
-        void Send(IMessage message);
+        UniTask Send(IMessage message);
 
         UniTask<IMessageResult> SendWait(IMessage message);
+
+        void Close();
     }
 }

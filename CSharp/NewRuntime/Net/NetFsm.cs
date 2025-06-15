@@ -32,6 +32,7 @@ namespace UselessFrame.Net
 
         public async UniTask ChangeState(Type type)
         {
+            await UniTask.Yield();
             NetFsmState<T> oldState = _current;
             if (oldState != null)
             {

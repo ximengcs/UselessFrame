@@ -42,24 +42,38 @@ namespace UselessFrame.Net
             }
         }
 
-        public void Response(IMessage message)
+        public async UniTask<bool> Response(IMessage message)
         {
             if (!RequireResponse)
             {
                 X.SystemLog.Debug($"can not require response");
-                return;
+                return false;
             }
 
             MessageTypeInfo typeInfo = NetUtility.GetMessageTypeInfo(message);
             if (typeInfo.HasResponseToken)
             {
                 typeInfo.SetResponseToken(message, _token);
-                _connection.Stream.Send(message, true).Forget();
+                WriteMessageResult result = await _connection.Stream.Send(message, true);
+                switch (result.State)
+                {
+                    case NetOperateState.OK:
+                        {
+                            return true;
+                        }
+
+                    default:
+                        {
+                            X.SystemLog.Error(result.StateMessage);
+                            _connection.Fsm.ChangeState(typeof(CloseRequest)).Forget();
+                            return false;
+                        }
+                }
             }
             else
             {
                 X.SystemLog.Debug($"response message error");
-                return;
+                return false;
             }
         }
     }

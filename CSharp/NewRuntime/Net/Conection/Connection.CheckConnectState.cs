@@ -148,9 +148,11 @@ namespace UselessFrame.Net
                             X.SystemLog.Debug($"{DebugPrefix}receive message {result.MessageType.Name}");
                             if (result.MessageType == typeof(TestConnect))
                             {
-                                result.Response(new TestConnectResponse());
+                                bool success = await result.Response(new TestConnectResponse());
                                 if (responseHandle.HasResponse)
                                     responseHandle.SetResponse(messageResult);
+                                if (!success)
+                                    return false;
                             }
                             else if (result.MessageType == typeof(TestConnectResponse))
                             {
