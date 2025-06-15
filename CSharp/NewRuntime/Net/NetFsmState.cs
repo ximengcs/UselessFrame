@@ -1,7 +1,9 @@
 ﻿
-using System;
-using Google.Protobuf;
 using Cysharp.Threading.Tasks;
+using Google.Protobuf;
+using System;
+using System.Text;
+using UselessFrame.NewRuntime;
 using static UselessFrame.Net.Connection.MessageStream;
 
 namespace UselessFrame.Net
@@ -40,19 +42,36 @@ namespace UselessFrame.Net
                 _waitPendingSource.TrySetResult();
         }
 
-        public virtual void OnInit() { }
+        protected string DebugPrefix => _connection.GetDebugPrefix(this);
 
-        public virtual void OnEnter(NetFsmState<T> preState) { }
+        public virtual void OnInit()
+        {
+            X.SystemLog.Debug($"{DebugPrefix}-----Init-----");
+        }
 
-        public virtual void OnExit() { }
+        public virtual void OnEnter(NetFsmState<T> preState)
+        {
+            X.SystemLog.Debug($"{DebugPrefix}-----Enter-----");
+        }
 
-        public virtual void OnDispose() { }
+        public virtual void OnExit()
+        {
+            X.SystemLog.Debug($"{DebugPrefix}-----Exit-----\n");
+        }
+
+        public virtual void OnDispose()
+        {
+            X.SystemLog.Debug($"{DebugPrefix}-----Dispose-----");
+        }
 
         public virtual async UniTask OnWaitEnd()
         {
-            _waitPendingSource = AutoResetUniTaskCompletionSource.Create();
-            await _waitPendingSource.Task;
-            _waitPendingSource = null;
+            if (_pendingCount > 0)
+            {
+                _waitPendingSource = AutoResetUniTaskCompletionSource.Create();
+                await _waitPendingSource.Task;
+                _waitPendingSource = null;
+            }
         }
 
         public virtual UniTask<bool> OnReceiveMessage(ReadMessageResult messageResult, WaitResponseHandle responseHandle)

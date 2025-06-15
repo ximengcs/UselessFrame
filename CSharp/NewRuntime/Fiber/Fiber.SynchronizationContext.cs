@@ -64,6 +64,11 @@ namespace UselessFrame.NewRuntime.Fiber
             {
                 m_ActQueue.Enqueue(Pair.Create(d, state));
             }
+
+            public override void Send(SendOrPostCallback d, object state)
+            {
+                d(state);
+            }
             #endregion
         }
     }

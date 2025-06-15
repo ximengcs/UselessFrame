@@ -2,7 +2,7 @@
 
 namespace UselessFrame.Net
 {
-    public struct RequestConnectResult
+    public class RequestConnectResult
     {
         public readonly TcpClient Remote;
         public readonly NetOperateState State;

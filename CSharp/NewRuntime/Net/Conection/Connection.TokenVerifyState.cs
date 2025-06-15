@@ -6,7 +6,7 @@ namespace UselessFrame.Net
 {
     internal partial class Connection
     {
-        internal class TokenVerifyState : NetFsmState<Connection>
+        internal class TokenVerifyState : TokenCheck
         {
             public override int State => (int)ConnectionState.TokenVerify;
 
@@ -37,27 +37,19 @@ namespace UselessFrame.Net
 
                 ServerToken token = NetUtility.CreateToken(_connection._id);
                 _token = new Guid(token.Id.Span);
-                X.SystemLog.Debug("Net", $"create new client {_connection._id} {_token}");
+                X.SystemLog.Debug($"{DebugPrefix}send verify token");
                 _connection._stream.StartRead();
                 ReadMessageResult result = await _connection._stream.SendWait(token, true);
-
+                X.SystemLog.Debug($"{DebugPrefix}send verify token complete, state {result.State}");
                 if (result.State == NetOperateState.Cancel)
                 {
                     AsyncEnd();
                     return;
                 }
 
-                ServerTokenVerify tokenVerify = result.Message as ServerTokenVerify;
-                if (tokenVerify != null)
-                {
-                    X.SystemLog.Debug("Net", $"verify success {_connection._id} {new Guid(token.Id.Span)}");
-                    ChangeState<RunState>().Forget();
-                }
-                else
-                {
-                    X.SystemLog.Debug("Net", $"tokenVerify error -> {_connection._client}");
-                    ChangeState<CloseRequestState>().Forget();
-                }
+                ServerTokenVerify tokenVerify = (ServerTokenVerify)result.Message;
+                X.SystemLog.Debug($"{DebugPrefix}verify success");
+                ChangeState<RunState>().Forget();
 
                 AsyncEnd();
             }
@@ -68,12 +60,19 @@ namespace UselessFrame.Net
                 {
                     case NetOperateState.OK:
                         {
-                            if (responseHandle.HasResponse)
-                                responseHandle.SetResponse(messageResult);
-
                             MessageResult result = new MessageResult(messageResult.Message, _connection);
-                            _connection.TriggerNewMessage(result);
-                            return false;
+                            if (result.MessageType == typeof(ServerTokenVerify))
+                            {
+                                responseHandle.SetResponse(messageResult);
+                                return false;
+                            }
+                            else
+                            {
+                                if (responseHandle.HasResponse)
+                                    responseHandle.SetResponse(messageResult);
+                            }
+
+                            return true;
                         }
 
                     case NetOperateState.SocketError:

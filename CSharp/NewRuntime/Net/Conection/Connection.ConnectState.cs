@@ -1,5 +1,7 @@
 ﻿
 using Cysharp.Threading.Tasks;
+using System.Net;
+using UselessFrame.NewRuntime;
 
 namespace UselessFrame.Net
 {
@@ -19,11 +21,14 @@ namespace UselessFrame.Net
             {
                 AsyncBegin();
 
-                RequestConnectResult result = await AsyncStateUtility.RequestConnectAsync(_connection._client, _connection._remoteIP);
+                X.SystemLog.Debug($"{DebugPrefix}TryConnect");
+                RequestConnectResult result = await AsyncStateUtility.RequestConnectAsync(_connection._client, _connection._remoteIP, _connection._runFiber);
+                X.SystemLog.Debug($"{DebugPrefix}TryConnect complete, {result.State}");
                 switch (result.State)
                 {
                     case NetOperateState.OK:
                         {
+                            _connection._localIP = (IPEndPoint)_connection._client.Client.LocalEndPoint;
                             ChangeState<CheckConnectState>().Forget();
                             break;
                         }

@@ -20,13 +20,15 @@ namespace UselessFrame.Net
 
             private async UniTask TryListen()
             {
-                X.SystemLog.Debug("Net", $"ready accept {_connection._host}");
-                AcceptConnectResult result = await AsyncStateUtility.AcceptConnectAsync(_connection._listener);
-                X.SystemLog.Debug("Net", $"find new client, result : {result.State}, server : {_connection._host} {result.State} ");
+                X.SystemLog.Debug($"{DebugPrefix}ready accept");
+                AcceptConnectResult result = await AsyncStateUtility.AcceptConnectAsync(_connection._listener, _connection._fiber);
+                X.SystemLog.Debug($"{DebugPrefix}find new client, result state : {result.State} ");
                 switch (result.State)
                 {
                     case NetOperateState.OK:
-                        _connection.AddConnection(new Connection(Guid.NewGuid(), result.Client, _connection._fiber));
+                        Connection connection = new Connection(Guid.NewGuid(), result.Client, _connection._fiber);
+                        _connection.AddConnection(connection);
+                        X.SystemLog.Debug($"{DebugPrefix}add new client, id : {connection.Id}, ip : {connection.RemoteIP}");
                         TryListen().Forget();
                         break;
 

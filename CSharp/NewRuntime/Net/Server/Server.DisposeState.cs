@@ -10,6 +10,9 @@ namespace UselessFrame.Net
             public override void OnEnter(NetFsmState<Server> preState)
             {
                 base.OnEnter(preState);
+                _connection._listener = null;
+                _connection._connections = null;
+                _connection._onConnectionListChange = null;
             }
         }
     }

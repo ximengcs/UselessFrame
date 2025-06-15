@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Sockets;
-using System.Text;
-using UselessFrame.Net;
+﻿using System.Net.Sockets;
 
 namespace UselessFrame.Net
 {
-    public struct AcceptConnectResult
+    public class AcceptConnectResult
     {
         public readonly TcpClient Client;
         public readonly NetOperateState State;

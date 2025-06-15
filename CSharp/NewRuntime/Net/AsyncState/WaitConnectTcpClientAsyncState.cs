@@ -1,20 +1,22 @@
 ﻿
 using System;
-using System.Threading;
 using System.Net.Sockets;
 using Cysharp.Threading.Tasks;
+using UselessFrame.NewRuntime.Fiber;
 
 namespace UselessFrame.Net
 {
     internal struct WaitConnectTcpClientAsyncState
     {
         private TcpListener _listener;
+        private IFiber _fiber;
         private AutoResetUniTaskCompletionSource<AcceptConnectResult> _completeTaskSource;
 
         public UniTask<AcceptConnectResult> CompleteTask => _completeTaskSource.Task;
 
-        public WaitConnectTcpClientAsyncState(TcpListener listener)
+        public WaitConnectTcpClientAsyncState(TcpListener listener, IFiber fiber)
         {
+            _fiber = fiber;
             _listener = listener;
             _completeTaskSource = AutoResetUniTaskCompletionSource<AcceptConnectResult>.Create();
             Begin();
@@ -22,6 +24,12 @@ namespace UselessFrame.Net
 
         private void Complete(AcceptConnectResult result)
         {
+            _fiber.Post(ResultToFiber, result);
+        }
+
+        private void ResultToFiber(object data)
+        {
+            AcceptConnectResult result = (AcceptConnectResult)data;
             _completeTaskSource.TrySetResult(result);
             _listener = null;
         }

@@ -6,7 +6,7 @@ namespace UselessFrame.Net
 {
     internal partial class Connection
     {
-        internal class TokenResponseState : NetFsmState<Connection>
+        internal class TokenResponseState : TokenCheck
         {
             public override int State => (int)ConnectionState.TokenResponse;
 
@@ -14,26 +14,6 @@ namespace UselessFrame.Net
             {
                 base.OnEnter(preState);
                 _connection._stream.StartRead();
-            }
-
-            private async UniTask TryReponseVerify(ServerToken token)
-            {
-                AsyncBegin();
-
-                ServerTokenVerify verify = new ServerTokenVerify() { ResponseToken = token.RequestToken };
-                WriteMessageResult writeResult = await _connection._stream.Send(verify, true);
-                switch (writeResult.State)
-                {
-                    case NetOperateState.OK:
-                        ChangeState<RunState>().Forget();
-                        break;
-
-                    default:
-                        ChangeState<CloseRequestState>().Forget();
-                        break;
-                }
-
-                AsyncEnd();
             }
 
             public override async UniTask<bool> OnReceiveMessage(ReadMessageResult messageResult, MessageStream.WaitResponseHandle responseHandle)
@@ -53,7 +33,8 @@ namespace UselessFrame.Net
                                 {
                                     ServerToken token = result.Message as ServerToken;
                                     _connection._id = token.GetId();
-                                    await TryReponseVerify(token);
+                                    X.SystemLog.Debug($"{DebugPrefix}receive server token {_connection._id}");
+                                    result.Response(new ServerTokenVerify() { ResponseToken = token.RequestToken });
                                     return false;
                                 }
                             }

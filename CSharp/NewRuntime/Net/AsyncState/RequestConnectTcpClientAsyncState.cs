@@ -5,6 +5,7 @@ using System.Security;
 using System.Threading;
 using System.Net.Sockets;
 using Cysharp.Threading.Tasks;
+using UselessFrame.NewRuntime.Fiber;
 
 namespace UselessFrame.Net
 {
@@ -12,12 +13,14 @@ namespace UselessFrame.Net
     {
         private TcpClient _client;
         private IPEndPoint _ipEndPoint;
+        private IFiber _fiber;
         private AutoResetUniTaskCompletionSource<RequestConnectResult> _completeTaskSource;
 
         public UniTask<RequestConnectResult> CompleteTask => _completeTaskSource.Task;
 
-        public RequestConnectTcpClientAsyncState(TcpClient client, IPEndPoint ipEndPoint)
+        public RequestConnectTcpClientAsyncState(TcpClient client, IPEndPoint ipEndPoint, IFiber fiber)
         {
+            _fiber = fiber;
             _ipEndPoint = ipEndPoint;
             _completeTaskSource = AutoResetUniTaskCompletionSource<RequestConnectResult>.Create();
             _client = client;
@@ -26,6 +29,12 @@ namespace UselessFrame.Net
 
         private void Complete(RequestConnectResult result)
         {
+            _fiber.Post(ResultToFiber, result);
+        }
+
+        private void ResultToFiber(object data)
+        {
+            RequestConnectResult result = (RequestConnectResult)data;
             _completeTaskSource.TrySetResult(result);
             if (result.State != NetOperateState.OK)
                 _client.Dispose();

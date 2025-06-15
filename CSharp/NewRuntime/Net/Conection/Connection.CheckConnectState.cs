@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
+using System.Data.Common;
 using System.Net.Sockets;
-using Cysharp.Threading.Tasks;
+using UselessFrame.NewRuntime;
 
 namespace UselessFrame.Net
 {
@@ -21,16 +23,19 @@ namespace UselessFrame.Net
 
             private void SuccessHandler()
             {
-                ChangeState<RunState>().Forget();
+                X.SystemLog.Debug($"{DebugPrefix}check success");
+                ChangeState<TokenCheck>().Forget();
             }
 
             private void FailureHandler()
             {
+                X.SystemLog.Debug($"{DebugPrefix}check failure");
                 ChangeState<DisposeState>().Forget();
             }
 
             private void RetryHandler()
             {
+                X.SystemLog.Debug($"{DebugPrefix}try check connect, times {_tryTimes}");
                 if (_tryTimes > 0)
                 {
                     CheckStep1();
@@ -44,6 +49,7 @@ namespace UselessFrame.Net
 
             private void CheckStep1()
             {
+                X.SystemLog.Debug($"{DebugPrefix}try check step1");
                 try
                 {
                     Socket socket = _connection._client.Client;
@@ -75,12 +81,15 @@ namespace UselessFrame.Net
 
             private async UniTask CheckStep2()
             {
+                X.SystemLog.Debug($"{DebugPrefix}try check step2");
                 AsyncBegin();
 
                 // 发送0字节数据测试连接
                 byte[] dummy = new byte[0];
                 TestConnect testMessage = new TestConnect();
+                _connection._stream.StartRead();
                 ReadMessageResult result = await _connection._stream.SendWait(testMessage, true);
+                X.SystemLog.Debug($"{DebugPrefix}try check step2 complete, {result.State}");
 
                 switch (result.State)
                 {
@@ -111,6 +120,7 @@ namespace UselessFrame.Net
 
             private void CheckSocketError(SocketException e)
             {
+                X.SystemLog.Debug($"{DebugPrefix}trigger socket error, {e.SocketErrorCode}");
                 switch (e.SocketErrorCode)
                 {
                     case SocketError.Success:
@@ -125,6 +135,62 @@ namespace UselessFrame.Net
                             RetryHandler();
                         }
                         break;
+                }
+            }
+
+            public override async UniTask<bool> OnReceiveMessage(ReadMessageResult messageResult, MessageStream.WaitResponseHandle responseHandle)
+            {
+                switch (messageResult.State)
+                {
+                    case NetOperateState.OK:
+                        {
+                            MessageResult result = new MessageResult(messageResult.Message, _connection);
+                            X.SystemLog.Debug($"{DebugPrefix}receive message {result.MessageType.Name}");
+                            if (result.MessageType == typeof(TestConnect))
+                            {
+                                result.Response(new TestConnectResponse());
+                                if (responseHandle.HasResponse)
+                                    responseHandle.SetResponse(messageResult);
+                            }
+                            else if (result.MessageType == typeof(TestConnectResponse))
+                            {
+                                responseHandle.SetResponse(messageResult);
+                            }
+                            else
+                            {
+                                if (responseHandle.HasResponse)
+                                    responseHandle.SetResponse(messageResult);
+                            }
+                            return true;
+                        }
+
+                    case NetOperateState.SocketError:
+                        {
+                            if (responseHandle.HasResponse)
+                                responseHandle.SetCancel();
+
+                            X.SystemLog.Debug($"verify socket error {messageResult.Exception.ErrorCode}");
+                            ChangeState<CheckConnectState>().Forget();
+                            return false;
+                        }
+
+                    case NetOperateState.RemoteClose:
+                        {
+                            if (responseHandle.HasResponse)
+                                responseHandle.SetCancel();
+
+                            ChangeState<CloseResponseState>().Forget();
+                            return false;
+                        }
+
+                    default:
+                        {
+                            if (responseHandle.HasResponse)
+                                responseHandle.SetCancel();
+
+                            ChangeState<DisposeState>().Forget();
+                            return false;
+                        }
                 }
             }
         }

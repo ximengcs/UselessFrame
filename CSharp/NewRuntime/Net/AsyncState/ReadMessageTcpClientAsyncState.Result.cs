@@ -1,13 +1,10 @@
-﻿using Google.Protobuf;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using Google.Protobuf;
 using System.Net.Sockets;
-using System.Text;
-using UselessFrame.Net;
 
 namespace UselessFrame.Net
 {
-    public struct ReadMessageResult
+    public class ReadMessageResult
     {
         public readonly NetOperateState State;
         public readonly string StateMessage;

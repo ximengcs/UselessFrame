@@ -1,10 +1,12 @@
 
 message TestConnect
 {
+    required bytes RequestToken = 1;
 }
 
 message TestConnectResponse
 {
+    required bytes ResponseToken = 1;
 }
 
 message CloseRequest

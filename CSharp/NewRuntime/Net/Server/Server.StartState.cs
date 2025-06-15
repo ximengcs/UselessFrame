@@ -1,6 +1,7 @@
 ﻿
-using System.Net.Sockets;
 using Cysharp.Threading.Tasks;
+using System;
+using System.Net.Sockets;
 using UselessFrame.NewRuntime;
 
 namespace UselessFrame.Net
@@ -19,15 +20,14 @@ namespace UselessFrame.Net
 
             private void TryStart()
             {
+                X.SystemLog.Debug($"{DebugPrefix}try start");
                 try
                 {
                     _connection._listener.Start();
-                    X.SystemLog.Debug("Net", $"server start");
                     ChangeState<ListenState>().Forget();
                 }
                 catch (SocketException e)
                 {
-                    X.SystemLog.Debug("Net", $"server start error");
                     ChangeState<DisposeState>().Forget();
                 }
             }

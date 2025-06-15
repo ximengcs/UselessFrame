@@ -22,8 +22,9 @@ public static partial class CoreMessageReflection {
   static CoreMessageReflection() {
     byte[] descriptorData = global::System.Convert.FromBase64String(
         string.Concat(
-          "ChFDb3JlTWVzc2FnZS5wcm90byINCgtUZXN0Q29ubmVjdCIVChNUZXN0Q29u",
-          "bmVjdFJlc3BvbnNlIiQKDENsb3NlUmVxdWVzdBIUCgxSZXF1ZXN0VG9rZW4Y",
+          "ChFDb3JlTWVzc2FnZS5wcm90byIjCgtUZXN0Q29ubmVjdBIUCgxSZXF1ZXN0",
+          "VG9rZW4YASACKAwiLAoTVGVzdENvbm5lY3RSZXNwb25zZRIVCg1SZXNwb25z",
+          "ZVRva2VuGAEgAigMIiQKDENsb3NlUmVxdWVzdBIUCgxSZXF1ZXN0VG9rZW4Y",
           "ASACKAwiJgoNQ2xvc2VSZXNwb25zZRIVCg1SZXNwb25zZVRva2VuGAEgAigM",
           "Ii8KC1NlcnZlclRva2VuEgoKAklkGAEgAigMEhQKDFJlcXVlc3RUb2tlbhgC",
           "IAIoDCIqChFTZXJ2ZXJUb2tlblZlcmlmeRIVCg1SZXNwb25zZVRva2VuGAEg",
@@ -33,8 +34,8 @@ public static partial class CoreMessageReflection {
     descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
         new pbr::FileDescriptor[] { },
         new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-          new pbr::GeneratedClrTypeInfo(typeof(global::TestConnect), global::TestConnect.Parser, null, null, null, null, null),
-          new pbr::GeneratedClrTypeInfo(typeof(global::TestConnectResponse), global::TestConnectResponse.Parser, null, null, null, null, null),
+          new pbr::GeneratedClrTypeInfo(typeof(global::TestConnect), global::TestConnect.Parser, new[]{ "RequestToken" }, null, null, null, null),
+          new pbr::GeneratedClrTypeInfo(typeof(global::TestConnectResponse), global::TestConnectResponse.Parser, new[]{ "ResponseToken" }, null, null, null, null),
           new pbr::GeneratedClrTypeInfo(typeof(global::CloseRequest), global::CloseRequest.Parser, new[]{ "RequestToken" }, null, null, null, null),
           new pbr::GeneratedClrTypeInfo(typeof(global::CloseResponse), global::CloseResponse.Parser, new[]{ "ResponseToken" }, null, null, null, null),
           new pbr::GeneratedClrTypeInfo(typeof(global::ServerToken), global::ServerToken.Parser, new[]{ "Id", "RequestToken" }, null, null, null, null),
@@ -82,6 +83,7 @@ public sealed partial class TestConnect : pb::IMessage<TestConnect>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public TestConnect(TestConnect other) : this() {
+    requestToken_ = other.requestToken_;
     _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
   }
 
@@ -89,6 +91,32 @@ public sealed partial class TestConnect : pb::IMessage<TestConnect>
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public TestConnect Clone() {
     return new TestConnect(this);
+  }
+
+  /// <summary>Field number for the "RequestToken" field.</summary>
+  public const int RequestTokenFieldNumber = 1;
+  private readonly static pb::ByteString RequestTokenDefaultValue = pb::ByteString.Empty;
+
+  private pb::ByteString requestToken_;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public pb::ByteString RequestToken {
+    get { return requestToken_ ?? RequestTokenDefaultValue; }
+    set {
+      requestToken_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+    }
+  }
+  /// <summary>Gets whether the "RequestToken" field is set</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool HasRequestToken {
+    get { return requestToken_ != null; }
+  }
+  /// <summary>Clears the value of the "RequestToken" field</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void ClearRequestToken() {
+    requestToken_ = null;
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -106,6 +134,7 @@ public sealed partial class TestConnect : pb::IMessage<TestConnect>
     if (ReferenceEquals(other, this)) {
       return true;
     }
+    if (RequestToken != other.RequestToken) return false;
     return Equals(_unknownFields, other._unknownFields);
   }
 
@@ -113,6 +142,7 @@ public sealed partial class TestConnect : pb::IMessage<TestConnect>
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public override int GetHashCode() {
     int hash = 1;
+    if (HasRequestToken) hash ^= RequestToken.GetHashCode();
     if (_unknownFields != null) {
       hash ^= _unknownFields.GetHashCode();
     }
@@ -131,6 +161,10 @@ public sealed partial class TestConnect : pb::IMessage<TestConnect>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     output.WriteRawMessage(this);
   #else
+    if (HasRequestToken) {
+      output.WriteRawTag(10);
+      output.WriteBytes(RequestToken);
+    }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(output);
     }
@@ -141,6 +175,10 @@ public sealed partial class TestConnect : pb::IMessage<TestConnect>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+    if (HasRequestToken) {
+      output.WriteRawTag(10);
+      output.WriteBytes(RequestToken);
+    }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(ref output);
     }
@@ -151,6 +189,9 @@ public sealed partial class TestConnect : pb::IMessage<TestConnect>
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public int CalculateSize() {
     int size = 0;
+    if (HasRequestToken) {
+      size += 1 + pb::CodedOutputStream.ComputeBytesSize(RequestToken);
+    }
     if (_unknownFields != null) {
       size += _unknownFields.CalculateSize();
     }
@@ -162,6 +203,9 @@ public sealed partial class TestConnect : pb::IMessage<TestConnect>
   public void MergeFrom(TestConnect other) {
     if (other == null) {
       return;
+    }
+    if (other.HasRequestToken) {
+      RequestToken = other.RequestToken;
     }
     _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
   }
@@ -178,6 +222,10 @@ public sealed partial class TestConnect : pb::IMessage<TestConnect>
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
           break;
+        case 10: {
+          RequestToken = input.ReadBytes();
+          break;
+        }
       }
     }
   #endif
@@ -193,6 +241,10 @@ public sealed partial class TestConnect : pb::IMessage<TestConnect>
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
           break;
+        case 10: {
+          RequestToken = input.ReadBytes();
+          break;
+        }
       }
     }
   }
@@ -235,6 +287,7 @@ public sealed partial class TestConnectResponse : pb::IMessage<TestConnectRespon
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public TestConnectResponse(TestConnectResponse other) : this() {
+    responseToken_ = other.responseToken_;
     _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
   }
 
@@ -242,6 +295,32 @@ public sealed partial class TestConnectResponse : pb::IMessage<TestConnectRespon
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public TestConnectResponse Clone() {
     return new TestConnectResponse(this);
+  }
+
+  /// <summary>Field number for the "ResponseToken" field.</summary>
+  public const int ResponseTokenFieldNumber = 1;
+  private readonly static pb::ByteString ResponseTokenDefaultValue = pb::ByteString.Empty;
+
+  private pb::ByteString responseToken_;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public pb::ByteString ResponseToken {
+    get { return responseToken_ ?? ResponseTokenDefaultValue; }
+    set {
+      responseToken_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+    }
+  }
+  /// <summary>Gets whether the "ResponseToken" field is set</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool HasResponseToken {
+    get { return responseToken_ != null; }
+  }
+  /// <summary>Clears the value of the "ResponseToken" field</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void ClearResponseToken() {
+    responseToken_ = null;
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -259,6 +338,7 @@ public sealed partial class TestConnectResponse : pb::IMessage<TestConnectRespon
     if (ReferenceEquals(other, this)) {
       return true;
     }
+    if (ResponseToken != other.ResponseToken) return false;
     return Equals(_unknownFields, other._unknownFields);
   }
 
@@ -266,6 +346,7 @@ public sealed partial class TestConnectResponse : pb::IMessage<TestConnectRespon
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public override int GetHashCode() {
     int hash = 1;
+    if (HasResponseToken) hash ^= ResponseToken.GetHashCode();
     if (_unknownFields != null) {
       hash ^= _unknownFields.GetHashCode();
     }
@@ -284,6 +365,10 @@ public sealed partial class TestConnectResponse : pb::IMessage<TestConnectRespon
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     output.WriteRawMessage(this);
   #else
+    if (HasResponseToken) {
+      output.WriteRawTag(10);
+      output.WriteBytes(ResponseToken);
+    }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(output);
     }
@@ -294,6 +379,10 @@ public sealed partial class TestConnectResponse : pb::IMessage<TestConnectRespon
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+    if (HasResponseToken) {
+      output.WriteRawTag(10);
+      output.WriteBytes(ResponseToken);
+    }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(ref output);
     }
@@ -304,6 +393,9 @@ public sealed partial class TestConnectResponse : pb::IMessage<TestConnectRespon
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public int CalculateSize() {
     int size = 0;
+    if (HasResponseToken) {
+      size += 1 + pb::CodedOutputStream.ComputeBytesSize(ResponseToken);
+    }
     if (_unknownFields != null) {
       size += _unknownFields.CalculateSize();
     }
@@ -315,6 +407,9 @@ public sealed partial class TestConnectResponse : pb::IMessage<TestConnectRespon
   public void MergeFrom(TestConnectResponse other) {
     if (other == null) {
       return;
+    }
+    if (other.HasResponseToken) {
+      ResponseToken = other.ResponseToken;
     }
     _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
   }
@@ -331,6 +426,10 @@ public sealed partial class TestConnectResponse : pb::IMessage<TestConnectRespon
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
           break;
+        case 10: {
+          ResponseToken = input.ReadBytes();
+          break;
+        }
       }
     }
   #endif
@@ -346,6 +445,10 @@ public sealed partial class TestConnectResponse : pb::IMessage<TestConnectRespon
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
           break;
+        case 10: {
+          ResponseToken = input.ReadBytes();
+          break;
+        }
       }
     }
   }

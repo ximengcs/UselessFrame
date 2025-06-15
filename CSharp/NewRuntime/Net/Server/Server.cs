@@ -1,11 +1,13 @@
 ﻿
+using Cysharp.Threading.Tasks;
 using System;
+using System.Collections.Generic;
+using System.Data.Common;
 using System.Net;
 using System.Net.Sockets;
-using Cysharp.Threading.Tasks;
-using System.Collections.Generic;
-using UselessFrame.NewRuntime.Fiber;
+using System.Text;
 using UselessFrame.NewRuntime;
+using UselessFrame.NewRuntime.Fiber;
 using UselessFrame.Runtime.Observable;
 
 namespace UselessFrame.Net
@@ -26,6 +28,14 @@ namespace UselessFrame.Net
 
         public ISubject<IServer, ServerState> State => _state;
 
+        public string GetDebugPrefix<T>(NetFsmState<T> state) where T : INetStateTrigger
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"[Host:{_host}]");
+            sb.Append($"[{state.GetType().Name,-18}]");
+            return sb.ToString();
+        }
+
 
         public event Action<IConnection> NewConnectionEvent
         {
@@ -39,7 +49,7 @@ namespace UselessFrame.Net
         {
             _fiber = fiber;
             _disposed = false;
-            _state = new ValueSubject<IServer, ServerState>(this, ServerState.None);
+            _state = new ValueSubject<IServer, ServerState>(this, fiber, ServerState.None);
             _connections = new Dictionary<Guid, Connection>();
             _host = new IPEndPoint(NetUtility.GetLocalIPAddress(), port);
             _listener = new TcpListener(_host);
@@ -50,14 +60,13 @@ namespace UselessFrame.Net
                 { typeof(CloseState), new CloseState() },
                 { typeof(DisposeState), new DisposeState() }
             });
-            X.SystemLog.Debug($"[Server] new server create {_host}, data to thread {_fiber.ThreadId}");
         }
 
         public void Start()
         {
             if (_start) return;
             _start = true;
-            _fsm.Start<ListenState>();
+            _fsm.Start<StartState>();
         }
 
         public void Close()

@@ -5,9 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
+using System.Threading;
 using UselessFrame.NewRuntime;
 using UselessFrame.NewRuntime.Fiber;
 using UselessFrame.Runtime.Observable;
+using UselessFrame.Runtime.Pools;
 
 namespace UselessFrame.Net
 {
@@ -25,6 +28,10 @@ namespace UselessFrame.Net
         private ISubject<IConnection, ConnectionState> _state;
         private Action<IMessageResult> _onReceiveMessage;
 
+        internal NetFsm<Connection> Fsm => _fsm;
+
+        internal MessageStream Stream => _stream;
+
         public Guid Id => _id;
 
         public IPEndPoint LocalIP => _localIP;
@@ -39,12 +46,27 @@ namespace UselessFrame.Net
             remove { _onReceiveMessage -= value; }
         }
 
+        public string GetDebugPrefix<T>(NetFsmState<T> state) where T : INetStateTrigger
+        {
+            StringBuilder sb = new StringBuilder();
+            if (_id != Guid.Empty)
+                sb.Append($"[ID:{_id}]");
+            if (_localIP != null)
+                sb.Append($"[L:{_localIP}]");
+            else
+                sb.Append("[L:Waiting]");
+            sb.Append($"[R:{_remoteIP}]");
+            sb.Append($"[{state.GetType().Name,-18}]");
+            return sb.ToString();
+        }
+
         public Connection(Guid id, TcpClient client, IFiber fiber)
         {
             _id = id;
             _client = client;
             _dataFiber = fiber;
-            _state = new ValueSubject<IConnection, ConnectionState>(this, ConnectionState.None);
+            _pool = new ByteBufferPool();
+            _state = new ValueSubject<IConnection, ConnectionState>(this, fiber, ConnectionState.None);
             _localIP = (IPEndPoint)client.Client.LocalEndPoint;
             _remoteIP = (IPEndPoint)client.Client.RemoteEndPoint;
             _stream = new MessageStream(this);
@@ -56,25 +78,20 @@ namespace UselessFrame.Net
                 { typeof(CloseResponseState), new CloseResponseState() },
                 { typeof(DisposeState), new DisposeState() },
                 { typeof(RunState), new RunState() },
-                { typeof(TokenVerifyState), new TokenVerifyState() }
+                { typeof(TokenCheck), new TokenVerifyState() }
 
             });
             _runFiber = X.FiberManager.Create();
-            _runFiber.Post(RunServerState, null);
-        }
-
-        private void RunServerState(object _)
-        {
-            _fsm.Start<TokenVerifyState>();
+            _runFiber.Post(RunCheckOnFiber, null);
         }
 
         public Connection(IPEndPoint remoteIP, IFiber fiber)
         {
             _id = Guid.Empty;
             _dataFiber = fiber;
-            _state = new ValueSubject<IConnection, ConnectionState>(this, ConnectionState.None);
+            _pool = new ByteBufferPool();
+            _state = new ValueSubject<IConnection, ConnectionState>(this, fiber, ConnectionState.None);
             _client = new TcpClient(AddressFamily.InterNetwork);
-            _localIP = (IPEndPoint)_client.Client.LocalEndPoint;
             _remoteIP = remoteIP;
             _stream = new MessageStream(this);
             _fsm = new NetFsm<Connection>(this, new Dictionary<Type, NetFsmState<Connection>>
@@ -85,14 +102,19 @@ namespace UselessFrame.Net
                 { typeof(CloseResponseState), new CloseResponseState() },
                 { typeof(DisposeState), new DisposeState() },
                 { typeof(RunState), new RunState() },
-                { typeof(TokenResponseState), new TokenResponseState() }
+                { typeof(TokenCheck), new TokenResponseState() }
 
             });
             _runFiber = X.FiberManager.Create();
-            _runFiber.Post(RunClientState, null);
+            _runFiber.Post(RunConnectOnFiber, null);
         }
 
-        private void RunClientState(object _)
+        private void RunCheckOnFiber(object _)
+        {
+            _fsm.Start<CheckConnectState>();
+        }
+
+        private void RunConnectOnFiber(object _)
         {
             _fsm.Start<ConnectState>();
         }

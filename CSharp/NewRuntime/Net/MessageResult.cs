@@ -4,7 +4,6 @@ using Google.Protobuf;
 using UselessFrame.NewRuntime;
 using Cysharp.Threading.Tasks;
 using static UselessFrame.Net.NetUtility;
-using static UselessFrame.Net.Connection;
 
 namespace UselessFrame.Net
 {
@@ -12,19 +11,20 @@ namespace UselessFrame.Net
     {
         private AutoResetUniTaskCompletionSource<IMessage> _responseTaskSource;
         private Guid _token;
+        private Connection _connection;
 
         public IMessage Message { get; }
         public bool RequireResponse { get; }
         public Type MessageType { get; }
 
-        public IConnection From { get; }
+        public IConnection From => _connection;
 
         internal UniTask<IMessage> ResponseTask => _responseTaskSource.Task;
 
         internal MessageResult(IMessage message, Connection connection)
         {
             Message = message;
-            From = connection;
+            _connection = connection;
 
             MessageTypeInfo typeInfo = NetUtility.GetMessageTypeInfo(message);
             MessageType = typeInfo.Type;
@@ -51,10 +51,10 @@ namespace UselessFrame.Net
             }
 
             MessageTypeInfo typeInfo = NetUtility.GetMessageTypeInfo(message);
-            if (typeInfo.HasRequestToken)
+            if (typeInfo.HasResponseToken)
             {
-                typeInfo.SetRequestToken(message, _token);
-                From.Send(message);
+                typeInfo.SetResponseToken(message, _token);
+                _connection.Stream.Send(message, true).Forget();
             }
             else
             {

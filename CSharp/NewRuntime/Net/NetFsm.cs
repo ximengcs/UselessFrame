@@ -1,6 +1,8 @@
 ﻿using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using UselessFrame.NewRuntime;
 
 namespace UselessFrame.Net
 {
@@ -20,7 +22,6 @@ namespace UselessFrame.Net
             {
                 NetFsmState<T> state = item.Value;
                 state.OnInit(owner, this);
-                _states.Add(state.GetType(), state);
             }
         }
 
@@ -38,8 +39,8 @@ namespace UselessFrame.Net
                 oldState.OnExit();
             }
             _current = _states[type];
-            _current.OnEnter(oldState);
             _connection.TriggerState(_current.State);
+            _current.OnEnter(oldState);
         }
 
         public void Dispose()

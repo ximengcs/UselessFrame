@@ -24,7 +24,7 @@ namespace UselessFrame.Net
 
             private async UniTask RequestMessage()
             {
-                ReadMessageResult result = await AsyncStateUtility.ReadMessageAsync(_connection._client, _connection._pool);
+                ReadMessageResult result = await AsyncStateUtility.ReadMessageAsync(_connection._client, _connection._pool, _connection._runFiber);
                 IMessage message = result.Message;
                 WaitResponseHandle handle = default;
                 if (message != null)

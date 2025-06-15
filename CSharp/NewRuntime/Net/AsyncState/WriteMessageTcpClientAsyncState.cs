@@ -2,19 +2,22 @@
 using System.IO;
 using System.Net.Sockets;
 using Cysharp.Threading.Tasks;
+using UselessFrame.NewRuntime.Fiber;
 
 namespace UselessFrame.Net
 {
     internal struct WriteMessageTcpClientAsyncState
     {
+        private IFiber _fiber;
         private NetworkStream _stream;
         private MessageWriteBuffer _buffer;
         private AutoResetUniTaskCompletionSource<WriteMessageResult> _completeTaskSource;
 
         public UniTask<WriteMessageResult> CompleteTask => _completeTaskSource.Task;
 
-        public WriteMessageTcpClientAsyncState(TcpClient client, MessageWriteBuffer buffer)
+        public WriteMessageTcpClientAsyncState(TcpClient client, MessageWriteBuffer buffer, IFiber fiber)
         {
+            _fiber = fiber;
             _buffer = buffer;
             _completeTaskSource = AutoResetUniTaskCompletionSource<WriteMessageResult>.Create();
 
@@ -39,6 +42,12 @@ namespace UselessFrame.Net
 
         private void Complete(WriteMessageResult result)
         {
+            _fiber.Post(ResultToFiber, result);
+        }
+
+        private void ResultToFiber(object data)
+        {
+            WriteMessageResult result = (WriteMessageResult)data;
             _completeTaskSource.TrySetResult(result);
             _stream = null;
         }
