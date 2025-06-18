@@ -12,6 +12,7 @@ namespace UselessFrame.NewRuntime.Fiber
         {
             #region Inner Fields
             private int _threadId;
+            private IFiber _fiber;
             private ConcurrentQueue<Pair<SendOrPostCallback, object>> m_ActQueue;
             private const long DEFAULT_TIMEOUT = -1;
             #endregion
@@ -22,11 +23,13 @@ namespace UselessFrame.NewRuntime.Fiber
             /// </summary>
             public long ExecTimeout { get; set; }
 
+            public IFiber FIber => _fiber;
             #endregion
 
             #region IModule Life Fun
-            public FiberSynchronizationContext(int checkThreadId = -1)
+            public FiberSynchronizationContext(IFiber fiber, int checkThreadId = -1)
             {
+                _fiber = fiber;
                 _threadId = checkThreadId;
                 m_ActQueue = new ConcurrentQueue<Pair<SendOrPostCallback, object>>();
                 ExecTimeout = DEFAULT_TIMEOUT;

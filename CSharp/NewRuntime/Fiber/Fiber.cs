@@ -9,13 +9,14 @@ namespace UselessFrame.NewRuntime.Fiber
         private FiberManager _fiberManager;
         private FiberSynchronizationContext _context;
         private CancellationTokenSource _disposeTokenSource;
+        private long _frame;
 
         public int ThreadId => _thread.ManagedThreadId;
 
         public Fiber(FiberManager fiberManager)
         {
             _fiberManager = fiberManager;
-            _context = new FiberSynchronizationContext();
+            _context = new FiberSynchronizationContext(this);
             _disposeTokenSource = new CancellationTokenSource();
             _thread = new Thread(Run)
             {

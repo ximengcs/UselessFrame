@@ -14,7 +14,7 @@ namespace UselessFrame.NewRuntime.Fiber
         public MainFiber()
         {
             _threadId = Thread.CurrentThread.ManagedThreadId;
-            _context = new FiberSynchronizationContext(_threadId);
+            _context = new FiberSynchronizationContext(this, _threadId);
             _disposeTokenSource = new CancellationTokenSource();
             SynchronizationContext.SetSynchronizationContext(_context);
         }
