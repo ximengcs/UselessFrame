@@ -1,5 +1,4 @@
 ﻿
-using System.Net;
 using System.Threading;
 
 namespace UselessFrame.NewRuntime.Fiber
@@ -11,5 +10,7 @@ namespace UselessFrame.NewRuntime.Fiber
         void Post(SendOrPostCallback d, object state);
 
         void Dispose();
+
+        static IFiber Current => FiberExtensions.GetCurrentContextFiber();
     }
 }

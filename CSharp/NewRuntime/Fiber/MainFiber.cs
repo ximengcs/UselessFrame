@@ -14,8 +14,9 @@ namespace UselessFrame.NewRuntime.Fiber
         public MainFiber()
         {
             _threadId = Thread.CurrentThread.ManagedThreadId;
-            _context = new FiberSynchronizationContext();
+            _context = new FiberSynchronizationContext(_threadId);
             _disposeTokenSource = new CancellationTokenSource();
+            SynchronizationContext.SetSynchronizationContext(_context);
         }
 
         public void Dispose()
@@ -32,17 +33,6 @@ namespace UselessFrame.NewRuntime.Fiber
                 return;
 
             _context.Post(d, state);
-        }
-
-        public void Use()
-        {
-            if (_disposeTokenSource.IsCancellationRequested)
-                return;
-
-            if (SynchronizationContext.Current != _context)
-            {
-                SynchronizationContext.SetSynchronizationContext(_context);
-            }
         }
 
         public void Update(float deltaTime)

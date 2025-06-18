@@ -11,6 +11,7 @@ namespace UselessFrame.NewRuntime.Fiber
         internal class FiberSynchronizationContext : SynchronizationContext
         {
             #region Inner Fields
+            private int _threadId;
             private ConcurrentQueue<Pair<SendOrPostCallback, object>> m_ActQueue;
             private const long DEFAULT_TIMEOUT = -1;
             #endregion
@@ -24,8 +25,9 @@ namespace UselessFrame.NewRuntime.Fiber
             #endregion
 
             #region IModule Life Fun
-            public FiberSynchronizationContext()
+            public FiberSynchronizationContext(int checkThreadId = -1)
             {
+                _threadId = checkThreadId;
                 m_ActQueue = new ConcurrentQueue<Pair<SendOrPostCallback, object>>();
                 ExecTimeout = DEFAULT_TIMEOUT;
             }
@@ -38,6 +40,9 @@ namespace UselessFrame.NewRuntime.Fiber
 
             public void OnUpdate(double escapeTime)
             {
+                if (_threadId != -1 && _threadId != Thread.CurrentThread.ManagedThreadId)
+                    return;
+
                 if (m_ActQueue.Count <= 0)
                     return;
 
