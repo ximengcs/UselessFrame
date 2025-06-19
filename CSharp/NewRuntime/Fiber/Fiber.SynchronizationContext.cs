@@ -23,7 +23,7 @@ namespace UselessFrame.NewRuntime.Fiber
             /// </summary>
             public long ExecTimeout { get; set; }
 
-            public IFiber FIber => _fiber;
+            public IFiber Fiber => _fiber;
             #endregion
 
             #region IModule Life Fun
@@ -41,7 +41,7 @@ namespace UselessFrame.NewRuntime.Fiber
                 ExecTimeout = default;
             }
 
-            public void OnUpdate(double escapeTime)
+            public void OnUpdate(float escapeTime)
             {
                 if (_threadId != -1 && _threadId != Thread.CurrentThread.ManagedThreadId)
                     return;

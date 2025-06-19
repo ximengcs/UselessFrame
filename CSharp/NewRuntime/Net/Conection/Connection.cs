@@ -6,11 +6,9 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
 using UselessFrame.NewRuntime;
 using UselessFrame.NewRuntime.Fiber;
 using UselessFrame.Runtime.Observable;
-using UselessFrame.Runtime.Pools;
 
 namespace UselessFrame.Net
 {
@@ -25,6 +23,7 @@ namespace UselessFrame.Net
         private ByteBufferPool _pool;
         private MessageStream _stream;
         private NetFsm<Connection> _fsm;
+        private Server _server;
         private ISubject<IConnection, ConnectionState> _state;
         private Action<IMessageResult> _onReceiveMessage;
 
@@ -60,9 +59,10 @@ namespace UselessFrame.Net
             return sb.ToString();
         }
 
-        public Connection(Guid id, TcpClient client, IFiber fiber)
+        public Connection(Server server, Guid id, TcpClient client, IFiber fiber)
         {
             _id = id;
+            _server = server;
             _client = client;
             _dataFiber = fiber;
             _pool = new ByteBufferPool();
@@ -109,6 +109,18 @@ namespace UselessFrame.Net
             _runFiber.Post(RunConnectOnFiber, null);
         }
 
+        public void Dispose()
+        {
+            _onReceiveMessage = null;
+            _fsm.Dispose();
+            _stream.Dispose();
+            _client.Dispose();
+            _pool.Dispose();
+            _runFiber.Dispose();
+            if (_server != null)
+                _server.RemoveConnection(this);
+        }
+
         private void RunCheckOnFiber(object _)
         {
             _fsm.Start<CheckConnectState>();
@@ -151,6 +163,11 @@ namespace UselessFrame.Net
         {
             IMessageResult result = (IMessageResult)data;
             _onReceiveMessage?.Invoke(result);
+        }
+
+        public void CancelAllAsyncWait()
+        {
+            _stream.CancelAllWait();
         }
     }
 }

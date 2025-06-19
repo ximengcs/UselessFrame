@@ -7,7 +7,15 @@ namespace UselessFrame.NewRuntime.Fiber
     {
         int ThreadId { get; }
 
+        long FrameCount { get; }
+
+        float DeltaTime { get; }
+
+        bool IsCurrent => this == Current;
+
         void Post(SendOrPostCallback d, object state);
+
+        void Add(IFiberLoopItem loopItem);
 
         void Dispose();
 

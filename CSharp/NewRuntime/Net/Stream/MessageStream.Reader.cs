@@ -49,7 +49,7 @@ namespace UselessFrame.Net
                     handle = WaitResponseHandle.CreateEmpty();
                 }
 
-                _reading = await _connection._fsm.Current.OnReceiveMessage(result, handle);
+                _reading = await _connection._fsm.Current.TriggerReceiveMessage(result, handle);
                 if (_reading)
                 {
                     RequestMessage().Forget();

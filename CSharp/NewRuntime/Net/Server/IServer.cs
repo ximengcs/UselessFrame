@@ -16,8 +16,6 @@ namespace UselessFrame.Net
 
         IReadOnlyList<IConnection> Connections { get; }
 
-        void RemoveConnection(IConnection connection);
-
         void Start();
 
         void Close();

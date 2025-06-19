@@ -7,6 +7,7 @@ namespace UselessFrame.Net
         SocketError,
         FatalError,
         RemoteClose,
-        Cancel
+        Cancel,
+        Timeout
     }
 }

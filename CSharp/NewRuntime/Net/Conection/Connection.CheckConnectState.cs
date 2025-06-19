@@ -102,6 +102,12 @@ namespace UselessFrame.Net
                     case NetOperateState.Cancel:
                         break;
 
+                    case NetOperateState.Timeout:
+                        {
+                            FailureHandler();
+                        }
+                        break;
+
                     case NetOperateState.SocketError:
                         {
                             CheckSocketError(result.Exception);
@@ -149,8 +155,6 @@ namespace UselessFrame.Net
                             if (result.MessageType == typeof(TestConnect))
                             {
                                 bool success = await result.Response(new TestConnectResponse());
-                                if (responseHandle.HasResponse)
-                                    responseHandle.SetResponse(messageResult);
                                 if (!success)
                                     return false;
                             }
@@ -161,8 +165,7 @@ namespace UselessFrame.Net
                             else if (result.MessageType == typeof(ServerToken))
                             {
                                 SuccessHandler(result);
-                                if (responseHandle.HasResponse)
-                                    responseHandle.SetCancel();
+                                CancelAllAsyncWait();
                                 return false;
                             }
                             else

@@ -23,8 +23,16 @@ namespace UselessFrame.Net
                 {
                     entry.Value.SetCancel();
                 }
+                _waitResponseList.Clear();
             }
 
+            public void Dispose()
+            {
+                if (_waitResponseList.Count > 0)
+                    CancelAllWait();
+                _connection = null;
+                _waitResponseList = null;
+            }
         }
     }
 }

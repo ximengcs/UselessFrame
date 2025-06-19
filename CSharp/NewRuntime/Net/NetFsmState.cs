@@ -14,6 +14,7 @@ namespace UselessFrame.Net
 
         private NetFsm<T> _fsm;
         private int _pendingCount;
+        private bool _active;
         private AutoResetUniTaskCompletionSource _waitPendingSource;
         protected T _connection;
 
@@ -27,6 +28,10 @@ namespace UselessFrame.Net
 
         public async UniTask ChangeState<ConnectionT>(MessageResult passMessage = null) where ConnectionT : NetFsmState<T>
         {
+            if (!_active)
+                return;
+
+            _active = false;
             await _fsm.ChangeState(typeof(ConnectionT), passMessage);
         }
 
@@ -42,6 +47,13 @@ namespace UselessFrame.Net
                 _waitPendingSource.TrySetResult();
         }
 
+        protected void CancelAllAsyncWait()
+        {
+            if (!_active)
+                return;
+            _connection.CancelAllAsyncWait();
+        }
+
         protected string DebugPrefix => _connection.GetDebugPrefix(this);
 
         public virtual void OnInit()
@@ -51,6 +63,7 @@ namespace UselessFrame.Net
 
         public virtual void OnEnter(NetFsmState<T> preState, MessageResult passMessage)
         {
+            _active = true;
             X.SystemLog.Debug($"{DebugPrefix}-----Enter-----");
         }
 
@@ -73,6 +86,14 @@ namespace UselessFrame.Net
                 _waitPendingSource = null;
             }
             await UniTask.Yield();
+        }
+
+        public async UniTask<bool> TriggerReceiveMessage(ReadMessageResult messageResult, WaitResponseHandle responseHandle)
+        {
+            if (!_active)
+                return false;
+
+            return await OnReceiveMessage(messageResult, responseHandle);
         }
 
         public virtual UniTask<bool> OnReceiveMessage(ReadMessageResult messageResult, WaitResponseHandle responseHandle)

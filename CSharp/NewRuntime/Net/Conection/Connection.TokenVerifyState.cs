@@ -41,15 +41,32 @@ namespace UselessFrame.Net
                 _connection._stream.StartRead();
                 ReadMessageResult result = await _connection._stream.SendWait(token, true);
                 X.SystemLog.Debug($"{DebugPrefix}send verify token complete, state {result.State}");
-                if (result.State == NetOperateState.Cancel)
-                {
-                    AsyncEnd();
-                    return;
-                }
 
-                ServerTokenVerify tokenVerify = (ServerTokenVerify)result.Message;
-                X.SystemLog.Debug($"{DebugPrefix}verify success");
-                ChangeState<RunState>().Forget();
+                switch (result.State)
+                {
+                    case NetOperateState.OK:
+                        {
+                            ServerTokenVerify tokenVerify = (ServerTokenVerify)result.Message;
+                            X.SystemLog.Debug($"{DebugPrefix}verify success");
+                            ChangeState<RunState>().Forget();
+                        }
+                        break;
+
+                    case NetOperateState.Cancel:
+                        break;
+
+                    case NetOperateState.Timeout:
+                        {
+                            ChangeState<DisposeState>().Forget();
+                        }
+                        break;
+
+                    default:
+                        {
+                            ChangeState<DisposeState>().Forget();
+                        }
+                        break;
+                }
 
                 AsyncEnd();
             }

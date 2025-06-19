@@ -37,6 +37,12 @@ namespace UselessFrame.Net
                     case NetOperateState.Cancel:
                         break;
 
+                    case NetOperateState.Timeout:
+                        {
+                            ChangeState<DisposeState>().Forget();
+                        }
+                        break;
+
                     default:
                         {
                             ChangeState<DisposeState>().Forget();
