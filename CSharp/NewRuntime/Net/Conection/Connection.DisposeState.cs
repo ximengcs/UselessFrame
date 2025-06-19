@@ -1,5 +1,6 @@
 ﻿
 using Cysharp.Threading.Tasks;
+using UselessFrame.NewRuntime;
 
 namespace UselessFrame.Net
 {
@@ -17,6 +18,7 @@ namespace UselessFrame.Net
 
             private async UniTask DelayDestroy(float seonds = 10)
             {
+                await UniTaskExt.Delay(seonds);
                 _connection.Dispose();
             }
         }
