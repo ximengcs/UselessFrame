@@ -104,7 +104,7 @@ namespace UselessFrame.Net
 
                     case NetOperateState.Timeout:
                         {
-                            FailureHandler();
+                            RetryHandler();
                         }
                         break;
 
