@@ -17,6 +17,11 @@ namespace UselessFrame.Net
     {
         private static Dictionary<string, MessageTypeInfo> _types = new Dictionary<string, MessageTypeInfo>();
 
+        internal static bool CheckMessageSize(int size)
+        {
+            return size <= 1024 * 1024;
+        }
+
         internal static IMessage ToMessage(this Memory<byte> datas)
         {
             int typeNameSize = BitConverter.ToInt32(datas.Span);

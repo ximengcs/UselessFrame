@@ -141,6 +141,13 @@ namespace UselessFrame.Net
 
                     //we should do some size validation here also (e.g. restrict incoming messages to x bytes long)
                     _bufferPool.Release(_buffer);
+
+                    if (!NetUtility.CheckMessageSize(_messageSize))
+                    {
+                        Complete(new ReadMessageResult(NetOperateState.FatalError, $"[Net][DENGER]The remote peer sent a large message size, messageSize is {_messageSize}. will interrupt this client"));
+                        return;
+                    }
+
                     _buffer = _bufferPool.Require(_messageSize);
                     //reset the bytes received back to zero
                     //because we are now switching to reading the message body
