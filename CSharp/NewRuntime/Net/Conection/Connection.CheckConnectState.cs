@@ -159,6 +159,7 @@ namespace UselessFrame.Net
                             else if (result.MessageType == typeof(TestConnectResponse))
                             {
                                 responseHandle.SetResponse(messageResult);
+                                return false;
                             }
                             else if (result.MessageType == typeof(ServerToken))
                             {

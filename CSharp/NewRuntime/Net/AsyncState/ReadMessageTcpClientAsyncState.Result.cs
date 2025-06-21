@@ -16,7 +16,6 @@ namespace UselessFrame.Net
             State = state;
             StateMessage = stateMsg;
             Message = msgData.AsMemory(Crc16CcittKermit.CRCLength, msgSize - Crc16CcittKermit.CRCLength).ToMessage();
-            pool.Release(msgData);
             Exception = null;
         }
 

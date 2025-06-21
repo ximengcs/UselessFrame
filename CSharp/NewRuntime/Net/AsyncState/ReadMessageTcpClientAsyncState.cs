@@ -53,7 +53,6 @@ namespace UselessFrame.Net
                 _bufferPool.Release(_buffer);
                 _buffer = null;
             }
-
             _fiber.Post(ResultToFiber, result);
         }
 
@@ -146,8 +145,6 @@ namespace UselessFrame.Net
                     }
 
                     //we should do some size validation here also (e.g. restrict incoming messages to x bytes long)
-                    _bufferPool.Release(_buffer);
-                    _buffer = null;
 
                     if (!NetUtility.CheckMessageSize(_messageSize))
                     {
@@ -155,6 +152,7 @@ namespace UselessFrame.Net
                         return;
                     }
 
+                    _bufferPool.Release(_buffer);
                     _buffer = _bufferPool.Require(_messageSize);
                     //reset the bytes received back to zero
                     //because we are now switching to reading the message body

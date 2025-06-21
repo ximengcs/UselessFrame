@@ -92,6 +92,8 @@ namespace UselessFrame.Net
 
                     default:
                         {
+                            X.SystemLog.Debug($"{DebugPrefix}receive message error, {messageResult.State} {messageResult.StateMessage}");
+
                             ChangeState<DisposeState>().Forget();
                             CancelAllAsyncWait();
                             return false;
