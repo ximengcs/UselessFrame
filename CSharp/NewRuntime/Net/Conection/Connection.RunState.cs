@@ -4,6 +4,7 @@ using Google.Protobuf;
 using System;
 using System.Data.Common;
 using UselessFrame.NewRuntime;
+using UselessFrame.NewRuntime.Fiber;
 
 namespace UselessFrame.Net
 {
@@ -20,9 +21,9 @@ namespace UselessFrame.Net
                 _connection._stream.SetWriteActive(true);
             }
 
-            public override async UniTask OnSendMessage(IMessage message)
+            public override async UniTask OnSendMessage(IMessage message, IFiber fiber)
             {
-                WriteMessageResult result = await _connection.Stream.Send(message, false);
+                WriteMessageResult result = await _connection.Stream.Send(message, false, fiber);
                 switch (result.State)
                 {
                     case NetOperateState.OK:

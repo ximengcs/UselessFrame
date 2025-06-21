@@ -5,6 +5,7 @@ using System;
 using System.Text;
 using UselessFrame.Net;
 using UselessFrame.NewRuntime;
+using UselessFrame.NewRuntime.Fiber;
 using UselessFrame.Runtime.Pools;
 
 namespace UselessFrame.Net
@@ -20,7 +21,7 @@ namespace UselessFrame.Net
                 _writeActive = active;
             }
 
-            public async UniTask<ReadMessageResult> SendWait(IMessage message, bool force)
+            public async UniTask<ReadMessageResult> SendWait(IMessage message, bool force, IFiber fiber = null)
             {
                 if (!force && !_writeActive)
                 {
@@ -30,12 +31,12 @@ namespace UselessFrame.Net
 
                 WaitResponseHandle waitHandle = new WaitResponseHandle(message);
                 _waitResponseList.TryAdd(waitHandle.Id, waitHandle);
-                WriteMessageResult result = await Send(message, force);
+                WriteMessageResult result = await Send(message, force, fiber);
                 ReadMessageResult response = await waitHandle.ResponseTask;
                 return response;
             }
 
-            public async UniTask<WriteMessageResult> Send(IMessage message, bool force)
+            public async UniTask<WriteMessageResult> Send(IMessage message, bool force, IFiber fiber = null)
             {
                 if (!force && !_writeActive)
                 {
@@ -57,7 +58,11 @@ namespace UselessFrame.Net
                 BitConverter.TryWriteBytes(buffer.Message, typeNameSize);
                 Encoding.UTF8.GetBytes(typeName, buffer.Message.Slice(sizeof(int), typeNameSize));
                 message.WriteTo(buffer.Message.Slice(sizeof(int) + typeNameSize));
-                WriteMessageResult result = await AsyncStateUtility.WriteMessageAsync(_connection._client, buffer, _connection._runFiber);
+
+                if (fiber == null)
+                    fiber = _connection._runFiber;
+
+                WriteMessageResult result = await AsyncStateUtility.WriteMessageAsync(_connection._client, buffer, fiber);
                 return result;
             }
         }

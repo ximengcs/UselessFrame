@@ -138,12 +138,12 @@ namespace UselessFrame.Net
 
         public async UniTask Send(IMessage message)
         {
-            await _fsm.Current.OnSendMessage(message);
+            await _fsm.Current.OnSendMessage(message, _dataFiber);
         }
 
         public async UniTask<IMessageResult> SendWait(IMessage message)
         {
-            return await _fsm.Current.OnSendWaitMessage(message);
+            return await _fsm.Current.OnSendWaitMessage(message, _dataFiber);
         }
 
         public void TriggerState(int newState)

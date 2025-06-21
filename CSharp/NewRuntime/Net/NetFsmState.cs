@@ -4,6 +4,7 @@ using Google.Protobuf;
 using System;
 using System.Text;
 using UselessFrame.NewRuntime;
+using UselessFrame.NewRuntime.Fiber;
 using static UselessFrame.Net.Connection.MessageStream;
 
 namespace UselessFrame.Net
@@ -101,12 +102,12 @@ namespace UselessFrame.Net
             throw new NotImplementedException();
         }
 
-        public virtual async UniTask OnSendMessage(IMessage message)
+        public virtual async UniTask OnSendMessage(IMessage message, IFiber fiber)
         {
             await UniTask.CompletedTask;
         }
 
-        public virtual async UniTask<MessageResult> OnSendWaitMessage(IMessage message)
+        public virtual async UniTask<MessageResult> OnSendWaitMessage(IMessage message, IFiber fiber)
         {
             await UniTask.CompletedTask;
             return default;
