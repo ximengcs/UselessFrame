@@ -19,6 +19,8 @@ namespace UselessFrame.NewRuntime.Fiber
 
         public float DeltaTime => _deltaTime;
 
+        public bool IsMain => true;
+
         public MainFiber()
         {
             _loopItems = new List<LoopItemInfo>(1024);

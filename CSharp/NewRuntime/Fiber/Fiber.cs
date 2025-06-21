@@ -21,6 +21,8 @@ namespace UselessFrame.NewRuntime.Fiber
 
         public int ThreadId => _thread.ManagedThreadId;
 
+        public bool IsMain => false;
+
         public Fiber(FiberManager fiberManager)
         {
             _loopItems = new List<LoopItemInfo>(1024);

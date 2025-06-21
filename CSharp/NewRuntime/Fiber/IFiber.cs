@@ -7,6 +7,8 @@ namespace UselessFrame.NewRuntime.Fiber
     {
         int ThreadId { get; }
 
+        bool IsMain { get; }
+
         long FrameCount { get; }
 
         float DeltaTime { get; }
