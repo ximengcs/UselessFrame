@@ -180,9 +180,9 @@ namespace UselessFrame.Net
 
                     case NetOperateState.SocketError:
                         {
-                            X.SystemLog.Error($"{DebugPrefix}verify socket error, {messageResult.Exception.ErrorCode}");
+                            X.SystemLog.Error($"{DebugPrefix}connect socket error, {messageResult.Exception.ErrorCode}");
                             X.SystemLog.Exception(messageResult.Exception);
-                            ChangeState<CheckConnectState>().Forget();
+                            ChangeState<DisposeState>().Forget();
                             CancelAllAsyncWait();
                             return false;
                         }
