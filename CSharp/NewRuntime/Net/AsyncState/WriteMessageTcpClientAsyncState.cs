@@ -68,7 +68,7 @@ namespace UselessFrame.Net
             }
             catch (SocketException e)
             {
-                Complete(new WriteMessageResult(NetOperateState.SocketError, $"[Net]write message begin socket error exception:{e}"));
+                Complete(new WriteMessageResult(e, $"[Net]write message begin socket error"));
             }
             catch (ObjectDisposedException e)
             {
@@ -76,9 +76,9 @@ namespace UselessFrame.Net
             }
             catch (IOException e)
             {
-                if (e.InnerException is SocketException)
+                if (e.InnerException is SocketException se)
                 {
-                    Complete(new WriteMessageResult(NetOperateState.SocketError, $"[Net]write message begin io socket error exception:{e}"));
+                    Complete(new WriteMessageResult(se, $"[Net]write message begin io socket error"));
                 }
                 else
                 {
@@ -96,7 +96,7 @@ namespace UselessFrame.Net
             }
             catch (SocketException e)
             {
-                Complete(new WriteMessageResult(NetOperateState.SocketError, $"[Net]write message end socket error exception:{e}"));
+                Complete(new WriteMessageResult(e, $"[Net]write message end socket error "));
             }
             catch (ObjectDisposedException e)
             {
@@ -104,9 +104,9 @@ namespace UselessFrame.Net
             }
             catch (IOException e)
             {
-                if (e.InnerException is SocketException)
+                if (e.InnerException is SocketException se)
                 {
-                    Complete(new WriteMessageResult(NetOperateState.SocketError, $"[Net]write message end socket error exception:{e}"));
+                    Complete(new WriteMessageResult(se, $"[Net]write message end socket error"));
                 }
                 else
                 {

@@ -46,7 +46,7 @@ namespace UselessFrame.Net
             }
             catch (SocketException e)
             {
-                Complete(new AcceptConnectResult(NetOperateState.SocketError, $"[Net]accept connect begin socket error exception:{e}"));
+                Complete(new AcceptConnectResult(e, $"[Net]accept connect begin socket error exception:"));
             }
         }
 
@@ -63,7 +63,7 @@ namespace UselessFrame.Net
             }
             catch (SocketException e)
             {
-                Complete(new AcceptConnectResult(NetOperateState.SocketError, $"[Net]accept connect end socket error exception:{e}"));
+                Complete(new AcceptConnectResult(e, $"[Net]accept connect end socket error"));
             }
         }
     }

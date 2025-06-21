@@ -65,7 +65,7 @@ namespace UselessFrame.Net
             }
             catch (SocketException e)
             {
-                Complete(new RequestConnectResult(NetOperateState.SocketError, $"[Net]request connect begin socket error exception:{e}"));
+                Complete(new RequestConnectResult(e, $"[Net]request connect begin socket error"));
             }
         }
 
@@ -94,7 +94,7 @@ namespace UselessFrame.Net
             }
             catch (SocketException e)
             {
-                Complete(new RequestConnectResult(NetOperateState.SocketError, $"[Net]request connect begin socket error exception:{e}"));
+                Complete(new RequestConnectResult(e, $"[Net]request connect begin socket error"));
             }
         }
     }

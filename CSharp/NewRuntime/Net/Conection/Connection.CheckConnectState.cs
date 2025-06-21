@@ -110,6 +110,8 @@ namespace UselessFrame.Net
 
                     case NetOperateState.SocketError:
                         {
+                            X.SystemLog.Error($"{DebugPrefix}try check step2 socket error, {result.Exception.ErrorCode}");
+                            X.SystemLog.Exception(result.Exception);
                             CheckSocketError(result.Exception);
                         }
                         break;
@@ -178,7 +180,8 @@ namespace UselessFrame.Net
 
                     case NetOperateState.SocketError:
                         {
-                            X.SystemLog.Debug($"verify socket error {messageResult.Exception.ErrorCode}");
+                            X.SystemLog.Error($"{DebugPrefix}verify socket error, {messageResult.Exception.ErrorCode}");
+                            X.SystemLog.Exception(messageResult.Exception);
                             ChangeState<CheckConnectState>().Forget();
                             CancelAllAsyncWait();
                             return false;

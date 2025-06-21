@@ -33,7 +33,11 @@ namespace UselessFrame.Net
                         break;
 
                     case NetOperateState.SocketError:
-                        ChangeState<DisposeState>().Forget();
+                        {
+                            X.SystemLog.Error($"{DebugPrefix}try listen client happend socket error, {result.Exception.ErrorCode}");
+                            X.SystemLog.Exception(result.Exception);
+                            ChangeState<DisposeState>().Forget();
+                        }
                         break;
 
                     case NetOperateState.FatalError:

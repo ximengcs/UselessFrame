@@ -28,11 +28,11 @@ namespace UselessFrame.Net
             Exception = null;
         }
 
-        internal ReadMessageResult(SocketException socketEx)
+        internal ReadMessageResult(SocketException socketEx, string stateMsg)
         {
             Exception = socketEx;
             State = NetOperateState.SocketError;
-            StateMessage = socketEx.Message;
+            StateMessage = stateMsg;
             Message = null;
         }
     }

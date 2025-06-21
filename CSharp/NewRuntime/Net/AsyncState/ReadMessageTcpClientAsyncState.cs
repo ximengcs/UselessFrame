@@ -74,7 +74,7 @@ namespace UselessFrame.Net
             }
             catch (SocketException e)
             {
-                Complete(new ReadMessageResult(NetOperateState.SocketError, $"[Net]read message begin socket error, readTimes {_readTimes}, exception:{e}"));
+                Complete(new ReadMessageResult(e, $"[Net]read message begin socket error, readTimes {_readTimes}"));
             }
             catch (ObjectDisposedException e)
             {
@@ -82,9 +82,9 @@ namespace UselessFrame.Net
             }
             catch (IOException e)
             {
-                if (e.InnerException is SocketException)
+                if (e.InnerException is SocketException se)
                 {
-                    Complete(new ReadMessageResult(NetOperateState.SocketError, $"[Net]read message begin io socket error, readTimes {_readTimes}, exception:{e}"));
+                    Complete(new ReadMessageResult(se, $"[Net]read message begin io socket error, readTimes {_readTimes}"));
                 }
                 else
                 {
@@ -109,7 +109,7 @@ namespace UselessFrame.Net
             {
                 if (e.InnerException is SocketException socketEx)
                 {
-                    Complete(new ReadMessageResult(socketEx));
+                    Complete(new ReadMessageResult(socketEx, $"[Net]read message begine socket error"));
                 }
                 else
                 {
