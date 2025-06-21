@@ -48,6 +48,12 @@ namespace UselessFrame.Net
 
         private void Complete(ReadMessageResult result)
         {
+            if (_buffer != null)
+            {
+                _bufferPool.Release(_buffer);
+                _buffer = null;
+            }
+
             _fiber.Post(ResultToFiber, result);
         }
 
@@ -141,6 +147,7 @@ namespace UselessFrame.Net
 
                     //we should do some size validation here also (e.g. restrict incoming messages to x bytes long)
                     _bufferPool.Release(_buffer);
+                    _buffer = null;
 
                     if (!NetUtility.CheckMessageSize(_messageSize))
                     {

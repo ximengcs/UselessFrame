@@ -1,12 +1,10 @@
 ﻿
-using Cysharp.Threading.Tasks;
-using Google.Protobuf;
 using System;
 using System.Text;
-using UselessFrame.Net;
+using Google.Protobuf;
 using UselessFrame.NewRuntime;
+using Cysharp.Threading.Tasks;
 using UselessFrame.NewRuntime.Fiber;
-using UselessFrame.Runtime.Pools;
 
 namespace UselessFrame.Net
 {
@@ -63,6 +61,7 @@ namespace UselessFrame.Net
                     fiber = _connection._runFiber;
 
                 WriteMessageResult result = await AsyncStateUtility.WriteMessageAsync(_connection._client, buffer, fiber);
+                buffer.Dispose();
                 return result;
             }
         }

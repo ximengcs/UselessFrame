@@ -31,7 +31,7 @@ namespace UselessFrame.Net
 
         public void Dispose()
         {
-            if (_pool != null)
+            if (_pool != null && _buffer != null)
             {
                 _pool.Release(_buffer);
                 _buffer = null;
