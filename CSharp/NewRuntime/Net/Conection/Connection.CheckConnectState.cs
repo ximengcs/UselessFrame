@@ -71,7 +71,9 @@ namespace UselessFrame.Net
                 }
                 catch (SocketException e)
                 {
-                    CheckSocketError(e);
+                    X.SystemLog.Error($"{DebugPrefix}try check step1 socket error, {e.ErrorCode}");
+                    X.SystemLog.Exception(e);
+                    RetryHandler();
                 }
                 catch (Exception e)
                 {
@@ -112,7 +114,21 @@ namespace UselessFrame.Net
                         {
                             X.SystemLog.Error($"{DebugPrefix}try check step2 socket error, {result.Exception.ErrorCode}");
                             X.SystemLog.Exception(result.Exception);
-                            CheckSocketError(result.Exception);
+                            switch (result.Exception.SocketErrorCode)
+                            {
+                                case SocketError.Success:
+                                case SocketError.WouldBlock:
+                                    {
+                                        SuccessHandler(null);
+                                    }
+                                    break;
+
+                                default:
+                                    {
+                                        RetryHandler();
+                                    }
+                                    break;
+                            }
                         }
                         break;
 
@@ -124,26 +140,6 @@ namespace UselessFrame.Net
                 }
 
                 AsyncEnd();
-            }
-
-            private void CheckSocketError(SocketException e)
-            {
-                X.SystemLog.Debug($"{DebugPrefix}trigger socket error, {e.SocketErrorCode}");
-                switch (e.SocketErrorCode)
-                {
-                    case SocketError.Success:
-                    case SocketError.WouldBlock:
-                        {
-                            SuccessHandler(null);
-                        }
-                        break;
-
-                    default:
-                        {
-                            RetryHandler();
-                        }
-                        break;
-                }
             }
 
             public override async UniTask<bool> OnReceiveMessage(ReadMessageResult messageResult, MessageStream.WaitResponseHandle responseHandle)

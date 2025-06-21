@@ -28,6 +28,8 @@ namespace UselessFrame.Net
                 }
                 catch (SocketException e)
                 {
+                    X.SystemLog.Error($"{DebugPrefix}try start socket error {e.SocketErrorCode}");
+                    X.SystemLog.Exception(e);
                     ChangeState<DisposeState>().Forget();
                 }
             }
