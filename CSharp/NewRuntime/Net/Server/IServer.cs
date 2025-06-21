@@ -8,6 +8,8 @@ namespace UselessFrame.Net
 {
     public partial interface IServer
     {
+        Guid Id { get; }
+
         IPEndPoint Host { get; }
 
         ISubject<IServer, ServerState> State { get; }

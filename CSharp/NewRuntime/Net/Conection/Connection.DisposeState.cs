@@ -13,7 +13,11 @@ namespace UselessFrame.Net
             public override void OnEnter(NetFsmState<Connection> preState, MessageResult passMessage)
             {
                 base.OnEnter(preState, passMessage);
-                DelayDestroy().Forget();
+
+                if (_connection._server == null)
+                    _connection.Dispose();
+                else
+                    DelayDestroy().Forget();
             }
 
             private async UniTask DelayDestroy(float seonds = 10)

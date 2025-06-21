@@ -117,8 +117,25 @@ namespace UselessFrame.Net
             _client.Dispose();
             _pool.Dispose();
             _runFiber.Dispose();
+
+            _fsm = null;
+            _stream = null;
+            _client = null;
+            _pool = null;
+            _runFiber = null;
+            _state = null;
+            _dataFiber.Post(UnRegister, null);
+        }
+
+        private void UnRegister(object state)
+        {
             if (_server != null)
+            {
                 _server.RemoveConnection(this);
+                _server = null;
+            }
+
+            X.UnRegisterConnection(this);
         }
 
         private void RunCheckOnFiber(object _)

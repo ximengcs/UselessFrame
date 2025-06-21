@@ -2,7 +2,6 @@
 using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -16,6 +15,7 @@ namespace UselessFrame.Net
     {
         private bool _disposed;
         private bool _start;
+        private Guid _id;
         private IPEndPoint _host;
         private TcpListener _listener;
         private NetFsm<Server> _fsm;
@@ -23,6 +23,8 @@ namespace UselessFrame.Net
         private Dictionary<Guid, Connection> _connections;
         private ISubject<IServer, ServerState> _state;
         private Action<IConnection> _onConnectionListChange;
+
+        public Guid Id => _id;
 
         public IPEndPoint Host => _host;
 
@@ -49,6 +51,7 @@ namespace UselessFrame.Net
         {
             _fiber = fiber;
             _disposed = false;
+            _id = Guid.NewGuid();
             _state = new ValueSubject<IServer, ServerState>(this, fiber, ServerState.None);
             _connections = new Dictionary<Guid, Connection>();
             _host = new IPEndPoint(NetUtility.GetLocalIPAddress(), port);
@@ -74,6 +77,18 @@ namespace UselessFrame.Net
             if (_disposed) return;
             _disposed = true;
             _fsm.Current.ChangeState<CloseState>().Forget();
+        }
+
+        internal void Dispose()
+        {
+            _host = null;
+            _listener = null;
+            _connections = null;
+            _onConnectionListChange = null;
+            _fsm = null;
+            _state = null;
+            _fiber = null;
+            X.UnRegisterServer(this);
         }
 
         public void RemoveConnection(IConnection connection)

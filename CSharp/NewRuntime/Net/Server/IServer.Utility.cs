@@ -1,5 +1,8 @@
 ﻿
+using System;
+using System.Collections.Generic;
 using System.Net;
+using UselessFrame.NewRuntime;
 using UselessFrame.NewRuntime.Fiber;
 
 namespace UselessFrame.Net
@@ -8,12 +11,16 @@ namespace UselessFrame.Net
     {
         public static IServer Create(int port, IFiber fiber)
         {
-            return new Server(port, fiber);
+            IServer server = new Server(port, fiber);
+            X.RegisterServer(server);
+            return server;
         }
 
         public static IConnection Connect(IPEndPoint ip, IFiber fiber)
         {
-            return new Connection(ip, fiber);
+            IConnection connection = new Connection(ip, fiber);
+            X.RegisterConnection(connection);
+            return connection;
         }
     }
 }
