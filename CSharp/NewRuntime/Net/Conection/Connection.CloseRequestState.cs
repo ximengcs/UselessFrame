@@ -59,9 +59,8 @@ namespace UselessFrame.Net
                 {
                     case NetOperateState.RemoteClose:
                         {
-                            if (responseHandle.HasResponse)
-                                responseHandle.SetCancel();
                             ChangeState<DisposeState>().Forget();
+                            CancelAllAsyncWait();
                             return false;
                         }
 
@@ -74,9 +73,8 @@ namespace UselessFrame.Net
 
                     default:
                         {
-                            if (responseHandle.HasResponse)
-                                responseHandle.SetCancel();
                             ChangeState<DisposeState>().Forget();
+                            CancelAllAsyncWait();
                             return false;
                         }
                 }

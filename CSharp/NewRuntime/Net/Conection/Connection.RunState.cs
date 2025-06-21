@@ -1,9 +1,7 @@
 ﻿
-using Cysharp.Threading.Tasks;
 using Google.Protobuf;
-using System;
-using System.Data.Common;
 using UselessFrame.NewRuntime;
+using Cysharp.Threading.Tasks;
 using UselessFrame.NewRuntime.Fiber;
 
 namespace UselessFrame.Net
@@ -27,12 +25,28 @@ namespace UselessFrame.Net
                 switch (result.State)
                 {
                     case NetOperateState.OK:
-
                         break;
 
                     default:
-
                         break;
+                }
+            }
+
+            public override async UniTask<MessageResult> OnSendWaitMessage(IMessage message, IFiber fiber)
+            {
+                ReadMessageResult messageResult = await _connection.Stream.SendWait(message, false, fiber);
+                switch (messageResult.State)
+                {
+                    case NetOperateState.OK:
+                        {
+                            MessageResult result = new MessageResult(messageResult.Message, _connection);
+                            return result;
+                        }
+
+                    default:
+                        {
+                            return null;
+                        }
                 }
             }
 
@@ -52,6 +66,7 @@ namespace UselessFrame.Net
                                 if (result.RequireResponse && result.MessageType == typeof(CloseRequest))
                                 {
                                     ChangeState<CloseResponseState>(result).Forget();
+                                    CancelAllAsyncWait();
                                     return false;
                                 }
                                 _connection.TriggerNewMessage(result);
@@ -61,29 +76,23 @@ namespace UselessFrame.Net
 
                     case NetOperateState.SocketError:
                         {
-                            if (responseHandle.HasResponse)
-                                responseHandle.SetCancel();
-
                             X.SystemLog.Debug($"verify socket error {messageResult.Exception.ErrorCode}");
                             ChangeState<CheckConnectState>().Forget();
+                            CancelAllAsyncWait();
                             return false;
                         }
 
                     case NetOperateState.RemoteClose:
                         {
-                            if (responseHandle.HasResponse)
-                                responseHandle.SetCancel();
-
                             ChangeState<DisposeState>().Forget();
+                            CancelAllAsyncWait();
                             return false;
                         }
 
                     default:
                         {
-                            if (responseHandle.HasResponse)
-                                responseHandle.SetCancel();
-
                             ChangeState<DisposeState>().Forget();
+                            CancelAllAsyncWait();
                             return false;
                         }
                 }

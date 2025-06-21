@@ -57,29 +57,23 @@ namespace UselessFrame.Net
 
                     case NetOperateState.SocketError:
                         {
-                            if (responseHandle.HasResponse)
-                                responseHandle.SetCancel();
-
                             X.SystemLog.Debug($"verify socket error {messageResult.Exception.ErrorCode}");
                             ChangeState<CheckConnectState>().Forget();
+                            CancelAllAsyncWait();
                             return false;
                         }
 
                     case NetOperateState.RemoteClose:
                         {
-                            if (responseHandle.HasResponse)
-                                responseHandle.SetCancel();
-
                             ChangeState<CloseResponseState>().Forget();
+                            CancelAllAsyncWait();
                             return false;
                         }
 
                     default:
                         {
-                            if (responseHandle.HasResponse)
-                                responseHandle.SetCancel();
-
                             ChangeState<DisposeState>().Forget();
+                            CancelAllAsyncWait();
                             return false;
                         }
                 }
