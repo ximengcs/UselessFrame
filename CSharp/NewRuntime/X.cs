@@ -36,6 +36,7 @@ namespace UselessFrame.NewRuntime
             _mainFiber = new MainFiber();
             _servers = new Dictionary<Guid, IServer>();
             _connections = new Dictionary<Guid, IConnection>();
+            AsyncStateUtility.InitializePool();
         }
 
         public static void Update(float deltaTime)

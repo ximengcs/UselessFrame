@@ -6,7 +6,7 @@ using UselessFrame.NewRuntime.Fiber;
 
 namespace UselessFrame.Net
 {
-    internal struct ReadMessageTcpClientAsyncState
+    internal class ReadMessageTcpClientAsyncState : INetPoolObject
     {
         private int _bytesReceived;
         private int _messageSize;
@@ -19,7 +19,7 @@ namespace UselessFrame.Net
 
         public UniTask<ReadMessageResult> CompleteTask => _completeTaskSource.Task;
 
-        public ReadMessageTcpClientAsyncState(TcpClient socket, ByteBufferPool pool, IFiber fiber)
+        public void Initialize(TcpClient socket, ByteBufferPool pool, IFiber fiber)
         {
             _fiber = fiber;
             _readTimes = 0;
@@ -56,11 +56,19 @@ namespace UselessFrame.Net
             _fiber.Post(ResultToFiber, result);
         }
 
+        public void Reset()
+        {
+            _buffer = null;
+            _stream = null;
+            _bufferPool = null;
+            _fiber = null;
+            _completeTaskSource = null;
+        }
+
         private void ResultToFiber(object data)
         {
             ReadMessageResult result = (ReadMessageResult)data;
             _completeTaskSource.TrySetResult(result);
-            _stream = null;
         }
 
         private void Begin(int offset, int size)

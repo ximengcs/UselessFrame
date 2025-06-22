@@ -1,7 +1,6 @@
 ﻿
 using System;
 using System.Net;
-using System.Threading;
 using System.Net.Sockets;
 using Cysharp.Threading.Tasks;
 using UselessFrame.NewRuntime.Fiber;
@@ -10,6 +9,13 @@ namespace UselessFrame.Net
 {
     internal class AsyncStateUtility
     {
+        private static NetObjectPool<ReadMessageTcpClientAsyncState> _readMessagePool;
+
+        public static void InitializePool()
+        {
+            _readMessagePool = new NetObjectPool<ReadMessageTcpClientAsyncState>();
+        }
+
         public static async UniTask<AcceptConnectResult> AcceptConnectAsync(TcpListener listener, IFiber fiber)
         {
             WaitConnectTcpClientAsyncState state = new WaitConnectTcpClientAsyncState(listener, fiber);
@@ -38,8 +44,13 @@ namespace UselessFrame.Net
 
         public static async UniTask<ReadMessageResult> ReadMessageAsync(TcpClient client, ByteBufferPool pool, IFiber fiber)
         {
-            ReadMessageTcpClientAsyncState state = new ReadMessageTcpClientAsyncState(client, pool, fiber);
-            return await state.CompleteTask;
+            ReadMessageTcpClientAsyncState state = _readMessagePool.Require();
+            if (state == null)
+                state = new ReadMessageTcpClientAsyncState();
+            state.Initialize(client, pool, fiber);
+            ReadMessageResult result = await state.CompleteTask;
+            _readMessagePool.Release(state);
+            return result;
         }
     }
 }
