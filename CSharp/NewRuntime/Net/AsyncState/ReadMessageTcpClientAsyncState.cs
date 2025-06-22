@@ -43,7 +43,7 @@ namespace UselessFrame.Net
                 Complete(new ReadMessageResult(NetOperateState.FatalError, $"[Net]read message begin socket error, readTimes {_readTimes}, exception:{e}"));
                 return;
             }
-            Begin(0, _buffer.Length);
+            Begin(0, 4);
         }
 
         private void Complete(ReadMessageResult result)

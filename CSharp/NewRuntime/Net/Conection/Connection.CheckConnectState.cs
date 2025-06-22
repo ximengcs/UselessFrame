@@ -86,8 +86,6 @@ namespace UselessFrame.Net
                 X.SystemLog.Debug($"{DebugPrefix}try check step2");
                 AsyncBegin();
 
-                // 发送0字节数据测试连接
-                byte[] dummy = new byte[0];
                 TestConnect testMessage = new TestConnect()
                 {
                     Time = DateTime.Now.Ticks
