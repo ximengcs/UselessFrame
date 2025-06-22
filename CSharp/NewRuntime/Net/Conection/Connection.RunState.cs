@@ -10,13 +10,42 @@ namespace UselessFrame.Net
     {
         internal class RunState : NetFsmState<Connection>
         {
+            private MessageBeat _beat;
+
             public override int State => (int)ConnectionState.Run;
 
             public override void OnEnter(NetFsmState<Connection> preState, MessageResult passMessage)
             {
                 base.OnEnter(preState, passMessage);
+
+                if (_beat == null)
+                {
+                    _beat = new MessageBeat(_connection._runFiber, _connection._stream, 60);
+                    _beat.ErrorEvent += OnErrorHandler;
+                }
+
                 _connection._stream.StartRead();
                 _connection._stream.SetWriteActive(true);
+                _beat.Start();
+            }
+
+            public override void OnExit()
+            {
+                base.OnExit();
+                if (_beat != null)
+                {
+                    _beat.Stop();
+                }
+            }
+
+            public override void OnDispose()
+            {
+                base.OnDispose();
+                if (_beat != null)
+                {
+                    _beat.Dispose();
+                    _beat = null;
+                }
             }
 
             public override async UniTask OnSendMessage(IMessage message, IFiber fiber)
@@ -69,6 +98,11 @@ namespace UselessFrame.Net
                                     CancelAllAsyncWait();
                                     return false;
                                 }
+                                if (result.MessageType == typeof(KeepAlive))
+                                {
+                                    X.SystemLog.Debug($"{DebugPrefix}receive keepalive.");
+                                    return true;
+                                }
                                 _connection.TriggerNewMessage(result);
                             }
                             return true;
@@ -97,6 +131,37 @@ namespace UselessFrame.Net
                             ChangeState<DisposeState>().Forget();
                             CancelAllAsyncWait();
                             return false;
+                        }
+                }
+            }
+
+            private void OnErrorHandler(WriteMessageResult result)
+            {
+                switch (result.State)
+                {
+                    case NetOperateState.SocketError:
+                        {
+                            X.SystemLog.Error($"{DebugPrefix}send keepalive happend socket error, {result.Exception.ErrorCode}");
+                            X.SystemLog.Exception(result.Exception);
+                            ChangeState<CheckConnectState>().Forget();
+                            CancelAllAsyncWait();
+                            break;
+                        }
+
+                    case NetOperateState.RemoteClose:
+                        {
+                            ChangeState<DisposeState>().Forget();
+                            CancelAllAsyncWait();
+                            break;
+                        }
+
+                    default:
+                        {
+                            X.SystemLog.Debug($"{DebugPrefix}send keepalive message error, {result.State} {result.StateMessage}");
+
+                            ChangeState<DisposeState>().Forget();
+                            CancelAllAsyncWait();
+                            break;
                         }
                 }
             }

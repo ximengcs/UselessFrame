@@ -2,6 +2,7 @@
 message TestConnect
 {
     required bytes RequestToken = 1;
+    required int64 Time = 2;
 }
 
 message TestConnectResponse
@@ -40,4 +41,8 @@ message StringMessage
 {
     required MessageTarget Target = 1;
     required string Content = 2;
+}
+
+message KeepAlive
+{
 }

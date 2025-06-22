@@ -88,7 +88,10 @@ namespace UselessFrame.Net
 
                 // 发送0字节数据测试连接
                 byte[] dummy = new byte[0];
-                TestConnect testMessage = new TestConnect();
+                TestConnect testMessage = new TestConnect()
+                {
+                    Time = DateTime.Now.Ticks
+                };
                 _connection._stream.StartRead();
                 ReadMessageResult result = await _connection._stream.SendWait(testMessage, true);
                 X.SystemLog.Debug($"{DebugPrefix}try check step2 complete, {result.State}");
@@ -152,6 +155,7 @@ namespace UselessFrame.Net
                             X.SystemLog.Debug($"{DebugPrefix}receive message {result.MessageType.Name}");
                             if (result.MessageType == typeof(TestConnect))
                             {
+                                TestConnect msg = (TestConnect)result.Message;
                                 bool success = await result.Response(new TestConnectResponse());
                                 if (!success)
                                     return false;
