@@ -17,13 +17,11 @@ namespace UselessFrame.Net
 
         public byte[] Require(int count)
         {
-            Console.WriteLine($"require {count}");
             return _bufferPool.Rent(count);
         }
 
         public void Release(byte[] data)
         {
-            Console.WriteLine($"Release {data.Length}");
             _bufferPool.Return(data);
         }
 
