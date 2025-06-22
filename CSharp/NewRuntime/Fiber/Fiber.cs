@@ -25,7 +25,7 @@ namespace UselessFrame.NewRuntime.Fiber
 
         public Fiber(FiberManager fiberManager)
         {
-            _loopItems = new List<LoopItemInfo>(1024);
+            _loopItems = new List<LoopItemInfo>(1024 * 1024);
             _fiberManager = fiberManager;
             _context = new FiberSynchronizationContext(this);
             _disposeTokenSource = new CancellationTokenSource();

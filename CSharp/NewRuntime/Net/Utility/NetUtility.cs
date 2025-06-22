@@ -15,7 +15,7 @@ namespace UselessFrame.Net
 {
     public static partial class NetUtility
     {
-        private static Dictionary<string, MessageTypeInfo> _types = new Dictionary<string, MessageTypeInfo>();
+        private static Dictionary<string, MessageTypeInfo> _types = new Dictionary<string, MessageTypeInfo>(2048);
 
         internal static bool CheckMessageSize(int size)
         {
