@@ -4,7 +4,7 @@ using System.Collections.Concurrent;
 
 namespace UselessFrame.Net
 {
-    internal class NetObjectPool<T> where T : class, INetPoolObject
+    internal class NetObjectPool<T> where T : class, INetPoolObject, new()
     {
         private readonly ConcurrentQueue<T> _pool = new ConcurrentQueue<T>();
         private readonly int _maxSize;
@@ -27,7 +27,7 @@ namespace UselessFrame.Net
                 return item;
             }
 
-            return null;
+            return new T();
         }
 
         public void Release(T item)

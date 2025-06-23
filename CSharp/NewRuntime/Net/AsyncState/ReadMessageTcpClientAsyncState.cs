@@ -6,7 +6,7 @@ using UselessFrame.NewRuntime.Fiber;
 
 namespace UselessFrame.Net
 {
-    internal class ReadMessageTcpClientAsyncState : INetPoolObject
+    internal class ReadMessageTcpClientAsyncState : INetPoolObject, IDisposable
     {
         private int _bytesReceived;
         private int _messageSize;
@@ -35,12 +35,12 @@ namespace UselessFrame.Net
             }
             catch (ObjectDisposedException e)
             {
-                Complete(new ReadMessageResult(NetOperateState.FatalError, $"[Net]read message begin socket error, readTimes {_readTimes}, exception:{e}"));
+                Complete(ReadMessageResult.Create(NetOperateState.FatalError, $"[Net]read message begin socket error, readTimes {_readTimes}, exception:{e}"));
                 return;
             }
             catch (InvalidOperationException e)
             {
-                Complete(new ReadMessageResult(NetOperateState.FatalError, $"[Net]read message begin socket error, readTimes {_readTimes}, exception:{e}"));
+                Complete(ReadMessageResult.Create(NetOperateState.FatalError, $"[Net]read message begin socket error, readTimes {_readTimes}, exception:{e}"));
                 return;
             }
             Begin(0, 4);
@@ -54,6 +54,11 @@ namespace UselessFrame.Net
                 _buffer = null;
             }
             _fiber.Post(ResultToFiber, result);
+        }
+
+        public void Dispose()
+        {
+            NetPoolUtility._readMessageAsyncPool.Release(this);
         }
 
         public void Reset()
@@ -79,29 +84,29 @@ namespace UselessFrame.Net
             }
             catch (ArgumentNullException e)
             {
-                Complete(new ReadMessageResult(NetOperateState.FatalError, $"[Net]read message begin param is null, readTimes {_readTimes}, exception:{e}"));
+                Complete(ReadMessageResult.Create(NetOperateState.FatalError, $"[Net]read message begin param is null, readTimes {_readTimes}, exception:{e}"));
             }
             catch (ArgumentOutOfRangeException e)
             {
-                Complete(new ReadMessageResult(NetOperateState.FatalError, $"[Net]read message begin param error, readTimes {_readTimes}, buffer length {_buffer.Length}, offset {offset}, size {size}, bytesReceived {_bytesReceived}, messageSize{_messageSize}, exception:{e}"));
+                Complete(ReadMessageResult.Create(NetOperateState.FatalError, $"[Net]read message begin param error, readTimes {_readTimes}, buffer length {_buffer.Length}, offset {offset}, size {size}, bytesReceived {_bytesReceived}, messageSize{_messageSize}, exception:{e}"));
             }
             catch (SocketException e)
             {
-                Complete(new ReadMessageResult(e, $"[Net]read message begin socket error, readTimes {_readTimes}"));
+                Complete(ReadMessageResult.Create(e, $"[Net]read message begin socket error, readTimes {_readTimes}"));
             }
             catch (ObjectDisposedException e)
             {
-                Complete(new ReadMessageResult(NetOperateState.FatalError, $"[Net]read message begin stream closing, readTimes {_readTimes}, exception:{e}"));
+                Complete(ReadMessageResult.Create(NetOperateState.FatalError, $"[Net]read message begin stream closing, readTimes {_readTimes}, exception:{e}"));
             }
             catch (IOException e)
             {
                 if (e.InnerException is SocketException se)
                 {
-                    Complete(new ReadMessageResult(se, $"[Net]read message begin io socket error, readTimes {_readTimes}"));
+                    Complete(ReadMessageResult.Create(se, $"[Net]read message begin io socket error, readTimes {_readTimes}"));
                 }
                 else
                 {
-                    Complete(new ReadMessageResult(NetOperateState.FatalError, $"[Net]read message begin io error, readTimes {_readTimes}, exception:{e}"));
+                    Complete(ReadMessageResult.Create(NetOperateState.FatalError, $"[Net]read message begin io error, readTimes {_readTimes}, exception:{e}"));
                 }
             }
         }
@@ -115,18 +120,18 @@ namespace UselessFrame.Net
             }
             catch (ObjectDisposedException e)
             {
-                Complete(new ReadMessageResult(NetOperateState.FatalError, $"[Net]read message begin stream closing, readTimes {_readTimes}, exception:{e}"));
+                Complete(ReadMessageResult.Create(NetOperateState.FatalError, $"[Net]read message begin stream closing, readTimes {_readTimes}, exception:{e}"));
                 return;
             }
             catch (IOException e)
             {
                 if (e.InnerException is SocketException socketEx)
                 {
-                    Complete(new ReadMessageResult(socketEx, $"[Net]read message begine socket error"));
+                    Complete(ReadMessageResult.Create(socketEx, $"[Net]read message begine socket error"));
                 }
                 else
                 {
-                    Complete(new ReadMessageResult(NetOperateState.FatalError, $"[Net]read message begin io error, readTimes {_readTimes}, exception:{e}"));
+                    Complete(ReadMessageResult.Create(NetOperateState.FatalError, $"[Net]read message begin io error, readTimes {_readTimes}, exception:{e}"));
                 }
                 return;
             }
@@ -137,7 +142,7 @@ namespace UselessFrame.Net
             {
                 if (count == 0)
                 {
-                    Complete(new ReadMessageResult(NetOperateState.RemoteClose, $"[Net]The remote peer closed the connection while reading the message size, readTimes {_readTimes},"));
+                    Complete(ReadMessageResult.Create(NetOperateState.RemoteClose, $"[Net]The remote peer closed the connection while reading the message size, readTimes {_readTimes},"));
                     return;
                 }
 
@@ -148,7 +153,7 @@ namespace UselessFrame.Net
                     //Console.WriteLine($"[Net] read size success -> {_messageSize}");
                     if (_messageSize < 0)
                     {
-                        Complete(new ReadMessageResult(NetOperateState.FatalError, $"[Net]The remote peer sent a negative message size, readTimes {_readTimes},"));
+                        Complete(ReadMessageResult.Create(NetOperateState.FatalError, $"[Net]The remote peer sent a negative message size, readTimes {_readTimes},"));
                         return;
                     }
 
@@ -156,7 +161,7 @@ namespace UselessFrame.Net
 
                     if (!NetUtility.CheckMessageSize(_messageSize))
                     {
-                        Complete(new ReadMessageResult(NetOperateState.FatalError, $"[Net][DENGER]The remote peer sent a large message size, messageSize is {_messageSize}. will interrupt this client"));
+                        Complete(ReadMessageResult.Create(NetOperateState.FatalError, $"[Net][DENGER]The remote peer sent a large message size, messageSize is {_messageSize}. will interrupt this client"));
                         return;
                     }
 
@@ -177,7 +182,7 @@ namespace UselessFrame.Net
                 else
                 {
                     //we have received a zero length message, notify the user...
-                    Complete(new ReadMessageResult(null, _messageSize, _bufferPool, NetOperateState.RemoteClose));
+                    Complete(ReadMessageResult.Create(null, _messageSize, _bufferPool, NetOperateState.RemoteClose));
                 }
             }
             else //we are reading the body of the message
@@ -187,18 +192,18 @@ namespace UselessFrame.Net
                     if (Crc16CcittKermit.Check(_buffer, _messageSize, out ushort src, out ushort cur))
                     {
                         //Console.WriteLine($"[Net] read data success -> {_messageSize}");
-                        Complete(new ReadMessageResult(_buffer, _messageSize, _bufferPool, NetOperateState.OK));
+                        Complete(ReadMessageResult.Create(_buffer, _messageSize, _bufferPool, NetOperateState.OK));
                     }
                     else
                     {
-                        Complete(new ReadMessageResult(NetOperateState.FatalError, $"[Net]socket receive data bit eror, readTimes {_readTimes}, buffer size {_buffer.Length}, message size {_messageSize}, source crc {src}, current crc {cur}"));
+                        Complete(ReadMessageResult.Create(NetOperateState.FatalError, $"[Net]socket receive data bit eror, readTimes {_readTimes}, buffer size {_buffer.Length}, message size {_messageSize}, source crc {src}, current crc {cur}"));
                     }
                 }
                 else //need more data.
                 {
                     if (count == 0)
                     {
-                        Complete(new ReadMessageResult(NetOperateState.RemoteClose, "[Net]The remote peer closed the connection before the entire message was received., readTimes {_readTimes}"));
+                        Complete(ReadMessageResult.Create(NetOperateState.RemoteClose, "[Net]The remote peer closed the connection before the entire message was received., readTimes {_readTimes}"));
                         return;
                     }
                     Begin(_bytesReceived, _messageSize - _bytesReceived);
