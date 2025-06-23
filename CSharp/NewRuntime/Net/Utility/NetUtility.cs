@@ -15,6 +15,7 @@ namespace UselessFrame.Net
 {
     public static partial class NetUtility
     {
+        private static ByteStringTree _messageBytesTree = new ByteStringTree(512);
         private static Dictionary<string, MessageTypeInfo> _types = new Dictionary<string, MessageTypeInfo>(512);
 
         internal static bool CheckMessageSize(int size)
@@ -22,10 +23,28 @@ namespace UselessFrame.Net
             return size <= 1024 * 1024 * 10;
         }
 
+        internal static void WriteMessageNameTo(string name, Span<byte> buffer)
+        {
+            if (!_messageBytesTree.Contains(name))
+                _messageBytesTree.Add(name);
+            _messageBytesTree.WriteTo(name, buffer);
+        }
+
+        internal static string GetMessageName(ReadOnlySpan<byte> data)
+        {
+            string name = _messageBytesTree.GetString(data);
+            if (string.IsNullOrEmpty(name))
+            {
+                name = Encoding.UTF8.GetString(data);
+                _messageBytesTree.Add(name);
+            }
+            return name;
+        }
+
         internal static IMessage ToMessage(this Memory<byte> datas)
         {
             int typeNameSize = BitConverter.ToInt32(datas.Span);
-            string typeName = Encoding.UTF8.GetString(datas.Span.Slice(sizeof(int), typeNameSize));
+            string typeName = GetMessageName(datas.Span.Slice(sizeof(int), typeNameSize));
             MessageTypeInfo info = NetUtility.GetMessageTypeInfo(typeName);
             IMessage message = info.Parser.ParseFrom(datas.Span.Slice(sizeof(int) + typeNameSize));
             return message;
@@ -33,18 +52,7 @@ namespace UselessFrame.Net
 
         internal static MessageTypeInfo GetMessageTypeInfo(IMessage message)
         {
-            Type type = message.GetType();
-            string messageTypeFullName = type.FullName;
-            lock (_types)
-            {
-                if (_types.TryGetValue(messageTypeFullName, out MessageTypeInfo messageTypeInfo))
-                    return messageTypeInfo;
-                MessageParser parser = (MessageParser)type.GetProperty("Parser", BindingFlags.Static | BindingFlags.Public).GetValue(null);
-                MessageDescriptor descriptor = (MessageDescriptor)type.GetProperty("Descriptor", BindingFlags.Static | BindingFlags.Public).GetValue(null);
-                messageTypeInfo = new MessageTypeInfo(type, parser, descriptor);
-                _types.TryAdd(messageTypeFullName, messageTypeInfo);
-                return messageTypeInfo;
-            }
+            return GetMessageTypeInfo(message.GetType().FullName);
         }
 
         internal static MessageTypeInfo GetMessageTypeInfo(string messageTypeFullName)

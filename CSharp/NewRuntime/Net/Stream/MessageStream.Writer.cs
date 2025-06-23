@@ -54,7 +54,7 @@ namespace UselessFrame.Net
 
                 MessageWriteBuffer buffer = new MessageWriteBuffer(_connection._pool, msgSize);
                 BitConverter.TryWriteBytes(buffer.Message, typeNameSize);
-                Encoding.UTF8.GetBytes(typeName, buffer.Message.Slice(sizeof(int), typeNameSize));
+                NetUtility.WriteMessageNameTo(typeName, buffer.Message.Slice(sizeof(int), typeNameSize));
                 message.WriteTo(buffer.Message.Slice(sizeof(int) + typeNameSize));
 
                 if (fiber == null)
