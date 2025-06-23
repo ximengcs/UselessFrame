@@ -7,39 +7,44 @@ using static UselessFrame.Net.NetUtility;
 
 namespace UselessFrame.Net
 {
-    internal class MessageResult : IMessageResult
+    internal class MessageResult : IMessageResult, INetPoolObject, IDisposable
     {
         private AutoResetUniTaskCompletionSource<IMessage> _responseTaskSource;
         private Guid _token;
         private Connection _connection;
+        private IMessage _message;
+        private Type _messageType;
+        private bool _requireResponse;
 
-        public IMessage Message { get; }
-        public bool RequireResponse { get; }
-        public Type MessageType { get; }
+        public IMessage Message => _message;
+        public bool RequireResponse => _requireResponse;
+        public Type MessageType => _messageType;
 
         public IConnection From => _connection;
 
         internal UniTask<IMessage> ResponseTask => _responseTaskSource.Task;
 
-        internal MessageResult(IMessage message, Connection connection)
+        internal static MessageResult Create(IMessage message, Connection connection)
         {
-            Message = message;
-            _connection = connection;
+            MessageResult result = NetPoolUtility._messageResultPool.Require();
+            result._message = message;
+            result._connection = connection;
 
             MessageTypeInfo typeInfo = NetUtility.GetMessageTypeInfo(message);
-            MessageType = typeInfo.Type;
+            result._messageType = typeInfo.Type;
             if (typeInfo.HasRequestToken)
             {
-                _token = typeInfo.GetRequestToken(message);
-                _responseTaskSource = AutoResetUniTaskCompletionSource<IMessage>.Create();
-                RequireResponse = true;
+                result._token = typeInfo.GetRequestToken(message);
+                result._responseTaskSource = AutoResetUniTaskCompletionSource<IMessage>.Create();
+                result._requireResponse = true;
             }
             else
             {
-                _token = Guid.Empty;
-                _responseTaskSource = null;
-                RequireResponse = false;
+                result._token = Guid.Empty;
+                result._responseTaskSource = null;
+                result._requireResponse = false;
             }
+            return result;
         }
 
         public async UniTask<bool> Response(IMessage message)
@@ -75,6 +80,20 @@ namespace UselessFrame.Net
                 X.SystemLog.Debug($"response message error");
                 return false;
             }
+        }
+
+        public void Reset()
+        {
+            _responseTaskSource = null;
+            _connection = null;
+            _message = null;
+            _requireResponse = false;
+            _messageType = null;
+        }
+
+        public void Dispose()
+        {
+            NetPoolUtility._messageResultPool.Release(this);
         }
     }
 }

@@ -38,7 +38,7 @@ namespace UselessFrame.Net
                     await UniTaskExt.Delay(10, _cancellationTokenSource.Token);
                     if (!_cancellationTokenSource.Token.IsCancellationRequested)
                     {
-                        _responseTaskSource.TrySetResult(new ReadMessageResult(NetOperateState.Timeout, "timeout"));
+                        _responseTaskSource.TrySetResult(ReadMessageResult.Create(NetOperateState.Timeout, "timeout"));
                         _cancellationTokenSource.Cancel();
                     }
                 }
@@ -61,7 +61,7 @@ namespace UselessFrame.Net
                 {
                     if (_cancellationTokenSource.IsCancellationRequested)
                         return;
-                    _responseTaskSource.TrySetResult(new ReadMessageResult(NetOperateState.Cancel, "cancel"));
+                    _responseTaskSource.TrySetResult(ReadMessageResult.Create(NetOperateState.Cancel, "cancel"));
                     _cancellationTokenSource.Cancel();
                 }
             }

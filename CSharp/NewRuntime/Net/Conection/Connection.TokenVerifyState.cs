@@ -77,7 +77,7 @@ namespace UselessFrame.Net
                 {
                     case NetOperateState.OK:
                         {
-                            MessageResult result = new MessageResult(messageResult.Message, _connection);
+                            MessageResult result = MessageResult.Create(messageResult.Message, _connection);
                             if (result.MessageType == typeof(ServerTokenVerify))
                             {
                                 responseHandle.SetResponse(messageResult);

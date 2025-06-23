@@ -149,7 +149,7 @@ namespace UselessFrame.Net
                 {
                     case NetOperateState.OK:
                         {
-                            MessageResult result = new MessageResult(messageResult.Message, _connection);
+                            MessageResult result = MessageResult.Create(messageResult.Message, _connection);
                             X.SystemLog.Debug($"{DebugPrefix}receive message {result.MessageType.Name}");
                             if (result.MessageType == typeof(TestConnect))
                             {

@@ -178,8 +178,9 @@ namespace UselessFrame.Net
 
         private void TriggerMessageToDataFiber(object data)
         {
-            IMessageResult result = (IMessageResult)data;
+            MessageResult result = (MessageResult)data;
             _onReceiveMessage?.Invoke(result);
+            result.Dispose();
         }
 
         public void CancelAllAsyncWait()

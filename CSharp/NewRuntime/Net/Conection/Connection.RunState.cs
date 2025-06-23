@@ -68,7 +68,7 @@ namespace UselessFrame.Net
                 {
                     case NetOperateState.OK:
                         {
-                            MessageResult result = new MessageResult(messageResult.Message, _connection);
+                            MessageResult result = MessageResult.Create(messageResult.Message, _connection);
                             return result;
                         }
 
@@ -91,7 +91,7 @@ namespace UselessFrame.Net
                             }
                             else
                             {
-                                MessageResult result = new MessageResult(messageResult.Message, _connection);
+                                MessageResult result = MessageResult.Create(messageResult.Message, _connection);
                                 if (result.RequireResponse && result.MessageType == typeof(CloseRequest))
                                 {
                                     ChangeState<CloseResponseState>(result).Forget();
