@@ -139,6 +139,7 @@ namespace UselessFrame.Net
                         }
                         break;
                 }
+                result.Dispose();
 
                 AsyncEnd();
             }
@@ -156,11 +157,15 @@ namespace UselessFrame.Net
                                 TestConnect msg = (TestConnect)result.Message;
                                 bool success = await result.Response(new TestConnectResponse());
                                 if (!success)
+                                {
+                                    result.DisposeNotMessage();
                                     return false;
+                                }
                             }
                             else if (result.MessageType == typeof(TestConnectResponse))
                             {
                                 responseHandle.SetResponse(messageResult);
+                                result.DisposeNotMessage();
                                 return false;
                             }
                             else if (result.MessageType == typeof(ServerToken))
@@ -174,6 +179,7 @@ namespace UselessFrame.Net
                                 if (responseHandle.HasResponse)
                                     responseHandle.SetResponse(messageResult);
                             }
+                            result.DisposeNotMessage();
                             return true;
                         }
 

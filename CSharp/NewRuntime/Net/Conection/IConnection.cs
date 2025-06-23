@@ -21,7 +21,7 @@ namespace UselessFrame.Net
 
         UniTask Send(IMessage message);
 
-        UniTask<IMessageResult> SendWait(IMessage message);
+        UniTask<MessageResultHandle> SendWait(IMessage message);
 
         void Close();
     }

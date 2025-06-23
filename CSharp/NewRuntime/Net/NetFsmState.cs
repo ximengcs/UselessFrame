@@ -94,7 +94,9 @@ namespace UselessFrame.Net
             if (!_active)
                 return false;
 
-            return await OnReceiveMessage(messageResult, responseHandle);
+            bool continueReceive = await OnReceiveMessage(messageResult, responseHandle);
+            messageResult.Dispose();
+            return continueReceive;
         }
 
         public virtual UniTask<bool> OnReceiveMessage(ReadMessageResult messageResult, WaitResponseHandle responseHandle)

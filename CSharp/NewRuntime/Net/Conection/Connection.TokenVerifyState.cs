@@ -88,7 +88,7 @@ namespace UselessFrame.Net
                                 if (responseHandle.HasResponse)
                                     responseHandle.SetResponse(messageResult);
                             }
-
+                            result.DisposeNotMessage();
                             return true;
                         }
 

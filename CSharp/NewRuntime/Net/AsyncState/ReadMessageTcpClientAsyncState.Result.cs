@@ -4,7 +4,7 @@ using System.Net.Sockets;
 
 namespace UselessFrame.Net
 {
-    public class ReadMessageResult : INetPoolObject, IDisposable
+    public class ReadMessageResult : IDisposable
     {
         public NetOperateState State;
         public string StateMessage;
@@ -43,7 +43,7 @@ namespace UselessFrame.Net
 
         public void Dispose()
         {
-            NetPoolUtility._readMessageResultPool.Release(this);
+            Reset();
         }
 
         public void Reset()

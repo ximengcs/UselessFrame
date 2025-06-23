@@ -7,7 +7,7 @@ using static UselessFrame.Net.NetUtility;
 
 namespace UselessFrame.Net
 {
-    internal class MessageResult : IMessageResult, INetPoolObject, IDisposable
+    internal class MessageResult : IMessageResult, IDisposable
     {
         private AutoResetUniTaskCompletionSource<IMessage> _responseTaskSource;
         private Guid _token;
@@ -91,8 +91,15 @@ namespace UselessFrame.Net
             _messageType = null;
         }
 
+        public void DisposeNotMessage()
+        {
+            Reset();
+            NetPoolUtility._messageResultPool.Release(this);
+        }
+
         public void Dispose()
         {
+            Reset();
             NetPoolUtility._messageResultPool.Release(this);
         }
     }

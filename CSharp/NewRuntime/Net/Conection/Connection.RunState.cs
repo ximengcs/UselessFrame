@@ -101,6 +101,7 @@ namespace UselessFrame.Net
                                 if (result.MessageType == typeof(KeepAlive))
                                 {
                                     X.SystemLog.Debug($"{DebugPrefix}receive keepalive.");
+                                    result.DisposeNotMessage();
                                     return true;
                                 }
                                 _connection.TriggerNewMessage(result);

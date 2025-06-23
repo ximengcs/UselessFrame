@@ -44,6 +44,7 @@ namespace UselessFrame.Net
                     ChangeState<DisposeState>().Forget();
                 }
 
+                passMessage.DisposeNotMessage();
                 AsyncEnd();
             }
 

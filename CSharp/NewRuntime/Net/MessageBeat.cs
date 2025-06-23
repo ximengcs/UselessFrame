@@ -14,6 +14,7 @@ namespace UselessFrame.Net
         private bool _pending;
         private float _timeGap;
         private float _time;
+        private KeepAlive _keepaliveMsg;
 
         private Action<WriteMessageResult> _onError;
 
@@ -29,6 +30,7 @@ namespace UselessFrame.Net
             _stream = stream;
             _timeGap = timeGap;
             _time = 0;
+            _keepaliveMsg = new KeepAlive();
             _fiber.Add(this);
         }
 
@@ -74,8 +76,7 @@ namespace UselessFrame.Net
         private async UniTask SendMessage()
         {
             _pending = true;
-            KeepAlive message = new KeepAlive();
-            WriteMessageResult result = await _stream.Send(message, true);
+            WriteMessageResult result = await _stream.Send(_keepaliveMsg, true);
             if (result.State != NetOperateState.OK)
             {
                 _onError?.Invoke(result);

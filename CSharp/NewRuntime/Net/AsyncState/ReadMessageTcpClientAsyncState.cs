@@ -6,7 +6,7 @@ using UselessFrame.NewRuntime.Fiber;
 
 namespace UselessFrame.Net
 {
-    internal class ReadMessageTcpClientAsyncState : INetPoolObject, IDisposable
+    internal class ReadMessageTcpClientAsyncState : IDisposable
     {
         private int _bytesReceived;
         private int _messageSize;
@@ -58,6 +58,7 @@ namespace UselessFrame.Net
 
         public void Dispose()
         {
+            Reset();
             NetPoolUtility._readMessageAsyncPool.Release(this);
         }
 

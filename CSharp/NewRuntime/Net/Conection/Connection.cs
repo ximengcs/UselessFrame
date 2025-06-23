@@ -156,11 +156,14 @@ namespace UselessFrame.Net
         public async UniTask Send(IMessage message)
         {
             await _fsm.Current.OnSendMessage(message, _dataFiber);
+            NetPoolUtility.ReleaseMessage(message);
         }
 
-        public async UniTask<IMessageResult> SendWait(IMessage message)
+        public async UniTask<MessageResultHandle> SendWait(IMessage message)
         {
-            return await _fsm.Current.OnSendWaitMessage(message, _dataFiber);
+            IMessageResult result = await _fsm.Current.OnSendWaitMessage(message, _dataFiber);
+            NetPoolUtility.ReleaseMessage(message);
+            return new MessageResultHandle(result);
         }
 
         public void TriggerState(int newState)

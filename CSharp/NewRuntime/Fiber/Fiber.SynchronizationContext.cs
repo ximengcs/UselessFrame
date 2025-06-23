@@ -13,6 +13,7 @@ namespace UselessFrame.NewRuntime.Fiber
             #region Inner Fields
             private int _threadId;
             private IFiber _fiber;
+            private bool _disposed;
             private ConcurrentQueue<Pair<SendOrPostCallback, object>> m_ActQueue;
             private const long DEFAULT_TIMEOUT = -1;
             #endregion
@@ -35,14 +36,19 @@ namespace UselessFrame.NewRuntime.Fiber
                 ExecTimeout = DEFAULT_TIMEOUT;
             }
 
-            public void OnDestroy()
+            public void Dispose()
             {
+                if (_disposed) return;
+                _disposed = true;
+                m_ActQueue.Clear();
                 m_ActQueue = null;
                 ExecTimeout = default;
             }
 
             public void OnUpdate(float escapeTime)
             {
+                if (_disposed) return;
+
                 if (_threadId != -1 && _threadId != Thread.CurrentThread.ManagedThreadId)
                     return;
 

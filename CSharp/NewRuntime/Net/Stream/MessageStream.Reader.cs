@@ -50,7 +50,6 @@ namespace UselessFrame.Net
                 }
 
                 _reading = await _connection._fsm.Current.TriggerReceiveMessage(result, handle);
-                result.Dispose();
                 if (_reading)
                 {
                     RequestMessage().Forget();

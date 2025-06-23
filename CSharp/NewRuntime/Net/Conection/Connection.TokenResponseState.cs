@@ -30,6 +30,7 @@ namespace UselessFrame.Net
                 {
                     ChangeState<RunState>().Forget();
                 }
+                result.DisposeNotMessage();
                 return success;
             }
 
@@ -50,6 +51,10 @@ namespace UselessFrame.Net
                                 {
                                     await SuccessHandler(result);
                                     return false;
+                                }
+                                else
+                                {
+                                    result.DisposeNotMessage();
                                 }
                             }
                             return true;
