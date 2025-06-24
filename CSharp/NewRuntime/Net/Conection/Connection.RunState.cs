@@ -70,11 +70,13 @@ namespace UselessFrame.Net
                     case NetOperateState.OK:
                         {
                             MessageResult result = MessageResult.Create(messageResult.Message, _connection);
+                            messageResult.Dispose();
                             return result;
                         }
 
                     default:
                         {
+                            messageResult.Dispose();
                             return null;
                         }
                 }
@@ -89,10 +91,12 @@ namespace UselessFrame.Net
                             if (responseHandle.HasResponse)
                             {
                                 responseHandle.SetResponse(messageResult);
+                                return true;
                             }
                             else
                             {
                                 MessageResult result = MessageResult.Create(messageResult.Message, _connection);
+                                messageResult.Dispose();
                                 if (result.RequireResponse && result.MessageType == typeof(CloseRequest))
                                 {
                                     ChangeState<CloseResponseState>(result).Forget();
@@ -102,18 +106,19 @@ namespace UselessFrame.Net
                                 if (result.MessageType == typeof(KeepAlive))
                                 {
                                     X.SystemLog.Debug($"{DebugPrefix}receive keepalive.");
-                                    result.DisposeNotMessage();
+                                    result.Dispose();
                                     return true;
                                 }
                                 _connection.TriggerNewMessage(result);
+                                return true;
                             }
-                            return true;
                         }
 
                     case NetOperateState.SocketError:
                         {
                             X.SystemLog.Error($"{DebugPrefix}receive message happend socket error, {messageResult.Exception.ErrorCode}");
                             X.SystemLog.Exception(messageResult.Exception);
+                            messageResult.Dispose();
                             ChangeState<CheckConnectState>().Forget();
                             CancelAllAsyncWait();
                             return false;
@@ -121,6 +126,7 @@ namespace UselessFrame.Net
 
                     case NetOperateState.RemoteClose:
                         {
+                            messageResult.Dispose();
                             ChangeState<DisposeState>().Forget();
                             CancelAllAsyncWait();
                             return false;
@@ -129,7 +135,7 @@ namespace UselessFrame.Net
                     default:
                         {
                             X.SystemLog.Debug($"{DebugPrefix}receive message error, {messageResult.State} {messageResult.StateMessage}");
-
+                            messageResult.Dispose();
                             ChangeState<DisposeState>().Forget();
                             CancelAllAsyncWait();
                             return false;

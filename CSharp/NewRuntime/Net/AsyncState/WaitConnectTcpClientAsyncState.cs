@@ -8,6 +8,7 @@ namespace UselessFrame.Net
 {
     internal class WaitConnectTcpClientAsyncState : IDisposable
     {
+        private bool _disposed;
         private TcpListener _listener;
         private IFiber _fiber;
         private AutoResetUniTaskCompletionSource<AcceptConnectResult> _completeTaskSource;
@@ -16,6 +17,7 @@ namespace UselessFrame.Net
 
         public void Initialize(TcpListener listener, IFiber fiber)
         {
+            _disposed = false;
             _fiber = fiber;
             _listener = listener;
             _completeTaskSource = AutoResetUniTaskCompletionSource<AcceptConnectResult>.Create();
@@ -29,6 +31,8 @@ namespace UselessFrame.Net
 
         public void Dispose()
         {
+            if (_disposed) return;
+            _disposed = true;
             Reset();
             NetPoolUtility._waitConnectAsyncPool.Release(this);
         }

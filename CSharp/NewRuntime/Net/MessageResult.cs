@@ -9,6 +9,7 @@ namespace UselessFrame.Net
 {
     internal class MessageResult : IMessageResult, IDisposable
     {
+        private bool _disposed;
         private AutoResetUniTaskCompletionSource<IMessage> _responseTaskSource;
         private Guid _token;
         private Connection _connection;
@@ -27,6 +28,7 @@ namespace UselessFrame.Net
         internal static MessageResult Create(IMessage message, Connection connection)
         {
             MessageResult result = NetPoolUtility._messageResultPool.Require();
+            result._disposed = false;
             result._message = message;
             result._connection = connection;
 
@@ -93,15 +95,12 @@ namespace UselessFrame.Net
             _messageType = null;
         }
 
-        public void DisposeNotMessage()
-        {
-            Reset();
-            NetPoolUtility._messageResultPool.Release(this);
-        }
-
         public void Dispose()
         {
-            DisposeNotMessage();
+            if (_disposed) return;
+            _disposed = true;
+            Reset();
+            NetPoolUtility._messageResultPool.Release(this);
         }
     }
 }

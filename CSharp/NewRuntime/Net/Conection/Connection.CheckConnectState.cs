@@ -1,7 +1,6 @@
-﻿using Cysharp.Threading.Tasks;
-using System;
-using System.Data.Common;
+﻿using System;
 using System.Net.Sockets;
+using Cysharp.Threading.Tasks;
 using UselessFrame.NewRuntime;
 
 namespace UselessFrame.Net
@@ -158,28 +157,31 @@ namespace UselessFrame.Net
                                 bool success = await result.Response(new TestConnectResponse());
                                 if (!success)
                                 {
-                                    result.DisposeNotMessage();
+                                    messageResult.Dispose();
+                                    result.Dispose();
                                     return false;
                                 }
                             }
                             else if (result.MessageType == typeof(TestConnectResponse))
                             {
                                 responseHandle.SetResponse(messageResult);
-                                result.DisposeNotMessage();
+                                result.Dispose();
                                 return false;
                             }
                             else if (result.MessageType == typeof(ServerToken))
                             {
+                                messageResult.Dispose();
                                 SuccessHandler(result);
                                 CancelAllAsyncWait();
                                 return false;
                             }
                             else
                             {
-                                if (responseHandle.HasResponse)
-                                    responseHandle.SetResponse(messageResult);
+                                responseHandle.SetCancel();
                             }
-                            result.DisposeNotMessage();
+
+                            messageResult.Dispose();
+                            result.Dispose();
                             return true;
                         }
 
@@ -187,6 +189,7 @@ namespace UselessFrame.Net
                         {
                             X.SystemLog.Error($"{DebugPrefix}connect socket error, {messageResult.Exception.ErrorCode}");
                             X.SystemLog.Exception(messageResult.Exception);
+                            messageResult.Dispose();
                             ChangeState<DisposeState>().Forget();
                             CancelAllAsyncWait();
                             return false;
@@ -194,6 +197,7 @@ namespace UselessFrame.Net
 
                     case NetOperateState.RemoteClose:
                         {
+                            messageResult.Dispose();
                             ChangeState<CloseResponseState>().Forget();
                             CancelAllAsyncWait();
                             return false;
@@ -201,6 +205,7 @@ namespace UselessFrame.Net
 
                     default:
                         {
+                            messageResult.Dispose();
                             ChangeState<DisposeState>().Forget();
                             CancelAllAsyncWait();
                             return false;

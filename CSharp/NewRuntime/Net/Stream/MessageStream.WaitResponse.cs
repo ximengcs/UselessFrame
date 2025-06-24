@@ -51,6 +51,8 @@ namespace UselessFrame.Net
 
                 public void SetResponse(ReadMessageResult messageResult)
                 {
+                    if (!HasResponse)
+                        return;
                     if (_cancellationTokenSource.IsCancellationRequested)
                         return;
                     _responseTaskSource.TrySetResult(messageResult);
@@ -59,6 +61,8 @@ namespace UselessFrame.Net
 
                 public void SetCancel()
                 {
+                    if (!HasResponse)
+                        return;
                     if (_cancellationTokenSource.IsCancellationRequested)
                         return;
                     _responseTaskSource.TrySetResult(ReadMessageResult.Create(NetOperateState.Cancel, "cancel"));

@@ -10,6 +10,7 @@ namespace UselessFrame.Net
 {
     internal class RequestConnectTcpClientAsyncState : IDisposable
     {
+        private bool _disposed;
         private TcpClient _client;
         private IPEndPoint _ipEndPoint;
         private IFiber _fiber;
@@ -19,6 +20,7 @@ namespace UselessFrame.Net
 
         public void Initialize(TcpClient client, IPEndPoint ipEndPoint, IFiber fiber)
         {
+            _disposed = false;
             _fiber = fiber;
             _ipEndPoint = ipEndPoint;
             _completeTaskSource = AutoResetUniTaskCompletionSource<RequestConnectResult>.Create();
@@ -33,6 +35,8 @@ namespace UselessFrame.Net
 
         public void Dispose()
         {
+            if (_disposed) return;
+            _disposed = true;
             Reset();
             NetPoolUtility._requestConnectAsyncPool.Release(this);
         }

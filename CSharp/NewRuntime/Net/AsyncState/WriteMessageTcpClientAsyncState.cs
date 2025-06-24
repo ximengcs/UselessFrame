@@ -8,6 +8,7 @@ namespace UselessFrame.Net
 {
     internal class WriteMessageTcpClientAsyncState : IDisposable
     {
+        private bool _disposed;
         private IFiber _fiber;
         private NetworkStream _stream;
         private MessageWriteBuffer _buffer;
@@ -17,6 +18,7 @@ namespace UselessFrame.Net
 
         public void Initialize(TcpClient client, MessageWriteBuffer buffer, IFiber fiber)
         {
+            _disposed = false;
             _fiber = fiber;
             _buffer = buffer;
             _completeTaskSource = AutoResetUniTaskCompletionSource<WriteMessageResult>.Create();
@@ -47,6 +49,8 @@ namespace UselessFrame.Net
 
         public void Dispose()
         {
+            if (_disposed) return;
+            _disposed = true;
             Reset();
             NetPoolUtility._writeMessageAsyncPool.Release(this);
         }

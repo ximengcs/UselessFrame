@@ -67,6 +67,7 @@ namespace UselessFrame.Net
                         }
                         break;
                 }
+                result.Dispose();
 
                 AsyncEnd();
             }
@@ -85,10 +86,10 @@ namespace UselessFrame.Net
                             }
                             else
                             {
-                                if (responseHandle.HasResponse)
-                                    responseHandle.SetResponse(messageResult);
+                                messageResult.Dispose();
+                                responseHandle.SetCancel();
                             }
-                            result.DisposeNotMessage();
+                            result.Dispose();
                             return true;
                         }
 
@@ -96,6 +97,7 @@ namespace UselessFrame.Net
                         {
                             X.SystemLog.Error($"{DebugPrefix}token verify happend socket error, {messageResult.Exception.ErrorCode}");
                             X.SystemLog.Exception(messageResult.Exception);
+                            messageResult.Dispose();
                             ChangeState<CheckConnectState>().Forget();
                             CancelAllAsyncWait();
                             return false;
@@ -103,6 +105,7 @@ namespace UselessFrame.Net
 
                     case NetOperateState.RemoteClose:
                         {
+                            messageResult.Dispose();
                             ChangeState<CloseResponseState>().Forget();
                             CancelAllAsyncWait();
                             return false;
@@ -110,6 +113,7 @@ namespace UselessFrame.Net
 
                     default:
                         {
+                            messageResult.Dispose();
                             ChangeState<DisposeState>().Forget();
                             CancelAllAsyncWait();
                             return false;

@@ -8,6 +8,7 @@ namespace UselessFrame.Net
 {
     internal class ReadMessageTcpClientAsyncState : IDisposable
     {
+        private bool _disposed;
         private int _bytesReceived;
         private int _messageSize;
         private byte[] _buffer;
@@ -21,6 +22,7 @@ namespace UselessFrame.Net
 
         public void Initialize(TcpClient socket, ByteBufferPool pool, IFiber fiber)
         {
+            _disposed = false;
             _fiber = fiber;
             _readTimes = 0;
             _bufferPool = pool;
@@ -58,6 +60,8 @@ namespace UselessFrame.Net
 
         public void Dispose()
         {
+            if (_disposed) return;
+            _disposed = false;
             Reset();
             NetPoolUtility._readMessageAsyncPool.Release(this);
         }
