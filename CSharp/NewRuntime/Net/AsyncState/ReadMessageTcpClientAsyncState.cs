@@ -183,7 +183,7 @@ namespace UselessFrame.Net
                 else
                 {
                     //we have received a zero length message, notify the user...
-                    Complete(ReadMessageResult.Create(null, _messageSize, _bufferPool, NetOperateState.RemoteClose));
+                    Complete(ReadMessageResult.Create(NetOperateState.RemoteClose, "we have received a zero length message, notify the connection close."));
                 }
             }
             else //we are reading the body of the message
