@@ -55,18 +55,6 @@ namespace UselessFrameTest
 
             Enum1 e1 = "E1".ToEnum<Enum1>();
             Console.WriteLine(e1);
-
-            Action<object> a1 = null;
-            Action<string> a2 = Test;
-
-            Func<string> t1 = null;
-            Func<object> t2 = t1;
-            object v = t2();
-        }
-
-        private void Test(object v)
-        {
-
         }
     }
 }

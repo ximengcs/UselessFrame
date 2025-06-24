@@ -99,7 +99,7 @@ namespace Core.Application
             else
             {
                 result = string.Concat($"[{Thread.CurrentThread.ManagedThreadId,5}]", content[0]);
-                head = null;
+                head = string.Empty;
                 return true;
             }
         }

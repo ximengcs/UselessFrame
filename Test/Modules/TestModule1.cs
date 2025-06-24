@@ -14,7 +14,7 @@ namespace UselessFrameTest.Modules
 
         protected override void OnInit(object param)
         {
-            Core.AddModule(typeof(TestModule2), null);
+            Core.AddModule(typeof(TestModule2));
         }
     }
 }
