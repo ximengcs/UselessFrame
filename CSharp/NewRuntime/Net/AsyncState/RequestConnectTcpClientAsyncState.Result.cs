@@ -1,36 +1,56 @@
-﻿using System.Net.Sockets;
+﻿using System;
+using System.Net.Sockets;
 
 namespace UselessFrame.Net
 {
-    public class RequestConnectResult
+    public class RequestConnectResult : IDisposable
     {
-        public readonly TcpClient Remote;
-        public readonly NetOperateState State;
-        public readonly string Message;
-        public readonly SocketException Exception;
+        public TcpClient Remote;
+        public NetOperateState State;
+        public string Message;
+        public SocketException Exception;
 
-        public RequestConnectResult(TcpClient remote, NetOperateState errorCode, string message = null)
+        public static RequestConnectResult Create(TcpClient remote, NetOperateState errorCode, string message = null)
         {
-            Remote = remote;
-            State = errorCode;
-            Message = message;
-            Exception = null;
+            RequestConnectResult result = NetPoolUtility._requestConnectResultPool.Require();
+            result.Remote = remote;
+            result.State = errorCode;
+            result.Message = message;
+            result.Exception = null;
+            return result;
         }
 
-        public RequestConnectResult(NetOperateState code, string msg = null)
+        public static RequestConnectResult Create(NetOperateState code, string msg = null)
         {
-            State = code;
-            Message = msg;
-            Remote = null;
-            Exception = null;
+            RequestConnectResult result = NetPoolUtility._requestConnectResultPool.Require();
+            result.State = code;
+            result.Message = msg;
+            result.Remote = null;
+            result.Exception = null;
+            return result;
         }
 
-        public RequestConnectResult(SocketException se, string stateMsg = null)
+        public static RequestConnectResult Create(SocketException se, string stateMsg = null)
         {
-            State = NetOperateState.SocketError;
-            Message = stateMsg;
+            RequestConnectResult result = NetPoolUtility._requestConnectResultPool.Require();
+            result.State = NetOperateState.SocketError;
+            result.Message = stateMsg;
+            result.Remote = null;
+            result.Exception = se;
+            return result;
+        }
+
+        public void Dispose()
+        {
+            Reset();
+            NetPoolUtility._requestConnectResultPool.Release(this);
+        }
+
+        public void Reset()
+        {
             Remote = null;
-            Exception = se;
+            Message = null;
+            Exception = null;
         }
     }
 }

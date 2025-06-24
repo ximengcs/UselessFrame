@@ -1,36 +1,56 @@
-﻿using System.Net.Sockets;
+﻿using System;
+using System.Net.Sockets;
 
 namespace UselessFrame.Net
 {
-    public class AcceptConnectResult
+    public class AcceptConnectResult : IDisposable
     {
-        public readonly TcpClient Client;
-        public readonly NetOperateState State;
-        public readonly string Message;
-        public readonly SocketException Exception;
+        public TcpClient Client;
+        public NetOperateState State;
+        public string Message;
+        public SocketException Exception;
 
-        public AcceptConnectResult(TcpClient client, NetOperateState errorCode, string message = null)
+        public static AcceptConnectResult Create(TcpClient client, NetOperateState errorCode, string message = null)
         {
-            Client = client;
-            State = errorCode;
-            Message = message;
-            Exception = null;
+            AcceptConnectResult result = NetPoolUtility._waitConnectResultPool.Require();
+            result.Client = client;
+            result.State = errorCode;
+            result.Message = message;
+            result.Exception = null;
+            return result;
         }
 
-        public AcceptConnectResult(NetOperateState code, string msg = null)
+        public static AcceptConnectResult Create(NetOperateState code, string msg = null)
         {
-            State = code;
-            Message = msg;
-            Client = null;
-            Exception = null;
+            AcceptConnectResult result = NetPoolUtility._waitConnectResultPool.Require();
+            result.State = code;
+            result.Message = msg;
+            result.Client = null;
+            result.Exception = null;
+            return result;
         }
 
-        public AcceptConnectResult(SocketException e, string stateMsg = null)
+        public static AcceptConnectResult Create(SocketException e, string stateMsg = null)
         {
-            State = NetOperateState.SocketError;
-            Exception = e;
+            AcceptConnectResult result = NetPoolUtility._waitConnectResultPool.Require();
+            result.State = NetOperateState.SocketError;
+            result.Exception = e;
+            result.Client = null;
+            result.Message = stateMsg;
+            return result;
+        }
+
+        public void Dispose()
+        {
+            Reset();
+            NetPoolUtility._waitConnectResultPool.Release(this);
+        }
+
+        public void Reset()
+        {
             Client = null;
-            Message = stateMsg;
+            Message = null;
+            Exception = null;
         }
     }
 }

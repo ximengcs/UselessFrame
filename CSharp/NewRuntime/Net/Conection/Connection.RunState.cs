@@ -59,6 +59,7 @@ namespace UselessFrame.Net
                     default:
                         break;
                 }
+                result.Dispose();
             }
 
             public override async UniTask<MessageResult> OnSendWaitMessage(IMessage message, IFiber fiber)
@@ -165,6 +166,7 @@ namespace UselessFrame.Net
                             break;
                         }
                 }
+                result.Dispose();
             }
         }
     }

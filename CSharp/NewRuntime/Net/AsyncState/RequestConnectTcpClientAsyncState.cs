@@ -2,14 +2,13 @@
 using System;
 using System.Net;
 using System.Security;
-using System.Threading;
 using System.Net.Sockets;
 using Cysharp.Threading.Tasks;
 using UselessFrame.NewRuntime.Fiber;
 
 namespace UselessFrame.Net
 {
-    internal struct RequestConnectTcpClientAsyncState
+    internal class RequestConnectTcpClientAsyncState : IDisposable
     {
         private TcpClient _client;
         private IPEndPoint _ipEndPoint;
@@ -18,7 +17,7 @@ namespace UselessFrame.Net
 
         public UniTask<RequestConnectResult> CompleteTask => _completeTaskSource.Task;
 
-        public RequestConnectTcpClientAsyncState(TcpClient client, IPEndPoint ipEndPoint, IFiber fiber)
+        public void Initialize(TcpClient client, IPEndPoint ipEndPoint, IFiber fiber)
         {
             _fiber = fiber;
             _ipEndPoint = ipEndPoint;
@@ -30,6 +29,20 @@ namespace UselessFrame.Net
         private void Complete(RequestConnectResult result)
         {
             _fiber.Post(ResultToFiber, result);
+        }
+
+        public void Dispose()
+        {
+            Reset();
+            NetPoolUtility._requestConnectAsyncPool.Release(this);
+        }
+
+        public void Reset()
+        {
+            _client = null;
+            _fiber = null;
+            _ipEndPoint = null;
+            _completeTaskSource = null;
         }
 
         private void ResultToFiber(object data)
@@ -49,23 +62,23 @@ namespace UselessFrame.Net
             }
             catch (ArgumentNullException e)
             {
-                Complete(new RequestConnectResult(NetOperateState.FatalError, $"[Net]request connect begin param is null, exception:{e}"));
+                Complete(RequestConnectResult.Create(NetOperateState.FatalError, $"[Net]request connect begin param is null, exception:{e}"));
             }
             catch (ArgumentOutOfRangeException e)
             {
-                Complete(new RequestConnectResult(NetOperateState.FatalError, $"[Net]request connect begin param error, exception:{e}"));
+                Complete(RequestConnectResult.Create(NetOperateState.FatalError, $"[Net]request connect begin param error, exception:{e}"));
             }
             catch (SecurityException e)
             {
-                Complete(new RequestConnectResult(NetOperateState.FatalError, $"[Net]request connect permission error, exception:{e}"));
+                Complete(RequestConnectResult.Create(NetOperateState.FatalError, $"[Net]request connect permission error, exception:{e}"));
             }
             catch (ObjectDisposedException e)
             {
-                Complete(new RequestConnectResult(NetOperateState.FatalError, $"[Net]request connect begin stream closing, exception:{e}"));
+                Complete(RequestConnectResult.Create(NetOperateState.FatalError, $"[Net]request connect begin stream closing, exception:{e}"));
             }
             catch (SocketException e)
             {
-                Complete(new RequestConnectResult(e, $"[Net]request connect begin socket error"));
+                Complete(RequestConnectResult.Create(e, $"[Net]request connect begin socket error"));
             }
         }
 
@@ -74,27 +87,27 @@ namespace UselessFrame.Net
             try
             {
                 _client.EndConnect(ar);
-                Complete(new RequestConnectResult(_client, NetOperateState.OK));
+                Complete(RequestConnectResult.Create(_client, NetOperateState.OK));
             }
             catch (ArgumentNullException e)
             {
-                Complete(new RequestConnectResult(NetOperateState.FatalError, $"[Net]request connect begin param is null, exception:{e}"));
+                Complete(RequestConnectResult.Create(NetOperateState.FatalError, $"[Net]request connect begin param is null, exception:{e}"));
             }
             catch (ArgumentOutOfRangeException e)
             {
-                Complete(new RequestConnectResult(NetOperateState.FatalError, $"[Net]request connect begin param error, exception:{e}"));
+                Complete(RequestConnectResult.Create(NetOperateState.FatalError, $"[Net]request connect begin param error, exception:{e}"));
             }
             catch (ObjectDisposedException e)
             {
-                Complete(new RequestConnectResult(NetOperateState.FatalError, $"[Net]request connect begin stream closing, exception:{e}"));
+                Complete(RequestConnectResult.Create(NetOperateState.FatalError, $"[Net]request connect begin stream closing, exception:{e}"));
             }
             catch (InvalidOperationException e)
             {
-                Complete(new RequestConnectResult(NetOperateState.FatalError, $"[Net]request connect cant end before async operate, exception:{e}"));
+                Complete(RequestConnectResult.Create(NetOperateState.FatalError, $"[Net]request connect cant end before async operate, exception:{e}"));
             }
             catch (SocketException e)
             {
-                Complete(new RequestConnectResult(e, $"[Net]request connect begin socket error"));
+                Complete(RequestConnectResult.Create(e, $"[Net]request connect begin socket error"));
             }
         }
     }

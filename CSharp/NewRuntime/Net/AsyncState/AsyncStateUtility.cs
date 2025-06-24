@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Sockets;
 using Cysharp.Threading.Tasks;
@@ -11,14 +10,20 @@ namespace UselessFrame.Net
     {
         public static async UniTask<AcceptConnectResult> AcceptConnectAsync(TcpListener listener, IFiber fiber)
         {
-            WaitConnectTcpClientAsyncState state = new WaitConnectTcpClientAsyncState(listener, fiber);
-            return await state.CompleteTask;
+            using (WaitConnectTcpClientAsyncState state = NetPoolUtility._waitConnectAsyncPool.Require())
+            {
+                state.Initialize(listener, fiber);
+                return await state.CompleteTask;
+            }
         }
 
         public static async UniTask<RequestConnectResult> RequestConnectAsync(TcpClient remote, IPEndPoint ipEndPoint, IFiber fiber)
         {
-            RequestConnectTcpClientAsyncState state = new RequestConnectTcpClientAsyncState(remote, ipEndPoint, fiber);
-            return await state.CompleteTask;
+            using (RequestConnectTcpClientAsyncState state = NetPoolUtility._requestConnectAsyncPool.Require())
+            {
+                state.Initialize(remote, ipEndPoint, fiber);
+                return await state.CompleteTask;
+            }
         }
 
         public static async UniTask<WriteMessageResult> WriteCloseMessageAsync(TcpClient client, IFiber fiber)

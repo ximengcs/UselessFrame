@@ -48,6 +48,7 @@ namespace UselessFrame.Net
                         ChangeState<DisposeState>().Forget();
                         break;
                 }
+                result.Dispose();
             }
         }
     }

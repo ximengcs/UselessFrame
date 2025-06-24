@@ -6,7 +6,7 @@ using UselessFrame.NewRuntime.Fiber;
 
 namespace UselessFrame.Net
 {
-    internal struct WaitConnectTcpClientAsyncState
+    internal class WaitConnectTcpClientAsyncState : IDisposable
     {
         private TcpListener _listener;
         private IFiber _fiber;
@@ -14,7 +14,7 @@ namespace UselessFrame.Net
 
         public UniTask<AcceptConnectResult> CompleteTask => _completeTaskSource.Task;
 
-        public WaitConnectTcpClientAsyncState(TcpListener listener, IFiber fiber)
+        public void Initialize(TcpListener listener, IFiber fiber)
         {
             _fiber = fiber;
             _listener = listener;
@@ -25,6 +25,19 @@ namespace UselessFrame.Net
         private void Complete(AcceptConnectResult result)
         {
             _fiber.Post(ResultToFiber, result);
+        }
+
+        public void Dispose()
+        {
+            Reset();
+            NetPoolUtility._waitConnectAsyncPool.Release(this);
+        }
+
+        public void Reset()
+        {
+            _listener = null;
+            _fiber = null;
+            _completeTaskSource = null;
         }
 
         private void ResultToFiber(object data)
@@ -42,11 +55,11 @@ namespace UselessFrame.Net
             }
             catch (ObjectDisposedException e)
             {
-                Complete(new AcceptConnectResult(NetOperateState.FatalError, $"[Net]accept connect begin stream closing, exception:{e}"));
+                Complete(AcceptConnectResult.Create(NetOperateState.FatalError, $"[Net]accept connect begin stream closing, exception:{e}"));
             }
             catch (SocketException e)
             {
-                Complete(new AcceptConnectResult(e, $"[Net]accept connect begin socket error exception:"));
+                Complete(AcceptConnectResult.Create(e, $"[Net]accept connect begin socket error exception:"));
             }
         }
 
@@ -55,15 +68,15 @@ namespace UselessFrame.Net
             try
             {
                 TcpClient client = _listener.EndAcceptTcpClient(ar);
-                Complete(new AcceptConnectResult(client, NetOperateState.OK));
+                Complete(AcceptConnectResult.Create(client, NetOperateState.OK));
             }
             catch (ObjectDisposedException e)
             {
-                Complete(new AcceptConnectResult(NetOperateState.FatalError, $"[Net]accept connect end stream closing, exception:{e}"));
+                Complete(AcceptConnectResult.Create(NetOperateState.FatalError, $"[Net]accept connect end stream closing, exception:{e}"));
             }
             catch (SocketException e)
             {
-                Complete(new AcceptConnectResult(e, $"[Net]accept connect end socket error"));
+                Complete(AcceptConnectResult.Create(e, $"[Net]accept connect end socket error"));
             }
         }
     }
