@@ -44,6 +44,7 @@ namespace UselessFrame.Net
         public void Dispose()
         {
             Reset();
+            NetPoolUtility._readMessageResultPool.Release(this);
         }
 
         public void Reset()

@@ -25,20 +25,26 @@ namespace UselessFrame.Net
 
         internal static void WriteMessageNameTo(string name, Span<byte> buffer)
         {
-            if (!_messageBytesTree.Contains(name))
-                _messageBytesTree.Add(name);
-            _messageBytesTree.WriteTo(name, buffer);
+            lock (_messageBytesTree)
+            {
+                if (!_messageBytesTree.Contains(name))
+                    _messageBytesTree.Add(name);
+                _messageBytesTree.WriteTo(name, buffer);
+            }
         }
 
         internal static string GetMessageName(ReadOnlySpan<byte> data)
         {
-            string name = _messageBytesTree.GetString(data);
-            if (string.IsNullOrEmpty(name))
+            lock (_messageBytesTree)
             {
-                name = Encoding.UTF8.GetString(data);
-                _messageBytesTree.Add(name);
+                string name = _messageBytesTree.GetString(data);
+                if (string.IsNullOrEmpty(name))
+                {
+                    name = Encoding.UTF8.GetString(data);
+                    _messageBytesTree.Add(name);
+                }
+                return name;
             }
-            return name;
         }
 
         internal static IMessage ToMessage(this Memory<byte> datas)

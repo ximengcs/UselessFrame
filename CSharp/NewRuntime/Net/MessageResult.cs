@@ -99,8 +99,7 @@ namespace UselessFrame.Net
 
         public void Dispose()
         {
-            Reset();
-            NetPoolUtility._messageResultPool.Release(this);
+            DisposeNotMessage();
         }
     }
 }

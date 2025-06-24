@@ -1,26 +1,43 @@
 ﻿
+using System;
 using System.Net.Sockets;
 
 namespace UselessFrame.Net
 {
-    public class WriteMessageResult
+    public class WriteMessageResult : IDisposable
     {
-        public readonly NetOperateState State;
-        public readonly string StateMessage;
-        public readonly SocketException Exception;
+        public NetOperateState State;
+        public string StateMessage;
+        public SocketException Exception;
 
-        public WriteMessageResult(NetOperateState code, string msg = null)
+        public static WriteMessageResult Create(NetOperateState code, string msg = null)
         {
-            State = code;
-            StateMessage = msg;
-            Exception = null;
+            WriteMessageResult result = NetPoolUtility._writeMessageResultPool.Require();
+            result.State = code;
+            result.StateMessage = msg;
+            result.Exception = null;
+            return result;
         }
 
-        public WriteMessageResult(SocketException e, string stateMsg = null)
+        public static WriteMessageResult Create(SocketException e, string stateMsg = null)
         {
-            State = NetOperateState.SocketError;
-            StateMessage = stateMsg;
-            Exception = e;
+            WriteMessageResult result = NetPoolUtility._writeMessageResultPool.Require();
+            result.State = NetOperateState.SocketError;
+            result.StateMessage = stateMsg;
+            result.Exception = e;
+            return result;
+        }
+
+        public void Dispose()
+        {
+            Reset();
+            NetPoolUtility._writeMessageResultPool.Release(this);
+        }
+
+        public void Reset()
+        {
+            StateMessage = null;
+            Exception = null;
         }
     }
 }

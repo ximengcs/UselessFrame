@@ -23,16 +23,22 @@ namespace UselessFrame.Net
 
         public static async UniTask<WriteMessageResult> WriteCloseMessageAsync(TcpClient client, IFiber fiber)
         {
-            WriteMessageTcpClientAsyncState state = new WriteMessageTcpClientAsyncState(client, MessageWriteBuffer.CloseBuffer, fiber);
-            return await state.CompleteTask;
+            using (WriteMessageTcpClientAsyncState state = NetPoolUtility._writeMessageAsyncPool.Require())
+            {
+                state.Initialize(client, MessageWriteBuffer.CloseBuffer, fiber);
+                return await state.CompleteTask;
+            }
         }
 
         public static async UniTask<WriteMessageResult> WriteMessageAsync(TcpClient client, MessageWriteBuffer buffer, IFiber fiber)
         {
             ushort crc = Crc16CcittKermit.ComputeChecksum(buffer.Message);
             BitConverter.TryWriteBytes(buffer.CrcHead, crc);
-            WriteMessageTcpClientAsyncState state = new WriteMessageTcpClientAsyncState(client, buffer, fiber);
-            return await state.CompleteTask;
+            using (WriteMessageTcpClientAsyncState state = NetPoolUtility._writeMessageAsyncPool.Require())
+            {
+                state.Initialize(client, buffer, fiber);
+                return await state.CompleteTask;
+            }
         }
 
         public static async UniTask<ReadMessageResult> ReadMessageAsync(TcpClient client, ByteBufferPool pool, IFiber fiber)

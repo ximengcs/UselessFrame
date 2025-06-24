@@ -8,14 +8,18 @@ namespace UselessFrame.Net
     public class NetPoolUtility
     {
         internal static NetObjectPool<ReadMessageTcpClientAsyncState> _readMessageAsyncPool;
+        internal static NetObjectPool<WriteMessageTcpClientAsyncState> _writeMessageAsyncPool;
         internal static NetObjectPool<ReadMessageResult> _readMessageResultPool;
+        internal static NetObjectPool<WriteMessageResult> _writeMessageResultPool;
         internal static NetObjectPool<MessageResult> _messageResultPool;
         private static Dictionary<Type, NetObjectPool> _messagePool;
 
         internal static void InitializePool()
         {
             _readMessageAsyncPool = new NetObjectPool<ReadMessageTcpClientAsyncState>();
+            _writeMessageAsyncPool = new NetObjectPool<WriteMessageTcpClientAsyncState>();
             _readMessageResultPool = new NetObjectPool<ReadMessageResult>();
+            _writeMessageResultPool = new NetObjectPool<WriteMessageResult>();
             _messageResultPool = new NetObjectPool<MessageResult>();
             _messagePool = new Dictionary<Type, NetObjectPool>(128);
         }

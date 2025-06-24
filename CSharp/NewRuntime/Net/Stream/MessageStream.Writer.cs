@@ -39,7 +39,7 @@ namespace UselessFrame.Net
                 if (!force && !_writeActive)
                 {
                     X.SystemLog.Debug($"send message refuse {force} {_writeActive}");
-                    return new WriteMessageResult(NetOperateState.Cancel, "[Net]this operate is inactive");
+                    return WriteMessageResult.Create(NetOperateState.Cancel, "[Net]this operate is inactive");
                 }
 
                 string typeName = message.Descriptor.FullName;
@@ -49,7 +49,7 @@ namespace UselessFrame.Net
                 if (!NetUtility.CheckMessageSize(msgSize))
                 {
                     X.SystemLog.Debug($"send message is too larget, will refuse, msgSize is {msgSize}");
-                    return new WriteMessageResult(NetOperateState.Cancel, $"[Net][DENGER]send a large message. will interrupt this operate, msgSize is {msgSize}");
+                    return WriteMessageResult.Create(NetOperateState.Cancel, $"[Net][DENGER]send a large message. will interrupt this operate, msgSize is {msgSize}");
                 }
 
                 MessageWriteBuffer buffer = new MessageWriteBuffer(_connection._pool, msgSize);

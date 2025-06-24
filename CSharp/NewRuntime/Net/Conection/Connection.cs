@@ -153,16 +153,18 @@ namespace UselessFrame.Net
             _fsm.ChangeState(typeof(CloseRequestState)).Forget();
         }
 
-        public async UniTask Send(IMessage message)
+        public async UniTask Send(IMessage message, bool autoRelease)
         {
             await _fsm.Current.OnSendMessage(message, _dataFiber);
-            NetPoolUtility.ReleaseMessage(message);
+            if (autoRelease)
+                NetPoolUtility.ReleaseMessage(message);
         }
 
-        public async UniTask<MessageResultHandle> SendWait(IMessage message)
+        public async UniTask<MessageResultHandle> SendWait(IMessage message, bool autoRelease)
         {
             IMessageResult result = await _fsm.Current.OnSendWaitMessage(message, _dataFiber);
-            NetPoolUtility.ReleaseMessage(message);
+            if (autoRelease)
+                NetPoolUtility.ReleaseMessage(message);
             return new MessageResultHandle(result);
         }
 
