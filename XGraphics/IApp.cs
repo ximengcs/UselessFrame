@@ -1,6 +1,4 @@
 ﻿
-using System;
-
 namespace Core.Application
 {
     public interface IApp
@@ -8,7 +6,9 @@ namespace Core.Application
         float DeltaTime { get; }
         bool Disposed { get; }
 
-        void Update();
+        CancellationToken DisposeToken { get; }
+
+        void Update(float deltaTime);
         void Resize(int width, int height);
         void OnGUI(Action handler);
         void OnUpdate(Action<float> handler);

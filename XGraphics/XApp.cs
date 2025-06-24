@@ -1,9 +1,6 @@
 ﻿using Veldrid;
 using Veldrid.Sdl2;
-using System.Diagnostics;
 using Veldrid.StartupUtilities;
-using System;
-using System.Threading;
 
 namespace Core.Application
 {
@@ -20,17 +17,20 @@ namespace Core.Application
         private Action _onGUIHandler;
         private Action<float> _onUpdateHandler;
         private bool _closeTaskSource;
-        private Stopwatch _sw;
         private float _deltaTime;
+        private CancellationTokenSource _disposeTokenSource;
 
         public bool Disposed => _closeTaskSource;
 
         public float DeltaTime => _deltaTime;
 
+        public CancellationToken DisposeToken => _disposeTokenSource.Token;
+
         public XApp(string title, int width, int height)
         {
             _width = width;
             _height = height;
+            _disposeTokenSource = new CancellationTokenSource();
             WindowCreateInfo windowInfo = new WindowCreateInfo()
             {
                 X = 1000,
@@ -63,12 +63,9 @@ namespace Core.Application
             _onUpdateHandler += updateHandler;
         }
 
-        public void Update()
+        public void Update(float deltaTime)
         {
-            if (_sw == null)
-                _sw = Stopwatch.StartNew();
-
-            _deltaTime = _sw.ElapsedTicks / (float)Stopwatch.Frequency;
+            _deltaTime = deltaTime;
             if (_window.Exists && !_closeTaskSource)
             {
                 InputSnapshot input = _window.PumpEvents();
@@ -82,7 +79,6 @@ namespace Core.Application
                 _graphicsDevice.SubmitCommands(_cmdList);
                 _graphicsDevice.SwapBuffers(_graphicsDevice.MainSwapchain);
                 Thread.Sleep((int)(_deltaTime * 1000));
-                _sw.Restart();
             }
             else
             {
@@ -90,6 +86,7 @@ namespace Core.Application
                 _cmdList.Dispose();
                 _graphicsDevice.Dispose();
                 _closeTaskSource = true;
+                _disposeTokenSource.Cancel();
             }
 
             _onUpdateHandler?.Invoke(_deltaTime);
