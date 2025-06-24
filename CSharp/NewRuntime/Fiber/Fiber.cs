@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
@@ -65,16 +66,32 @@ namespace UselessFrame.NewRuntime.Fiber
                 return;
 
             SynchronizationContext.SetSynchronizationContext(_context);
-            Stopwatch sw = Stopwatch.StartNew();
+
+            double timestampToTicks = TimeSpan.TicksPerSecond / (double)Stopwatch.Frequency;
+            long ticksPerFrame = TimeSpan.TicksPerSecond / 60;
+            long perDeltaTimeStamp = (long)(ticksPerFrame / timestampToTicks);
+
+            long prevTimestamp = Stopwatch.GetTimestamp();
             while (!_disposeTokenSource.IsCancellationRequested)
             {
-                _deltaTime = sw.ElapsedMilliseconds / 1000f;
+                long currentTimestamp = Stopwatch.GetTimestamp();
+                long deltaTicks = (long)((currentTimestamp - prevTimestamp) * timestampToTicks);
+                _deltaTime = (float)deltaTicks / TimeSpan.TicksPerSecond;
+                prevTimestamp = currentTimestamp;
+
                 RunLoopItem();
                 _context.OnUpdate(_deltaTime);
                 _frame++;
-                sw.Stop();
-                sw.Restart();
-                Thread.Sleep(1);
+
+                long targetTicks = currentTimestamp + perDeltaTimeStamp;
+                while (Stopwatch.GetTimestamp() < targetTicks)
+                {
+                    long remainingTicks = (long)((targetTicks - Stopwatch.GetTimestamp()) * timestampToTicks);
+                    if (remainingTicks > 4_000_000)
+                        Thread.Sleep(1);
+                    else
+                        Thread.Sleep(0);
+                }
             }
         }
 
