@@ -48,10 +48,9 @@ namespace UselessFrame.Net
         private void ResultToFiber(object data)
         {
             RequestConnectResult result = (RequestConnectResult)data;
-            _completeTaskSource.TrySetResult(result);
             if (result.State != NetOperateState.OK)
                 _client.Dispose();
-            _client = null;
+            _completeTaskSource.TrySetResult(result);
         }
 
         private void Begin()

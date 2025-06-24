@@ -66,33 +66,15 @@ namespace UselessFrame.NewRuntime.Fiber
                 return;
 
             SynchronizationContext.SetSynchronizationContext(_context);
+            FiberUtility.RunLoop(60, RunUpdate, _disposeTokenSource.Token);
+        }
 
-            double timestampToTicks = TimeSpan.TicksPerSecond / (double)Stopwatch.Frequency;
-            long ticksPerFrame = TimeSpan.TicksPerSecond / 60;
-            long perDeltaTimeStamp = (long)(ticksPerFrame / timestampToTicks);
-
-            long prevTimestamp = Stopwatch.GetTimestamp();
-            while (!_disposeTokenSource.IsCancellationRequested)
-            {
-                long currentTimestamp = Stopwatch.GetTimestamp();
-                long deltaTicks = (long)((currentTimestamp - prevTimestamp) * timestampToTicks);
-                _deltaTime = (float)deltaTicks / TimeSpan.TicksPerSecond;
-                prevTimestamp = currentTimestamp;
-
-                RunLoopItem();
-                _context.OnUpdate(_deltaTime);
-                _frame++;
-
-                long targetTicks = currentTimestamp + perDeltaTimeStamp;
-                while (Stopwatch.GetTimestamp() < targetTicks)
-                {
-                    long remainingTicks = (long)((targetTicks - Stopwatch.GetTimestamp()) * timestampToTicks);
-                    if (remainingTicks > 4_000_000)
-                        Thread.Sleep(1);
-                    else
-                        Thread.Sleep(0);
-                }
-            }
+        private void RunUpdate(float deltaTime)
+        {
+            _deltaTime = deltaTime;
+            RunLoopItem();
+            _context.OnUpdate(_deltaTime);
+            _frame++;
         }
 
         private void RunLoopItem()

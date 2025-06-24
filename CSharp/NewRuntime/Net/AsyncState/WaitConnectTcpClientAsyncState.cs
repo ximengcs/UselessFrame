@@ -44,7 +44,6 @@ namespace UselessFrame.Net
         {
             AcceptConnectResult result = (AcceptConnectResult)data;
             _completeTaskSource.TrySetResult(result);
-            _listener = null;
         }
 
         private void Begin()

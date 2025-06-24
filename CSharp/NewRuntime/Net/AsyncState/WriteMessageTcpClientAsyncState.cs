@@ -63,7 +63,6 @@ namespace UselessFrame.Net
         {
             WriteMessageResult result = (WriteMessageResult)data;
             _completeTaskSource.TrySetResult(result);
-            _stream = null;
         }
 
         private void Begin(int offset, int size)
