@@ -32,6 +32,11 @@ namespace UselessFrame.NewRuntime.Fiber
             RunLoop(60, handler, token);
         }
 
+        public static void RunLoop144Hz(Action<float> handler, CancellationToken token)
+        {
+            RunLoop(144, handler, token);
+        }
+
         private static void RunLoop(int frameRate, Action<float> handler, CancellationToken token)
         {
             double timestampToTicks = TimeSpan.TicksPerSecond / (double)Stopwatch.Frequency;
