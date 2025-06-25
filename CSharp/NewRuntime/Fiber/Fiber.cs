@@ -66,7 +66,7 @@ namespace UselessFrame.NewRuntime.Fiber
                 return;
 
             SynchronizationContext.SetSynchronizationContext(_context);
-            FiberUtility.RunLoop1(RunUpdate, _disposeTokenSource.Token);
+            FiberUtility.RunLoopSleep1(RunUpdate, _disposeTokenSource.Token);
         }
 
         private void RunUpdate(float deltaTime)
