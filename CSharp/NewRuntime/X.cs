@@ -4,10 +4,12 @@ using UselessFrame.Net;
 using System.Collections.Generic;
 using UselessFrame.NewRuntime.Fiber;
 using UselessFrame.NewRuntime.World;
+using System.Text;
+using UselessFrame.NewRuntime.Net;
 
 namespace UselessFrame.NewRuntime
 {
-    public static class X
+    public static partial class X
     {
         private static MainFiber _mainFiber;
         private static ITypeManager _typeManager;

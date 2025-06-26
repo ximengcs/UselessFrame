@@ -11,6 +11,13 @@ namespace UselessFrame.Net
         private int _count;
         private bool _disposed;
 
+        internal int _DEBUG_requireTimes = 0;
+        internal int _DEBUG_reuseTimes = 0;
+        internal int _DEBUG_newTimes = 0;
+        internal int _DEBUG_releaseTimes = 0;
+        internal int _DEBUG_toPoolTimes = 0;
+        internal int _DEBUG_wasteTimes = 0;
+
         public NetObjectPool(int maxSize = 128)
         {
             _maxSize = Math.Max(1, maxSize);
@@ -21,12 +28,16 @@ namespace UselessFrame.Net
             if (_disposed)
                 throw new ObjectDisposedException(nameof(NetObjectPool<object>));
 
+            Interlocked.Increment(ref _DEBUG_requireTimes);
+
             if (_pool.TryDequeue(out var item))
             {
+                Interlocked.Increment(ref _DEBUG_reuseTimes);
                 Interlocked.Decrement(ref _count);
                 return item;
             }
 
+            Interlocked.Increment(ref _DEBUG_newTimes);
             return null;
         }
 
@@ -34,15 +45,16 @@ namespace UselessFrame.Net
         {
             if (_disposed || item == null) return;
 
-            DisposeItem(item);
+            Interlocked.Increment(ref _DEBUG_releaseTimes);
 
             if (Interlocked.Increment(ref _count) > _maxSize)
             {
+                Interlocked.Increment(ref _DEBUG_wasteTimes);
                 Interlocked.Decrement(ref _count);
-                DisposeItem(item);
                 return;
             }
 
+            Interlocked.Increment(ref _DEBUG_toPoolTimes);
             _pool.Enqueue(item);
         }
 
@@ -53,13 +65,8 @@ namespace UselessFrame.Net
 
             while (_pool.TryDequeue(out var item))
             {
-                DisposeItem(item);
+                Interlocked.Decrement(ref _count);
             }
-        }
-
-        private void DisposeItem(object item)
-        {
-            Interlocked.Decrement(ref _count);
         }
 
         public int Count => _count;
@@ -74,6 +81,13 @@ namespace UselessFrame.Net
         private int _count;
         private bool _disposed;
 
+        internal int _DEBUG_requireTimes = 0;
+        internal int _DEBUG_reuseTimes = 0;
+        internal int _DEBUG_newTimes = 0;
+        internal int _DEBUG_releaseTimes = 0;
+        internal int _DEBUG_toPoolTimes = 0;
+        internal int _DEBUG_wasteTimes = 0;
+
         public NetObjectPool(int maxSize = 128)
         {
             _maxSize = Math.Max(1, maxSize);
@@ -84,12 +98,16 @@ namespace UselessFrame.Net
             if (_disposed)
                 throw new ObjectDisposedException(nameof(NetObjectPool<T>));
 
+            Interlocked.Increment(ref _DEBUG_requireTimes);
+
             if (_pool.TryDequeue(out var item))
             {
+                Interlocked.Increment(ref _DEBUG_reuseTimes);
                 Interlocked.Decrement(ref _count);
                 return item;
             }
 
+            Interlocked.Increment(ref _DEBUG_newTimes);
             return new T();
         }
 
@@ -97,15 +115,15 @@ namespace UselessFrame.Net
         {
             if (_disposed || item == null) return;
 
-            DisposeItem(item);
-
+            Interlocked.Increment(ref _DEBUG_releaseTimes);
             if (Interlocked.Increment(ref _count) > _maxSize)
             {
+                Interlocked.Increment(ref _DEBUG_wasteTimes);
                 Interlocked.Decrement(ref _count);
-                DisposeItem(item);
                 return;
             }
 
+            Interlocked.Increment(ref _DEBUG_toPoolTimes);
             _pool.Enqueue(item);
         }
 
@@ -116,13 +134,8 @@ namespace UselessFrame.Net
 
             while (_pool.TryDequeue(out var item))
             {
-                DisposeItem(item);
+                Interlocked.Decrement(ref _count);
             }
-        }
-
-        private void DisposeItem(T item)
-        {
-            Interlocked.Decrement(ref _count);
         }
 
         public int Count => _count;

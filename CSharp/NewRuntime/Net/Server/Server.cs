@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Text;
 using UselessFrame.NewRuntime;
 using UselessFrame.NewRuntime.Fiber;
+using UselessFrame.NewRuntime.Net;
 using UselessFrame.Runtime.Observable;
 
 namespace UselessFrame.Net
@@ -63,6 +64,7 @@ namespace UselessFrame.Net
                 { typeof(CloseState), new CloseState() },
                 { typeof(DisposeState), new DisposeState() }
             });
+            NetDebugInfo.Record(this, "registe server");
         }
 
         public void Start()
