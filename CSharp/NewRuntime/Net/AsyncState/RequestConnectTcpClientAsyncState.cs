@@ -30,7 +30,9 @@ namespace UselessFrame.Net
 
         private void Complete(RequestConnectResult result)
         {
-            _fiber.Post(ResultToFiber, result);
+            if (result.State != NetOperateState.OK)
+                _client.Dispose();
+            _fiber.Post(AsyncStateUtility.RunToFiber<RequestConnectResult>, Tuple.Create(_completeTaskSource, result));
         }
 
         public void Dispose()
@@ -47,14 +49,6 @@ namespace UselessFrame.Net
             _fiber = null;
             _ipEndPoint = null;
             _completeTaskSource = null;
-        }
-
-        private void ResultToFiber(object data)
-        {
-            RequestConnectResult result = (RequestConnectResult)data;
-            if (result.State != NetOperateState.OK)
-                _client.Dispose();
-            _completeTaskSource.TrySetResult(result);
         }
 
         private void Begin()

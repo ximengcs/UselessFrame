@@ -55,5 +55,11 @@ namespace UselessFrame.Net
                 return result;
             }
         }
+
+        internal static void RunToFiber<T>(object data)
+        {
+            var tuple = (Tuple<AutoResetUniTaskCompletionSource<T>, T>)data;
+            tuple.Item1.TrySetResult(tuple.Item2);
+        }
     }
 }

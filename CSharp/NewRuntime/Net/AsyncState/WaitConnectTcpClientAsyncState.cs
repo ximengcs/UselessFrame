@@ -26,7 +26,7 @@ namespace UselessFrame.Net
 
         private void Complete(AcceptConnectResult result)
         {
-            _fiber.Post(ResultToFiber, result);
+            _fiber.Post(AsyncStateUtility.RunToFiber<AcceptConnectResult>, Tuple.Create(_completeTaskSource, result));
         }
 
         public void Dispose()
@@ -42,12 +42,6 @@ namespace UselessFrame.Net
             _listener = null;
             _fiber = null;
             _completeTaskSource = null;
-        }
-
-        private void ResultToFiber(object data)
-        {
-            AcceptConnectResult result = (AcceptConnectResult)data;
-            _completeTaskSource.TrySetResult(result);
         }
 
         private void Begin()

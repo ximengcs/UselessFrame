@@ -55,7 +55,7 @@ namespace UselessFrame.Net
                 _bufferPool.Release(_buffer);
                 _buffer = null;
             }
-            _fiber.Post(ResultToFiber, result);
+            _fiber.Post(AsyncStateUtility.RunToFiber<ReadMessageResult>, Tuple.Create(_completeTaskSource, result));
         }
 
         public void Dispose()
@@ -73,12 +73,6 @@ namespace UselessFrame.Net
             _bufferPool = null;
             _fiber = null;
             _completeTaskSource = null;
-        }
-
-        private void ResultToFiber(object data)
-        {
-            ReadMessageResult result = (ReadMessageResult)data;
-            _completeTaskSource.TrySetResult(result);
         }
 
         private void Begin(int offset, int size)
