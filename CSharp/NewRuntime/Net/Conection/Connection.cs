@@ -90,7 +90,6 @@ namespace UselessFrame.Net
             NetDebugInfo.Record(_pool, "registe _pool");
             NetDebugInfo.Record(_stream, "registe _stream");
             NetDebugInfo.Record(_fsm, "registe _fsm");
-            NetDebugInfo.Record(_server, "registe _server");
         }
 
         public Connection(IPEndPoint remoteIP, IFiber fiber)
@@ -121,7 +120,6 @@ namespace UselessFrame.Net
             NetDebugInfo.Record(_pool, "registe _pool");
             NetDebugInfo.Record(_stream, "registe _stream");
             NetDebugInfo.Record(_fsm, "registe _fsm");
-            NetDebugInfo.Record(_server, "registe _server");
         }
 
         public void Dispose()
