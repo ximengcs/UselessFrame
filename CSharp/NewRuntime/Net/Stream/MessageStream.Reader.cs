@@ -52,7 +52,7 @@ namespace UselessFrame.Net
                     }
 
                     _reading = await _connection._fsm.Current.TriggerReceiveMessage(result, handle);
-                    await UniTask.Yield();  //防止异步状态机循环引用，导致内存泄漏
+                    await UniTask.CompletedTask;
                 }
             }
         }
