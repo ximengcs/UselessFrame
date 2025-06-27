@@ -59,7 +59,6 @@ namespace UselessFrame.Net
                     default:
                         break;
                 }
-                result.Dispose();
             }
 
             public override async UniTask<MessageResult> OnSendWaitMessage(IMessage message, IFiber fiber)
@@ -70,13 +69,11 @@ namespace UselessFrame.Net
                     case NetOperateState.OK:
                         {
                             MessageResult result = MessageResult.Create(messageResult.Message, _connection);
-                            messageResult.Dispose();
                             return result;
                         }
 
                     default:
                         {
-                            messageResult.Dispose();
                             return null;
                         }
                 }
@@ -96,7 +93,6 @@ namespace UselessFrame.Net
                             else
                             {
                                 MessageResult result = MessageResult.Create(messageResult.Message, _connection);
-                                messageResult.Dispose();
                                 if (result.RequireResponse && result.MessageType == typeof(CloseRequest))
                                 {
                                     ChangeState<CloseResponseState>(result).Forget();
@@ -118,7 +114,6 @@ namespace UselessFrame.Net
                         {
                             X.SystemLog.Error($"{DebugPrefix}receive message happend socket error, {messageResult.Exception.ErrorCode}");
                             X.SystemLog.Exception(messageResult.Exception);
-                            messageResult.Dispose();
                             ChangeState<CheckConnectState>().Forget();
                             CancelAllAsyncWait();
                             return false;
@@ -126,7 +121,6 @@ namespace UselessFrame.Net
 
                     case NetOperateState.RemoteClose:
                         {
-                            messageResult.Dispose();
                             ChangeState<DisposeState>().Forget();
                             CancelAllAsyncWait();
                             return false;
@@ -135,7 +129,6 @@ namespace UselessFrame.Net
                     default:
                         {
                             X.SystemLog.Debug($"{DebugPrefix}receive message error, {messageResult.State} {messageResult.StateMessage}");
-                            messageResult.Dispose();
                             ChangeState<DisposeState>().Forget();
                             CancelAllAsyncWait();
                             return false;
@@ -172,7 +165,6 @@ namespace UselessFrame.Net
                             break;
                         }
                 }
-                result.Dispose();
             }
         }
     }

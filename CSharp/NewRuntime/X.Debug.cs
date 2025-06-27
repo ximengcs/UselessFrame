@@ -13,14 +13,6 @@ namespace UselessFrame.NewRuntime
             StringBuilder sb = new StringBuilder();
             sb.AppendLine();
             sb.AppendLine("============Pool Start============");
-            ShowNetPoolDebugInfo(sb, NetPoolUtility._readMessageAsyncPool, "ReadMessageAsyncPool");
-            ShowNetPoolDebugInfo(sb, NetPoolUtility._writeMessageAsyncPool, "WriteMessageAsyncPool");
-            ShowNetPoolDebugInfo(sb, NetPoolUtility._waitConnectAsyncPool, "WaitConnectAsyncPool");
-            ShowNetPoolDebugInfo(sb, NetPoolUtility._requestConnectAsyncPool, "RequestConnectAsyncPool");
-            ShowNetPoolDebugInfo(sb, NetPoolUtility._readMessageResultPool, "ReadMessageResultPool");
-            ShowNetPoolDebugInfo(sb, NetPoolUtility._writeMessageResultPool, "WriteMessageResultPool");
-            ShowNetPoolDebugInfo(sb, NetPoolUtility._waitConnectResultPool, "WaitConnectResultPool");
-            ShowNetPoolDebugInfo(sb, NetPoolUtility._requestConnectResultPool, "RequestConnectResultPool");
             ShowNetPoolDebugInfo(sb, NetPoolUtility._messageResultPool, "MessageResultPool");
             sb.AppendLine("============Pool End============");
             sb.AppendLine("============Ref Start============");

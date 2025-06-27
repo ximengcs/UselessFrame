@@ -30,7 +30,6 @@ namespace UselessFrame.Net
                 WaitResponseHandle waitHandle = new WaitResponseHandle(message);
                 _waitResponseList.TryAdd(waitHandle.Id, waitHandle);
                 WriteMessageResult result = await Send(message, force, fiber);
-                result.Dispose();
                 ReadMessageResult response = await waitHandle.ResponseTask;
                 return response;
             }

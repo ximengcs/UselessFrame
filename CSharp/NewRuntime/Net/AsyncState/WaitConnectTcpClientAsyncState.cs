@@ -6,18 +6,16 @@ using UselessFrame.NewRuntime.Fiber;
 
 namespace UselessFrame.Net
 {
-    internal class WaitConnectTcpClientAsyncState : IDisposable
+    internal struct WaitConnectTcpClientAsyncState
     {
-        private bool _disposed;
         private TcpListener _listener;
         private IFiber _fiber;
         private AutoResetUniTaskCompletionSource<AcceptConnectResult> _completeTaskSource;
 
         public UniTask<AcceptConnectResult> CompleteTask => _completeTaskSource.Task;
 
-        public void Initialize(TcpListener listener, IFiber fiber)
+        public WaitConnectTcpClientAsyncState(TcpListener listener, IFiber fiber)
         {
-            _disposed = false;
             _fiber = fiber;
             _listener = listener;
             _completeTaskSource = AutoResetUniTaskCompletionSource<AcceptConnectResult>.Create();
@@ -27,21 +25,6 @@ namespace UselessFrame.Net
         private void Complete(AcceptConnectResult result)
         {
             _fiber.Post(AsyncStateUtility.RunToFiber<AcceptConnectResult>, Tuple.Create(_completeTaskSource, result));
-        }
-
-        public void Dispose()
-        {
-            if (_disposed) return;
-            _disposed = true;
-            Reset();
-            NetPoolUtility._waitConnectAsyncPool.Release(this);
-        }
-
-        public void Reset()
-        {
-            _listener = null;
-            _fiber = null;
-            _completeTaskSource = null;
         }
 
         private void Begin()

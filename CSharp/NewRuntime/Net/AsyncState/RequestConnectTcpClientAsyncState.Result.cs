@@ -3,9 +3,8 @@ using System.Net.Sockets;
 
 namespace UselessFrame.Net
 {
-    public class RequestConnectResult : IDisposable
+    public struct RequestConnectResult
     {
-        private bool _disposed;
         public TcpClient Remote;
         public NetOperateState State;
         public string Message;
@@ -13,8 +12,7 @@ namespace UselessFrame.Net
 
         public static RequestConnectResult Create(TcpClient remote, NetOperateState errorCode, string message = null)
         {
-            RequestConnectResult result = NetPoolUtility._requestConnectResultPool.Require();
-            result._disposed = false;
+            RequestConnectResult result = new RequestConnectResult();
             result.Remote = remote;
             result.State = errorCode;
             result.Message = message;
@@ -24,8 +22,7 @@ namespace UselessFrame.Net
 
         public static RequestConnectResult Create(NetOperateState code, string msg = null)
         {
-            RequestConnectResult result = NetPoolUtility._requestConnectResultPool.Require();
-            result._disposed = false;
+            RequestConnectResult result = new RequestConnectResult();
             result.State = code;
             result.Message = msg;
             result.Remote = null;
@@ -35,28 +32,12 @@ namespace UselessFrame.Net
 
         public static RequestConnectResult Create(SocketException se, string stateMsg = null)
         {
-            RequestConnectResult result = NetPoolUtility._requestConnectResultPool.Require();
-            result._disposed = false;
+            RequestConnectResult result = new RequestConnectResult();
             result.State = NetOperateState.SocketError;
             result.Message = stateMsg;
             result.Remote = null;
             result.Exception = se;
             return result;
-        }
-
-        public void Dispose()
-        {
-            if (_disposed) return;
-            _disposed = true;
-            Reset();
-            NetPoolUtility._requestConnectResultPool.Release(this);
-        }
-
-        public void Reset()
-        {
-            Remote = null;
-            Message = null;
-            Exception = null;
         }
     }
 }

@@ -138,7 +138,6 @@ namespace UselessFrame.Net
                         }
                         break;
                 }
-                result.Dispose();
 
                 AsyncEnd();
             }
@@ -157,7 +156,6 @@ namespace UselessFrame.Net
                                 bool success = await result.Response(new TestConnectResponse());
                                 if (!success)
                                 {
-                                    messageResult.Dispose();
                                     result.Dispose();
                                     return false;
                                 }
@@ -170,7 +168,6 @@ namespace UselessFrame.Net
                             }
                             else if (result.MessageType == typeof(ServerToken))
                             {
-                                messageResult.Dispose();
                                 SuccessHandler(result);
                                 CancelAllAsyncWait();
                                 return false;
@@ -180,7 +177,6 @@ namespace UselessFrame.Net
                                 responseHandle.SetCancel();
                             }
 
-                            messageResult.Dispose();
                             result.Dispose();
                             return true;
                         }
@@ -189,7 +185,6 @@ namespace UselessFrame.Net
                         {
                             X.SystemLog.Error($"{DebugPrefix}connect socket error, {messageResult.Exception.ErrorCode}");
                             X.SystemLog.Exception(messageResult.Exception);
-                            messageResult.Dispose();
                             ChangeState<DisposeState>().Forget();
                             CancelAllAsyncWait();
                             return false;
@@ -197,7 +192,6 @@ namespace UselessFrame.Net
 
                     case NetOperateState.RemoteClose:
                         {
-                            messageResult.Dispose();
                             ChangeState<CloseResponseState>().Forget();
                             CancelAllAsyncWait();
                             return false;
@@ -205,7 +199,6 @@ namespace UselessFrame.Net
 
                     default:
                         {
-                            messageResult.Dispose();
                             ChangeState<DisposeState>().Forget();
                             CancelAllAsyncWait();
                             return false;

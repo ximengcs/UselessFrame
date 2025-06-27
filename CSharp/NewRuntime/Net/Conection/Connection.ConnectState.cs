@@ -40,7 +40,6 @@ namespace UselessFrame.Net
                         }
                 }
 
-                result.Dispose();
                 AsyncEnd();
             }
         }

@@ -66,7 +66,6 @@ namespace UselessFrame.Net
                 {
                     case NetOperateState.OK:
                         {
-                            result.Dispose();
                             return true;
                         }
 
@@ -74,7 +73,6 @@ namespace UselessFrame.Net
                         {
                             X.SystemLog.Error(result.StateMessage);
                             _connection.Fsm.ChangeState(typeof(CloseRequest)).Forget();
-                            result.Dispose();
                             return false;
                         }
                 }

@@ -59,7 +59,6 @@ namespace UselessFrame.Net
                 {
                     case NetOperateState.RemoteClose:
                         {
-                            messageResult.Dispose();
                             ChangeState<DisposeState>().Forget();
                             CancelAllAsyncWait();
                             return false;
@@ -67,14 +66,12 @@ namespace UselessFrame.Net
 
                     case NetOperateState.OK:
                         {
-                            messageResult.Dispose();
                             responseHandle.SetCancel();
                             return true;
                         }
 
                     default:
                         {
-                            messageResult.Dispose();
                             ChangeState<DisposeState>().Forget();
                             CancelAllAsyncWait();
                             return false;

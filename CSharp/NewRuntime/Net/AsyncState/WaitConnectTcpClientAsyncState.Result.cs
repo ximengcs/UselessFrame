@@ -3,7 +3,7 @@ using System.Net.Sockets;
 
 namespace UselessFrame.Net
 {
-    public class AcceptConnectResult : IDisposable
+    public struct AcceptConnectResult
     {
         private bool _disposed;
         public TcpClient Client;
@@ -13,7 +13,7 @@ namespace UselessFrame.Net
 
         public static AcceptConnectResult Create(TcpClient client, NetOperateState errorCode, string message = null)
         {
-            AcceptConnectResult result = NetPoolUtility._waitConnectResultPool.Require();
+            AcceptConnectResult result = new AcceptConnectResult();
             result._disposed = false;
             result.Client = client;
             result.State = errorCode;
@@ -24,7 +24,7 @@ namespace UselessFrame.Net
 
         public static AcceptConnectResult Create(NetOperateState code, string msg = null)
         {
-            AcceptConnectResult result = NetPoolUtility._waitConnectResultPool.Require();
+            AcceptConnectResult result = new AcceptConnectResult();
             result._disposed = false;
             result.State = code;
             result.Message = msg;
@@ -35,28 +35,13 @@ namespace UselessFrame.Net
 
         public static AcceptConnectResult Create(SocketException e, string stateMsg = null)
         {
-            AcceptConnectResult result = NetPoolUtility._waitConnectResultPool.Require();
+            AcceptConnectResult result = new AcceptConnectResult();
             result._disposed = false;
             result.State = NetOperateState.SocketError;
             result.Exception = e;
             result.Client = null;
             result.Message = stateMsg;
             return result;
-        }
-
-        public void Dispose()
-        {
-            if (_disposed) return;
-            _disposed = true;
-            Reset();
-            NetPoolUtility._waitConnectResultPool.Release(this);
-        }
-
-        public void Reset()
-        {
-            Client = null;
-            Message = null;
-            Exception = null;
         }
     }
 }

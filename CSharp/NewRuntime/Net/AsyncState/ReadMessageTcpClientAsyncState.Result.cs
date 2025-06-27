@@ -4,9 +4,8 @@ using System.Net.Sockets;
 
 namespace UselessFrame.Net
 {
-    public class ReadMessageResult : IDisposable
+    public struct ReadMessageResult
     {
-        private bool _disposed;
         public NetOperateState State;
         public string StateMessage;
         public IMessage Message;
@@ -14,8 +13,7 @@ namespace UselessFrame.Net
 
         internal static ReadMessageResult Create(byte[] msgData, int msgSize, ByteBufferPool pool, NetOperateState state, string stateMsg = null)
         {
-            ReadMessageResult result = NetPoolUtility._readMessageResultPool.Require();
-            result._disposed = false;
+            ReadMessageResult result = new ReadMessageResult();
             result.State = state;
             result.StateMessage = stateMsg;
             result.Message = msgData.AsMemory(Crc16CcittKermit.CRCLength, msgSize - Crc16CcittKermit.CRCLength).ToMessage();
@@ -25,8 +23,7 @@ namespace UselessFrame.Net
 
         internal static ReadMessageResult Create(NetOperateState state, string stateMsg)
         {
-            ReadMessageResult result = NetPoolUtility._readMessageResultPool.Require();
-            result._disposed = false;
+            ReadMessageResult result = new ReadMessageResult();
             result.State = state;
             result.StateMessage = stateMsg;
             result.Message = null;
@@ -36,28 +33,12 @@ namespace UselessFrame.Net
 
         internal static ReadMessageResult Create(SocketException socketEx, string stateMsg)
         {
-            ReadMessageResult result = NetPoolUtility._readMessageResultPool.Require();
-            result._disposed = false;
+            ReadMessageResult result = new ReadMessageResult();
             result.Exception = socketEx;
             result.State = NetOperateState.SocketError;
             result.StateMessage = stateMsg;
             result.Message = null;
             return result;
-        }
-
-        public void Dispose()
-        {
-            if (_disposed) return;
-            _disposed = true;
-            Reset();
-            NetPoolUtility._readMessageResultPool.Release(this);
-        }
-
-        public void Reset()
-        {
-            StateMessage = null;
-            Message = null;
-            Exception = null;
         }
     }
 }

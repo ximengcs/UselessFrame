@@ -8,9 +8,8 @@ using UselessFrame.NewRuntime.Fiber;
 
 namespace UselessFrame.Net
 {
-    internal class RequestConnectTcpClientAsyncState : IDisposable
+    internal struct RequestConnectTcpClientAsyncState
     {
-        private bool _disposed;
         private TcpClient _client;
         private IPEndPoint _ipEndPoint;
         private IFiber _fiber;
@@ -18,9 +17,8 @@ namespace UselessFrame.Net
 
         public UniTask<RequestConnectResult> CompleteTask => _completeTaskSource.Task;
 
-        public void Initialize(TcpClient client, IPEndPoint ipEndPoint, IFiber fiber)
+        public RequestConnectTcpClientAsyncState(TcpClient client, IPEndPoint ipEndPoint, IFiber fiber)
         {
-            _disposed = false;
             _fiber = fiber;
             _ipEndPoint = ipEndPoint;
             _completeTaskSource = AutoResetUniTaskCompletionSource<RequestConnectResult>.Create();
@@ -33,22 +31,6 @@ namespace UselessFrame.Net
             if (result.State != NetOperateState.OK)
                 _client.Dispose();
             _fiber.Post(AsyncStateUtility.RunToFiber<RequestConnectResult>, Tuple.Create(_completeTaskSource, result));
-        }
-
-        public void Dispose()
-        {
-            if (_disposed) return;
-            _disposed = true;
-            Reset();
-            NetPoolUtility._requestConnectAsyncPool.Release(this);
-        }
-
-        public void Reset()
-        {
-            _client = null;
-            _fiber = null;
-            _ipEndPoint = null;
-            _completeTaskSource = null;
         }
 
         private void Begin()
