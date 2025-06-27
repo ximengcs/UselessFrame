@@ -40,6 +40,7 @@ namespace UselessFrame.Net
                                 _connection.AddConnection(connection);
                                 X.SystemLog.Debug($"{DebugPrefix}add new client, id : {connection.Id}, ip : {connection.RemoteIP}");
                                 _listening = true;
+                                await UniTask.Yield();  //防止异步状态机循环引用，导致内存泄漏
                             }
                             break;
 
