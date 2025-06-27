@@ -14,7 +14,7 @@ namespace UselessFrame.Net
             {
                 base.OnEnter(preState, passMessage);
 
-                if (passMessage != null)
+                if (passMessage.Valid)
                     SuccessHandler(passMessage).Forget();
                 else
                     _connection._stream.StartRead();
@@ -30,7 +30,6 @@ namespace UselessFrame.Net
                 {
                     ChangeState<RunState>().Forget();
                 }
-                result.Dispose();
                 return success;
             }
 
@@ -52,10 +51,6 @@ namespace UselessFrame.Net
                                 {
                                     await SuccessHandler(result);
                                     return false;
-                                }
-                                else
-                                {
-                                    result.Dispose();
                                 }
                                 return true;
                             }

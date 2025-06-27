@@ -16,26 +16,33 @@ namespace UselessFrame.Net
 
             public void StartRead()
             {
-                if (_reading)
-                    return;
-                _reading = true;
-
                 RequestMessage().Forget();
             }
 
             private async UniTask RequestMessage()
             {
-                ReadMessageResult result = await AsyncStateUtility.ReadMessageAsync(_connection._client, _connection._pool, _connection._runFiber);
-                IMessage message = result.Message;
-                WaitResponseHandle handle = default;
-                if (message != null)
+                if (_reading)
+                    return;
+
+                _reading = true;
+                while (_reading)
                 {
-                    MessageTypeInfo typeInfo = NetUtility.GetMessageTypeInfo(message);
-                    if (typeInfo.HasResponseToken)
+                    ReadMessageResult result = await AsyncStateUtility.ReadMessageAsync(_connection._client, _connection._pool, _connection._runFiber);
+                    IMessage message = result.Message;
+                    WaitResponseHandle handle = default;
+                    if (message != null)
                     {
-                        if (!_waitResponseList.Remove(typeInfo.GetResponseToken(message), out handle))
+                        MessageTypeInfo typeInfo = NetUtility.GetMessageTypeInfo(message);
+                        if (typeInfo.HasResponseToken)
                         {
-                            X.SystemLog.Debug($"waitResponseList TryRemove ERROR");
+                            if (!_waitResponseList.Remove(typeInfo.GetResponseToken(message), out handle))
+                            {
+                                X.SystemLog.Debug($"waitResponseList TryRemove ERROR");
+                                handle = WaitResponseHandle.CreateEmpty();
+                            }
+                        }
+                        else
+                        {
                             handle = WaitResponseHandle.CreateEmpty();
                         }
                     }
@@ -43,16 +50,8 @@ namespace UselessFrame.Net
                     {
                         handle = WaitResponseHandle.CreateEmpty();
                     }
-                }
-                else
-                {
-                    handle = WaitResponseHandle.CreateEmpty();
-                }
 
-                _reading = await _connection._fsm.Current.TriggerReceiveMessage(result, handle);
-                if (_reading)
-                {
-                    RequestMessage().Forget();
+                    _reading = await _connection._fsm.Current.TriggerReceiveMessage(result, handle);
                 }
             }
         }

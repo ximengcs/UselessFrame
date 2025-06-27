@@ -7,16 +7,17 @@ using static UselessFrame.Net.NetUtility;
 
 namespace UselessFrame.Net
 {
-    internal class MessageResult : IMessageResult, IDisposable
+    public struct MessageResult
     {
-        private bool _disposed;
         private AutoResetUniTaskCompletionSource<IMessage> _responseTaskSource;
         private Guid _token;
         private Connection _connection;
         private IMessage _message;
         private Type _messageType;
         private bool _requireResponse;
+        private bool _valid;
 
+        public bool Valid => _valid;
         public IMessage Message => _message;
         public bool RequireResponse => _requireResponse;
         public Type MessageType => _messageType;
@@ -27,8 +28,8 @@ namespace UselessFrame.Net
 
         internal static MessageResult Create(IMessage message, Connection connection)
         {
-            MessageResult result = NetPoolUtility._messageResultPool.Require();
-            result._disposed = false;
+            MessageResult result = new MessageResult();
+            result._valid = true;
             result._message = message;
             result._connection = connection;
 
@@ -82,23 +83,6 @@ namespace UselessFrame.Net
                 X.SystemLog.Debug($"response message error");
                 return false;
             }
-        }
-
-        public void Reset()
-        {
-            _responseTaskSource = null;
-            _connection = null;
-            _message = null;
-            _requireResponse = false;
-            _messageType = null;
-        }
-
-        public void Dispose()
-        {
-            if (_disposed) return;
-            _disposed = true;
-            Reset();
-            NetPoolUtility._messageResultPool.Release(this);
         }
     }
 }

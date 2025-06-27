@@ -74,7 +74,7 @@ namespace UselessFrame.Net
 
                     default:
                         {
-                            return null;
+                            return default;
                         }
                 }
             }
@@ -102,7 +102,6 @@ namespace UselessFrame.Net
                                 if (result.MessageType == typeof(KeepAlive))
                                 {
                                     X.SystemLog.Debug($"{DebugPrefix}receive keepalive.");
-                                    result.Dispose();
                                     return true;
                                 }
                                 _connection.TriggerNewMessage(result);

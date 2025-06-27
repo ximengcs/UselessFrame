@@ -26,7 +26,7 @@ namespace UselessFrame.Net
         private NetFsm<Connection> _fsm;
         private Server _server;
         private ISubject<IConnection, ConnectionState> _state;
-        private Action<IMessageResult> _onReceiveMessage;
+        private Action<MessageResult> _onReceiveMessage;
 
         internal NetFsm<Connection> Fsm => _fsm;
 
@@ -40,7 +40,7 @@ namespace UselessFrame.Net
 
         public ISubject<IConnection, ConnectionState> State => _state;
 
-        public event Action<IMessageResult> ReceiveMessageEvent
+        public event Action<MessageResult> ReceiveMessageEvent
         {
             add { _onReceiveMessage += value; }
             remove { _onReceiveMessage -= value; }
@@ -83,7 +83,7 @@ namespace UselessFrame.Net
 
             });
             _runFiber = X.FiberManager.Create();
-            _runFiber.Post(RunCheckOnFiber, null);
+            _runFiber.Post(ToFiberFun.RunCheckOnFiber, _fsm);
             NetDebugInfo.Record(this, "registe connection");
             NetDebugInfo.Record(_client, "registe _client");
             NetDebugInfo.Record(_remoteIP, "registe _remoteIP");
@@ -113,7 +113,7 @@ namespace UselessFrame.Net
 
             });
             _runFiber = X.FiberManager.Create();
-            _runFiber.Post(RunConnectOnFiber, null);
+            _runFiber.Post(ToFiberFun.RunConnectOnFiber, _fsm);
             NetDebugInfo.Record(this, "registe connection");
             NetDebugInfo.Record(_client, "registe _client");
             NetDebugInfo.Record(_remoteIP, "registe _remoteIP");
@@ -139,28 +139,7 @@ namespace UselessFrame.Net
             _pool = null;
             _runFiber = null;
             _state = null;
-            _dataFiber.Post(UnRegister, null);
-        }
-
-        private void UnRegister(object state)
-        {
-            if (_server != null)
-            {
-                _server.RemoveConnection(this);
-                _server = null;
-            }
-
-            X.UnRegisterConnection(this);
-        }
-
-        private void RunCheckOnFiber(object _)
-        {
-            _fsm.Start<CheckConnectState>();
-        }
-
-        private void RunConnectOnFiber(object _)
-        {
-            _fsm.Start<ConnectState>();
+            _dataFiber.Post(ToFiberFun.UnRegister, Tuple.Create(_server, this));
         }
 
         public void Close()
@@ -175,12 +154,12 @@ namespace UselessFrame.Net
                 NetPoolUtility.ReleaseMessage(message);
         }
 
-        public async UniTask<MessageResultHandle> SendWait(IMessage message, bool autoRelease)
+        public async UniTask<MessageResult> SendWait(IMessage message, bool autoRelease)
         {
-            IMessageResult result = await _fsm.Current.OnSendWaitMessage(message, _dataFiber);
+            MessageResult result = await _fsm.Current.OnSendWaitMessage(message, _dataFiber);
             if (autoRelease)
                 NetPoolUtility.ReleaseMessage(message);
-            return new MessageResultHandle(result);
+            return result;
         }
 
         public void TriggerState(int newState)
@@ -193,14 +172,7 @@ namespace UselessFrame.Net
             if (_onReceiveMessage == null)
                 return;
 
-            _dataFiber.Post(TriggerMessageToDataFiber, message);
-        }
-
-        private void TriggerMessageToDataFiber(object data)
-        {
-            MessageResult result = (MessageResult)data;
-            _onReceiveMessage?.Invoke(result);
-            result.Dispose();
+            _dataFiber.Post(ToFiberFun.TriggerMessageToDataFiber, Tuple.Create(_onReceiveMessage, message));
         }
 
         public void CancelAllAsyncWait()

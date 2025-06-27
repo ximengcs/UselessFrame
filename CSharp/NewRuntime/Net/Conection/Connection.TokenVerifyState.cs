@@ -87,7 +87,6 @@ namespace UselessFrame.Net
                             {
                                 responseHandle.SetCancel();
                             }
-                            result.Dispose();
                             return true;
                         }
 

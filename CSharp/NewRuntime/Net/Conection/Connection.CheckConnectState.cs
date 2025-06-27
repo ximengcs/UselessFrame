@@ -97,7 +97,7 @@ namespace UselessFrame.Net
                 {
                     case NetOperateState.OK:
                         {
-                            SuccessHandler(null);
+                            SuccessHandler(default);
                         }
                         break;
 
@@ -119,7 +119,7 @@ namespace UselessFrame.Net
                                 case SocketError.Success:
                                 case SocketError.WouldBlock:
                                     {
-                                        SuccessHandler(null);
+                                        SuccessHandler(default);
                                     }
                                     break;
 
@@ -156,14 +156,12 @@ namespace UselessFrame.Net
                                 bool success = await result.Response(new TestConnectResponse());
                                 if (!success)
                                 {
-                                    result.Dispose();
                                     return false;
                                 }
                             }
                             else if (result.MessageType == typeof(TestConnectResponse))
                             {
                                 responseHandle.SetResponse(messageResult);
-                                result.Dispose();
                                 return false;
                             }
                             else if (result.MessageType == typeof(ServerToken))
@@ -177,7 +175,6 @@ namespace UselessFrame.Net
                                 responseHandle.SetCancel();
                             }
 
-                            result.Dispose();
                             return true;
                         }
 

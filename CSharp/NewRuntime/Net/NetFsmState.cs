@@ -27,7 +27,7 @@ namespace UselessFrame.Net
             OnInit();
         }
 
-        public async UniTask ChangeState<ConnectionT>(MessageResult passMessage = null) where ConnectionT : NetFsmState<T>
+        public async UniTask ChangeState<ConnectionT>(MessageResult passMessage = default) where ConnectionT : NetFsmState<T>
         {
             if (!_active)
                 return;

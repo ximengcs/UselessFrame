@@ -7,12 +7,10 @@ namespace UselessFrame.Net
 {
     public class NetPoolUtility
     {
-        internal static NetObjectPool<MessageResult> _messageResultPool;
         private static Dictionary<Type, NetObjectPool> _messagePool;
 
         internal static void InitializePool()
         {
-            _messageResultPool = new NetObjectPool<MessageResult>();
             _messagePool = new Dictionary<Type, NetObjectPool>(128);
         }
 

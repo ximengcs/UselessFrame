@@ -67,7 +67,7 @@ namespace UselessFrame.Runtime.Observable
             _eventFiber = eventFiber;
         }
 
-        private void TriggerEventToFiber(object state)
+        private static void TriggerEventToFiber(object state)
         {
             EventInfo evtInfo = (EventInfo)state;
             evtInfo.Trigger();

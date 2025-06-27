@@ -17,7 +17,7 @@ namespace UselessFrame.Net
             {
                 base.OnEnter(preState, passMessage);
 
-                if (passMessage != null)
+                if (passMessage.Valid)
                     TryResponse(passMessage).Forget();
                 else
                     ChangeState<DisposeState>().Forget();
@@ -44,7 +44,6 @@ namespace UselessFrame.Net
                     ChangeState<DisposeState>().Forget();
                 }
 
-                passMessage.Dispose();
                 AsyncEnd();
             }
 

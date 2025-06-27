@@ -13,7 +13,7 @@ namespace UselessFrame.NewRuntime
             StringBuilder sb = new StringBuilder();
             sb.AppendLine();
             sb.AppendLine("============Pool Start============");
-            ShowNetPoolDebugInfo(sb, NetPoolUtility._messageResultPool, "MessageResultPool");
+            //ShowNetPoolDebugInfo(sb, NetPoolUtility.CreateMessage, "MessageResultPool");
             sb.AppendLine("============Pool End============");
             sb.AppendLine("============Ref Start============");
             sb.AppendLine();

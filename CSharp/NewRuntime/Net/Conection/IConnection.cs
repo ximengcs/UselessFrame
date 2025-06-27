@@ -17,11 +17,11 @@ namespace UselessFrame.Net
 
         ISubject<IConnection, ConnectionState> State { get; }
 
-        event Action<IMessageResult> ReceiveMessageEvent;
+        event Action<MessageResult> ReceiveMessageEvent;
 
         UniTask Send(IMessage message, bool autoRelease = true);
 
-        UniTask<MessageResultHandle> SendWait(IMessage message, bool autoRelease = true);
+        UniTask<MessageResult> SendWait(IMessage message, bool autoRelease = true);
 
         void Close();
     }

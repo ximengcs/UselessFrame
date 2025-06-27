@@ -28,7 +28,7 @@ namespace UselessFrame.Net
             ChangeState(typeof(TState)).Forget();
         }
 
-        public async UniTask ChangeState(Type type, MessageResult passMessage = null)
+        public async UniTask ChangeState(Type type, MessageResult passMessage = default)
         {
             await UniTask.Yield();
             NetFsmState<T> oldState = _current;
