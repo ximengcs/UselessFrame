@@ -14,6 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="System.CommandLine">
+      <HintPath>..\Dlls\System.CommandLine.dll</HintPath>
+    </Reference>
     <Reference Include="UniTask">
       <HintPath>..\Dlls\UniTask.dll</HintPath>
     </Reference>
