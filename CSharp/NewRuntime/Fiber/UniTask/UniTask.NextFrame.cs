@@ -8,9 +8,9 @@ namespace UselessFrame.NewRuntime
 {
     public partial struct UniTaskExt
     {
-        public static Cysharp.Threading.Tasks.UniTask NextFrame(CancellationToken cancellationToken)
+        public static UniTask NextFrame(CancellationToken cancellationToken = default)
         {
-            return new Cysharp.Threading.Tasks.UniTask(NextFramePromise.Create(cancellationToken, out var token), token);
+            return new UniTask(NextFramePromise.Create(cancellationToken, out var token), token);
         }
 
         sealed class NextFramePromise : IUniTaskSource, IFiberLoopItem, ITaskPoolNode<NextFramePromise>

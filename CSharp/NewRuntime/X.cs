@@ -1,11 +1,11 @@
 ﻿
+using Cysharp.Threading.Tasks;
 using System;
-using UselessFrame.Net;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using UselessFrame.Net;
 using UselessFrame.NewRuntime.Fiber;
 using UselessFrame.NewRuntime.World;
-using System.Text;
-using UselessFrame.NewRuntime.Net;
 
 namespace UselessFrame.NewRuntime
 {
@@ -31,10 +31,14 @@ namespace UselessFrame.NewRuntime
 
         public static void Initialize(XSetting setting)
         {
+            _logManager = new LogManager();
+            AppDomain.CurrentDomain.UnhandledException += PrintSystemException;
+            TaskScheduler.UnobservedTaskException += PrintTaskException;
+            UniTaskScheduler.UnobservedTaskException += PrintUniTaskException;
+
             _typeManager = new TypeManager(setting.TypeFilter);
             _fiberManager = new FiberManager();
             _worldManager = new WorldManager();
-            _logManager = new LogManager();
             _mainFiber = new MainFiber();
             _servers = new Dictionary<Guid, IServer>();
             _connections = new Dictionary<Guid, IConnection>();
@@ -48,6 +52,9 @@ namespace UselessFrame.NewRuntime
 
         public static void Shutdown()
         {
+            AppDomain.CurrentDomain.UnhandledException -= PrintSystemException;
+            TaskScheduler.UnobservedTaskException -= PrintTaskException;
+            UniTaskScheduler.UnobservedTaskException -= PrintUniTaskException;
             List<IConnection> connections = new List<IConnection>(_connections.Values);
             foreach (IConnection connection in connections)
                 connection.Close();

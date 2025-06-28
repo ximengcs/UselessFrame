@@ -1,7 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using UselessFrame.NewRuntime;
 using UselessFrame.NewRuntime.Fiber;
 
@@ -18,6 +15,14 @@ namespace UselessFrame.Net
 
         public static IConnection Connect(IPEndPoint ip, IFiber fiber)
         {
+            IConnection connection = new Connection(ip, fiber);
+            X.RegisterConnection(connection);
+            return connection;
+        }
+
+        public static IConnection Connect(int port, IFiber fiber)
+        {
+            IPEndPoint ip = new IPEndPoint(NetUtility.GetLocalIPAddress(), port);
             IConnection connection = new Connection(ip, fiber);
             X.RegisterConnection(connection);
             return connection;
