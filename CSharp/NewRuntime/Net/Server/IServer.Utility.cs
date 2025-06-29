@@ -16,7 +16,6 @@ namespace UselessFrame.Net
         public static IConnection Connect(IPEndPoint ip, IFiber fiber)
         {
             IConnection connection = new Connection(ip, fiber);
-            X.RegisterConnection(connection);
             return connection;
         }
 
@@ -24,7 +23,6 @@ namespace UselessFrame.Net
         {
             IPEndPoint ip = new IPEndPoint(NetUtility.GetLocalIPAddress(), port);
             IConnection connection = new Connection(ip, fiber);
-            X.RegisterConnection(connection);
             return connection;
         }
     }

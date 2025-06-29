@@ -84,12 +84,6 @@ namespace UselessFrame.Net
             });
             _runFiber = X.FiberManager.Create();
             _runFiber.Post(ToFiberFun.RunCheckOnFiber, _fsm);
-            NetDebugInfo.Record(this, "registe connection");
-            NetDebugInfo.Record(_client, "registe _client");
-            NetDebugInfo.Record(_remoteIP, "registe _remoteIP");
-            NetDebugInfo.Record(_pool, "registe _pool");
-            NetDebugInfo.Record(_stream, "registe _stream");
-            NetDebugInfo.Record(_fsm, "registe _fsm");
         }
 
         public Connection(IPEndPoint remoteIP, IFiber fiber)
@@ -114,12 +108,6 @@ namespace UselessFrame.Net
             });
             _runFiber = X.FiberManager.Create();
             _runFiber.Post(ToFiberFun.RunConnectOnFiber, _fsm);
-            NetDebugInfo.Record(this, "registe connection");
-            NetDebugInfo.Record(_client, "registe _client");
-            NetDebugInfo.Record(_remoteIP, "registe _remoteIP");
-            NetDebugInfo.Record(_pool, "registe _pool");
-            NetDebugInfo.Record(_stream, "registe _stream");
-            NetDebugInfo.Record(_fsm, "registe _fsm");
         }
 
         public void Dispose()
@@ -138,8 +126,10 @@ namespace UselessFrame.Net
             _client = null;
             _pool = null;
             _runFiber = null;
-            _state = null;
-            _dataFiber.Post(ToFiberFun.UnRegister, Tuple.Create(_server, this));
+            if (_server != null)
+            {
+                _dataFiber.Post(ToFiberFun.UnRegisteConnection, Tuple.Create(_server, this));
+            }
         }
 
         public void Close()

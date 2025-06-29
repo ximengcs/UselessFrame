@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UselessFrame.Net;
+using UselessFrame.NewRuntime.Commands;
 using UselessFrame.NewRuntime.Fiber;
 using UselessFrame.NewRuntime.World;
 
@@ -16,6 +17,7 @@ namespace UselessFrame.NewRuntime
         private static IWorldManager _worldManager;
         private static ILogManager _logManager;
         private static IFiberManager _fiberManager;
+        private static CommandManager _commandManager;
         private static Dictionary<Guid, IServer> _servers;
         private static Dictionary<Guid, IConnection> _connections;
 
@@ -28,6 +30,8 @@ namespace UselessFrame.NewRuntime
         public static IFiberManager FiberManager => _fiberManager;
 
         public static IFiber MainFiber => _mainFiber;
+
+        public static ICommandManager Command => _commandManager;
 
         public static void Initialize(XSetting setting)
         {
@@ -42,6 +46,7 @@ namespace UselessFrame.NewRuntime
             _mainFiber = new MainFiber();
             _servers = new Dictionary<Guid, IServer>();
             _connections = new Dictionary<Guid, IConnection>();
+            _commandManager = new CommandManager();
             NetPoolUtility.InitializePool();
         }
 

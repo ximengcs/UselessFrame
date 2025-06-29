@@ -46,3 +46,16 @@ message StringMessage
 message KeepAlive
 {
 }
+
+message CommandMessage
+{
+    required bytes RequestToken = 1;
+    required string CommandStr = 2;
+}
+
+message CommandResponseMessage
+{
+    required bytes ResponseToken = 1;
+    required string CommandResult = 2;
+    required int32 CommandCode = 3;
+}

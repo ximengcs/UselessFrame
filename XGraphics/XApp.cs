@@ -78,7 +78,6 @@ namespace Core.Application
                 _cmdList.End();
                 _graphicsDevice.SubmitCommands(_cmdList);
                 _graphicsDevice.SwapBuffers(_graphicsDevice.MainSwapchain);
-                Thread.Sleep((int)(_deltaTime * 1000));
             }
             else
             {

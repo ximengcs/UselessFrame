@@ -3,6 +3,7 @@ using Google.Protobuf;
 using UselessFrame.NewRuntime;
 using Cysharp.Threading.Tasks;
 using UselessFrame.NewRuntime.Fiber;
+using System;
 
 namespace UselessFrame.Net
 {
@@ -102,6 +103,13 @@ namespace UselessFrame.Net
                                 if (result.MessageType == typeof(KeepAlive))
                                 {
                                     X.SystemLog.Debug($"{DebugPrefix}receive keepalive.");
+                                    return true;
+                                }
+                                if (result.MessageType == typeof(CommandMessage))
+                                {
+                                    CommandMessage cmd = (CommandMessage)result.Message;
+                                    X.SystemLog.Debug($"{DebugPrefix}execute command -> {cmd.CommandStr}.");
+                                    _connection._dataFiber.Post(ToFiberFun.RunCommand, Tuple.Create(_connection._runFiber, result));
                                     return true;
                                 }
                                 _connection.TriggerNewMessage(result);
