@@ -19,6 +19,8 @@ namespace UselessFrame.Net
 
         event Action<MessageResult> ReceiveMessageEvent;
 
+        T GetRuntimeData<T>();
+
         UniTask Send(IMessage message, bool autoRelease = true);
 
         UniTask<MessageResult> SendWait(IMessage message, bool autoRelease = true);

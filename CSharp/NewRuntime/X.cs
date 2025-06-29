@@ -70,6 +70,13 @@ namespace UselessFrame.NewRuntime
             _servers.Clear();
         }
 
+        public static IServer GetServer(Guid id)
+        {
+            if (_servers.TryGetValue(id, out IServer server))
+                return server;
+            return null;
+        }
+
         internal static void RegisterServer(IServer server)
         {
             _servers.Add(server.Id, server);

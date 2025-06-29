@@ -102,14 +102,15 @@ namespace UselessFrame.Net
                                 }
                                 if (result.MessageType == typeof(KeepAlive))
                                 {
-                                    X.SystemLog.Debug($"{DebugPrefix}receive keepalive.");
+                                    if (_connection.GetRuntimeData<ConnectionSetting>().ShowReceiveKeepaliveLog)
+                                        X.SystemLog.Debug($"{DebugPrefix}receive keepalive.");
                                     return true;
                                 }
                                 if (result.MessageType == typeof(CommandMessage))
                                 {
                                     CommandMessage cmd = (CommandMessage)result.Message;
                                     X.SystemLog.Debug($"{DebugPrefix}execute command -> {cmd.CommandStr}.");
-                                    _connection._dataFiber.Post(ToFiberFun.RunCommand, Tuple.Create(_connection._runFiber, result));
+                                    _connection._dataFiber.Post(ToFiberFun.RunCommand, Tuple.Create(_connection, result));
                                     return true;
                                 }
                                 _connection.TriggerNewMessage(result);

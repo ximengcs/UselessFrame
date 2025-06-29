@@ -1,10 +1,11 @@
 ﻿
+using Cysharp.Threading.Tasks;
+using Google.Protobuf;
 using System;
 using System.Text;
-using Google.Protobuf;
 using UselessFrame.NewRuntime;
-using Cysharp.Threading.Tasks;
 using UselessFrame.NewRuntime.Fiber;
+using static Google.Protobuf.Reflection.FieldOptions.Types;
 
 namespace UselessFrame.Net
 {
@@ -36,6 +37,10 @@ namespace UselessFrame.Net
 
             public async UniTask<WriteMessageResult> Send(IMessage message, bool force, IFiber fiber = null)
             {
+                if (_setting.ShowSendMessageInfo)
+                {
+                    X.SystemLog.Debug($"{_connection.GetDebugPrefix(_connection._fsm.Current)}send message start : {message.GetType().Name} {message.GetHashCode()}");
+                }
                 if (!force && !_writeActive)
                 {
                     X.SystemLog.Debug($"send message refuse {force} {_writeActive}");
@@ -62,6 +67,10 @@ namespace UselessFrame.Net
 
                 WriteMessageResult result = await AsyncStateUtility.WriteMessageAsync(_connection._client, buffer, fiber);
                 buffer.Dispose();
+                if (_setting.ShowSendMessageInfo)
+                {
+                    X.SystemLog.Debug($"{_connection.GetDebugPrefix(_connection._fsm.Current)}send message end : {message.GetType().Name} {message.GetHashCode()}");
+                }
                 return result;
             }
         }

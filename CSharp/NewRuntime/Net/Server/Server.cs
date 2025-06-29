@@ -1,13 +1,12 @@
 ﻿
 using Cysharp.Threading.Tasks;
 using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Net.Sockets;
 using System.Text;
+using System.Net.Sockets;
 using UselessFrame.NewRuntime;
+using System.Collections.Generic;
 using UselessFrame.NewRuntime.Fiber;
-using UselessFrame.NewRuntime.Net;
 using UselessFrame.Runtime.Observable;
 
 namespace UselessFrame.Net
@@ -64,7 +63,12 @@ namespace UselessFrame.Net
                 { typeof(CloseState), new CloseState() },
                 { typeof(DisposeState), new DisposeState() }
             });
-            NetDebugInfo.Record(this, "registe server");
+        }
+
+        public IConnection GetConnection(Guid id)
+        {
+            if (_connections.TryGetValue(id, out var connection)) return connection;
+            return null;
         }
 
         public void Start()

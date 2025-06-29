@@ -8,7 +8,6 @@ using System.Net.Sockets;
 using System.Text;
 using UselessFrame.NewRuntime;
 using UselessFrame.NewRuntime.Fiber;
-using UselessFrame.NewRuntime.Net;
 using UselessFrame.Runtime.Observable;
 
 namespace UselessFrame.Net
@@ -27,6 +26,7 @@ namespace UselessFrame.Net
         private Server _server;
         private ISubject<IConnection, ConnectionState> _state;
         private Action<MessageResult> _onReceiveMessage;
+        private Dictionary<Type, object> _runtimeData;
 
         internal NetFsm<Connection> Fsm => _fsm;
 
@@ -62,6 +62,10 @@ namespace UselessFrame.Net
 
         public Connection(Server server, Guid id, TcpClient client, IFiber fiber)
         {
+            _runtimeData = new Dictionary<Type, object>()
+            {
+                { typeof(ConnectionSetting), new ConnectionSetting() }
+            };
             _id = id;
             _server = server;
             _client = client;
@@ -88,6 +92,10 @@ namespace UselessFrame.Net
 
         public Connection(IPEndPoint remoteIP, IFiber fiber)
         {
+            _runtimeData = new Dictionary<Type, object>()
+            {
+                { typeof(ConnectionSetting), new ConnectionSetting() }
+            };
             _id = Guid.Empty;
             _dataFiber = fiber;
             _pool = new ByteBufferPool();
@@ -119,6 +127,7 @@ namespace UselessFrame.Net
             _pool.Dispose();
             _runFiber.Dispose();
 
+            _runtimeData = null;
             _localIP = null;
             _remoteIP = null;
             _fsm = null;
@@ -135,6 +144,15 @@ namespace UselessFrame.Net
         public void Close()
         {
             _fsm.ChangeState(typeof(CloseRequestState)).Forget();
+        }
+
+        public T GetRuntimeData<T>()
+        {
+            if (_runtimeData.TryGetValue(typeof(T), out var data))
+            {
+                return (T)data;
+            }
+            return default(T);
         }
 
         public async UniTask Send(IMessage message, bool autoRelease)

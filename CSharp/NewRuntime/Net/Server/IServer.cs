@@ -18,6 +18,8 @@ namespace UselessFrame.Net
 
         IReadOnlyList<IConnection> Connections { get; }
 
+        IConnection GetConnection(Guid id);
+
         void Start();
 
         void Close();

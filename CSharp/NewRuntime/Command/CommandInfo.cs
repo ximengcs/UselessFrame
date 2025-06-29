@@ -15,6 +15,7 @@ namespace UselessFrame.NewRuntime.Commands
         private MethodInfo _method;
         private ParamInfo[] _params;
         private object[] _paramCache;
+        private CommandHandle _executeHandle;
 
         public string Name => _command.Name;
 
@@ -29,11 +30,20 @@ namespace UselessFrame.NewRuntime.Commands
             _command.Action = this;
 
             ParameterInfo[] parameters = method.GetParameters();
+            if (parameters.Length > 0)
+            {
+                ParameterInfo p = parameters[0];
+                if (p.ParameterType == typeof(CommandHandle))
+                    _executeHandle = new CommandHandle();
+            }
+
             _params = new ParamInfo[parameters.Length];
             _paramCache = new object[parameters.Length];
             for (int i = 0; i < parameters.Length; i++)
             {
                 ParameterInfo param = parameters[i];
+                if (param.ParameterType == typeof(CommandHandle))
+                    continue;
                 CommandArgumentAttribute argAttr = param.GetCustomAttribute<CommandArgumentAttribute>();
                 if (argAttr != null)
                 {
@@ -88,7 +98,10 @@ namespace UselessFrame.NewRuntime.Commands
                 try
                 {
                     result.Invoke();
-                    return new CommandExecuteResult(CommandExecuteCode.OK);
+                    if (_executeHandle != null)
+                        return _executeHandle.Result;
+                    else
+                        return new CommandExecuteResult(CommandExecuteCode.OK);
                 }
                 catch (Exception e)
                 {
@@ -99,7 +112,14 @@ namespace UselessFrame.NewRuntime.Commands
 
         public override int Invoke(ParseResult parseResult)
         {
-            for (int i = 0; i < _params.Length; i++)
+            int startIndex = 0;
+            if (_executeHandle != null)
+            {
+                _paramCache[0] = _executeHandle;
+                startIndex++;
+            }
+
+            for (int i = startIndex; i < _params.Length; i++)
             {
                 ParamInfo entry = _params[i];
                 object value = entry.GetValue(parseResult);

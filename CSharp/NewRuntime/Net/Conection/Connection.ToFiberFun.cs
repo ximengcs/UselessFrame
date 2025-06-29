@@ -44,10 +44,14 @@ namespace UselessFrame.Net
 
             public static void RunCommand(object state)
             {
-                Tuple<IFiber, MessageResult> result = (Tuple<IFiber, MessageResult>)state;
+                Tuple<Connection, MessageResult> result = (Tuple<Connection, MessageResult>)state;
+                Connection connection = result.Item1;
                 MessageResult reqResult = result.Item2;
                 CommandMessage cmdMsg = (CommandMessage)reqResult.Message;
-                CommandExecuteResult execResult = X.Command.Execute(cmdMsg.CommandStr);
+                string cmd = cmdMsg.CommandStr;
+                cmd += $" --server_id \"{connection._server.Id}\"";
+                cmd += $" --client_id \"{connection.Id}\"";
+                CommandExecuteResult execResult = X.Command.Execute(cmd);
                 reqResult.Response(new CommandResponseMessage()
                 {
                     CommandCode = (int)execResult.Code,

@@ -28,6 +28,12 @@ namespace UselessFrame.Net
                 while (_reading)
                 {
                     ReadMessageResult result = await AsyncStateUtility.ReadMessageAsync(_connection._client, _connection._pool, _connection._runFiber);
+                    if (_setting.ShowReceiveMessageInfo)
+                    {
+                        Type msgType = result.Message != null ? result.Message.GetType() : typeof(Nullable);
+                        X.SystemLog.Debug($"{_connection.GetDebugPrefix(_connection._fsm.Current)}receive state : {result.State}, receive messageType {msgType.Name}");
+                    }
+
                     IMessage message = result.Message;
                     WaitResponseHandle handle = default;
                     if (message != null)
