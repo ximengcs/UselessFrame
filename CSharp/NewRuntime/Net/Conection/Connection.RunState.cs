@@ -94,7 +94,7 @@ namespace UselessFrame.Net
                             else
                             {
                                 MessageResult result = MessageResult.Create(messageResult.Message, _connection);
-                                if (result.RequireResponse && result.MessageType == typeof(CloseRequest))
+                                if (result.MessageType == typeof(CloseRequest))
                                 {
                                     ChangeState<CloseResponseState>(result).Forget();
                                     CancelAllAsyncWait();
