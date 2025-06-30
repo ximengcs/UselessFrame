@@ -157,17 +157,16 @@ namespace UselessFrame.Net
 
         public async UniTask Send(IMessage message, bool autoRelease)
         {
-            await _fsm.Current.OnSendMessage(message, _dataFiber);
-            if (autoRelease)
-                NetPoolUtility.ReleaseMessage(message);
+            AutoResetUniTaskCompletionSource completeSource = AutoResetUniTaskCompletionSource.Create();
+            _runFiber.Post(ToFiberFun.SendMessageToRunFiber, Tuple.Create(this, message, autoRelease, completeSource));
+            await completeSource.Task;
         }
 
         public async UniTask<MessageResult> SendWait(IMessage message, bool autoRelease)
         {
-            MessageResult result = await _fsm.Current.OnSendWaitMessage(message, _dataFiber);
-            if (autoRelease)
-                NetPoolUtility.ReleaseMessage(message);
-            return result;
+            AutoResetUniTaskCompletionSource<MessageResult> completeSource = AutoResetUniTaskCompletionSource<MessageResult>.Create();
+            _runFiber.Post(ToFiberFun.SendWaitMessageToRunFiber, Tuple.Create(this, message, autoRelease, completeSource));
+            return await completeSource.Task;
         }
 
         public void TriggerState(int newState)

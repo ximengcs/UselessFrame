@@ -1,5 +1,6 @@
 ﻿
 using Cysharp.Threading.Tasks;
+using Google.Protobuf;
 using System;
 using UselessFrame.NewRuntime;
 using UselessFrame.NewRuntime.Commands;
@@ -34,6 +35,32 @@ namespace UselessFrame.Net
                 var tuple = (Tuple<Server, Connection>)state;
                 tuple.Item1.RemoveConnection(tuple.Item2);
                 X.UnRegisterConnection(tuple.Item2);
+            }
+
+            public static async void SendMessageToRunFiber(object state)
+            {
+                var tuple = (Tuple<Connection, IMessage, bool, AutoResetUniTaskCompletionSource>)state;
+                Connection connection = tuple.Item1;
+                IMessage message = tuple.Item2;
+                bool autoRelease = tuple.Item3;
+                AutoResetUniTaskCompletionSource completeSource = tuple.Item4;
+                await connection._fsm.Current.OnSendMessage(message, connection._dataFiber);
+                if (autoRelease)
+                    NetPoolUtility.ReleaseMessage(message);
+                completeSource.TrySetResult();
+            }
+
+            public static async void SendWaitMessageToRunFiber(object state)
+            {
+                var tuple = (Tuple<Connection, IMessage, bool, AutoResetUniTaskCompletionSource<MessageResult>>)state;
+                Connection connection = tuple.Item1;
+                IMessage message = tuple.Item2;
+                bool autoRelease = tuple.Item3;
+                AutoResetUniTaskCompletionSource<MessageResult> completeSource = tuple.Item4;
+                MessageResult result = await connection._fsm.Current.OnSendWaitMessage(message, connection._dataFiber);
+                if (autoRelease)
+                    NetPoolUtility.ReleaseMessage(message);
+                completeSource.TrySetResult(result);
             }
 
             public static void TriggerMessageToDataFiber(object state)
