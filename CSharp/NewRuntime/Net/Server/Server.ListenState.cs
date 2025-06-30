@@ -30,7 +30,7 @@ namespace UselessFrame.Net
                 while (_listening)
                 {
                     X.SystemLog.Debug($"{DebugPrefix}ready accept");
-                    AcceptConnectResult result = await AsyncStateUtility.AcceptConnectAsync(_connection._listener, _connection._fiber);
+                    AcceptConnectResult result = await AsyncStateUtility.AcceptConnectAsync(_connection._listener);
                     X.SystemLog.Debug($"{DebugPrefix}find new client, result state : {result.State} ");
                     switch (result.State)
                     {

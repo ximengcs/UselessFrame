@@ -9,14 +9,12 @@ namespace UselessFrame.Net
     internal struct WaitConnectTcpClientAsyncState
     {
         private TcpListener _listener;
-        private IFiber _fiber;
         private AutoResetUniTaskCompletionSource<AcceptConnectResult> _completeTaskSource;
 
         public UniTask<AcceptConnectResult> CompleteTask => _completeTaskSource.Task;
 
-        public WaitConnectTcpClientAsyncState(TcpListener listener, IFiber fiber)
+        public WaitConnectTcpClientAsyncState(TcpListener listener)
         {
-            _fiber = fiber;
             _listener = listener;
             _completeTaskSource = AutoResetUniTaskCompletionSource<AcceptConnectResult>.Create();
             Begin();
@@ -24,7 +22,7 @@ namespace UselessFrame.Net
 
         private void Complete(AcceptConnectResult result)
         {
-            _fiber.Post(AsyncStateUtility.RunToFiber<AcceptConnectResult>, Tuple.Create(_completeTaskSource, result));
+            _completeTaskSource.TrySetResult(result);
         }
 
         private void Begin()

@@ -4,7 +4,6 @@ using Google.Protobuf;
 using System;
 using UselessFrame.NewRuntime;
 using UselessFrame.NewRuntime.Commands;
-using UselessFrame.NewRuntime.Fiber;
 
 namespace UselessFrame.Net
 {
@@ -47,7 +46,7 @@ namespace UselessFrame.Net
                 await connection._fsm.Current.OnSendMessage(message);
                 if (autoRelease)
                     NetPoolUtility.ReleaseMessage(message);
-                connection._dataFiber.Post(AsyncStateUtility.RunToFiber, completeSource);
+                connection._dataFiber.Post(RunToFiber, completeSource);
             }
 
             public static async void SendWaitMessageToRunFiber(object state)
@@ -60,7 +59,19 @@ namespace UselessFrame.Net
                 MessageResult result = await connection._fsm.Current.OnSendWaitMessage(message);
                 if (autoRelease)
                     NetPoolUtility.ReleaseMessage(message);
-                connection._dataFiber.Post(AsyncStateUtility.RunToFiber<MessageResult>, Tuple.Create(completeSource, result));
+                connection._dataFiber.Post(RunToFiber<MessageResult>, Tuple.Create(completeSource, result));
+            }
+
+            private static void RunToFiber<T>(object data)
+            {
+                var tuple = (Tuple<AutoResetUniTaskCompletionSource<T>, T>)data;
+                tuple.Item1.TrySetResult(tuple.Item2);
+            }
+
+            private static void RunToFiber(object data)
+            {
+                var taskSource = (AutoResetUniTaskCompletionSource)data;
+                taskSource.TrySetResult();
             }
 
             public static void TriggerMessageToDataFiber(object state)

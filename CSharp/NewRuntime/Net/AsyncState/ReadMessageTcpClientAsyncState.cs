@@ -2,7 +2,6 @@
 using System.IO;
 using System.Net.Sockets;
 using Cysharp.Threading.Tasks;
-using UselessFrame.NewRuntime.Fiber;
 
 namespace UselessFrame.Net
 {
@@ -14,14 +13,12 @@ namespace UselessFrame.Net
         private int _readTimes;
         private NetworkStream _stream;
         private ByteBufferPool _bufferPool;
-        private IFiber _fiber;
         private AutoResetUniTaskCompletionSource<ReadMessageResult> _completeTaskSource;
 
         public UniTask<ReadMessageResult> CompleteTask => _completeTaskSource.Task;
 
-        public ReadMessageTcpClientAsyncState(TcpClient socket, ByteBufferPool pool, IFiber fiber)
+        public ReadMessageTcpClientAsyncState(TcpClient socket, ByteBufferPool pool)
         {
-            _fiber = fiber;
             _readTimes = 0;
             _bufferPool = pool;
             _buffer = _bufferPool.Require(4);
@@ -53,7 +50,7 @@ namespace UselessFrame.Net
                 _bufferPool.Release(_buffer);
                 _buffer = null;
             }
-            _fiber.Post(AsyncStateUtility.RunToFiber<ReadMessageResult>, Tuple.Create(_completeTaskSource, result));
+            _completeTaskSource.TrySetResult(result);
         }
 
         private void Begin(int offset, int size)

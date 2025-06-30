@@ -5,6 +5,7 @@ using UselessFrame.NewRuntime;
 using Cysharp.Threading.Tasks;
 using static UselessFrame.Net.NetUtility;
 using System;
+using System.Threading;
 
 namespace UselessFrame.Net
 {
@@ -27,7 +28,7 @@ namespace UselessFrame.Net
                 _reading = true;
                 while (_reading)
                 {
-                    ReadMessageResult result = await AsyncStateUtility.ReadMessageAsync(_connection._client, _connection._pool, _connection._runFiber);
+                    ReadMessageResult result = await AsyncStateUtility.ReadMessageAsync(_connection._client, _connection._pool);
                     if (_setting.ShowReceiveMessageInfo)
                     {
                         Type msgType = result.Message != null ? result.Message.GetType() : typeof(Nullable);

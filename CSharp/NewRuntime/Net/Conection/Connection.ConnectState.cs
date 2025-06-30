@@ -22,7 +22,7 @@ namespace UselessFrame.Net
                 AsyncBegin();
 
                 X.SystemLog.Debug($"{DebugPrefix}TryConnect");
-                RequestConnectResult result = await AsyncStateUtility.RequestConnectAsync(_connection._client, _connection._remoteIP, _connection._runFiber);
+                RequestConnectResult result = await AsyncStateUtility.RequestConnectAsync(_connection._client, _connection._remoteIP);
                 X.SystemLog.Debug($"{DebugPrefix}TryConnect complete, {result.State}");
                 switch (result.State)
                 {
