@@ -1,6 +1,7 @@
 ﻿
 using System.Threading;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 
 namespace UselessFrame.NewRuntime.Fiber
 {
@@ -33,6 +34,11 @@ namespace UselessFrame.NewRuntime.Fiber
                 IsBackground = true,
             };
             _thread.Start();
+        }
+
+        public SwitchToSynchronizationContextAwaitable Switch()
+        {
+            return UniTask.SwitchToSynchronizationContext(_context, _disposeTokenSource.Token);
         }
 
         public void Dispose()

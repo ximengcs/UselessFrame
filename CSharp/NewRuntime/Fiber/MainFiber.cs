@@ -1,5 +1,6 @@
-﻿using System.Threading;
+﻿using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using System.Threading;
 using static UselessFrame.NewRuntime.Fiber.Fiber;
 
 namespace UselessFrame.NewRuntime.Fiber
@@ -28,6 +29,11 @@ namespace UselessFrame.NewRuntime.Fiber
             _context = new FiberSynchronizationContext(this, _threadId);
             _disposeTokenSource = new CancellationTokenSource();
             SynchronizationContext.SetSynchronizationContext(_context);
+        }
+
+        public SwitchToSynchronizationContextAwaitable Switch()
+        {
+            return UniTask.SwitchToSynchronizationContext(_context);
         }
 
         public void Dispose()

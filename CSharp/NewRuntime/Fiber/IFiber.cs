@@ -1,4 +1,5 @@
 ﻿
+using Cysharp.Threading.Tasks;
 using System.Threading;
 
 namespace UselessFrame.NewRuntime.Fiber
@@ -14,6 +15,8 @@ namespace UselessFrame.NewRuntime.Fiber
         float DeltaTime { get; }
 
         bool IsCurrent => this == Current;
+
+        SwitchToSynchronizationContextAwaitable Switch();
 
         void Post(SendOrPostCallback d, object state);
 
