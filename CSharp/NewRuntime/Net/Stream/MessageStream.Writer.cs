@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using Google.Protobuf;
 using System;
 using System.Text;
+using System.Threading;
 using UselessFrame.NewRuntime;
 using UselessFrame.NewRuntime.Fiber;
 using static Google.Protobuf.Reflection.FieldOptions.Types;
@@ -20,7 +21,7 @@ namespace UselessFrame.Net
                 _writeActive = active;
             }
 
-            public async UniTask<ReadMessageResult> SendWait(IMessage message, bool force, IFiber fiber = null)
+            public async UniTask<ReadMessageResult> SendWait(IMessage message, bool force)
             {
                 if (!force && !_writeActive)
                 {
@@ -30,12 +31,12 @@ namespace UselessFrame.Net
 
                 WaitResponseHandle waitHandle = new WaitResponseHandle(message);
                 _waitResponseList.TryAdd(waitHandle.Id, waitHandle);
-                WriteMessageResult result = await Send(message, force, fiber);
+                WriteMessageResult result = await Send(message, force);
                 ReadMessageResult response = await waitHandle.ResponseTask;
                 return response;
             }
 
-            public async UniTask<WriteMessageResult> Send(IMessage message, bool force, IFiber fiber = null)
+            public async UniTask<WriteMessageResult> Send(IMessage message, bool force)
             {
                 if (_setting.ShowSendMessageInfo)
                 {
@@ -62,10 +63,7 @@ namespace UselessFrame.Net
                 NetUtility.WriteMessageNameTo(typeName, buffer.Message.Slice(sizeof(int), typeNameSize));
                 message.WriteTo(buffer.Message.Slice(sizeof(int) + typeNameSize));
 
-                if (fiber == null)
-                    fiber = _connection._runFiber;
-
-                WriteMessageResult result = await AsyncStateUtility.WriteMessageAsync(_connection._client, buffer, fiber);
+                WriteMessageResult result = await AsyncStateUtility.WriteMessageAsync(_connection._client, buffer);
                 buffer.Dispose();
                 if (_setting.ShowSendMessageInfo)
                 {

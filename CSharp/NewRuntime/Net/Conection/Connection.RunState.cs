@@ -49,9 +49,9 @@ namespace UselessFrame.Net
                 }
             }
 
-            public override async UniTask OnSendMessage(IMessage message, IFiber fiber)
+            public override async UniTask OnSendMessage(IMessage message)
             {
-                WriteMessageResult result = await _connection.Stream.Send(message, false, fiber);
+                WriteMessageResult result = await _connection.Stream.Send(message, false);
                 switch (result.State)
                 {
                     case NetOperateState.OK:
@@ -62,9 +62,9 @@ namespace UselessFrame.Net
                 }
             }
 
-            public override async UniTask<MessageResult> OnSendWaitMessage(IMessage message, IFiber fiber)
+            public override async UniTask<MessageResult> OnSendWaitMessage(IMessage message)
             {
-                ReadMessageResult messageResult = await _connection.Stream.SendWait(message, false, fiber);
+                ReadMessageResult messageResult = await _connection.Stream.SendWait(message, false);
                 switch (messageResult.State)
                 {
                     case NetOperateState.OK:

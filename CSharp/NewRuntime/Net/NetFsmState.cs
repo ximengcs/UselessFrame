@@ -102,12 +102,12 @@ namespace UselessFrame.Net
             throw new NotImplementedException();
         }
 
-        public virtual async UniTask OnSendMessage(IMessage message, IFiber fiber)
+        public virtual async UniTask OnSendMessage(IMessage message)
         {
             await UniTask.CompletedTask;
         }
 
-        public virtual async UniTask<MessageResult> OnSendWaitMessage(IMessage message, IFiber fiber)
+        public virtual async UniTask<MessageResult> OnSendWaitMessage(IMessage message)
         {
             await UniTask.CompletedTask;
             return default;

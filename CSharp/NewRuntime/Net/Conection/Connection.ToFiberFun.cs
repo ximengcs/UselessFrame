@@ -44,10 +44,10 @@ namespace UselessFrame.Net
                 IMessage message = tuple.Item2;
                 bool autoRelease = tuple.Item3;
                 AutoResetUniTaskCompletionSource completeSource = tuple.Item4;
-                await connection._fsm.Current.OnSendMessage(message, connection._dataFiber);
+                await connection._fsm.Current.OnSendMessage(message);
                 if (autoRelease)
                     NetPoolUtility.ReleaseMessage(message);
-                completeSource.TrySetResult();
+                connection._dataFiber.Post(AsyncStateUtility.RunToFiber, completeSource);
             }
 
             public static async void SendWaitMessageToRunFiber(object state)
@@ -57,10 +57,10 @@ namespace UselessFrame.Net
                 IMessage message = tuple.Item2;
                 bool autoRelease = tuple.Item3;
                 AutoResetUniTaskCompletionSource<MessageResult> completeSource = tuple.Item4;
-                MessageResult result = await connection._fsm.Current.OnSendWaitMessage(message, connection._dataFiber);
+                MessageResult result = await connection._fsm.Current.OnSendWaitMessage(message);
                 if (autoRelease)
                     NetPoolUtility.ReleaseMessage(message);
-                completeSource.TrySetResult(result);
+                connection._dataFiber.Post(AsyncStateUtility.RunToFiber<MessageResult>, Tuple.Create(completeSource, result));
             }
 
             public static void TriggerMessageToDataFiber(object state)

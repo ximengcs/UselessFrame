@@ -8,16 +8,14 @@ namespace UselessFrame.Net
 {
     internal struct WriteMessageTcpClientAsyncState
     {
-        private IFiber _fiber;
         private NetworkStream _stream;
         private MessageWriteBuffer _buffer;
         private AutoResetUniTaskCompletionSource<WriteMessageResult> _completeTaskSource;
 
         public UniTask<WriteMessageResult> CompleteTask => _completeTaskSource.Task;
 
-        public WriteMessageTcpClientAsyncState(TcpClient client, MessageWriteBuffer buffer, IFiber fiber)
+        public WriteMessageTcpClientAsyncState(TcpClient client, MessageWriteBuffer buffer)
         {
-            _fiber = fiber;
             _buffer = buffer;
             _completeTaskSource = AutoResetUniTaskCompletionSource<WriteMessageResult>.Create();
 
@@ -42,7 +40,7 @@ namespace UselessFrame.Net
 
         private void Complete(WriteMessageResult result)
         {
-            _fiber.Post(AsyncStateUtility.RunToFiber<WriteMessageResult>, Tuple.Create(_completeTaskSource, result));
+            _completeTaskSource.TrySetResult(result);
         }
 
         private void Begin(int offset, int size)

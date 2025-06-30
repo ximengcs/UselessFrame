@@ -21,17 +21,17 @@ namespace UselessFrame.Net
             return await state.CompleteTask;
         }
 
-        public static async ValueTask<WriteMessageResult> WriteCloseMessageAsync(TcpClient client, IFiber fiber)
+        public static async ValueTask<WriteMessageResult> WriteCloseMessageAsync(TcpClient client)
         {
-            WriteMessageTcpClientAsyncState state = new WriteMessageTcpClientAsyncState(client, MessageWriteBuffer.CloseBuffer, fiber);
+            WriteMessageTcpClientAsyncState state = new WriteMessageTcpClientAsyncState(client, MessageWriteBuffer.CloseBuffer);
             return await state.CompleteTask;
         }
 
-        public static async ValueTask<WriteMessageResult> WriteMessageAsync(TcpClient client, MessageWriteBuffer buffer, IFiber fiber)
+        public static async ValueTask<WriteMessageResult> WriteMessageAsync(TcpClient client, MessageWriteBuffer buffer)
         {
             ushort crc = Crc16CcittKermit.ComputeChecksum(buffer.Message);
             BitConverter.TryWriteBytes(buffer.CrcHead, crc);
-            WriteMessageTcpClientAsyncState state = new WriteMessageTcpClientAsyncState(client, buffer, fiber);
+            WriteMessageTcpClientAsyncState state = new WriteMessageTcpClientAsyncState(client, buffer);
             return await state.CompleteTask;
         }
 
@@ -45,6 +45,12 @@ namespace UselessFrame.Net
         {
             var tuple = (Tuple<AutoResetUniTaskCompletionSource<T>, T>)data;
             tuple.Item1.TrySetResult(tuple.Item2);
+        }
+
+        internal static void RunToFiber(object data)
+        {
+            var taskSource = (AutoResetUniTaskCompletionSource)data;
+            taskSource.TrySetResult();
         }
     }
 }
