@@ -97,9 +97,11 @@ namespace UselessFrame.Net
             return await OnReceiveMessage(messageResult, responseHandle);
         }
 
-        public virtual UniTask<bool> OnReceiveMessage(ReadMessageResult messageResult, WaitResponseHandle responseHandle)
+        public virtual async UniTask<bool> OnReceiveMessage(ReadMessageResult messageResult, WaitResponseHandle responseHandle)
         {
-            throw new NotImplementedException();
+            string messageInfo = messageResult.Message != null ? messageResult.Message.ToString() : "null";
+            X.SystemLog.Error($"{DebugPrefix}OnReceiveMessage state is error. receive state : {messageResult.State}, message : {messageInfo}, state message : {messageResult.StateMessage}");
+            return false;
         }
 
         public virtual async UniTask OnSendMessage(IMessage message)
