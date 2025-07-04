@@ -10,11 +10,11 @@ namespace UselessFrame.Net
         private int _packageSize;
         private ByteBufferPool _pool;
 
-        public Span<byte> LengthHead => _buffer.AsSpan(0, sizeof(int));
+        public Span<byte> LengthHead => _buffer.AsSpan(0, NetUtility.SizeLength);
 
-        public Span<byte> CrcHead => _buffer.AsSpan(sizeof(int), Crc16CcittKermit.CRCLength);
+        public Span<byte> CrcHead => _buffer.AsSpan(NetUtility.SizeLength, Crc16CcittKermit.CRCLength);
 
-        public Span<byte> Message => _buffer.AsSpan(sizeof(int) + Crc16CcittKermit.CRCLength, _msgSize);
+        public Span<byte> Message => _buffer.AsSpan(NetUtility.SizeLength + Crc16CcittKermit.CRCLength, _msgSize);
 
         public byte[] Package => _buffer;
 
@@ -23,7 +23,7 @@ namespace UselessFrame.Net
         public MessageWriteBuffer(ByteBufferPool pool, int msgSize)
         {
             _pool = pool;
-            _packageSize = sizeof(int) + Crc16CcittKermit.CRCLength + msgSize;
+            _packageSize = NetUtility.SizeLength + Crc16CcittKermit.CRCLength + msgSize;
             _buffer = pool.Require(_packageSize);
             _msgSize = msgSize;
             BitConverter.TryWriteBytes(LengthHead, Crc16CcittKermit.CRCLength + msgSize);

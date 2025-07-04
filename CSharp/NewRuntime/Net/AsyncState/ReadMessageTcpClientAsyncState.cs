@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 
 namespace UselessFrame.Net
 {
-    internal struct ReadMessageTcpClientAsyncState 
+    internal struct ReadMessageTcpClientAsyncState
     {
         private int _bytesReceived;
         private int _messageSize;
@@ -15,15 +15,17 @@ namespace UselessFrame.Net
         private ByteBufferPool _bufferPool;
         private AutoResetUniTaskCompletionSource<ReadMessageResult> _completeTaskSource;
 
+        private const int INVALID_SIZE = -1;
+
         public UniTask<ReadMessageResult> CompleteTask => _completeTaskSource.Task;
 
         public ReadMessageTcpClientAsyncState(TcpClient socket, ByteBufferPool pool)
         {
             _readTimes = 0;
             _bufferPool = pool;
-            _buffer = _bufferPool.Require(4);
+            _buffer = _bufferPool.Require(NetUtility.SizeLength);
             _bytesReceived = 0;
-            _messageSize = -1;
+            _messageSize = INVALID_SIZE;
             _completeTaskSource = AutoResetUniTaskCompletionSource<ReadMessageResult>.Create();
             _stream = null;
             try
@@ -40,7 +42,7 @@ namespace UselessFrame.Net
                 Complete(ReadMessageResult.Create(NetOperateState.FatalError, $"[Net]read message begin socket error, readTimes {_readTimes}, exception:{e}"));
                 return;
             }
-            Begin(0, 4);
+            Begin(0, NetUtility.SizeLength);
         }
 
         private void Complete(ReadMessageResult result)
@@ -115,7 +117,7 @@ namespace UselessFrame.Net
 
             _bytesReceived += count;
             // reading the size of the data 
-            if (_messageSize == -1)
+            if (_messageSize == INVALID_SIZE)
             {
                 if (count == 0)
                 {
@@ -123,7 +125,7 @@ namespace UselessFrame.Net
                     return;
                 }
 
-                if (_bytesReceived == 4)//we have received the entire message size information
+                if (_bytesReceived == NetUtility.SizeLength)//we have received the entire message size information
                 {
                     //read the size of the message
                     _messageSize = BitConverter.ToInt32(_buffer, 0);
@@ -154,7 +156,14 @@ namespace UselessFrame.Net
                     //we need more data - could be more of the message size information
                     //or it could be the message body. The only time we won't need to
                     //read more data is if the message size == 0
-                    Begin(_bytesReceived, _messageSize - _bytesReceived); //how much data can be read into remaining buffer
+                    if (_messageSize == INVALID_SIZE)
+                    {
+                        Begin(_bytesReceived, NetUtility.SizeLength - _bytesReceived);
+                    }
+                    else
+                    {
+                        Begin(_bytesReceived, _messageSize - _bytesReceived); //how much data can be read into remaining buffer
+                    }  
                 }
                 else
                 {

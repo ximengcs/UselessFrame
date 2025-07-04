@@ -15,6 +15,8 @@ namespace UselessFrame.Net
 {
     public static partial class NetUtility
     {
+        internal const int SizeLength = sizeof(int);
+
         private static ByteStringTree _messageBytesTree = new ByteStringTree(512);
         private static Dictionary<string, MessageTypeInfo> _types = new Dictionary<string, MessageTypeInfo>(512);
 
