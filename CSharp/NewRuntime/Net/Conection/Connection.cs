@@ -28,6 +28,7 @@ namespace UselessFrame.Net
         private ISubject<IConnection, ConnectionState> _state;
         private Action<MessageResult> _onReceiveMessage;
         private Dictionary<Type, object> _runtimeData;
+        private CancellationTokenSource _disposeTokenSource;
 
         internal NetFsm<Connection> Fsm => _fsm;
 
@@ -63,6 +64,7 @@ namespace UselessFrame.Net
 
         public Connection(Server server, Guid id, TcpClient client, IFiber fiber)
         {
+            _disposeTokenSource = new CancellationTokenSource();
             _runtimeData = new Dictionary<Type, object>()
             {
                 { typeof(ConnectionSetting), new ConnectionSetting() }
@@ -75,7 +77,7 @@ namespace UselessFrame.Net
             _state = new ValueSubject<IConnection, ConnectionState>(this, fiber, ConnectionState.None);
             _localIP = (IPEndPoint)client.Client.LocalEndPoint;
             _remoteIP = (IPEndPoint)client.Client.RemoteEndPoint;
-            _stream = new MessageStream(this);
+            _stream = new MessageStream(this, _disposeTokenSource.Token);
             _fsm = new NetFsm<Connection>(this, new Dictionary<Type, NetFsmState<Connection>>
             {
                 { typeof(ConnectState), new ConnectState() },
@@ -93,6 +95,7 @@ namespace UselessFrame.Net
 
         public Connection(IPEndPoint remoteIP, IFiber fiber)
         {
+            _disposeTokenSource = new CancellationTokenSource();
             _runtimeData = new Dictionary<Type, object>()
             {
                 { typeof(ConnectionSetting), new ConnectionSetting() }
@@ -103,7 +106,7 @@ namespace UselessFrame.Net
             _state = new ValueSubject<IConnection, ConnectionState>(this, fiber, ConnectionState.None);
             _client = new TcpClient(AddressFamily.InterNetwork);
             _remoteIP = remoteIP;
-            _stream = new MessageStream(this);
+            _stream = new MessageStream(this, _disposeTokenSource.Token);
             _fsm = new NetFsm<Connection>(this, new Dictionary<Type, NetFsmState<Connection>>
             {
                 { typeof(ConnectState), new ConnectState() },
@@ -121,6 +124,7 @@ namespace UselessFrame.Net
 
         public void Dispose()
         {
+            _disposeTokenSource.Cancel();
             _onReceiveMessage = null;
             _fsm.Dispose();
             _stream.Dispose();

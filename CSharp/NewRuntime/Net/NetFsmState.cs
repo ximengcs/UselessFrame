@@ -99,7 +99,7 @@ namespace UselessFrame.Net
 
         public virtual async UniTask<bool> OnReceiveMessage(ReadMessageResult messageResult, WaitResponseHandle responseHandle)
         {
-            string messageInfo = messageResult.Message != null ? messageResult.Message.ToString() : "null";
+            string messageInfo = messageResult.Message != null ? $"{messageResult.Message.GetType().Name} {messageResult.Message.ToString()}" : "null";
             X.SystemLog.Error($"{DebugPrefix}OnReceiveMessage state is error. receive state : {messageResult.State}, message : {messageInfo}, state message : {messageResult.StateMessage}");
             return false;
         }

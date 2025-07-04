@@ -35,7 +35,7 @@ namespace UselessFrame.Net
 
                 private async UniTask WaitTimeout()
                 {
-                    await UniTaskExt.Delay(10, _cancellationTokenSource.Token);
+                    await UniTaskExt.Delay(60, _cancellationTokenSource.Token);
                     if (!_cancellationTokenSource.Token.IsCancellationRequested)
                     {
                         _responseTaskSource.TrySetResult(ReadMessageResult.Create(NetOperateState.Timeout, "timeout"));

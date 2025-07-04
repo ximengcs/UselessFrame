@@ -29,6 +29,11 @@ namespace UselessFrame.Net
                 while (_reading)
                 {
                     ReadMessageResult result = await AsyncStateUtility.ReadMessageAsync(_connection._client, _connection._pool);
+                    if (_disposeToken.IsCancellationRequested)
+                    {
+                        _reading = false;
+                        return;
+                    }
                     if (_setting.ShowReceiveMessageInfo)
                     {
                         Type msgType = result.Message != null ? result.Message.GetType() : typeof(Nullable);
