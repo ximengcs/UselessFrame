@@ -12,17 +12,25 @@ namespace UselessFrame.Net
             public override int State => (int)ConnectionState.CheckConnect;
 
             private int _tryTimes;
+            private bool _remoteTest;
+            private bool _localTest;
+            private UniTaskCompletionSource _remoteTestTaskSource;
 
             public override void OnEnter(NetFsmState<Connection> preState, MessageResult passMessage)
             {
                 base.OnEnter(preState, passMessage);
                 _tryTimes = 3;
+                _remoteTest = false;
+                _localTest = false;
+                _remoteTestTaskSource = new UniTaskCompletionSource();
                 RetryHandler();
             }
 
-            private void SuccessHandler(MessageResult tokenMessage)
+            private async UniTask SuccessHandler(MessageResult tokenMessage)
             {
                 X.SystemLog.Debug($"{DebugPrefix}check success");
+                await _remoteTestTaskSource.Task;
+                X.SystemLog.Debug($"{DebugPrefix}wait remote check complete");
                 ChangeState<TokenCheck>(tokenMessage).Forget();
             }
 
@@ -97,7 +105,7 @@ namespace UselessFrame.Net
                 {
                     case NetOperateState.OK:
                         {
-                            SuccessHandler(default);
+                            SuccessHandler(default).Forget();
                         }
                         break;
 
@@ -119,7 +127,7 @@ namespace UselessFrame.Net
                                 case SocketError.Success:
                                 case SocketError.WouldBlock:
                                     {
-                                        SuccessHandler(default);
+                                        SuccessHandler(default).Forget();
                                     }
                                     break;
 
@@ -156,19 +164,33 @@ namespace UselessFrame.Net
                                 bool success = await result.Response(new TestConnectResponse());
                                 if (!success)
                                 {
+                                    ChangeState<DisposeState>().Forget();
+                                    CancelAllAsyncWait();
                                     return false;
                                 }
+                                else
+                                {
+                                    _remoteTest = true;
+                                    _remoteTestTaskSource.TrySetResult();
+                                }
+                                if (_localTest)
+                                    return false;
+                                else
+                                    return true;
                             }
                             else if (result.MessageType == typeof(TestConnectResponse))
                             {
                                 responseHandle.SetResponse(messageResult);
-                                return false;
+                                _localTest = true;
+                                if (_remoteTest)
+                                    return false;
+                                else
+                                    return true;
                             }
                             else if (result.MessageType == typeof(ServerToken))
                             {
-                                SuccessHandler(result);
+                                SuccessHandler(result).Forget();
                                 CancelAllAsyncWait();
-                                return false;
                             }
                             else
                             {
