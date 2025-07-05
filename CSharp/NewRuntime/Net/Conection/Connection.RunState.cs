@@ -1,9 +1,10 @@
 ﻿
-using Google.Protobuf;
-using UselessFrame.NewRuntime;
 using Cysharp.Threading.Tasks;
-using UselessFrame.NewRuntime.Fiber;
+using Google.Protobuf;
 using System;
+using System.Diagnostics;
+using UselessFrame.NewRuntime;
+using UselessFrame.NewRuntime.Fiber;
 
 namespace UselessFrame.Net
 {
@@ -100,17 +101,26 @@ namespace UselessFrame.Net
                                     CancelAllAsyncWait();
                                     return false;
                                 }
-                                if (result.MessageType == typeof(KeepAlive))
+                                else if (result.MessageType == typeof(KeepAlive))
                                 {
                                     if (_connection.GetRuntimeData<ConnectionSetting>().ShowReceiveKeepaliveLog)
                                         X.SystemLog.Debug($"{DebugPrefix}receive keepalive.");
                                     return true;
                                 }
-                                if (result.MessageType == typeof(CommandMessage))
+                                else if (result.MessageType == typeof(CommandMessage))
                                 {
                                     CommandMessage cmd = (CommandMessage)result.Message;
                                     X.SystemLog.Debug($"{DebugPrefix}execute command -> {cmd.CommandStr}.");
                                     _connection._dataFiber.Post(ToFiberFun.RunCommand, Tuple.Create(_connection, result));
+                                    return true;
+                                }
+                                else if (result.MessageType == typeof(TestLatencyMessage))
+                                {
+                                    X.SystemLog.Debug($"{DebugPrefix}test latency");
+                                    TestLatencyMessage test = (TestLatencyMessage)result.Message;
+                                    TestLatencyResponseMessage rspTest = NetPoolUtility.CreateMessage<TestLatencyResponseMessage>();
+                                    rspTest.Time = Stopwatch.GetTimestamp();
+                                    result.Response(rspTest).Forget();
                                     return true;
                                 }
                                 _connection.TriggerNewMessage(result);

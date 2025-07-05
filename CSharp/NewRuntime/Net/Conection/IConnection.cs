@@ -25,6 +25,8 @@ namespace UselessFrame.Net
 
         UniTask<MessageResult> SendWait(IMessage message, bool autoRelease = true);
 
+        UniTask<LatencyResult> TestLatency();
+
         void Close();
     }
 }

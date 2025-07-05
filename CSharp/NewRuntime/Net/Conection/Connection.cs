@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using Google.Protobuf;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -172,6 +173,31 @@ namespace UselessFrame.Net
             AutoResetUniTaskCompletionSource<MessageResult> completeSource = AutoResetUniTaskCompletionSource<MessageResult>.Create();
             _runFiber.Post(ToFiberFun.SendWaitMessageToRunFiber, Tuple.Create(this, message, autoRelease, completeSource));
             return await completeSource.Task;
+        }
+
+        public async UniTask<LatencyResult> TestLatency()
+        {
+            long time = Stopwatch.GetTimestamp();
+            TestLatencyMessage msg = NetPoolUtility.CreateMessage<TestLatencyMessage>();
+            MessageResult result = await SendWait(msg, true);
+            if (result.Valid)
+            {
+                TestLatencyResponseMessage rspMsg = (TestLatencyResponseMessage)result.Message;
+                LatencyResult latency = new LatencyResult()
+                {
+                    Success = true,
+                    DeltaTime = rspMsg.Time - (time + Stopwatch.GetTimestamp()) / 2f
+                };
+                return latency;
+            }
+            else
+            {
+                LatencyResult latency = new LatencyResult()
+                {
+                    Success = false
+                };
+                return latency;
+            }
         }
 
         public void TriggerState(int newState)
