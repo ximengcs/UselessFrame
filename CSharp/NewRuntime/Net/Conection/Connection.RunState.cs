@@ -2,17 +2,18 @@
 using Cysharp.Threading.Tasks;
 using Google.Protobuf;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using UselessFrame.NewRuntime;
-using UselessFrame.NewRuntime.Fiber;
 
 namespace UselessFrame.Net
 {
     internal partial class Connection
     {
-        internal class RunState : NetFsmState<Connection>
+        internal partial class RunState : NetFsmState<Connection>
         {
             private MessageBeat _beat;
+            private Dictionary<Type, Func<MessageResult, bool>> _messageHandler;
 
             public override int State => (int)ConnectionState.Run;
 
@@ -95,36 +96,15 @@ namespace UselessFrame.Net
                             else
                             {
                                 MessageResult result = MessageResult.Create(messageResult.Message, _connection);
-                                if (result.MessageType == typeof(CloseRequest))
+                                if (_messageHandler.TryGetValue(result.MessageType, out var handler))
                                 {
-                                    ChangeState<CloseResponseState>(result).Forget();
-                                    CancelAllAsyncWait();
-                                    return false;
+                                    return handler(result);
                                 }
-                                else if (result.MessageType == typeof(KeepAlive))
+                                else
                                 {
-                                    if (_connection.GetRuntimeData<ConnectionSetting>().ShowReceiveKeepaliveLog)
-                                        X.SystemLog.Debug($"{DebugPrefix}receive keepalive.");
+                                    _connection.TriggerNewMessage(result);
                                     return true;
                                 }
-                                else if (result.MessageType == typeof(CommandMessage))
-                                {
-                                    CommandMessage cmd = (CommandMessage)result.Message;
-                                    X.SystemLog.Debug($"{DebugPrefix}execute command -> {cmd.CommandStr}.");
-                                    _connection._dataFiber.Post(ToFiberFun.RunCommand, Tuple.Create(_connection, result));
-                                    return true;
-                                }
-                                else if (result.MessageType == typeof(TestLatencyMessage))
-                                {
-                                    X.SystemLog.Debug($"{DebugPrefix}test latency");
-                                    TestLatencyMessage test = (TestLatencyMessage)result.Message;
-                                    TestLatencyResponseMessage rspTest = NetPoolUtility.CreateMessage<TestLatencyResponseMessage>();
-                                    rspTest.Time = Stopwatch.GetTimestamp();
-                                    result.Response(rspTest).Forget();
-                                    return true;
-                                }
-                                _connection.TriggerNewMessage(result);
-                                return true;
                             }
                         }
 
