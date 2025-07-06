@@ -152,11 +152,15 @@ namespace UselessFrame.Net
 
         public void Close()
         {
+            if (_disposeTokenSource.IsCancellationRequested)
+                return;
             _fsm.ChangeState(typeof(CloseRequestState)).Forget();
         }
 
         public T GetRuntimeData<T>()
         {
+            if (_disposeTokenSource.IsCancellationRequested)
+                return default;
             if (_runtimeData.TryGetValue(typeof(T), out var data))
             {
                 return (T)data;
@@ -166,6 +170,9 @@ namespace UselessFrame.Net
 
         public async UniTask Send(IMessage message, bool autoRelease)
         {
+            if (_disposeTokenSource.IsCancellationRequested)
+                return;
+
             AutoResetUniTaskCompletionSource completeSource = AutoResetUniTaskCompletionSource.Create();
             _runFiber.Post(ToFiberFun.SendMessageToRunFiber, Tuple.Create(this, message, autoRelease, completeSource));
             await completeSource.Task;
@@ -173,6 +180,8 @@ namespace UselessFrame.Net
 
         public async UniTask<MessageResult> SendWait(IMessage message, bool autoRelease)
         {
+            if (_disposeTokenSource.IsCancellationRequested)
+                return default(MessageResult);
             AutoResetUniTaskCompletionSource<MessageResult> completeSource = AutoResetUniTaskCompletionSource<MessageResult>.Create();
             _runFiber.Post(ToFiberFun.SendWaitMessageToRunFiber, Tuple.Create(this, message, autoRelease, completeSource));
             return await completeSource.Task;
@@ -180,6 +189,8 @@ namespace UselessFrame.Net
 
         public async UniTask<LatencyResult> TestLatency()
         {
+            if (_disposeTokenSource.IsCancellationRequested)
+                return default(LatencyResult);
             long time = DateTime.UtcNow.Ticks;
             TestLatencyMessage msg = NetPoolUtility.CreateMessage<TestLatencyMessage>();
             MessageResult result = await SendWait(msg, true);
