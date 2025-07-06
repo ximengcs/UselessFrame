@@ -15,8 +15,9 @@ namespace UselessFrame.Net
 
         private NetFsm<T> _fsm;
         private int _pendingCount;
-        private bool _active;
         private AutoResetUniTaskCompletionSource _waitPendingSource;
+
+        protected bool _active;
         protected T _connection;
 
         public void OnInit(T connection, NetFsm<T> fsm)

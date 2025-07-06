@@ -26,12 +26,12 @@ namespace UselessFrame.Net
                 RetryHandler();
             }
 
-            private async UniTask SuccessHandler(MessageResult tokenMessage)
+            private async UniTask SuccessHandler()
             {
                 X.SystemLog.Debug($"{DebugPrefix}check success");
                 await _remoteTestTaskSource.Task;
                 X.SystemLog.Debug($"{DebugPrefix}wait remote check complete");
-                ChangeState<TokenCheck>(tokenMessage).Forget();
+                ChangeState<TokenCheck>().Forget();
             }
 
             private void FailureHandler()
@@ -105,7 +105,7 @@ namespace UselessFrame.Net
                 {
                     case NetOperateState.OK:
                         {
-                            SuccessHandler(default).Forget();
+                            SuccessHandler().Forget();
                         }
                         break;
 
@@ -127,7 +127,7 @@ namespace UselessFrame.Net
                                 case SocketError.Success:
                                 case SocketError.WouldBlock:
                                     {
-                                        SuccessHandler(default).Forget();
+                                        SuccessHandler().Forget();
                                     }
                                     break;
 
@@ -186,11 +186,6 @@ namespace UselessFrame.Net
                                     return false;
                                 else
                                     return true;
-                            }
-                            else if (result.MessageType == typeof(ServerToken))
-                            {
-                                SuccessHandler(result).Forget();
-                                CancelAllAsyncWait();
                             }
                             else
                             {

@@ -15,6 +15,8 @@ namespace UselessFrame.Net
 
         IPEndPoint RemoteIP { get; }
 
+        DateTime RemoteTime { get; }
+
         ISubject<IConnection, ConnectionState> State { get; }
 
         event Action<MessageResult> ReceiveMessageEvent;

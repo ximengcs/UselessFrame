@@ -10,6 +10,8 @@ namespace UselessFrame.Net
     {
         internal partial class RunState
         {
+            private Dictionary<Type, Func<MessageResult, bool>> _messageHandler;
+
             public override void OnInit()
             {
                 base.OnInit();
@@ -46,10 +48,8 @@ namespace UselessFrame.Net
 
             private bool TestLatencyMessageHandler(MessageResult result)
             {
-                X.SystemLog.Debug($"{DebugPrefix}test latency");
                 TestLatencyMessage test = (TestLatencyMessage)result.Message;
                 TestLatencyResponseMessage rspTest = NetPoolUtility.CreateMessage<TestLatencyResponseMessage>();
-                rspTest.Time = Stopwatch.GetTimestamp();
                 result.Response(rspTest).Forget();
                 return true;
             }

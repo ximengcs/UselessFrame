@@ -25,8 +25,7 @@ namespace UselessFrame.Net
             {
                 if (!force && !_writeActive)
                 {
-                    X.SystemLog.Debug($"send message refuse {force} {_writeActive}");
-                    return default;
+                    return ReadMessageResult.Create(NetOperateState.Cancel, $"send message refuse {force} {_writeActive}");
                 }
 
                 WaitResponseHandle waitHandle = new WaitResponseHandle(message);

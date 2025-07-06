@@ -30,10 +30,13 @@ namespace UselessFrame.Net
         private Action<MessageResult> _onReceiveMessage;
         private Dictionary<Type, object> _runtimeData;
         private CancellationTokenSource _disposeTokenSource;
+        private long _serverTimeGap;
 
         internal NetFsm<Connection> Fsm => _fsm;
 
         internal MessageStream Stream => _stream;
+
+        public DateTime RemoteTime => DateTime.UtcNow.AddTicks(_serverTimeGap);
 
         public Guid Id => _id;
 
@@ -177,16 +180,17 @@ namespace UselessFrame.Net
 
         public async UniTask<LatencyResult> TestLatency()
         {
-            long time = Stopwatch.GetTimestamp();
+            long time = DateTime.UtcNow.Ticks;
             TestLatencyMessage msg = NetPoolUtility.CreateMessage<TestLatencyMessage>();
             MessageResult result = await SendWait(msg, true);
             if (result.Valid)
             {
                 TestLatencyResponseMessage rspMsg = (TestLatencyResponseMessage)result.Message;
+                long nowTicks = DateTime.UtcNow.Ticks;
                 LatencyResult latency = new LatencyResult()
                 {
                     Success = true,
-                    DeltaTime = rspMsg.Time - (time + Stopwatch.GetTimestamp()) / 2f
+                    DeltaTime = (int)((nowTicks - time) / TimeSpan.TicksPerMillisecond)
                 };
                 return latency;
             }

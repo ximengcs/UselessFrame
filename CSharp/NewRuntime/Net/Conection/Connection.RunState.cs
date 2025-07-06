@@ -13,7 +13,6 @@ namespace UselessFrame.Net
         internal partial class RunState : NetFsmState<Connection>
         {
             private MessageBeat _beat;
-            private Dictionary<Type, Func<MessageResult, bool>> _messageHandler;
 
             public override int State => (int)ConnectionState.Run;
 

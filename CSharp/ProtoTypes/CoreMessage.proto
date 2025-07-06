@@ -20,6 +20,10 @@ message CloseResponse
     required bytes ResponseToken = 1;
 }
 
+message ServerTokenRequest
+{
+}
+
 message ServerToken
 {
     required bytes Id = 1;
@@ -66,6 +70,16 @@ message TestLatencyMessage
 }
 
 message TestLatencyResponseMessage
+{
+    required bytes ResponseToken = 1;
+}
+
+message TestServerTimeMessage
+{
+    required bytes RequestToken = 1;
+}
+
+message TestServerTimeResponseMessage
 {
     required bytes ResponseToken = 1;
     required int64 Time = 2;

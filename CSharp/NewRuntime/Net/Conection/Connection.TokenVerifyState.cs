@@ -6,29 +6,16 @@ namespace UselessFrame.Net
 {
     internal partial class Connection
     {
-        internal class TokenVerifyState : TokenCheck
+        internal partial class TokenVerifyState : TokenCheck
         {
             public override int State => (int)ConnectionState.TokenVerify;
 
-            private Guid _token;
-
-            public override void OnInit()
-            {
-                base.OnInit();
-                _token = Guid.Empty;
-            }
+            private Guid _token = Guid.Empty;
 
             public override void OnEnter(NetFsmState<Connection> preState, MessageResult passMessage)
             {
                 base.OnEnter(preState, passMessage);
-                if (_token != Guid.Empty)
-                {
-                    ChangeState<RunState>().Forget();
-                }
-                else
-                {
-                    Verify().Forget();
-                }
+                _connection.Stream.StartRead();
             }
 
             private async UniTask Verify()
@@ -36,7 +23,8 @@ namespace UselessFrame.Net
                 AsyncBegin();
 
                 ServerToken token = NetUtility.CreateToken(_connection._id);
-                _token = new Guid(token.Id.Span);
+                if (_token == Guid.Empty)
+                    _token = new Guid(token.Id.Span);
                 X.SystemLog.Debug($"{DebugPrefix}send verify token");
                 _connection._stream.StartRead();
                 ReadMessageResult result = await _connection._stream.SendWait(token, true);
@@ -78,16 +66,29 @@ namespace UselessFrame.Net
                     case NetOperateState.OK:
                         {
                             MessageResult result = MessageResult.Create(messageResult.Message, _connection);
-                            if (result.MessageType == typeof(ServerTokenVerify))
+                            if (responseHandle.HasResponse)
                             {
-                                responseHandle.SetResponse(messageResult);
-                                return false;
+                                if (result.MessageType == typeof(ServerTokenVerify))
+                                {
+                                    responseHandle.SetResponse(messageResult);
+                                    return false;
+                                }
+                                else
+                                {
+                                    return true;
+                                }
                             }
                             else
                             {
-                                responseHandle.SetCancel();
+                                if (_messageHandler.TryGetValue(result.MessageType, out var handler))
+                                {
+                                    return handler(result);
+                                }
+                                else
+                                {
+                                    return true;
+                                }
                             }
-                            return true;
                         }
 
                     case NetOperateState.SocketError:
