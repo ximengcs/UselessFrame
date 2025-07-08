@@ -2,7 +2,6 @@
 using System;
 using System.CommandLine;
 using System.Reflection;
-using UselessFrame.NewRuntime.Entity;
 
 namespace UselessFrame.NewRuntime.Commands
 {

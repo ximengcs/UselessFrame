@@ -9,7 +9,7 @@ using Unity.Mathematics;
 namespace UselessFrame.NewRuntime.Entities
 {
     [MemoryPackable]
-    public class Entity : IRectFQuadStorable
+    public partial class Entity : IRectFQuadStorable
     {
         private long _id;
         private Entity _root;
@@ -23,9 +23,5 @@ namespace UselessFrame.NewRuntime.Entities
 
         public RectangleF Rect => throw new System.NotImplementedException();
 
-        internal Entity(Entity root, Entity parent)
-        {
-            
-        }
     }
 }
