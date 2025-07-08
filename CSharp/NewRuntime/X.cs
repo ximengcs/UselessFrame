@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using UselessFrame.Net;
 using UselessFrame.NewRuntime.Commands;
 using UselessFrame.NewRuntime.Fiber;
+using UselessFrame.NewRuntime.Utilities;
 using UselessFrame.NewRuntime.World;
 
 namespace UselessFrame.NewRuntime
@@ -21,7 +22,7 @@ namespace UselessFrame.NewRuntime
         private static Dictionary<long, IServer> _servers;
         private static Dictionary<long, IConnection> _connections;
 
-        public readonly static long Seed = DateTime.UtcNow.Ticks;
+        public readonly static int Seed = (int)DateTime.UtcNow.Ticks;
 
         public static ITypeManager Type => _typeManager;
 
@@ -37,6 +38,7 @@ namespace UselessFrame.NewRuntime
 
         public static void Initialize(XSetting setting)
         {
+            RandomUtility.Initialize(Seed);
             _logManager = new LogManager();
             AppDomain.CurrentDomain.UnhandledException += PrintSystemException;
             TaskScheduler.UnobservedTaskException += PrintTaskException;

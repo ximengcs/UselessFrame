@@ -23,23 +23,23 @@ public static partial class CoreMessageReflection {
     byte[] descriptorData = global::System.Convert.FromBase64String(
         string.Concat(
           "ChFDb3JlTWVzc2FnZS5wcm90byIxCgtUZXN0Q29ubmVjdBIUCgxSZXF1ZXN0",
-          "VG9rZW4YASACKAwSDAoEVGltZRgCIAIoAyIsChNUZXN0Q29ubmVjdFJlc3Bv",
-          "bnNlEhUKDVJlc3BvbnNlVG9rZW4YASACKAwiJAoMQ2xvc2VSZXF1ZXN0EhQK",
-          "DFJlcXVlc3RUb2tlbhgBIAIoDCImCg1DbG9zZVJlc3BvbnNlEhUKDVJlc3Bv",
-          "bnNlVG9rZW4YASACKAwiFAoSU2VydmVyVG9rZW5SZXF1ZXN0Ii8KC1NlcnZl",
-          "clRva2VuEgoKAklkGAEgAigDEhQKDFJlcXVlc3RUb2tlbhgCIAIoDCIqChFT",
-          "ZXJ2ZXJUb2tlblZlcmlmeRIVCg1SZXNwb25zZVRva2VuGAEgAigMIi0KDU1l",
+          "VG9rZW4YASACKAUSDAoEVGltZRgCIAIoAyIsChNUZXN0Q29ubmVjdFJlc3Bv",
+          "bnNlEhUKDVJlc3BvbnNlVG9rZW4YASACKAUiJAoMQ2xvc2VSZXF1ZXN0EhQK",
+          "DFJlcXVlc3RUb2tlbhgBIAIoBSImCg1DbG9zZVJlc3BvbnNlEhUKDVJlc3Bv",
+          "bnNlVG9rZW4YASACKAUiFAoSU2VydmVyVG9rZW5SZXF1ZXN0Ii8KC1NlcnZl",
+          "clRva2VuEgoKAklkGAEgAigDEhQKDFJlcXVlc3RUb2tlbhgCIAIoBSIqChFT",
+          "ZXJ2ZXJUb2tlblZlcmlmeRIVCg1SZXNwb25zZVRva2VuGAEgAigFIi0KDU1l",
           "c3NhZ2VUYXJnZXQSDQoFV29ybGQYAiACKAUSDQoFU2NlbmUYAyACKAUiQAoN",
           "U3RyaW5nTWVzc2FnZRIeCgZUYXJnZXQYASACKAsyDi5NZXNzYWdlVGFyZ2V0",
           "Eg8KB0NvbnRlbnQYAiACKAkiCwoJS2VlcEFsaXZlIjoKDkNvbW1hbmRNZXNz",
-          "YWdlEhQKDFJlcXVlc3RUb2tlbhgBIAIoDBISCgpDb21tYW5kU3RyGAIgAigJ",
+          "YWdlEhQKDFJlcXVlc3RUb2tlbhgBIAIoBRISCgpDb21tYW5kU3RyGAIgAigJ",
           "IlsKFkNvbW1hbmRSZXNwb25zZU1lc3NhZ2USFQoNUmVzcG9uc2VUb2tlbhgB",
-          "IAIoDBIVCg1Db21tYW5kUmVzdWx0GAIgAigJEhMKC0NvbW1hbmRDb2RlGAMg",
+          "IAIoBRIVCg1Db21tYW5kUmVzdWx0GAIgAigJEhMKC0NvbW1hbmRDb2RlGAMg",
           "AigFIioKElRlc3RMYXRlbmN5TWVzc2FnZRIUCgxSZXF1ZXN0VG9rZW4YASAC",
-          "KAwiMwoaVGVzdExhdGVuY3lSZXNwb25zZU1lc3NhZ2USFQoNUmVzcG9uc2VU",
-          "b2tlbhgBIAIoDCItChVUZXN0U2VydmVyVGltZU1lc3NhZ2USFAoMUmVxdWVz",
-          "dFRva2VuGAEgAigMIkQKHVRlc3RTZXJ2ZXJUaW1lUmVzcG9uc2VNZXNzYWdl",
-          "EhUKDVJlc3BvbnNlVG9rZW4YASACKAwSDAoEVGltZRgCIAIoAw=="));
+          "KAUiMwoaVGVzdExhdGVuY3lSZXNwb25zZU1lc3NhZ2USFQoNUmVzcG9uc2VU",
+          "b2tlbhgBIAIoBSItChVUZXN0U2VydmVyVGltZU1lc3NhZ2USFAoMUmVxdWVz",
+          "dFRva2VuGAEgAigFIkQKHVRlc3RTZXJ2ZXJUaW1lUmVzcG9uc2VNZXNzYWdl",
+          "EhUKDVJlc3BvbnNlVG9rZW4YASACKAUSDAoEVGltZRgCIAIoAw=="));
     descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
         new pbr::FileDescriptor[] { },
         new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -115,28 +115,29 @@ public sealed partial class TestConnect : pb::IMessage<TestConnect>
 
   /// <summary>Field number for the "RequestToken" field.</summary>
   public const int RequestTokenFieldNumber = 1;
-  private readonly static pb::ByteString RequestTokenDefaultValue = pb::ByteString.Empty;
+  private readonly static int RequestTokenDefaultValue = 0;
 
-  private pb::ByteString requestToken_;
+  private int requestToken_;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public pb::ByteString RequestToken {
-    get { return requestToken_ ?? RequestTokenDefaultValue; }
+  public int RequestToken {
+    get { if ((_hasBits0 & 1) != 0) { return requestToken_; } else { return RequestTokenDefaultValue; } }
     set {
-      requestToken_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      _hasBits0 |= 1;
+      requestToken_ = value;
     }
   }
   /// <summary>Gets whether the "RequestToken" field is set</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public bool HasRequestToken {
-    get { return requestToken_ != null; }
+    get { return (_hasBits0 & 1) != 0; }
   }
   /// <summary>Clears the value of the "RequestToken" field</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public void ClearRequestToken() {
-    requestToken_ = null;
+    _hasBits0 &= ~1;
   }
 
   /// <summary>Field number for the "Time" field.</summary>
@@ -147,9 +148,9 @@ public sealed partial class TestConnect : pb::IMessage<TestConnect>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public long Time {
-    get { if ((_hasBits0 & 1) != 0) { return time_; } else { return TimeDefaultValue; } }
+    get { if ((_hasBits0 & 2) != 0) { return time_; } else { return TimeDefaultValue; } }
     set {
-      _hasBits0 |= 1;
+      _hasBits0 |= 2;
       time_ = value;
     }
   }
@@ -157,13 +158,13 @@ public sealed partial class TestConnect : pb::IMessage<TestConnect>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public bool HasTime {
-    get { return (_hasBits0 & 1) != 0; }
+    get { return (_hasBits0 & 2) != 0; }
   }
   /// <summary>Clears the value of the "Time" field</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public void ClearTime() {
-    _hasBits0 &= ~1;
+    _hasBits0 &= ~2;
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -211,8 +212,8 @@ public sealed partial class TestConnect : pb::IMessage<TestConnect>
     output.WriteRawMessage(this);
   #else
     if (HasRequestToken) {
-      output.WriteRawTag(10);
-      output.WriteBytes(RequestToken);
+      output.WriteRawTag(8);
+      output.WriteInt32(RequestToken);
     }
     if (HasTime) {
       output.WriteRawTag(16);
@@ -229,8 +230,8 @@ public sealed partial class TestConnect : pb::IMessage<TestConnect>
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
     if (HasRequestToken) {
-      output.WriteRawTag(10);
-      output.WriteBytes(RequestToken);
+      output.WriteRawTag(8);
+      output.WriteInt32(RequestToken);
     }
     if (HasTime) {
       output.WriteRawTag(16);
@@ -247,7 +248,7 @@ public sealed partial class TestConnect : pb::IMessage<TestConnect>
   public int CalculateSize() {
     int size = 0;
     if (HasRequestToken) {
-      size += 1 + pb::CodedOutputStream.ComputeBytesSize(RequestToken);
+      size += 1 + pb::CodedOutputStream.ComputeInt32Size(RequestToken);
     }
     if (HasTime) {
       size += 1 + pb::CodedOutputStream.ComputeInt64Size(Time);
@@ -285,8 +286,8 @@ public sealed partial class TestConnect : pb::IMessage<TestConnect>
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
           break;
-        case 10: {
-          RequestToken = input.ReadBytes();
+        case 8: {
+          RequestToken = input.ReadInt32();
           break;
         }
         case 16: {
@@ -308,8 +309,8 @@ public sealed partial class TestConnect : pb::IMessage<TestConnect>
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
           break;
-        case 10: {
-          RequestToken = input.ReadBytes();
+        case 8: {
+          RequestToken = input.ReadInt32();
           break;
         }
         case 16: {
@@ -331,6 +332,7 @@ public sealed partial class TestConnectResponse : pb::IMessage<TestConnectRespon
 {
   private static readonly pb::MessageParser<TestConnectResponse> _parser = new pb::MessageParser<TestConnectResponse>(() => new TestConnectResponse());
   private pb::UnknownFieldSet _unknownFields;
+  private int _hasBits0;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public static pb::MessageParser<TestConnectResponse> Parser { get { return _parser; } }
@@ -358,6 +360,7 @@ public sealed partial class TestConnectResponse : pb::IMessage<TestConnectRespon
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public TestConnectResponse(TestConnectResponse other) : this() {
+    _hasBits0 = other._hasBits0;
     responseToken_ = other.responseToken_;
     _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
   }
@@ -370,28 +373,29 @@ public sealed partial class TestConnectResponse : pb::IMessage<TestConnectRespon
 
   /// <summary>Field number for the "ResponseToken" field.</summary>
   public const int ResponseTokenFieldNumber = 1;
-  private readonly static pb::ByteString ResponseTokenDefaultValue = pb::ByteString.Empty;
+  private readonly static int ResponseTokenDefaultValue = 0;
 
-  private pb::ByteString responseToken_;
+  private int responseToken_;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public pb::ByteString ResponseToken {
-    get { return responseToken_ ?? ResponseTokenDefaultValue; }
+  public int ResponseToken {
+    get { if ((_hasBits0 & 1) != 0) { return responseToken_; } else { return ResponseTokenDefaultValue; } }
     set {
-      responseToken_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      _hasBits0 |= 1;
+      responseToken_ = value;
     }
   }
   /// <summary>Gets whether the "ResponseToken" field is set</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public bool HasResponseToken {
-    get { return responseToken_ != null; }
+    get { return (_hasBits0 & 1) != 0; }
   }
   /// <summary>Clears the value of the "ResponseToken" field</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public void ClearResponseToken() {
-    responseToken_ = null;
+    _hasBits0 &= ~1;
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -437,8 +441,8 @@ public sealed partial class TestConnectResponse : pb::IMessage<TestConnectRespon
     output.WriteRawMessage(this);
   #else
     if (HasResponseToken) {
-      output.WriteRawTag(10);
-      output.WriteBytes(ResponseToken);
+      output.WriteRawTag(8);
+      output.WriteInt32(ResponseToken);
     }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(output);
@@ -451,8 +455,8 @@ public sealed partial class TestConnectResponse : pb::IMessage<TestConnectRespon
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
     if (HasResponseToken) {
-      output.WriteRawTag(10);
-      output.WriteBytes(ResponseToken);
+      output.WriteRawTag(8);
+      output.WriteInt32(ResponseToken);
     }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(ref output);
@@ -465,7 +469,7 @@ public sealed partial class TestConnectResponse : pb::IMessage<TestConnectRespon
   public int CalculateSize() {
     int size = 0;
     if (HasResponseToken) {
-      size += 1 + pb::CodedOutputStream.ComputeBytesSize(ResponseToken);
+      size += 1 + pb::CodedOutputStream.ComputeInt32Size(ResponseToken);
     }
     if (_unknownFields != null) {
       size += _unknownFields.CalculateSize();
@@ -497,8 +501,8 @@ public sealed partial class TestConnectResponse : pb::IMessage<TestConnectRespon
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
           break;
-        case 10: {
-          ResponseToken = input.ReadBytes();
+        case 8: {
+          ResponseToken = input.ReadInt32();
           break;
         }
       }
@@ -516,8 +520,8 @@ public sealed partial class TestConnectResponse : pb::IMessage<TestConnectRespon
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
           break;
-        case 10: {
-          ResponseToken = input.ReadBytes();
+        case 8: {
+          ResponseToken = input.ReadInt32();
           break;
         }
       }
@@ -535,6 +539,7 @@ public sealed partial class CloseRequest : pb::IMessage<CloseRequest>
 {
   private static readonly pb::MessageParser<CloseRequest> _parser = new pb::MessageParser<CloseRequest>(() => new CloseRequest());
   private pb::UnknownFieldSet _unknownFields;
+  private int _hasBits0;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public static pb::MessageParser<CloseRequest> Parser { get { return _parser; } }
@@ -562,6 +567,7 @@ public sealed partial class CloseRequest : pb::IMessage<CloseRequest>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public CloseRequest(CloseRequest other) : this() {
+    _hasBits0 = other._hasBits0;
     requestToken_ = other.requestToken_;
     _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
   }
@@ -574,28 +580,29 @@ public sealed partial class CloseRequest : pb::IMessage<CloseRequest>
 
   /// <summary>Field number for the "RequestToken" field.</summary>
   public const int RequestTokenFieldNumber = 1;
-  private readonly static pb::ByteString RequestTokenDefaultValue = pb::ByteString.Empty;
+  private readonly static int RequestTokenDefaultValue = 0;
 
-  private pb::ByteString requestToken_;
+  private int requestToken_;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public pb::ByteString RequestToken {
-    get { return requestToken_ ?? RequestTokenDefaultValue; }
+  public int RequestToken {
+    get { if ((_hasBits0 & 1) != 0) { return requestToken_; } else { return RequestTokenDefaultValue; } }
     set {
-      requestToken_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      _hasBits0 |= 1;
+      requestToken_ = value;
     }
   }
   /// <summary>Gets whether the "RequestToken" field is set</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public bool HasRequestToken {
-    get { return requestToken_ != null; }
+    get { return (_hasBits0 & 1) != 0; }
   }
   /// <summary>Clears the value of the "RequestToken" field</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public void ClearRequestToken() {
-    requestToken_ = null;
+    _hasBits0 &= ~1;
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -641,8 +648,8 @@ public sealed partial class CloseRequest : pb::IMessage<CloseRequest>
     output.WriteRawMessage(this);
   #else
     if (HasRequestToken) {
-      output.WriteRawTag(10);
-      output.WriteBytes(RequestToken);
+      output.WriteRawTag(8);
+      output.WriteInt32(RequestToken);
     }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(output);
@@ -655,8 +662,8 @@ public sealed partial class CloseRequest : pb::IMessage<CloseRequest>
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
     if (HasRequestToken) {
-      output.WriteRawTag(10);
-      output.WriteBytes(RequestToken);
+      output.WriteRawTag(8);
+      output.WriteInt32(RequestToken);
     }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(ref output);
@@ -669,7 +676,7 @@ public sealed partial class CloseRequest : pb::IMessage<CloseRequest>
   public int CalculateSize() {
     int size = 0;
     if (HasRequestToken) {
-      size += 1 + pb::CodedOutputStream.ComputeBytesSize(RequestToken);
+      size += 1 + pb::CodedOutputStream.ComputeInt32Size(RequestToken);
     }
     if (_unknownFields != null) {
       size += _unknownFields.CalculateSize();
@@ -701,8 +708,8 @@ public sealed partial class CloseRequest : pb::IMessage<CloseRequest>
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
           break;
-        case 10: {
-          RequestToken = input.ReadBytes();
+        case 8: {
+          RequestToken = input.ReadInt32();
           break;
         }
       }
@@ -720,8 +727,8 @@ public sealed partial class CloseRequest : pb::IMessage<CloseRequest>
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
           break;
-        case 10: {
-          RequestToken = input.ReadBytes();
+        case 8: {
+          RequestToken = input.ReadInt32();
           break;
         }
       }
@@ -739,6 +746,7 @@ public sealed partial class CloseResponse : pb::IMessage<CloseResponse>
 {
   private static readonly pb::MessageParser<CloseResponse> _parser = new pb::MessageParser<CloseResponse>(() => new CloseResponse());
   private pb::UnknownFieldSet _unknownFields;
+  private int _hasBits0;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public static pb::MessageParser<CloseResponse> Parser { get { return _parser; } }
@@ -766,6 +774,7 @@ public sealed partial class CloseResponse : pb::IMessage<CloseResponse>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public CloseResponse(CloseResponse other) : this() {
+    _hasBits0 = other._hasBits0;
     responseToken_ = other.responseToken_;
     _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
   }
@@ -778,28 +787,29 @@ public sealed partial class CloseResponse : pb::IMessage<CloseResponse>
 
   /// <summary>Field number for the "ResponseToken" field.</summary>
   public const int ResponseTokenFieldNumber = 1;
-  private readonly static pb::ByteString ResponseTokenDefaultValue = pb::ByteString.Empty;
+  private readonly static int ResponseTokenDefaultValue = 0;
 
-  private pb::ByteString responseToken_;
+  private int responseToken_;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public pb::ByteString ResponseToken {
-    get { return responseToken_ ?? ResponseTokenDefaultValue; }
+  public int ResponseToken {
+    get { if ((_hasBits0 & 1) != 0) { return responseToken_; } else { return ResponseTokenDefaultValue; } }
     set {
-      responseToken_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      _hasBits0 |= 1;
+      responseToken_ = value;
     }
   }
   /// <summary>Gets whether the "ResponseToken" field is set</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public bool HasResponseToken {
-    get { return responseToken_ != null; }
+    get { return (_hasBits0 & 1) != 0; }
   }
   /// <summary>Clears the value of the "ResponseToken" field</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public void ClearResponseToken() {
-    responseToken_ = null;
+    _hasBits0 &= ~1;
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -845,8 +855,8 @@ public sealed partial class CloseResponse : pb::IMessage<CloseResponse>
     output.WriteRawMessage(this);
   #else
     if (HasResponseToken) {
-      output.WriteRawTag(10);
-      output.WriteBytes(ResponseToken);
+      output.WriteRawTag(8);
+      output.WriteInt32(ResponseToken);
     }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(output);
@@ -859,8 +869,8 @@ public sealed partial class CloseResponse : pb::IMessage<CloseResponse>
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
     if (HasResponseToken) {
-      output.WriteRawTag(10);
-      output.WriteBytes(ResponseToken);
+      output.WriteRawTag(8);
+      output.WriteInt32(ResponseToken);
     }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(ref output);
@@ -873,7 +883,7 @@ public sealed partial class CloseResponse : pb::IMessage<CloseResponse>
   public int CalculateSize() {
     int size = 0;
     if (HasResponseToken) {
-      size += 1 + pb::CodedOutputStream.ComputeBytesSize(ResponseToken);
+      size += 1 + pb::CodedOutputStream.ComputeInt32Size(ResponseToken);
     }
     if (_unknownFields != null) {
       size += _unknownFields.CalculateSize();
@@ -905,8 +915,8 @@ public sealed partial class CloseResponse : pb::IMessage<CloseResponse>
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
           break;
-        case 10: {
-          ResponseToken = input.ReadBytes();
+        case 8: {
+          ResponseToken = input.ReadInt32();
           break;
         }
       }
@@ -924,8 +934,8 @@ public sealed partial class CloseResponse : pb::IMessage<CloseResponse>
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
           break;
-        case 10: {
-          ResponseToken = input.ReadBytes();
+        case 8: {
+          ResponseToken = input.ReadInt32();
           break;
         }
       }
@@ -1165,28 +1175,29 @@ public sealed partial class ServerToken : pb::IMessage<ServerToken>
 
   /// <summary>Field number for the "RequestToken" field.</summary>
   public const int RequestTokenFieldNumber = 2;
-  private readonly static pb::ByteString RequestTokenDefaultValue = pb::ByteString.Empty;
+  private readonly static int RequestTokenDefaultValue = 0;
 
-  private pb::ByteString requestToken_;
+  private int requestToken_;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public pb::ByteString RequestToken {
-    get { return requestToken_ ?? RequestTokenDefaultValue; }
+  public int RequestToken {
+    get { if ((_hasBits0 & 2) != 0) { return requestToken_; } else { return RequestTokenDefaultValue; } }
     set {
-      requestToken_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      _hasBits0 |= 2;
+      requestToken_ = value;
     }
   }
   /// <summary>Gets whether the "RequestToken" field is set</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public bool HasRequestToken {
-    get { return requestToken_ != null; }
+    get { return (_hasBits0 & 2) != 0; }
   }
   /// <summary>Clears the value of the "RequestToken" field</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public void ClearRequestToken() {
-    requestToken_ = null;
+    _hasBits0 &= ~2;
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1238,8 +1249,8 @@ public sealed partial class ServerToken : pb::IMessage<ServerToken>
       output.WriteInt64(Id);
     }
     if (HasRequestToken) {
-      output.WriteRawTag(18);
-      output.WriteBytes(RequestToken);
+      output.WriteRawTag(16);
+      output.WriteInt32(RequestToken);
     }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(output);
@@ -1256,8 +1267,8 @@ public sealed partial class ServerToken : pb::IMessage<ServerToken>
       output.WriteInt64(Id);
     }
     if (HasRequestToken) {
-      output.WriteRawTag(18);
-      output.WriteBytes(RequestToken);
+      output.WriteRawTag(16);
+      output.WriteInt32(RequestToken);
     }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(ref output);
@@ -1273,7 +1284,7 @@ public sealed partial class ServerToken : pb::IMessage<ServerToken>
       size += 1 + pb::CodedOutputStream.ComputeInt64Size(Id);
     }
     if (HasRequestToken) {
-      size += 1 + pb::CodedOutputStream.ComputeBytesSize(RequestToken);
+      size += 1 + pb::CodedOutputStream.ComputeInt32Size(RequestToken);
     }
     if (_unknownFields != null) {
       size += _unknownFields.CalculateSize();
@@ -1312,8 +1323,8 @@ public sealed partial class ServerToken : pb::IMessage<ServerToken>
           Id = input.ReadInt64();
           break;
         }
-        case 18: {
-          RequestToken = input.ReadBytes();
+        case 16: {
+          RequestToken = input.ReadInt32();
           break;
         }
       }
@@ -1335,8 +1346,8 @@ public sealed partial class ServerToken : pb::IMessage<ServerToken>
           Id = input.ReadInt64();
           break;
         }
-        case 18: {
-          RequestToken = input.ReadBytes();
+        case 16: {
+          RequestToken = input.ReadInt32();
           break;
         }
       }
@@ -1354,6 +1365,7 @@ public sealed partial class ServerTokenVerify : pb::IMessage<ServerTokenVerify>
 {
   private static readonly pb::MessageParser<ServerTokenVerify> _parser = new pb::MessageParser<ServerTokenVerify>(() => new ServerTokenVerify());
   private pb::UnknownFieldSet _unknownFields;
+  private int _hasBits0;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public static pb::MessageParser<ServerTokenVerify> Parser { get { return _parser; } }
@@ -1381,6 +1393,7 @@ public sealed partial class ServerTokenVerify : pb::IMessage<ServerTokenVerify>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public ServerTokenVerify(ServerTokenVerify other) : this() {
+    _hasBits0 = other._hasBits0;
     responseToken_ = other.responseToken_;
     _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
   }
@@ -1393,28 +1406,29 @@ public sealed partial class ServerTokenVerify : pb::IMessage<ServerTokenVerify>
 
   /// <summary>Field number for the "ResponseToken" field.</summary>
   public const int ResponseTokenFieldNumber = 1;
-  private readonly static pb::ByteString ResponseTokenDefaultValue = pb::ByteString.Empty;
+  private readonly static int ResponseTokenDefaultValue = 0;
 
-  private pb::ByteString responseToken_;
+  private int responseToken_;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public pb::ByteString ResponseToken {
-    get { return responseToken_ ?? ResponseTokenDefaultValue; }
+  public int ResponseToken {
+    get { if ((_hasBits0 & 1) != 0) { return responseToken_; } else { return ResponseTokenDefaultValue; } }
     set {
-      responseToken_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      _hasBits0 |= 1;
+      responseToken_ = value;
     }
   }
   /// <summary>Gets whether the "ResponseToken" field is set</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public bool HasResponseToken {
-    get { return responseToken_ != null; }
+    get { return (_hasBits0 & 1) != 0; }
   }
   /// <summary>Clears the value of the "ResponseToken" field</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public void ClearResponseToken() {
-    responseToken_ = null;
+    _hasBits0 &= ~1;
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1460,8 +1474,8 @@ public sealed partial class ServerTokenVerify : pb::IMessage<ServerTokenVerify>
     output.WriteRawMessage(this);
   #else
     if (HasResponseToken) {
-      output.WriteRawTag(10);
-      output.WriteBytes(ResponseToken);
+      output.WriteRawTag(8);
+      output.WriteInt32(ResponseToken);
     }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(output);
@@ -1474,8 +1488,8 @@ public sealed partial class ServerTokenVerify : pb::IMessage<ServerTokenVerify>
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
     if (HasResponseToken) {
-      output.WriteRawTag(10);
-      output.WriteBytes(ResponseToken);
+      output.WriteRawTag(8);
+      output.WriteInt32(ResponseToken);
     }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(ref output);
@@ -1488,7 +1502,7 @@ public sealed partial class ServerTokenVerify : pb::IMessage<ServerTokenVerify>
   public int CalculateSize() {
     int size = 0;
     if (HasResponseToken) {
-      size += 1 + pb::CodedOutputStream.ComputeBytesSize(ResponseToken);
+      size += 1 + pb::CodedOutputStream.ComputeInt32Size(ResponseToken);
     }
     if (_unknownFields != null) {
       size += _unknownFields.CalculateSize();
@@ -1520,8 +1534,8 @@ public sealed partial class ServerTokenVerify : pb::IMessage<ServerTokenVerify>
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
           break;
-        case 10: {
-          ResponseToken = input.ReadBytes();
+        case 8: {
+          ResponseToken = input.ReadInt32();
           break;
         }
       }
@@ -1539,8 +1553,8 @@ public sealed partial class ServerTokenVerify : pb::IMessage<ServerTokenVerify>
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
           break;
-        case 10: {
-          ResponseToken = input.ReadBytes();
+        case 8: {
+          ResponseToken = input.ReadInt32();
           break;
         }
       }
@@ -2220,6 +2234,7 @@ public sealed partial class CommandMessage : pb::IMessage<CommandMessage>
 {
   private static readonly pb::MessageParser<CommandMessage> _parser = new pb::MessageParser<CommandMessage>(() => new CommandMessage());
   private pb::UnknownFieldSet _unknownFields;
+  private int _hasBits0;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public static pb::MessageParser<CommandMessage> Parser { get { return _parser; } }
@@ -2247,6 +2262,7 @@ public sealed partial class CommandMessage : pb::IMessage<CommandMessage>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public CommandMessage(CommandMessage other) : this() {
+    _hasBits0 = other._hasBits0;
     requestToken_ = other.requestToken_;
     commandStr_ = other.commandStr_;
     _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -2260,28 +2276,29 @@ public sealed partial class CommandMessage : pb::IMessage<CommandMessage>
 
   /// <summary>Field number for the "RequestToken" field.</summary>
   public const int RequestTokenFieldNumber = 1;
-  private readonly static pb::ByteString RequestTokenDefaultValue = pb::ByteString.Empty;
+  private readonly static int RequestTokenDefaultValue = 0;
 
-  private pb::ByteString requestToken_;
+  private int requestToken_;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public pb::ByteString RequestToken {
-    get { return requestToken_ ?? RequestTokenDefaultValue; }
+  public int RequestToken {
+    get { if ((_hasBits0 & 1) != 0) { return requestToken_; } else { return RequestTokenDefaultValue; } }
     set {
-      requestToken_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      _hasBits0 |= 1;
+      requestToken_ = value;
     }
   }
   /// <summary>Gets whether the "RequestToken" field is set</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public bool HasRequestToken {
-    get { return requestToken_ != null; }
+    get { return (_hasBits0 & 1) != 0; }
   }
   /// <summary>Clears the value of the "RequestToken" field</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public void ClearRequestToken() {
-    requestToken_ = null;
+    _hasBits0 &= ~1;
   }
 
   /// <summary>Field number for the "CommandStr" field.</summary>
@@ -2355,8 +2372,8 @@ public sealed partial class CommandMessage : pb::IMessage<CommandMessage>
     output.WriteRawMessage(this);
   #else
     if (HasRequestToken) {
-      output.WriteRawTag(10);
-      output.WriteBytes(RequestToken);
+      output.WriteRawTag(8);
+      output.WriteInt32(RequestToken);
     }
     if (HasCommandStr) {
       output.WriteRawTag(18);
@@ -2373,8 +2390,8 @@ public sealed partial class CommandMessage : pb::IMessage<CommandMessage>
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
     if (HasRequestToken) {
-      output.WriteRawTag(10);
-      output.WriteBytes(RequestToken);
+      output.WriteRawTag(8);
+      output.WriteInt32(RequestToken);
     }
     if (HasCommandStr) {
       output.WriteRawTag(18);
@@ -2391,7 +2408,7 @@ public sealed partial class CommandMessage : pb::IMessage<CommandMessage>
   public int CalculateSize() {
     int size = 0;
     if (HasRequestToken) {
-      size += 1 + pb::CodedOutputStream.ComputeBytesSize(RequestToken);
+      size += 1 + pb::CodedOutputStream.ComputeInt32Size(RequestToken);
     }
     if (HasCommandStr) {
       size += 1 + pb::CodedOutputStream.ComputeStringSize(CommandStr);
@@ -2429,8 +2446,8 @@ public sealed partial class CommandMessage : pb::IMessage<CommandMessage>
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
           break;
-        case 10: {
-          RequestToken = input.ReadBytes();
+        case 8: {
+          RequestToken = input.ReadInt32();
           break;
         }
         case 18: {
@@ -2452,8 +2469,8 @@ public sealed partial class CommandMessage : pb::IMessage<CommandMessage>
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
           break;
-        case 10: {
-          RequestToken = input.ReadBytes();
+        case 8: {
+          RequestToken = input.ReadInt32();
           break;
         }
         case 18: {
@@ -2518,28 +2535,29 @@ public sealed partial class CommandResponseMessage : pb::IMessage<CommandRespons
 
   /// <summary>Field number for the "ResponseToken" field.</summary>
   public const int ResponseTokenFieldNumber = 1;
-  private readonly static pb::ByteString ResponseTokenDefaultValue = pb::ByteString.Empty;
+  private readonly static int ResponseTokenDefaultValue = 0;
 
-  private pb::ByteString responseToken_;
+  private int responseToken_;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public pb::ByteString ResponseToken {
-    get { return responseToken_ ?? ResponseTokenDefaultValue; }
+  public int ResponseToken {
+    get { if ((_hasBits0 & 1) != 0) { return responseToken_; } else { return ResponseTokenDefaultValue; } }
     set {
-      responseToken_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      _hasBits0 |= 1;
+      responseToken_ = value;
     }
   }
   /// <summary>Gets whether the "ResponseToken" field is set</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public bool HasResponseToken {
-    get { return responseToken_ != null; }
+    get { return (_hasBits0 & 1) != 0; }
   }
   /// <summary>Clears the value of the "ResponseToken" field</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public void ClearResponseToken() {
-    responseToken_ = null;
+    _hasBits0 &= ~1;
   }
 
   /// <summary>Field number for the "CommandResult" field.</summary>
@@ -2576,9 +2594,9 @@ public sealed partial class CommandResponseMessage : pb::IMessage<CommandRespons
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public int CommandCode {
-    get { if ((_hasBits0 & 1) != 0) { return commandCode_; } else { return CommandCodeDefaultValue; } }
+    get { if ((_hasBits0 & 2) != 0) { return commandCode_; } else { return CommandCodeDefaultValue; } }
     set {
-      _hasBits0 |= 1;
+      _hasBits0 |= 2;
       commandCode_ = value;
     }
   }
@@ -2586,13 +2604,13 @@ public sealed partial class CommandResponseMessage : pb::IMessage<CommandRespons
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public bool HasCommandCode {
-    get { return (_hasBits0 & 1) != 0; }
+    get { return (_hasBits0 & 2) != 0; }
   }
   /// <summary>Clears the value of the "CommandCode" field</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public void ClearCommandCode() {
-    _hasBits0 &= ~1;
+    _hasBits0 &= ~2;
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2642,8 +2660,8 @@ public sealed partial class CommandResponseMessage : pb::IMessage<CommandRespons
     output.WriteRawMessage(this);
   #else
     if (HasResponseToken) {
-      output.WriteRawTag(10);
-      output.WriteBytes(ResponseToken);
+      output.WriteRawTag(8);
+      output.WriteInt32(ResponseToken);
     }
     if (HasCommandResult) {
       output.WriteRawTag(18);
@@ -2664,8 +2682,8 @@ public sealed partial class CommandResponseMessage : pb::IMessage<CommandRespons
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
     if (HasResponseToken) {
-      output.WriteRawTag(10);
-      output.WriteBytes(ResponseToken);
+      output.WriteRawTag(8);
+      output.WriteInt32(ResponseToken);
     }
     if (HasCommandResult) {
       output.WriteRawTag(18);
@@ -2686,7 +2704,7 @@ public sealed partial class CommandResponseMessage : pb::IMessage<CommandRespons
   public int CalculateSize() {
     int size = 0;
     if (HasResponseToken) {
-      size += 1 + pb::CodedOutputStream.ComputeBytesSize(ResponseToken);
+      size += 1 + pb::CodedOutputStream.ComputeInt32Size(ResponseToken);
     }
     if (HasCommandResult) {
       size += 1 + pb::CodedOutputStream.ComputeStringSize(CommandResult);
@@ -2730,8 +2748,8 @@ public sealed partial class CommandResponseMessage : pb::IMessage<CommandRespons
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
           break;
-        case 10: {
-          ResponseToken = input.ReadBytes();
+        case 8: {
+          ResponseToken = input.ReadInt32();
           break;
         }
         case 18: {
@@ -2757,8 +2775,8 @@ public sealed partial class CommandResponseMessage : pb::IMessage<CommandRespons
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
           break;
-        case 10: {
-          ResponseToken = input.ReadBytes();
+        case 8: {
+          ResponseToken = input.ReadInt32();
           break;
         }
         case 18: {
@@ -2784,6 +2802,7 @@ public sealed partial class TestLatencyMessage : pb::IMessage<TestLatencyMessage
 {
   private static readonly pb::MessageParser<TestLatencyMessage> _parser = new pb::MessageParser<TestLatencyMessage>(() => new TestLatencyMessage());
   private pb::UnknownFieldSet _unknownFields;
+  private int _hasBits0;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public static pb::MessageParser<TestLatencyMessage> Parser { get { return _parser; } }
@@ -2811,6 +2830,7 @@ public sealed partial class TestLatencyMessage : pb::IMessage<TestLatencyMessage
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public TestLatencyMessage(TestLatencyMessage other) : this() {
+    _hasBits0 = other._hasBits0;
     requestToken_ = other.requestToken_;
     _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
   }
@@ -2823,28 +2843,29 @@ public sealed partial class TestLatencyMessage : pb::IMessage<TestLatencyMessage
 
   /// <summary>Field number for the "RequestToken" field.</summary>
   public const int RequestTokenFieldNumber = 1;
-  private readonly static pb::ByteString RequestTokenDefaultValue = pb::ByteString.Empty;
+  private readonly static int RequestTokenDefaultValue = 0;
 
-  private pb::ByteString requestToken_;
+  private int requestToken_;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public pb::ByteString RequestToken {
-    get { return requestToken_ ?? RequestTokenDefaultValue; }
+  public int RequestToken {
+    get { if ((_hasBits0 & 1) != 0) { return requestToken_; } else { return RequestTokenDefaultValue; } }
     set {
-      requestToken_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      _hasBits0 |= 1;
+      requestToken_ = value;
     }
   }
   /// <summary>Gets whether the "RequestToken" field is set</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public bool HasRequestToken {
-    get { return requestToken_ != null; }
+    get { return (_hasBits0 & 1) != 0; }
   }
   /// <summary>Clears the value of the "RequestToken" field</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public void ClearRequestToken() {
-    requestToken_ = null;
+    _hasBits0 &= ~1;
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2890,8 +2911,8 @@ public sealed partial class TestLatencyMessage : pb::IMessage<TestLatencyMessage
     output.WriteRawMessage(this);
   #else
     if (HasRequestToken) {
-      output.WriteRawTag(10);
-      output.WriteBytes(RequestToken);
+      output.WriteRawTag(8);
+      output.WriteInt32(RequestToken);
     }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(output);
@@ -2904,8 +2925,8 @@ public sealed partial class TestLatencyMessage : pb::IMessage<TestLatencyMessage
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
     if (HasRequestToken) {
-      output.WriteRawTag(10);
-      output.WriteBytes(RequestToken);
+      output.WriteRawTag(8);
+      output.WriteInt32(RequestToken);
     }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(ref output);
@@ -2918,7 +2939,7 @@ public sealed partial class TestLatencyMessage : pb::IMessage<TestLatencyMessage
   public int CalculateSize() {
     int size = 0;
     if (HasRequestToken) {
-      size += 1 + pb::CodedOutputStream.ComputeBytesSize(RequestToken);
+      size += 1 + pb::CodedOutputStream.ComputeInt32Size(RequestToken);
     }
     if (_unknownFields != null) {
       size += _unknownFields.CalculateSize();
@@ -2950,8 +2971,8 @@ public sealed partial class TestLatencyMessage : pb::IMessage<TestLatencyMessage
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
           break;
-        case 10: {
-          RequestToken = input.ReadBytes();
+        case 8: {
+          RequestToken = input.ReadInt32();
           break;
         }
       }
@@ -2969,8 +2990,8 @@ public sealed partial class TestLatencyMessage : pb::IMessage<TestLatencyMessage
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
           break;
-        case 10: {
-          RequestToken = input.ReadBytes();
+        case 8: {
+          RequestToken = input.ReadInt32();
           break;
         }
       }
@@ -2988,6 +3009,7 @@ public sealed partial class TestLatencyResponseMessage : pb::IMessage<TestLatenc
 {
   private static readonly pb::MessageParser<TestLatencyResponseMessage> _parser = new pb::MessageParser<TestLatencyResponseMessage>(() => new TestLatencyResponseMessage());
   private pb::UnknownFieldSet _unknownFields;
+  private int _hasBits0;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public static pb::MessageParser<TestLatencyResponseMessage> Parser { get { return _parser; } }
@@ -3015,6 +3037,7 @@ public sealed partial class TestLatencyResponseMessage : pb::IMessage<TestLatenc
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public TestLatencyResponseMessage(TestLatencyResponseMessage other) : this() {
+    _hasBits0 = other._hasBits0;
     responseToken_ = other.responseToken_;
     _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
   }
@@ -3027,28 +3050,29 @@ public sealed partial class TestLatencyResponseMessage : pb::IMessage<TestLatenc
 
   /// <summary>Field number for the "ResponseToken" field.</summary>
   public const int ResponseTokenFieldNumber = 1;
-  private readonly static pb::ByteString ResponseTokenDefaultValue = pb::ByteString.Empty;
+  private readonly static int ResponseTokenDefaultValue = 0;
 
-  private pb::ByteString responseToken_;
+  private int responseToken_;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public pb::ByteString ResponseToken {
-    get { return responseToken_ ?? ResponseTokenDefaultValue; }
+  public int ResponseToken {
+    get { if ((_hasBits0 & 1) != 0) { return responseToken_; } else { return ResponseTokenDefaultValue; } }
     set {
-      responseToken_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      _hasBits0 |= 1;
+      responseToken_ = value;
     }
   }
   /// <summary>Gets whether the "ResponseToken" field is set</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public bool HasResponseToken {
-    get { return responseToken_ != null; }
+    get { return (_hasBits0 & 1) != 0; }
   }
   /// <summary>Clears the value of the "ResponseToken" field</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public void ClearResponseToken() {
-    responseToken_ = null;
+    _hasBits0 &= ~1;
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3094,8 +3118,8 @@ public sealed partial class TestLatencyResponseMessage : pb::IMessage<TestLatenc
     output.WriteRawMessage(this);
   #else
     if (HasResponseToken) {
-      output.WriteRawTag(10);
-      output.WriteBytes(ResponseToken);
+      output.WriteRawTag(8);
+      output.WriteInt32(ResponseToken);
     }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(output);
@@ -3108,8 +3132,8 @@ public sealed partial class TestLatencyResponseMessage : pb::IMessage<TestLatenc
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
     if (HasResponseToken) {
-      output.WriteRawTag(10);
-      output.WriteBytes(ResponseToken);
+      output.WriteRawTag(8);
+      output.WriteInt32(ResponseToken);
     }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(ref output);
@@ -3122,7 +3146,7 @@ public sealed partial class TestLatencyResponseMessage : pb::IMessage<TestLatenc
   public int CalculateSize() {
     int size = 0;
     if (HasResponseToken) {
-      size += 1 + pb::CodedOutputStream.ComputeBytesSize(ResponseToken);
+      size += 1 + pb::CodedOutputStream.ComputeInt32Size(ResponseToken);
     }
     if (_unknownFields != null) {
       size += _unknownFields.CalculateSize();
@@ -3154,8 +3178,8 @@ public sealed partial class TestLatencyResponseMessage : pb::IMessage<TestLatenc
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
           break;
-        case 10: {
-          ResponseToken = input.ReadBytes();
+        case 8: {
+          ResponseToken = input.ReadInt32();
           break;
         }
       }
@@ -3173,8 +3197,8 @@ public sealed partial class TestLatencyResponseMessage : pb::IMessage<TestLatenc
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
           break;
-        case 10: {
-          ResponseToken = input.ReadBytes();
+        case 8: {
+          ResponseToken = input.ReadInt32();
           break;
         }
       }
@@ -3192,6 +3216,7 @@ public sealed partial class TestServerTimeMessage : pb::IMessage<TestServerTimeM
 {
   private static readonly pb::MessageParser<TestServerTimeMessage> _parser = new pb::MessageParser<TestServerTimeMessage>(() => new TestServerTimeMessage());
   private pb::UnknownFieldSet _unknownFields;
+  private int _hasBits0;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public static pb::MessageParser<TestServerTimeMessage> Parser { get { return _parser; } }
@@ -3219,6 +3244,7 @@ public sealed partial class TestServerTimeMessage : pb::IMessage<TestServerTimeM
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public TestServerTimeMessage(TestServerTimeMessage other) : this() {
+    _hasBits0 = other._hasBits0;
     requestToken_ = other.requestToken_;
     _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
   }
@@ -3231,28 +3257,29 @@ public sealed partial class TestServerTimeMessage : pb::IMessage<TestServerTimeM
 
   /// <summary>Field number for the "RequestToken" field.</summary>
   public const int RequestTokenFieldNumber = 1;
-  private readonly static pb::ByteString RequestTokenDefaultValue = pb::ByteString.Empty;
+  private readonly static int RequestTokenDefaultValue = 0;
 
-  private pb::ByteString requestToken_;
+  private int requestToken_;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public pb::ByteString RequestToken {
-    get { return requestToken_ ?? RequestTokenDefaultValue; }
+  public int RequestToken {
+    get { if ((_hasBits0 & 1) != 0) { return requestToken_; } else { return RequestTokenDefaultValue; } }
     set {
-      requestToken_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      _hasBits0 |= 1;
+      requestToken_ = value;
     }
   }
   /// <summary>Gets whether the "RequestToken" field is set</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public bool HasRequestToken {
-    get { return requestToken_ != null; }
+    get { return (_hasBits0 & 1) != 0; }
   }
   /// <summary>Clears the value of the "RequestToken" field</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public void ClearRequestToken() {
-    requestToken_ = null;
+    _hasBits0 &= ~1;
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3298,8 +3325,8 @@ public sealed partial class TestServerTimeMessage : pb::IMessage<TestServerTimeM
     output.WriteRawMessage(this);
   #else
     if (HasRequestToken) {
-      output.WriteRawTag(10);
-      output.WriteBytes(RequestToken);
+      output.WriteRawTag(8);
+      output.WriteInt32(RequestToken);
     }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(output);
@@ -3312,8 +3339,8 @@ public sealed partial class TestServerTimeMessage : pb::IMessage<TestServerTimeM
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
     if (HasRequestToken) {
-      output.WriteRawTag(10);
-      output.WriteBytes(RequestToken);
+      output.WriteRawTag(8);
+      output.WriteInt32(RequestToken);
     }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(ref output);
@@ -3326,7 +3353,7 @@ public sealed partial class TestServerTimeMessage : pb::IMessage<TestServerTimeM
   public int CalculateSize() {
     int size = 0;
     if (HasRequestToken) {
-      size += 1 + pb::CodedOutputStream.ComputeBytesSize(RequestToken);
+      size += 1 + pb::CodedOutputStream.ComputeInt32Size(RequestToken);
     }
     if (_unknownFields != null) {
       size += _unknownFields.CalculateSize();
@@ -3358,8 +3385,8 @@ public sealed partial class TestServerTimeMessage : pb::IMessage<TestServerTimeM
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
           break;
-        case 10: {
-          RequestToken = input.ReadBytes();
+        case 8: {
+          RequestToken = input.ReadInt32();
           break;
         }
       }
@@ -3377,8 +3404,8 @@ public sealed partial class TestServerTimeMessage : pb::IMessage<TestServerTimeM
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
           break;
-        case 10: {
-          RequestToken = input.ReadBytes();
+        case 8: {
+          RequestToken = input.ReadInt32();
           break;
         }
       }
@@ -3438,28 +3465,29 @@ public sealed partial class TestServerTimeResponseMessage : pb::IMessage<TestSer
 
   /// <summary>Field number for the "ResponseToken" field.</summary>
   public const int ResponseTokenFieldNumber = 1;
-  private readonly static pb::ByteString ResponseTokenDefaultValue = pb::ByteString.Empty;
+  private readonly static int ResponseTokenDefaultValue = 0;
 
-  private pb::ByteString responseToken_;
+  private int responseToken_;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public pb::ByteString ResponseToken {
-    get { return responseToken_ ?? ResponseTokenDefaultValue; }
+  public int ResponseToken {
+    get { if ((_hasBits0 & 1) != 0) { return responseToken_; } else { return ResponseTokenDefaultValue; } }
     set {
-      responseToken_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      _hasBits0 |= 1;
+      responseToken_ = value;
     }
   }
   /// <summary>Gets whether the "ResponseToken" field is set</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public bool HasResponseToken {
-    get { return responseToken_ != null; }
+    get { return (_hasBits0 & 1) != 0; }
   }
   /// <summary>Clears the value of the "ResponseToken" field</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public void ClearResponseToken() {
-    responseToken_ = null;
+    _hasBits0 &= ~1;
   }
 
   /// <summary>Field number for the "Time" field.</summary>
@@ -3470,9 +3498,9 @@ public sealed partial class TestServerTimeResponseMessage : pb::IMessage<TestSer
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public long Time {
-    get { if ((_hasBits0 & 1) != 0) { return time_; } else { return TimeDefaultValue; } }
+    get { if ((_hasBits0 & 2) != 0) { return time_; } else { return TimeDefaultValue; } }
     set {
-      _hasBits0 |= 1;
+      _hasBits0 |= 2;
       time_ = value;
     }
   }
@@ -3480,13 +3508,13 @@ public sealed partial class TestServerTimeResponseMessage : pb::IMessage<TestSer
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public bool HasTime {
-    get { return (_hasBits0 & 1) != 0; }
+    get { return (_hasBits0 & 2) != 0; }
   }
   /// <summary>Clears the value of the "Time" field</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public void ClearTime() {
-    _hasBits0 &= ~1;
+    _hasBits0 &= ~2;
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3534,8 +3562,8 @@ public sealed partial class TestServerTimeResponseMessage : pb::IMessage<TestSer
     output.WriteRawMessage(this);
   #else
     if (HasResponseToken) {
-      output.WriteRawTag(10);
-      output.WriteBytes(ResponseToken);
+      output.WriteRawTag(8);
+      output.WriteInt32(ResponseToken);
     }
     if (HasTime) {
       output.WriteRawTag(16);
@@ -3552,8 +3580,8 @@ public sealed partial class TestServerTimeResponseMessage : pb::IMessage<TestSer
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
     if (HasResponseToken) {
-      output.WriteRawTag(10);
-      output.WriteBytes(ResponseToken);
+      output.WriteRawTag(8);
+      output.WriteInt32(ResponseToken);
     }
     if (HasTime) {
       output.WriteRawTag(16);
@@ -3570,7 +3598,7 @@ public sealed partial class TestServerTimeResponseMessage : pb::IMessage<TestSer
   public int CalculateSize() {
     int size = 0;
     if (HasResponseToken) {
-      size += 1 + pb::CodedOutputStream.ComputeBytesSize(ResponseToken);
+      size += 1 + pb::CodedOutputStream.ComputeInt32Size(ResponseToken);
     }
     if (HasTime) {
       size += 1 + pb::CodedOutputStream.ComputeInt64Size(Time);
@@ -3608,8 +3636,8 @@ public sealed partial class TestServerTimeResponseMessage : pb::IMessage<TestSer
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
           break;
-        case 10: {
-          ResponseToken = input.ReadBytes();
+        case 8: {
+          ResponseToken = input.ReadInt32();
           break;
         }
         case 16: {
@@ -3631,8 +3659,8 @@ public sealed partial class TestServerTimeResponseMessage : pb::IMessage<TestSer
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
           break;
-        case 10: {
-          ResponseToken = input.ReadBytes();
+        case 8: {
+          ResponseToken = input.ReadInt32();
           break;
         }
         case 16: {

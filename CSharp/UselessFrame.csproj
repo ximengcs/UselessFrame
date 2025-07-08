@@ -17,6 +17,15 @@
     <Reference Include="IdGen">
       <HintPath>..\Dlls\IdGen.dll</HintPath>
     </Reference>
+    <Reference Include="MemoryPack">
+      <HintPath>..\Dlls\MemoryPack.dll</HintPath>
+    </Reference>
+    <Reference Include="MemoryPack.Core">
+      <HintPath>..\Dlls\MemoryPack.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="MemoryPack.Generator">
+      <HintPath>..\Dlls\MemoryPack.Generator.dll</HintPath>
+    </Reference>
     <Reference Include="QuadTrees">
       <HintPath>..\Dlls\QuadTrees.dll</HintPath>
     </Reference>
@@ -25,6 +34,9 @@
     </Reference>
     <Reference Include="UniTask">
       <HintPath>..\Dlls\UniTask.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mathematics">
+      <HintPath>..\Dlls\Unity.Mathematics.dll</HintPath>
     </Reference>
   </ItemGroup>
 

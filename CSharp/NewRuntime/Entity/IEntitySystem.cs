@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace UselessFrame.NewRuntime.Entity
+namespace UselessFrame.NewRuntime.Entities
 {
-    internal class EntityManager
+    public interface IEntitySystem
     {
     }
 }

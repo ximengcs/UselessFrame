@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using static UselessFrame.Net.NetUtility;
 using UselessFrame.NewRuntime;
 using System.Threading;
+using UselessFrame.NewRuntime.Utilities;
 
 namespace UselessFrame.Net
 {
@@ -17,14 +18,14 @@ namespace UselessFrame.Net
                 private CancellationTokenSource _cancellationTokenSource;
                 private AutoResetUniTaskCompletionSource<ReadMessageResult> _responseTaskSource;
 
-                public readonly Guid Id;
+                public readonly int Id;
                 public readonly bool HasResponse;
 
                 public UniTask<ReadMessageResult> ResponseTask => _responseTaskSource.Task;
 
                 public WaitResponseHandle(IMessage requestMessage)
                 {
-                    Id = Guid.NewGuid();
+                    Id = RandomUtility.NextInt();
                     HasResponse = true;
                     MessageTypeInfo typeInfo = NetUtility.GetMessageTypeInfo(requestMessage);
                     typeInfo.SetRequestToken(requestMessage, Id);

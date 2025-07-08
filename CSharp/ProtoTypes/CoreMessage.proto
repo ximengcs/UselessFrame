@@ -1,23 +1,23 @@
 
 message TestConnect
 {
-    required bytes RequestToken = 1;
+    required int32 RequestToken = 1;
     required int64 Time = 2;
 }
 
 message TestConnectResponse
 {
-    required bytes ResponseToken = 1;
+    required int32 ResponseToken = 1;
 }
 
 message CloseRequest
 {
-    required bytes RequestToken = 1;
+    required int32 RequestToken = 1;
 }
 
 message CloseResponse
 {
-    required bytes ResponseToken = 1;
+    required int32 ResponseToken = 1;
 }
 
 message ServerTokenRequest
@@ -27,12 +27,12 @@ message ServerTokenRequest
 message ServerToken
 {
     required int64 Id = 1;
-    required bytes RequestToken = 2;
+    required int32 RequestToken = 2;
 }
 
 message ServerTokenVerify
 {
-    required bytes ResponseToken = 1;
+    required int32 ResponseToken = 1;
 }
 
 message MessageTarget
@@ -53,34 +53,34 @@ message KeepAlive
 
 message CommandMessage
 {
-    required bytes RequestToken = 1;
+    required int32 RequestToken = 1;
     required string CommandStr = 2;
 }
 
 message CommandResponseMessage
 {
-    required bytes ResponseToken = 1;
+    required int32 ResponseToken = 1;
     required string CommandResult = 2;
     required int32 CommandCode = 3;
 }
 
 message TestLatencyMessage
 {
-    required bytes RequestToken = 1;
+    required int32 RequestToken = 1;
 }
 
 message TestLatencyResponseMessage
 {
-    required bytes ResponseToken = 1;
+    required int32 ResponseToken = 1;
 }
 
 message TestServerTimeMessage
 {
-    required bytes RequestToken = 1;
+    required int32 RequestToken = 1;
 }
 
 message TestServerTimeResponseMessage
 {
-    required bytes ResponseToken = 1;
+    required int32 ResponseToken = 1;
     required int64 Time = 2;
 }

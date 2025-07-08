@@ -10,7 +10,7 @@ namespace UselessFrame.Net
     public struct MessageResult
     {
         private AutoResetUniTaskCompletionSource<IMessage> _responseTaskSource;
-        private Guid _token;
+        private int _token;
         private Connection _connection;
         private IMessage _message;
         private Type _messageType;
@@ -43,7 +43,7 @@ namespace UselessFrame.Net
             }
             else
             {
-                result._token = Guid.Empty;
+                result._token = 0;
                 result._responseTaskSource = null;
                 result._requireResponse = false;
             }

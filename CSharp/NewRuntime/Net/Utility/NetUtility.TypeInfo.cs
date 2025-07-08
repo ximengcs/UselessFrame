@@ -43,22 +43,20 @@ namespace UselessFrame.Net
                 EnsureResponseToken();
             }
 
-            public Guid GetResponseToken(IMessage message)
+            public int GetResponseToken(IMessage message)
             {
                 if (_responseTokenFiled == null)
-                    return Guid.Empty;
+                    return 0;
 
-                ByteString value = (ByteString)_responseTokenFiled.GetValue(message);
-                return new Guid(value.Span);
+                return (int)_responseTokenFiled.GetValue(message);
             }
 
-            public void SetResponseToken(IMessage message, Guid token)
+            public void SetResponseToken(IMessage message, int token)
             {
                 if (_responseTokenFiled == null)
                     return;
 
-                ByteString bytes = ByteString.CopyFrom(token.ToByteArray());
-                _responseTokenFiled.SetValue(message, bytes);
+                _responseTokenFiled.SetValue(message, token);
             }
 
             private void EnsureResponseToken()
@@ -78,22 +76,20 @@ namespace UselessFrame.Net
                 }
             }
 
-            public Guid GetRequestToken(IMessage message)
+            public int GetRequestToken(IMessage message)
             {
                 if (_requestTokenFiled == null)
-                    return Guid.Empty;
+                    return 0;
 
-                ByteString value = (ByteString)_requestTokenFiled.GetValue(message);
-                return new Guid(value.Span);
+                return (int)_requestTokenFiled.GetValue(message);
             }
 
-            public void SetRequestToken(IMessage message, Guid token)
+            public void SetRequestToken(IMessage message, int token)
             {
                 if (_requestTokenFiled == null)
                     return;
 
-                ByteString bytes = ByteString.CopyFrom(token.ToByteArray());
-                _requestTokenFiled.SetValue(message, bytes);
+                _requestTokenFiled.SetValue(message, token);
             }
 
             private void EnsureRequestToken()

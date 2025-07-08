@@ -12,14 +12,14 @@ namespace UselessFrame.Net
             private Connection _connection;
             private ConnectionSetting _setting;
             private CancellationToken _disposeToken;
-            private Dictionary<Guid, WaitResponseHandle> _waitResponseList;
+            private Dictionary<int, WaitResponseHandle> _waitResponseList;
 
             public MessageStream(Connection connection, CancellationToken disposeToken)
             {
                 _disposeToken = disposeToken;
                 _connection = connection;
                 _setting = connection.GetRuntimeData<ConnectionSetting>();
-                _waitResponseList = new Dictionary<Guid, WaitResponseHandle>();
+                _waitResponseList = new Dictionary<int, WaitResponseHandle>();
             }
 
             public void CancelAllWait()
