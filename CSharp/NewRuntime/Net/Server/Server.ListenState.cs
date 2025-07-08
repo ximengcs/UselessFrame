@@ -36,7 +36,7 @@ namespace UselessFrame.Net
                     {
                         case NetOperateState.OK:
                             {
-                                Connection connection = new Connection(_connection, Guid.NewGuid(), result.Client, _connection._fiber);
+                                Connection connection = new Connection(_connection, _connection._idGenerator.CreateId(), result.Client, _connection._fiber);
                                 _connection.AddConnection(connection);
                                 X.SystemLog.Debug($"{DebugPrefix}add new client, id : {connection.Id}, ip : {connection.RemoteIP}");
                                 _listening = true;

@@ -1,12 +1,15 @@
 ﻿
 using Cysharp.Threading.Tasks;
+using IdGen;
 using System;
-using System.Net;
-using System.Text;
-using System.Net.Sockets;
-using UselessFrame.NewRuntime;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
+using System.Reflection.Emit;
+using System.Text;
+using UselessFrame.NewRuntime;
 using UselessFrame.NewRuntime.Fiber;
+using UselessFrame.NewRuntime.Utilities;
 using UselessFrame.Runtime.Observable;
 
 namespace UselessFrame.Net
@@ -15,16 +18,17 @@ namespace UselessFrame.Net
     {
         private bool _disposed;
         private bool _start;
-        private Guid _id;
+        private long _id;
         private IPEndPoint _host;
         private TcpListener _listener;
         private NetFsm<Server> _fsm;
         private IFiber _fiber;
-        private Dictionary<Guid, Connection> _connections;
+        private Dictionary<long, Connection> _connections;
         private ISubject<IServer, ServerState> _state;
         private Action<IConnection> _onConnectionListChange;
+        private IdGenerator _idGenerator;
 
-        public Guid Id => _id;
+        public long Id => _id;
 
         public IPEndPoint Host => _host;
 
@@ -47,13 +51,14 @@ namespace UselessFrame.Net
 
         public IReadOnlyList<IConnection> Connections => new List<IConnection>(_connections.Values);
 
-        public Server(int port, IFiber fiber)
+        public Server(long id, int port, IFiber fiber)
         {
             _fiber = fiber;
             _disposed = false;
-            _id = Guid.NewGuid();
+            _id = id;
+            _idGenerator = new IdGenerator(0, new IdGeneratorOptions(timeSource : new TimeTicksSource()));
             _state = new ValueSubject<IServer, ServerState>(this, fiber, ServerState.None);
-            _connections = new Dictionary<Guid, Connection>();
+            _connections = new Dictionary<long, Connection>();
             _host = new IPEndPoint(NetUtility.GetLocalIPAddress(), port);
             _listener = new TcpListener(_host);
             _fsm = new NetFsm<Server>(this, new Dictionary<Type, NetFsmState<Server>>()
@@ -65,7 +70,7 @@ namespace UselessFrame.Net
             });
         }
 
-        public IConnection GetConnection(Guid id)
+        public IConnection GetConnection(long id)
         {
             if (_connections.TryGetValue(id, out var connection)) return connection;
             return null;

@@ -27,7 +27,7 @@ public static partial class CoreMessageReflection {
           "bnNlEhUKDVJlc3BvbnNlVG9rZW4YASACKAwiJAoMQ2xvc2VSZXF1ZXN0EhQK",
           "DFJlcXVlc3RUb2tlbhgBIAIoDCImCg1DbG9zZVJlc3BvbnNlEhUKDVJlc3Bv",
           "bnNlVG9rZW4YASACKAwiFAoSU2VydmVyVG9rZW5SZXF1ZXN0Ii8KC1NlcnZl",
-          "clRva2VuEgoKAklkGAEgAigMEhQKDFJlcXVlc3RUb2tlbhgCIAIoDCIqChFT",
+          "clRva2VuEgoKAklkGAEgAigDEhQKDFJlcXVlc3RUb2tlbhgCIAIoDCIqChFT",
           "ZXJ2ZXJUb2tlblZlcmlmeRIVCg1SZXNwb25zZVRva2VuGAEgAigMIi0KDU1l",
           "c3NhZ2VUYXJnZXQSDQoFV29ybGQYAiACKAUSDQoFU2NlbmUYAyACKAUiQAoN",
           "U3RyaW5nTWVzc2FnZRIeCgZUYXJnZXQYASACKAsyDi5NZXNzYWdlVGFyZ2V0",
@@ -1096,6 +1096,7 @@ public sealed partial class ServerToken : pb::IMessage<ServerToken>
 {
   private static readonly pb::MessageParser<ServerToken> _parser = new pb::MessageParser<ServerToken>(() => new ServerToken());
   private pb::UnknownFieldSet _unknownFields;
+  private int _hasBits0;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public static pb::MessageParser<ServerToken> Parser { get { return _parser; } }
@@ -1123,6 +1124,7 @@ public sealed partial class ServerToken : pb::IMessage<ServerToken>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public ServerToken(ServerToken other) : this() {
+    _hasBits0 = other._hasBits0;
     id_ = other.id_;
     requestToken_ = other.requestToken_;
     _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -1136,28 +1138,29 @@ public sealed partial class ServerToken : pb::IMessage<ServerToken>
 
   /// <summary>Field number for the "Id" field.</summary>
   public const int IdFieldNumber = 1;
-  private readonly static pb::ByteString IdDefaultValue = pb::ByteString.Empty;
+  private readonly static long IdDefaultValue = 0L;
 
-  private pb::ByteString id_;
+  private long id_;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public pb::ByteString Id {
-    get { return id_ ?? IdDefaultValue; }
+  public long Id {
+    get { if ((_hasBits0 & 1) != 0) { return id_; } else { return IdDefaultValue; } }
     set {
-      id_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      _hasBits0 |= 1;
+      id_ = value;
     }
   }
   /// <summary>Gets whether the "Id" field is set</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public bool HasId {
-    get { return id_ != null; }
+    get { return (_hasBits0 & 1) != 0; }
   }
   /// <summary>Clears the value of the "Id" field</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public void ClearId() {
-    id_ = null;
+    _hasBits0 &= ~1;
   }
 
   /// <summary>Field number for the "RequestToken" field.</summary>
@@ -1231,8 +1234,8 @@ public sealed partial class ServerToken : pb::IMessage<ServerToken>
     output.WriteRawMessage(this);
   #else
     if (HasId) {
-      output.WriteRawTag(10);
-      output.WriteBytes(Id);
+      output.WriteRawTag(8);
+      output.WriteInt64(Id);
     }
     if (HasRequestToken) {
       output.WriteRawTag(18);
@@ -1249,8 +1252,8 @@ public sealed partial class ServerToken : pb::IMessage<ServerToken>
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
     if (HasId) {
-      output.WriteRawTag(10);
-      output.WriteBytes(Id);
+      output.WriteRawTag(8);
+      output.WriteInt64(Id);
     }
     if (HasRequestToken) {
       output.WriteRawTag(18);
@@ -1267,7 +1270,7 @@ public sealed partial class ServerToken : pb::IMessage<ServerToken>
   public int CalculateSize() {
     int size = 0;
     if (HasId) {
-      size += 1 + pb::CodedOutputStream.ComputeBytesSize(Id);
+      size += 1 + pb::CodedOutputStream.ComputeInt64Size(Id);
     }
     if (HasRequestToken) {
       size += 1 + pb::CodedOutputStream.ComputeBytesSize(RequestToken);
@@ -1305,8 +1308,8 @@ public sealed partial class ServerToken : pb::IMessage<ServerToken>
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
           break;
-        case 10: {
-          Id = input.ReadBytes();
+        case 8: {
+          Id = input.ReadInt64();
           break;
         }
         case 18: {
@@ -1328,8 +1331,8 @@ public sealed partial class ServerToken : pb::IMessage<ServerToken>
         default:
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
           break;
-        case 10: {
-          Id = input.ReadBytes();
+        case 8: {
+          Id = input.ReadInt64();
           break;
         }
         case 18: {

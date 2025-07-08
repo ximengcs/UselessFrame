@@ -1,14 +1,23 @@
-﻿using System.Net;
+﻿using IdGen;
+using System.Net;
 using UselessFrame.NewRuntime;
 using UselessFrame.NewRuntime.Fiber;
+using UselessFrame.NewRuntime.Utilities;
 
 namespace UselessFrame.Net
 {
     public partial interface IServer
     {
+        private static IdGenerator _idGenerator;
+
         public static IServer Create(int port, IFiber fiber)
         {
-            IServer server = new Server(port, fiber);
+            if (_idGenerator == null)
+            {
+                IdGeneratorOptions opt = new IdGeneratorOptions(timeSource: new TimeTicksSource());
+                _idGenerator = new IdGenerator(0, opt);
+            }
+            IServer server = new Server(_idGenerator.CreateId(), port, fiber);
             X.RegisterServer(server);
             return server;
         }

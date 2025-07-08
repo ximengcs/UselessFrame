@@ -10,8 +10,6 @@ namespace UselessFrame.Net
         {
             public override int State => (int)ConnectionState.TokenVerify;
 
-            private Guid _token = Guid.Empty;
-
             public override void OnEnter(NetFsmState<Connection> preState, MessageResult passMessage)
             {
                 base.OnEnter(preState, passMessage);
@@ -21,10 +19,7 @@ namespace UselessFrame.Net
             private async UniTask Verify()
             {
                 AsyncBegin();
-
-                ServerToken token = NetUtility.CreateToken(_connection._id);
-                if (_token == Guid.Empty)
-                    _token = new Guid(token.Id.Span);
+                ServerToken token = NetUtility.CreateToken(_connection.Id);
                 X.SystemLog.Debug($"{DebugPrefix}send verify token");
                 _connection._stream.StartRead();
                 ReadMessageResult result = await _connection._stream.SendWait(token, true);

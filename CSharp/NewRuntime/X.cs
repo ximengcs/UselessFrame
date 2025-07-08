@@ -18,8 +18,10 @@ namespace UselessFrame.NewRuntime
         private static ILogManager _logManager;
         private static IFiberManager _fiberManager;
         private static CommandManager _commandManager;
-        private static Dictionary<Guid, IServer> _servers;
-        private static Dictionary<Guid, IConnection> _connections;
+        private static Dictionary<long, IServer> _servers;
+        private static Dictionary<long, IConnection> _connections;
+
+        public readonly static long Seed = DateTime.UtcNow.Ticks;
 
         public static ITypeManager Type => _typeManager;
 
@@ -44,8 +46,8 @@ namespace UselessFrame.NewRuntime
             _fiberManager = new FiberManager();
             _worldManager = new WorldManager();
             _mainFiber = new MainFiber();
-            _servers = new Dictionary<Guid, IServer>();
-            _connections = new Dictionary<Guid, IConnection>();
+            _servers = new Dictionary<long, IServer>();
+            _connections = new Dictionary<long, IConnection>();
             _commandManager = new CommandManager();
             NetPoolUtility.InitializePool();
         }
@@ -70,7 +72,7 @@ namespace UselessFrame.NewRuntime
             _servers.Clear();
         }
 
-        public static IServer GetServer(Guid id)
+        public static IServer GetServer(long id)
         {
             if (_servers.TryGetValue(id, out IServer server))
                 return server;

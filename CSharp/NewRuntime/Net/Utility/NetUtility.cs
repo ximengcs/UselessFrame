@@ -80,18 +80,13 @@ namespace UselessFrame.Net
             }
         }
 
-        internal static ServerToken CreateToken(Guid guid)
+        internal static ServerToken CreateToken(long id)
         {
             ServerToken token = new ServerToken()
             {
-                Id = ByteString.CopyFrom(guid.ToByteArray())
+                Id = id
             };
             return token;
-        }
-
-        internal static Guid GetId(this ServerToken token)
-        {
-            return new Guid(token.Id.Memory.Span);
         }
 
         public static IPEndPoint GetLocalIPEndPoint(int port, AddressFamily addressFamily = AddressFamily.InterNetwork)

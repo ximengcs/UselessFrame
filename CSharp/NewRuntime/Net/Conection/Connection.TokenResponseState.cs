@@ -94,8 +94,8 @@ namespace UselessFrame.Net
 
             private async UniTask<bool> SuccessHandler(MessageResult result)
             {
-                ServerToken token = result.Message as ServerToken;
-                _connection._id = token.GetId();
+                ServerToken token = (ServerToken)result.Message;
+                _connection._id = token.Id;
                 _connection._dataFiber.Post(ToFiberFun.RegisteConnection, _connection);
                 X.SystemLog.Debug($"{DebugPrefix}receive server token {_connection._id}");
                 bool success = await result.Response(new ServerTokenVerify() { ResponseToken = token.RequestToken });

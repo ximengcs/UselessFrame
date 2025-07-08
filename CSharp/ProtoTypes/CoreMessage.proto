@@ -26,7 +26,7 @@ message ServerTokenRequest
 
 message ServerToken
 {
-    required bytes Id = 1;
+    required int64 Id = 1;
     required bytes RequestToken = 2;
 }
 

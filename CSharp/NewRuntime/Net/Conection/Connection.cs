@@ -16,7 +16,7 @@ namespace UselessFrame.Net
 {
     internal partial class Connection : IConnection, INetStateTrigger
     {
-        private Guid _id;
+        private long _id;
         private IFiber _runFiber;
         private IFiber _dataFiber;
         private TcpClient _client;
@@ -38,7 +38,7 @@ namespace UselessFrame.Net
 
         public DateTime RemoteTime => DateTime.UtcNow.AddTicks(_serverTimeGap);
 
-        public Guid Id => _id;
+        public long Id => _id;
 
         public IPEndPoint LocalIP => _localIP;
 
@@ -55,7 +55,7 @@ namespace UselessFrame.Net
         public string GetDebugPrefix<T>(NetFsmState<T> state) where T : INetStateTrigger
         {
             StringBuilder sb = new StringBuilder();
-            if (_id != Guid.Empty)
+            if (_id != 0)
                 sb.Append($"[ID:{_id}]");
             if (_localIP != null)
                 sb.Append($"[L:{_localIP}]");
@@ -66,7 +66,7 @@ namespace UselessFrame.Net
             return sb.ToString();
         }
 
-        public Connection(Server server, Guid id, TcpClient client, IFiber fiber)
+        public Connection(Server server, long id, TcpClient client, IFiber fiber)
         {
             _disposeTokenSource = new CancellationTokenSource();
             _runtimeData = new Dictionary<Type, object>()
@@ -104,7 +104,7 @@ namespace UselessFrame.Net
             {
                 { typeof(ConnectionSetting), new ConnectionSetting() }
             };
-            _id = Guid.Empty;
+            _id = 0L;
             _dataFiber = fiber;
             _pool = new ByteBufferPool();
             _state = new ValueSubject<IConnection, ConnectionState>(this, fiber, ConnectionState.None);

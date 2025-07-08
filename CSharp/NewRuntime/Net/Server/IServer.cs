@@ -8,7 +8,7 @@ namespace UselessFrame.Net
 {
     public partial interface IServer
     {
-        Guid Id { get; }
+        long Id { get; }
 
         IPEndPoint Host { get; }
 
@@ -18,7 +18,7 @@ namespace UselessFrame.Net
 
         IReadOnlyList<IConnection> Connections { get; }
 
-        IConnection GetConnection(Guid id);
+        IConnection GetConnection(long id);
 
         void Start();
 

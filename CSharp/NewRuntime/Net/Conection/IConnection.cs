@@ -9,7 +9,7 @@ namespace UselessFrame.Net
 {
     public interface IConnection
     {
-        Guid Id { get; }
+        long Id { get; }
 
         IPEndPoint LocalIP { get; }
 
