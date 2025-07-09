@@ -4,7 +4,7 @@ using UselessFrame.NewRuntime.Router;
 using UselessFrame.NewRuntime.Scene;
 using UselessFrame.NewRuntime.World;
 
-namespace UselessFrame.NewRuntime
+namespace UselessFrame.NewRuntime.Worlds
 {
     public class WorldManager : IWorldManager
     {

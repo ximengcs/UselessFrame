@@ -1,6 +1,6 @@
 ﻿using UselessFrame.NewRuntime.Router;
 
-namespace UselessFrame.NewRuntime.World
+namespace UselessFrame.NewRuntime.Worlds
 {
     public interface IWorldManager : IRouter
     {

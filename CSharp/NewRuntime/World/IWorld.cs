@@ -2,7 +2,7 @@
 using UselessFrame.NewRuntime.Router;
 using UselessFrame.NewRuntime.Scene;
 
-namespace UselessFrame.NewRuntime.World
+namespace UselessFrame.NewRuntime.Worlds
 {
     public interface IWorld : IRouter
     {

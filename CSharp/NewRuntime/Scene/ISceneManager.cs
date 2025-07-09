@@ -1,7 +1,7 @@
 ﻿
 using UselessFrame.NewRuntime.Router;
 
-namespace UselessFrame.NewRuntime.Scene
+namespace UselessFrame.NewRuntime.Scenes
 {
     public interface ISceneManager : IRouter
     {

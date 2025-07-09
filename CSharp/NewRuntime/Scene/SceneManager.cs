@@ -1,5 +1,5 @@
 ﻿
-namespace UselessFrame.NewRuntime.Scene
+namespace UselessFrame.NewRuntime.Scenes
 {
     internal class SceneManager
     {

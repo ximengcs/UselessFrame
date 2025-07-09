@@ -1,5 +1,5 @@
 ﻿
-namespace UselessFrame.NewRuntime.World
+namespace UselessFrame.NewRuntime.Worlds
 {
     public enum WorldType
     {
