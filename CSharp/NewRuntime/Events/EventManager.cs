@@ -14,6 +14,11 @@ namespace UselessFrame.NewRuntime.Events
             _awakeSystems = new Dictionary<Type, List<IAwakeSystem>>();
         }
 
+        public void Trigger(IComponent comp, params object[] objects)
+        {
+
+        }
+
         public void TriggerComponentAwake(IComponent comp)
         {
             Type type = comp.GetType();
