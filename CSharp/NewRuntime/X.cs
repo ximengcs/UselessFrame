@@ -7,7 +7,7 @@ using UselessFrame.Net;
 using UselessFrame.NewRuntime.Commands;
 using UselessFrame.NewRuntime.Fiber;
 using UselessFrame.NewRuntime.Utilities;
-using UselessFrame.NewRuntime.World;
+using UselessFrame.NewRuntime.Worlds;
 
 namespace UselessFrame.NewRuntime
 {

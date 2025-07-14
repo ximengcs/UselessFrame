@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace UselessFrame.NewRuntime.Entity.Net.Components
+namespace UselessFrame.NewRuntime.Scenes
 {
     internal class EntitySyncComponent
     {

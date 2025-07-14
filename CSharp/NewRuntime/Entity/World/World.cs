@@ -1,10 +1,29 @@
 ﻿
+using IdGen;
+using System.Collections.Generic;
+using UselessFrame.NewRuntime.Entities;
 using UselessFrame.NewRuntime.Events;
+using UselessFrame.NewRuntime.Scenes;
+using UselessFrame.NewRuntime.Utilities;
 
 namespace UselessFrame.NewRuntime.Worlds
 {
-    internal class World
+    public class World : Entity
     {
-        public EventManager Event {  get; set; }
+        private Dictionary<long, Scene> _scenes;
+        private IdGenerator _idGenerator;
+        private EventManager _event;
+
+        public IdGenerator IdGen => _idGenerator;
+
+        public EventManager Event => _event;
+
+        protected override void OnInit()
+        {
+            base.OnInit();
+            _scenes = new Dictionary<long, Scene>();
+            _idGenerator = new IdGenerator(0, new IdGeneratorOptions(timeSource: new TimeTicksSource()));
+            _event = new EventManager();
+        }
     }
 }

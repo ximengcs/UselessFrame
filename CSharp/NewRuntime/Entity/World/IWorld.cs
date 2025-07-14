@@ -1,6 +1,6 @@
 ﻿
 using UselessFrame.NewRuntime.Router;
-using UselessFrame.NewRuntime.Scene;
+using UselessFrame.NewRuntime.Scenes;
 
 namespace UselessFrame.NewRuntime.Worlds
 {

@@ -1,8 +1,7 @@
 ﻿
 namespace UselessFrame.NewRuntime.Entities
 {
-    public interface IComponent
+    public class ClientNetComponent : Component
     {
-        int Type { get; }
     }
 }

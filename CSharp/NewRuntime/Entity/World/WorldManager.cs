@@ -1,33 +1,32 @@
-﻿
-using Google.Protobuf;
-using UselessFrame.NewRuntime.Router;
-using UselessFrame.NewRuntime.Scene;
-using UselessFrame.NewRuntime.World;
+﻿using System.Collections.Generic;
+using UselessFrame.NewRuntime.Entities;
 
 namespace UselessFrame.NewRuntime.Worlds
 {
-    public class WorldManager : IWorldManager
+    public class WorldManager
     {
-        public ISceneManager Scene => throw new System.NotImplementedException();
+        private List<World> _worldList;
 
-        public IRouter Add()
+        public WorldManager()
         {
-            throw new System.NotImplementedException();
+            _worldList = new List<World>();
         }
 
-        public void Broadcast(IMessage message)
+        public World Create(IEntityHelper helper)
         {
-            throw new System.NotImplementedException();
+            World world = new World();
+            _worldList.Add(world);
+            world.Init(helper);
+            return world;
         }
 
-        public IWorld GetWorld(int worldId)
+        public void Destroy(World world)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public void Remove(IRouter router)
-        {
-            throw new System.NotImplementedException();
+            if (_worldList.Contains(world))
+            {
+                _worldList.Remove(world);
+                world.Destroy();
+            }
         }
     }
 }

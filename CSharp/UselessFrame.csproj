@@ -23,7 +23,7 @@
 		<Reference Include="MemoryPack.Core">
 			<HintPath>..\Dlls\MemoryPack.Core.dll</HintPath>
 		</Reference>
-		<Analyzer Include="..\Dlls\MemoryPack.Generator.dll"/>
+		<Analyzer Include="..\Dlls\MemoryPack.Generator.dll" />
 		<Reference Include="QuadTrees">
 			<HintPath>..\Dlls\QuadTrees.dll</HintPath>
 		</Reference>

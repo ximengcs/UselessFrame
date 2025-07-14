@@ -4,6 +4,6 @@ namespace UselessFrame.NewRuntime.Entities
 {
     public interface ISystem
     {
-        void Run(IComponent comp);
+        void Run(Component comp);
     }
 }
