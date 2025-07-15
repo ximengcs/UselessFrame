@@ -13,6 +13,8 @@ namespace UselessFrame.NewRuntime.Scenes
 
         public World World => (World)Parent;
 
+        public IReadOnlyCollection<Entity> Entities => _entitiesRefId.Values;
+
         protected override void OnInit()
         {
             base.OnInit();

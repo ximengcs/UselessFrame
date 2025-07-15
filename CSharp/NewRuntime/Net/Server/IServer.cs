@@ -1,4 +1,5 @@
 ﻿
+using Google.Protobuf;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -23,5 +24,7 @@ namespace UselessFrame.Net
         void Start();
 
         void Close();
+
+        void Broadcast(IMessage message);
     }
 }

@@ -1,30 +1,38 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using UselessFrame.Net;
 using UselessFrame.NewRuntime.Entities;
+using UselessFrame.NewRuntime.Scenes;
 
 namespace UselessFrame.NewRuntime.Worlds
 {
     public class WorldManager
     {
-        private List<World> _worldList;
+        private IWorldHelper _helper;
+        private Dictionary<long, World> _worldList;
+
+        public IWorldHelper Helper => _helper;
 
         public WorldManager()
         {
-            _worldList = new List<World>();
+            _worldList = new Dictionary<long, World>();
         }
 
-        public World Create(IEntityHelper helper)
+        public World Create()
         {
+            IEntityHelper entityHelper = _helper.CreateHelper();
             World world = new World();
-            _worldList.Add(world);
-            world.Init(helper);
+            world.InitEntity(world.IdGen.CreateId(), entityHelper);
+            entityHelper.Bind(world);
+            _worldList.Add(world.Id, world);
             return world;
         }
 
         public void Destroy(World world)
         {
-            if (_worldList.Contains(world))
+            if (_worldList.ContainsKey(world.Id))
             {
-                _worldList.Remove(world);
+                _worldList.Remove(world.Id);
                 world.Destroy();
             }
         }

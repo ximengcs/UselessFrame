@@ -1,10 +1,18 @@
 ﻿
+using UselessFrame.NewRuntime.Worlds;
+
 namespace UselessFrame.NewRuntime.Entities
 {
     public interface IEntityHelper
     {
-        void OnInit(Entity entity);
+        void Bind(World world);
 
-        void OnDestroy(Entity entity);
+        void OnCreateEntity(Entity entity);
+
+        void OnDestroyEntity(Entity entity);
+
+        void OnCreateComponent(Component component);
+
+        void OnDestroyComponent(Component component);
     }
 }

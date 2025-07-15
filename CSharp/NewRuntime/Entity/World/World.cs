@@ -18,12 +18,20 @@ namespace UselessFrame.NewRuntime.Worlds
 
         public EventManager Event => _event;
 
+        public IReadOnlyCollection<Scene> Scenes => _scenes.Values;
+
         protected override void OnInit()
         {
             base.OnInit();
             _scenes = new Dictionary<long, Scene>();
             _idGenerator = new IdGenerator(0, new IdGeneratorOptions(timeSource: new TimeTicksSource()));
             _event = new EventManager();
+        }
+
+        public Scene GetScene(long id)
+        {
+            if (_scenes.TryGetValue(id, out Scene scene)) return scene;
+            return null;
         }
 
         protected override void OnAddEntity(Entity entity)

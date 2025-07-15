@@ -39,7 +39,16 @@ public static partial class CoreMessageReflection {
           "KAUiMwoaVGVzdExhdGVuY3lSZXNwb25zZU1lc3NhZ2USFQoNUmVzcG9uc2VU",
           "b2tlbhgBIAIoBSItChVUZXN0U2VydmVyVGltZU1lc3NhZ2USFAoMUmVxdWVz",
           "dFRva2VuGAEgAigFIkQKHVRlc3RTZXJ2ZXJUaW1lUmVzcG9uc2VNZXNzYWdl",
-          "EhUKDVJlc3BvbnNlVG9rZW4YASACKAUSDAoEVGltZRgCIAIoAw=="));
+          "EhUKDVJlc3BvbnNlVG9rZW4YASACKAUSDAoEVGltZRgCIAIoAyJeChNDcmVh",
+          "dGVFbnRpdHlNZXNzYWdlEg8KB1NjZW5lSWQYASACKAMSEAoIUGFybmV0SWQY",
+          "AiACKAMSEAoIRW50aXR5SWQYAyACKAMSEgoKRW50aXR5VHlwZRgEIAIoCSI5",
+          "ChREZXN0cm95RW50aXR5TWVzc2FnZRIPCgdTY2VuZUlkGAEgAigDEhAKCEVu",
+          "dGl0eUlkGAIgAigDIk4KFkNyZWF0ZUNvbXBvbmVudE1lc3NhZ2USDwoHU2Nl",
+          "bmVJZBgBIAIoAxIQCghFbnRpdHlJZBgCIAIoAxIRCglDb21wb25lbnQYAyAC",
+          "KAwiTgoWVXBkYXRlQ29tcG9uZW50TWVzc2FnZRIPCgdTY2VuZUlkGAEgAigD",
+          "EhAKCEVudGl0eUlkGAIgAigDEhEKCUNvbXBvbmVudBgDIAIoDCJPChdEZXN0",
+          "cm95Q29tcG9uZW50TWVzc2FnZRIPCgdTY2VuZUlkGAEgAigDEhAKCEVudGl0",
+          "eUlkGAIgAigDEhEKCUNvbXBvbmVudBgDIAIoCQ=="));
     descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
         new pbr::FileDescriptor[] { },
         new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -58,7 +67,12 @@ public static partial class CoreMessageReflection {
           new pbr::GeneratedClrTypeInfo(typeof(global::TestLatencyMessage), global::TestLatencyMessage.Parser, new[]{ "RequestToken" }, null, null, null, null),
           new pbr::GeneratedClrTypeInfo(typeof(global::TestLatencyResponseMessage), global::TestLatencyResponseMessage.Parser, new[]{ "ResponseToken" }, null, null, null, null),
           new pbr::GeneratedClrTypeInfo(typeof(global::TestServerTimeMessage), global::TestServerTimeMessage.Parser, new[]{ "RequestToken" }, null, null, null, null),
-          new pbr::GeneratedClrTypeInfo(typeof(global::TestServerTimeResponseMessage), global::TestServerTimeResponseMessage.Parser, new[]{ "ResponseToken", "Time" }, null, null, null, null)
+          new pbr::GeneratedClrTypeInfo(typeof(global::TestServerTimeResponseMessage), global::TestServerTimeResponseMessage.Parser, new[]{ "ResponseToken", "Time" }, null, null, null, null),
+          new pbr::GeneratedClrTypeInfo(typeof(global::CreateEntityMessage), global::CreateEntityMessage.Parser, new[]{ "SceneId", "ParnetId", "EntityId", "EntityType" }, null, null, null, null),
+          new pbr::GeneratedClrTypeInfo(typeof(global::DestroyEntityMessage), global::DestroyEntityMessage.Parser, new[]{ "SceneId", "EntityId" }, null, null, null, null),
+          new pbr::GeneratedClrTypeInfo(typeof(global::CreateComponentMessage), global::CreateComponentMessage.Parser, new[]{ "SceneId", "EntityId", "Component" }, null, null, null, null),
+          new pbr::GeneratedClrTypeInfo(typeof(global::UpdateComponentMessage), global::UpdateComponentMessage.Parser, new[]{ "SceneId", "EntityId", "Component" }, null, null, null, null),
+          new pbr::GeneratedClrTypeInfo(typeof(global::DestroyComponentMessage), global::DestroyComponentMessage.Parser, new[]{ "SceneId", "EntityId", "Component" }, null, null, null, null)
         }));
   }
   #endregion
@@ -3665,6 +3679,1557 @@ public sealed partial class TestServerTimeResponseMessage : pb::IMessage<TestSer
         }
         case 16: {
           Time = input.ReadInt64();
+          break;
+        }
+      }
+    }
+  }
+  #endif
+
+}
+
+[global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+public sealed partial class CreateEntityMessage : pb::IMessage<CreateEntityMessage>
+#if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    , pb::IBufferMessage
+#endif
+{
+  private static readonly pb::MessageParser<CreateEntityMessage> _parser = new pb::MessageParser<CreateEntityMessage>(() => new CreateEntityMessage());
+  private pb::UnknownFieldSet _unknownFields;
+  private int _hasBits0;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public static pb::MessageParser<CreateEntityMessage> Parser { get { return _parser; } }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public static pbr::MessageDescriptor Descriptor {
+    get { return global::CoreMessageReflection.Descriptor.MessageTypes[16]; }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  pbr::MessageDescriptor pb::IMessage.Descriptor {
+    get { return Descriptor; }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public CreateEntityMessage() {
+    OnConstruction();
+  }
+
+  partial void OnConstruction();
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public CreateEntityMessage(CreateEntityMessage other) : this() {
+    _hasBits0 = other._hasBits0;
+    sceneId_ = other.sceneId_;
+    parnetId_ = other.parnetId_;
+    entityId_ = other.entityId_;
+    entityType_ = other.entityType_;
+    _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public CreateEntityMessage Clone() {
+    return new CreateEntityMessage(this);
+  }
+
+  /// <summary>Field number for the "SceneId" field.</summary>
+  public const int SceneIdFieldNumber = 1;
+  private readonly static long SceneIdDefaultValue = 0L;
+
+  private long sceneId_;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public long SceneId {
+    get { if ((_hasBits0 & 1) != 0) { return sceneId_; } else { return SceneIdDefaultValue; } }
+    set {
+      _hasBits0 |= 1;
+      sceneId_ = value;
+    }
+  }
+  /// <summary>Gets whether the "SceneId" field is set</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool HasSceneId {
+    get { return (_hasBits0 & 1) != 0; }
+  }
+  /// <summary>Clears the value of the "SceneId" field</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void ClearSceneId() {
+    _hasBits0 &= ~1;
+  }
+
+  /// <summary>Field number for the "ParnetId" field.</summary>
+  public const int ParnetIdFieldNumber = 2;
+  private readonly static long ParnetIdDefaultValue = 0L;
+
+  private long parnetId_;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public long ParnetId {
+    get { if ((_hasBits0 & 2) != 0) { return parnetId_; } else { return ParnetIdDefaultValue; } }
+    set {
+      _hasBits0 |= 2;
+      parnetId_ = value;
+    }
+  }
+  /// <summary>Gets whether the "ParnetId" field is set</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool HasParnetId {
+    get { return (_hasBits0 & 2) != 0; }
+  }
+  /// <summary>Clears the value of the "ParnetId" field</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void ClearParnetId() {
+    _hasBits0 &= ~2;
+  }
+
+  /// <summary>Field number for the "EntityId" field.</summary>
+  public const int EntityIdFieldNumber = 3;
+  private readonly static long EntityIdDefaultValue = 0L;
+
+  private long entityId_;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public long EntityId {
+    get { if ((_hasBits0 & 4) != 0) { return entityId_; } else { return EntityIdDefaultValue; } }
+    set {
+      _hasBits0 |= 4;
+      entityId_ = value;
+    }
+  }
+  /// <summary>Gets whether the "EntityId" field is set</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool HasEntityId {
+    get { return (_hasBits0 & 4) != 0; }
+  }
+  /// <summary>Clears the value of the "EntityId" field</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void ClearEntityId() {
+    _hasBits0 &= ~4;
+  }
+
+  /// <summary>Field number for the "EntityType" field.</summary>
+  public const int EntityTypeFieldNumber = 4;
+  private readonly static string EntityTypeDefaultValue = "";
+
+  private string entityType_;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public string EntityType {
+    get { return entityType_ ?? EntityTypeDefaultValue; }
+    set {
+      entityType_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+    }
+  }
+  /// <summary>Gets whether the "EntityType" field is set</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool HasEntityType {
+    get { return entityType_ != null; }
+  }
+  /// <summary>Clears the value of the "EntityType" field</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void ClearEntityType() {
+    entityType_ = null;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public override bool Equals(object other) {
+    return Equals(other as CreateEntityMessage);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool Equals(CreateEntityMessage other) {
+    if (ReferenceEquals(other, null)) {
+      return false;
+    }
+    if (ReferenceEquals(other, this)) {
+      return true;
+    }
+    if (SceneId != other.SceneId) return false;
+    if (ParnetId != other.ParnetId) return false;
+    if (EntityId != other.EntityId) return false;
+    if (EntityType != other.EntityType) return false;
+    return Equals(_unknownFields, other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public override int GetHashCode() {
+    int hash = 1;
+    if (HasSceneId) hash ^= SceneId.GetHashCode();
+    if (HasParnetId) hash ^= ParnetId.GetHashCode();
+    if (HasEntityId) hash ^= EntityId.GetHashCode();
+    if (HasEntityType) hash ^= EntityType.GetHashCode();
+    if (_unknownFields != null) {
+      hash ^= _unknownFields.GetHashCode();
+    }
+    return hash;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public override string ToString() {
+    return pb::JsonFormatter.ToDiagnosticString(this);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void WriteTo(pb::CodedOutputStream output) {
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    output.WriteRawMessage(this);
+  #else
+    if (HasSceneId) {
+      output.WriteRawTag(8);
+      output.WriteInt64(SceneId);
+    }
+    if (HasParnetId) {
+      output.WriteRawTag(16);
+      output.WriteInt64(ParnetId);
+    }
+    if (HasEntityId) {
+      output.WriteRawTag(24);
+      output.WriteInt64(EntityId);
+    }
+    if (HasEntityType) {
+      output.WriteRawTag(34);
+      output.WriteString(EntityType);
+    }
+    if (_unknownFields != null) {
+      _unknownFields.WriteTo(output);
+    }
+  #endif
+  }
+
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+    if (HasSceneId) {
+      output.WriteRawTag(8);
+      output.WriteInt64(SceneId);
+    }
+    if (HasParnetId) {
+      output.WriteRawTag(16);
+      output.WriteInt64(ParnetId);
+    }
+    if (HasEntityId) {
+      output.WriteRawTag(24);
+      output.WriteInt64(EntityId);
+    }
+    if (HasEntityType) {
+      output.WriteRawTag(34);
+      output.WriteString(EntityType);
+    }
+    if (_unknownFields != null) {
+      _unknownFields.WriteTo(ref output);
+    }
+  }
+  #endif
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public int CalculateSize() {
+    int size = 0;
+    if (HasSceneId) {
+      size += 1 + pb::CodedOutputStream.ComputeInt64Size(SceneId);
+    }
+    if (HasParnetId) {
+      size += 1 + pb::CodedOutputStream.ComputeInt64Size(ParnetId);
+    }
+    if (HasEntityId) {
+      size += 1 + pb::CodedOutputStream.ComputeInt64Size(EntityId);
+    }
+    if (HasEntityType) {
+      size += 1 + pb::CodedOutputStream.ComputeStringSize(EntityType);
+    }
+    if (_unknownFields != null) {
+      size += _unknownFields.CalculateSize();
+    }
+    return size;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void MergeFrom(CreateEntityMessage other) {
+    if (other == null) {
+      return;
+    }
+    if (other.HasSceneId) {
+      SceneId = other.SceneId;
+    }
+    if (other.HasParnetId) {
+      ParnetId = other.ParnetId;
+    }
+    if (other.HasEntityId) {
+      EntityId = other.EntityId;
+    }
+    if (other.HasEntityType) {
+      EntityType = other.EntityType;
+    }
+    _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void MergeFrom(pb::CodedInputStream input) {
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    input.ReadRawMessage(this);
+  #else
+    uint tag;
+    while ((tag = input.ReadTag()) != 0) {
+      switch(tag) {
+        default:
+          _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+          break;
+        case 8: {
+          SceneId = input.ReadInt64();
+          break;
+        }
+        case 16: {
+          ParnetId = input.ReadInt64();
+          break;
+        }
+        case 24: {
+          EntityId = input.ReadInt64();
+          break;
+        }
+        case 34: {
+          EntityType = input.ReadString();
+          break;
+        }
+      }
+    }
+  #endif
+  }
+
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+    uint tag;
+    while ((tag = input.ReadTag()) != 0) {
+      switch(tag) {
+        default:
+          _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+          break;
+        case 8: {
+          SceneId = input.ReadInt64();
+          break;
+        }
+        case 16: {
+          ParnetId = input.ReadInt64();
+          break;
+        }
+        case 24: {
+          EntityId = input.ReadInt64();
+          break;
+        }
+        case 34: {
+          EntityType = input.ReadString();
+          break;
+        }
+      }
+    }
+  }
+  #endif
+
+}
+
+[global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+public sealed partial class DestroyEntityMessage : pb::IMessage<DestroyEntityMessage>
+#if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    , pb::IBufferMessage
+#endif
+{
+  private static readonly pb::MessageParser<DestroyEntityMessage> _parser = new pb::MessageParser<DestroyEntityMessage>(() => new DestroyEntityMessage());
+  private pb::UnknownFieldSet _unknownFields;
+  private int _hasBits0;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public static pb::MessageParser<DestroyEntityMessage> Parser { get { return _parser; } }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public static pbr::MessageDescriptor Descriptor {
+    get { return global::CoreMessageReflection.Descriptor.MessageTypes[17]; }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  pbr::MessageDescriptor pb::IMessage.Descriptor {
+    get { return Descriptor; }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public DestroyEntityMessage() {
+    OnConstruction();
+  }
+
+  partial void OnConstruction();
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public DestroyEntityMessage(DestroyEntityMessage other) : this() {
+    _hasBits0 = other._hasBits0;
+    sceneId_ = other.sceneId_;
+    entityId_ = other.entityId_;
+    _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public DestroyEntityMessage Clone() {
+    return new DestroyEntityMessage(this);
+  }
+
+  /// <summary>Field number for the "SceneId" field.</summary>
+  public const int SceneIdFieldNumber = 1;
+  private readonly static long SceneIdDefaultValue = 0L;
+
+  private long sceneId_;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public long SceneId {
+    get { if ((_hasBits0 & 1) != 0) { return sceneId_; } else { return SceneIdDefaultValue; } }
+    set {
+      _hasBits0 |= 1;
+      sceneId_ = value;
+    }
+  }
+  /// <summary>Gets whether the "SceneId" field is set</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool HasSceneId {
+    get { return (_hasBits0 & 1) != 0; }
+  }
+  /// <summary>Clears the value of the "SceneId" field</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void ClearSceneId() {
+    _hasBits0 &= ~1;
+  }
+
+  /// <summary>Field number for the "EntityId" field.</summary>
+  public const int EntityIdFieldNumber = 2;
+  private readonly static long EntityIdDefaultValue = 0L;
+
+  private long entityId_;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public long EntityId {
+    get { if ((_hasBits0 & 2) != 0) { return entityId_; } else { return EntityIdDefaultValue; } }
+    set {
+      _hasBits0 |= 2;
+      entityId_ = value;
+    }
+  }
+  /// <summary>Gets whether the "EntityId" field is set</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool HasEntityId {
+    get { return (_hasBits0 & 2) != 0; }
+  }
+  /// <summary>Clears the value of the "EntityId" field</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void ClearEntityId() {
+    _hasBits0 &= ~2;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public override bool Equals(object other) {
+    return Equals(other as DestroyEntityMessage);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool Equals(DestroyEntityMessage other) {
+    if (ReferenceEquals(other, null)) {
+      return false;
+    }
+    if (ReferenceEquals(other, this)) {
+      return true;
+    }
+    if (SceneId != other.SceneId) return false;
+    if (EntityId != other.EntityId) return false;
+    return Equals(_unknownFields, other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public override int GetHashCode() {
+    int hash = 1;
+    if (HasSceneId) hash ^= SceneId.GetHashCode();
+    if (HasEntityId) hash ^= EntityId.GetHashCode();
+    if (_unknownFields != null) {
+      hash ^= _unknownFields.GetHashCode();
+    }
+    return hash;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public override string ToString() {
+    return pb::JsonFormatter.ToDiagnosticString(this);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void WriteTo(pb::CodedOutputStream output) {
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    output.WriteRawMessage(this);
+  #else
+    if (HasSceneId) {
+      output.WriteRawTag(8);
+      output.WriteInt64(SceneId);
+    }
+    if (HasEntityId) {
+      output.WriteRawTag(16);
+      output.WriteInt64(EntityId);
+    }
+    if (_unknownFields != null) {
+      _unknownFields.WriteTo(output);
+    }
+  #endif
+  }
+
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+    if (HasSceneId) {
+      output.WriteRawTag(8);
+      output.WriteInt64(SceneId);
+    }
+    if (HasEntityId) {
+      output.WriteRawTag(16);
+      output.WriteInt64(EntityId);
+    }
+    if (_unknownFields != null) {
+      _unknownFields.WriteTo(ref output);
+    }
+  }
+  #endif
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public int CalculateSize() {
+    int size = 0;
+    if (HasSceneId) {
+      size += 1 + pb::CodedOutputStream.ComputeInt64Size(SceneId);
+    }
+    if (HasEntityId) {
+      size += 1 + pb::CodedOutputStream.ComputeInt64Size(EntityId);
+    }
+    if (_unknownFields != null) {
+      size += _unknownFields.CalculateSize();
+    }
+    return size;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void MergeFrom(DestroyEntityMessage other) {
+    if (other == null) {
+      return;
+    }
+    if (other.HasSceneId) {
+      SceneId = other.SceneId;
+    }
+    if (other.HasEntityId) {
+      EntityId = other.EntityId;
+    }
+    _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void MergeFrom(pb::CodedInputStream input) {
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    input.ReadRawMessage(this);
+  #else
+    uint tag;
+    while ((tag = input.ReadTag()) != 0) {
+      switch(tag) {
+        default:
+          _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+          break;
+        case 8: {
+          SceneId = input.ReadInt64();
+          break;
+        }
+        case 16: {
+          EntityId = input.ReadInt64();
+          break;
+        }
+      }
+    }
+  #endif
+  }
+
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+    uint tag;
+    while ((tag = input.ReadTag()) != 0) {
+      switch(tag) {
+        default:
+          _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+          break;
+        case 8: {
+          SceneId = input.ReadInt64();
+          break;
+        }
+        case 16: {
+          EntityId = input.ReadInt64();
+          break;
+        }
+      }
+    }
+  }
+  #endif
+
+}
+
+[global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+public sealed partial class CreateComponentMessage : pb::IMessage<CreateComponentMessage>
+#if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    , pb::IBufferMessage
+#endif
+{
+  private static readonly pb::MessageParser<CreateComponentMessage> _parser = new pb::MessageParser<CreateComponentMessage>(() => new CreateComponentMessage());
+  private pb::UnknownFieldSet _unknownFields;
+  private int _hasBits0;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public static pb::MessageParser<CreateComponentMessage> Parser { get { return _parser; } }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public static pbr::MessageDescriptor Descriptor {
+    get { return global::CoreMessageReflection.Descriptor.MessageTypes[18]; }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  pbr::MessageDescriptor pb::IMessage.Descriptor {
+    get { return Descriptor; }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public CreateComponentMessage() {
+    OnConstruction();
+  }
+
+  partial void OnConstruction();
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public CreateComponentMessage(CreateComponentMessage other) : this() {
+    _hasBits0 = other._hasBits0;
+    sceneId_ = other.sceneId_;
+    entityId_ = other.entityId_;
+    component_ = other.component_;
+    _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public CreateComponentMessage Clone() {
+    return new CreateComponentMessage(this);
+  }
+
+  /// <summary>Field number for the "SceneId" field.</summary>
+  public const int SceneIdFieldNumber = 1;
+  private readonly static long SceneIdDefaultValue = 0L;
+
+  private long sceneId_;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public long SceneId {
+    get { if ((_hasBits0 & 1) != 0) { return sceneId_; } else { return SceneIdDefaultValue; } }
+    set {
+      _hasBits0 |= 1;
+      sceneId_ = value;
+    }
+  }
+  /// <summary>Gets whether the "SceneId" field is set</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool HasSceneId {
+    get { return (_hasBits0 & 1) != 0; }
+  }
+  /// <summary>Clears the value of the "SceneId" field</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void ClearSceneId() {
+    _hasBits0 &= ~1;
+  }
+
+  /// <summary>Field number for the "EntityId" field.</summary>
+  public const int EntityIdFieldNumber = 2;
+  private readonly static long EntityIdDefaultValue = 0L;
+
+  private long entityId_;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public long EntityId {
+    get { if ((_hasBits0 & 2) != 0) { return entityId_; } else { return EntityIdDefaultValue; } }
+    set {
+      _hasBits0 |= 2;
+      entityId_ = value;
+    }
+  }
+  /// <summary>Gets whether the "EntityId" field is set</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool HasEntityId {
+    get { return (_hasBits0 & 2) != 0; }
+  }
+  /// <summary>Clears the value of the "EntityId" field</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void ClearEntityId() {
+    _hasBits0 &= ~2;
+  }
+
+  /// <summary>Field number for the "Component" field.</summary>
+  public const int ComponentFieldNumber = 3;
+  private readonly static pb::ByteString ComponentDefaultValue = pb::ByteString.Empty;
+
+  private pb::ByteString component_;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public pb::ByteString Component {
+    get { return component_ ?? ComponentDefaultValue; }
+    set {
+      component_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+    }
+  }
+  /// <summary>Gets whether the "Component" field is set</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool HasComponent {
+    get { return component_ != null; }
+  }
+  /// <summary>Clears the value of the "Component" field</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void ClearComponent() {
+    component_ = null;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public override bool Equals(object other) {
+    return Equals(other as CreateComponentMessage);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool Equals(CreateComponentMessage other) {
+    if (ReferenceEquals(other, null)) {
+      return false;
+    }
+    if (ReferenceEquals(other, this)) {
+      return true;
+    }
+    if (SceneId != other.SceneId) return false;
+    if (EntityId != other.EntityId) return false;
+    if (Component != other.Component) return false;
+    return Equals(_unknownFields, other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public override int GetHashCode() {
+    int hash = 1;
+    if (HasSceneId) hash ^= SceneId.GetHashCode();
+    if (HasEntityId) hash ^= EntityId.GetHashCode();
+    if (HasComponent) hash ^= Component.GetHashCode();
+    if (_unknownFields != null) {
+      hash ^= _unknownFields.GetHashCode();
+    }
+    return hash;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public override string ToString() {
+    return pb::JsonFormatter.ToDiagnosticString(this);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void WriteTo(pb::CodedOutputStream output) {
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    output.WriteRawMessage(this);
+  #else
+    if (HasSceneId) {
+      output.WriteRawTag(8);
+      output.WriteInt64(SceneId);
+    }
+    if (HasEntityId) {
+      output.WriteRawTag(16);
+      output.WriteInt64(EntityId);
+    }
+    if (HasComponent) {
+      output.WriteRawTag(26);
+      output.WriteBytes(Component);
+    }
+    if (_unknownFields != null) {
+      _unknownFields.WriteTo(output);
+    }
+  #endif
+  }
+
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+    if (HasSceneId) {
+      output.WriteRawTag(8);
+      output.WriteInt64(SceneId);
+    }
+    if (HasEntityId) {
+      output.WriteRawTag(16);
+      output.WriteInt64(EntityId);
+    }
+    if (HasComponent) {
+      output.WriteRawTag(26);
+      output.WriteBytes(Component);
+    }
+    if (_unknownFields != null) {
+      _unknownFields.WriteTo(ref output);
+    }
+  }
+  #endif
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public int CalculateSize() {
+    int size = 0;
+    if (HasSceneId) {
+      size += 1 + pb::CodedOutputStream.ComputeInt64Size(SceneId);
+    }
+    if (HasEntityId) {
+      size += 1 + pb::CodedOutputStream.ComputeInt64Size(EntityId);
+    }
+    if (HasComponent) {
+      size += 1 + pb::CodedOutputStream.ComputeBytesSize(Component);
+    }
+    if (_unknownFields != null) {
+      size += _unknownFields.CalculateSize();
+    }
+    return size;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void MergeFrom(CreateComponentMessage other) {
+    if (other == null) {
+      return;
+    }
+    if (other.HasSceneId) {
+      SceneId = other.SceneId;
+    }
+    if (other.HasEntityId) {
+      EntityId = other.EntityId;
+    }
+    if (other.HasComponent) {
+      Component = other.Component;
+    }
+    _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void MergeFrom(pb::CodedInputStream input) {
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    input.ReadRawMessage(this);
+  #else
+    uint tag;
+    while ((tag = input.ReadTag()) != 0) {
+      switch(tag) {
+        default:
+          _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+          break;
+        case 8: {
+          SceneId = input.ReadInt64();
+          break;
+        }
+        case 16: {
+          EntityId = input.ReadInt64();
+          break;
+        }
+        case 26: {
+          Component = input.ReadBytes();
+          break;
+        }
+      }
+    }
+  #endif
+  }
+
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+    uint tag;
+    while ((tag = input.ReadTag()) != 0) {
+      switch(tag) {
+        default:
+          _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+          break;
+        case 8: {
+          SceneId = input.ReadInt64();
+          break;
+        }
+        case 16: {
+          EntityId = input.ReadInt64();
+          break;
+        }
+        case 26: {
+          Component = input.ReadBytes();
+          break;
+        }
+      }
+    }
+  }
+  #endif
+
+}
+
+[global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+public sealed partial class UpdateComponentMessage : pb::IMessage<UpdateComponentMessage>
+#if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    , pb::IBufferMessage
+#endif
+{
+  private static readonly pb::MessageParser<UpdateComponentMessage> _parser = new pb::MessageParser<UpdateComponentMessage>(() => new UpdateComponentMessage());
+  private pb::UnknownFieldSet _unknownFields;
+  private int _hasBits0;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public static pb::MessageParser<UpdateComponentMessage> Parser { get { return _parser; } }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public static pbr::MessageDescriptor Descriptor {
+    get { return global::CoreMessageReflection.Descriptor.MessageTypes[19]; }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  pbr::MessageDescriptor pb::IMessage.Descriptor {
+    get { return Descriptor; }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public UpdateComponentMessage() {
+    OnConstruction();
+  }
+
+  partial void OnConstruction();
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public UpdateComponentMessage(UpdateComponentMessage other) : this() {
+    _hasBits0 = other._hasBits0;
+    sceneId_ = other.sceneId_;
+    entityId_ = other.entityId_;
+    component_ = other.component_;
+    _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public UpdateComponentMessage Clone() {
+    return new UpdateComponentMessage(this);
+  }
+
+  /// <summary>Field number for the "SceneId" field.</summary>
+  public const int SceneIdFieldNumber = 1;
+  private readonly static long SceneIdDefaultValue = 0L;
+
+  private long sceneId_;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public long SceneId {
+    get { if ((_hasBits0 & 1) != 0) { return sceneId_; } else { return SceneIdDefaultValue; } }
+    set {
+      _hasBits0 |= 1;
+      sceneId_ = value;
+    }
+  }
+  /// <summary>Gets whether the "SceneId" field is set</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool HasSceneId {
+    get { return (_hasBits0 & 1) != 0; }
+  }
+  /// <summary>Clears the value of the "SceneId" field</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void ClearSceneId() {
+    _hasBits0 &= ~1;
+  }
+
+  /// <summary>Field number for the "EntityId" field.</summary>
+  public const int EntityIdFieldNumber = 2;
+  private readonly static long EntityIdDefaultValue = 0L;
+
+  private long entityId_;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public long EntityId {
+    get { if ((_hasBits0 & 2) != 0) { return entityId_; } else { return EntityIdDefaultValue; } }
+    set {
+      _hasBits0 |= 2;
+      entityId_ = value;
+    }
+  }
+  /// <summary>Gets whether the "EntityId" field is set</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool HasEntityId {
+    get { return (_hasBits0 & 2) != 0; }
+  }
+  /// <summary>Clears the value of the "EntityId" field</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void ClearEntityId() {
+    _hasBits0 &= ~2;
+  }
+
+  /// <summary>Field number for the "Component" field.</summary>
+  public const int ComponentFieldNumber = 3;
+  private readonly static pb::ByteString ComponentDefaultValue = pb::ByteString.Empty;
+
+  private pb::ByteString component_;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public pb::ByteString Component {
+    get { return component_ ?? ComponentDefaultValue; }
+    set {
+      component_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+    }
+  }
+  /// <summary>Gets whether the "Component" field is set</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool HasComponent {
+    get { return component_ != null; }
+  }
+  /// <summary>Clears the value of the "Component" field</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void ClearComponent() {
+    component_ = null;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public override bool Equals(object other) {
+    return Equals(other as UpdateComponentMessage);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool Equals(UpdateComponentMessage other) {
+    if (ReferenceEquals(other, null)) {
+      return false;
+    }
+    if (ReferenceEquals(other, this)) {
+      return true;
+    }
+    if (SceneId != other.SceneId) return false;
+    if (EntityId != other.EntityId) return false;
+    if (Component != other.Component) return false;
+    return Equals(_unknownFields, other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public override int GetHashCode() {
+    int hash = 1;
+    if (HasSceneId) hash ^= SceneId.GetHashCode();
+    if (HasEntityId) hash ^= EntityId.GetHashCode();
+    if (HasComponent) hash ^= Component.GetHashCode();
+    if (_unknownFields != null) {
+      hash ^= _unknownFields.GetHashCode();
+    }
+    return hash;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public override string ToString() {
+    return pb::JsonFormatter.ToDiagnosticString(this);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void WriteTo(pb::CodedOutputStream output) {
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    output.WriteRawMessage(this);
+  #else
+    if (HasSceneId) {
+      output.WriteRawTag(8);
+      output.WriteInt64(SceneId);
+    }
+    if (HasEntityId) {
+      output.WriteRawTag(16);
+      output.WriteInt64(EntityId);
+    }
+    if (HasComponent) {
+      output.WriteRawTag(26);
+      output.WriteBytes(Component);
+    }
+    if (_unknownFields != null) {
+      _unknownFields.WriteTo(output);
+    }
+  #endif
+  }
+
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+    if (HasSceneId) {
+      output.WriteRawTag(8);
+      output.WriteInt64(SceneId);
+    }
+    if (HasEntityId) {
+      output.WriteRawTag(16);
+      output.WriteInt64(EntityId);
+    }
+    if (HasComponent) {
+      output.WriteRawTag(26);
+      output.WriteBytes(Component);
+    }
+    if (_unknownFields != null) {
+      _unknownFields.WriteTo(ref output);
+    }
+  }
+  #endif
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public int CalculateSize() {
+    int size = 0;
+    if (HasSceneId) {
+      size += 1 + pb::CodedOutputStream.ComputeInt64Size(SceneId);
+    }
+    if (HasEntityId) {
+      size += 1 + pb::CodedOutputStream.ComputeInt64Size(EntityId);
+    }
+    if (HasComponent) {
+      size += 1 + pb::CodedOutputStream.ComputeBytesSize(Component);
+    }
+    if (_unknownFields != null) {
+      size += _unknownFields.CalculateSize();
+    }
+    return size;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void MergeFrom(UpdateComponentMessage other) {
+    if (other == null) {
+      return;
+    }
+    if (other.HasSceneId) {
+      SceneId = other.SceneId;
+    }
+    if (other.HasEntityId) {
+      EntityId = other.EntityId;
+    }
+    if (other.HasComponent) {
+      Component = other.Component;
+    }
+    _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void MergeFrom(pb::CodedInputStream input) {
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    input.ReadRawMessage(this);
+  #else
+    uint tag;
+    while ((tag = input.ReadTag()) != 0) {
+      switch(tag) {
+        default:
+          _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+          break;
+        case 8: {
+          SceneId = input.ReadInt64();
+          break;
+        }
+        case 16: {
+          EntityId = input.ReadInt64();
+          break;
+        }
+        case 26: {
+          Component = input.ReadBytes();
+          break;
+        }
+      }
+    }
+  #endif
+  }
+
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+    uint tag;
+    while ((tag = input.ReadTag()) != 0) {
+      switch(tag) {
+        default:
+          _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+          break;
+        case 8: {
+          SceneId = input.ReadInt64();
+          break;
+        }
+        case 16: {
+          EntityId = input.ReadInt64();
+          break;
+        }
+        case 26: {
+          Component = input.ReadBytes();
+          break;
+        }
+      }
+    }
+  }
+  #endif
+
+}
+
+[global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+public sealed partial class DestroyComponentMessage : pb::IMessage<DestroyComponentMessage>
+#if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    , pb::IBufferMessage
+#endif
+{
+  private static readonly pb::MessageParser<DestroyComponentMessage> _parser = new pb::MessageParser<DestroyComponentMessage>(() => new DestroyComponentMessage());
+  private pb::UnknownFieldSet _unknownFields;
+  private int _hasBits0;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public static pb::MessageParser<DestroyComponentMessage> Parser { get { return _parser; } }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public static pbr::MessageDescriptor Descriptor {
+    get { return global::CoreMessageReflection.Descriptor.MessageTypes[20]; }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  pbr::MessageDescriptor pb::IMessage.Descriptor {
+    get { return Descriptor; }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public DestroyComponentMessage() {
+    OnConstruction();
+  }
+
+  partial void OnConstruction();
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public DestroyComponentMessage(DestroyComponentMessage other) : this() {
+    _hasBits0 = other._hasBits0;
+    sceneId_ = other.sceneId_;
+    entityId_ = other.entityId_;
+    component_ = other.component_;
+    _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public DestroyComponentMessage Clone() {
+    return new DestroyComponentMessage(this);
+  }
+
+  /// <summary>Field number for the "SceneId" field.</summary>
+  public const int SceneIdFieldNumber = 1;
+  private readonly static long SceneIdDefaultValue = 0L;
+
+  private long sceneId_;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public long SceneId {
+    get { if ((_hasBits0 & 1) != 0) { return sceneId_; } else { return SceneIdDefaultValue; } }
+    set {
+      _hasBits0 |= 1;
+      sceneId_ = value;
+    }
+  }
+  /// <summary>Gets whether the "SceneId" field is set</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool HasSceneId {
+    get { return (_hasBits0 & 1) != 0; }
+  }
+  /// <summary>Clears the value of the "SceneId" field</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void ClearSceneId() {
+    _hasBits0 &= ~1;
+  }
+
+  /// <summary>Field number for the "EntityId" field.</summary>
+  public const int EntityIdFieldNumber = 2;
+  private readonly static long EntityIdDefaultValue = 0L;
+
+  private long entityId_;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public long EntityId {
+    get { if ((_hasBits0 & 2) != 0) { return entityId_; } else { return EntityIdDefaultValue; } }
+    set {
+      _hasBits0 |= 2;
+      entityId_ = value;
+    }
+  }
+  /// <summary>Gets whether the "EntityId" field is set</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool HasEntityId {
+    get { return (_hasBits0 & 2) != 0; }
+  }
+  /// <summary>Clears the value of the "EntityId" field</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void ClearEntityId() {
+    _hasBits0 &= ~2;
+  }
+
+  /// <summary>Field number for the "Component" field.</summary>
+  public const int ComponentFieldNumber = 3;
+  private readonly static string ComponentDefaultValue = "";
+
+  private string component_;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public string Component {
+    get { return component_ ?? ComponentDefaultValue; }
+    set {
+      component_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+    }
+  }
+  /// <summary>Gets whether the "Component" field is set</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool HasComponent {
+    get { return component_ != null; }
+  }
+  /// <summary>Clears the value of the "Component" field</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void ClearComponent() {
+    component_ = null;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public override bool Equals(object other) {
+    return Equals(other as DestroyComponentMessage);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool Equals(DestroyComponentMessage other) {
+    if (ReferenceEquals(other, null)) {
+      return false;
+    }
+    if (ReferenceEquals(other, this)) {
+      return true;
+    }
+    if (SceneId != other.SceneId) return false;
+    if (EntityId != other.EntityId) return false;
+    if (Component != other.Component) return false;
+    return Equals(_unknownFields, other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public override int GetHashCode() {
+    int hash = 1;
+    if (HasSceneId) hash ^= SceneId.GetHashCode();
+    if (HasEntityId) hash ^= EntityId.GetHashCode();
+    if (HasComponent) hash ^= Component.GetHashCode();
+    if (_unknownFields != null) {
+      hash ^= _unknownFields.GetHashCode();
+    }
+    return hash;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public override string ToString() {
+    return pb::JsonFormatter.ToDiagnosticString(this);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void WriteTo(pb::CodedOutputStream output) {
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    output.WriteRawMessage(this);
+  #else
+    if (HasSceneId) {
+      output.WriteRawTag(8);
+      output.WriteInt64(SceneId);
+    }
+    if (HasEntityId) {
+      output.WriteRawTag(16);
+      output.WriteInt64(EntityId);
+    }
+    if (HasComponent) {
+      output.WriteRawTag(26);
+      output.WriteString(Component);
+    }
+    if (_unknownFields != null) {
+      _unknownFields.WriteTo(output);
+    }
+  #endif
+  }
+
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+    if (HasSceneId) {
+      output.WriteRawTag(8);
+      output.WriteInt64(SceneId);
+    }
+    if (HasEntityId) {
+      output.WriteRawTag(16);
+      output.WriteInt64(EntityId);
+    }
+    if (HasComponent) {
+      output.WriteRawTag(26);
+      output.WriteString(Component);
+    }
+    if (_unknownFields != null) {
+      _unknownFields.WriteTo(ref output);
+    }
+  }
+  #endif
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public int CalculateSize() {
+    int size = 0;
+    if (HasSceneId) {
+      size += 1 + pb::CodedOutputStream.ComputeInt64Size(SceneId);
+    }
+    if (HasEntityId) {
+      size += 1 + pb::CodedOutputStream.ComputeInt64Size(EntityId);
+    }
+    if (HasComponent) {
+      size += 1 + pb::CodedOutputStream.ComputeStringSize(Component);
+    }
+    if (_unknownFields != null) {
+      size += _unknownFields.CalculateSize();
+    }
+    return size;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void MergeFrom(DestroyComponentMessage other) {
+    if (other == null) {
+      return;
+    }
+    if (other.HasSceneId) {
+      SceneId = other.SceneId;
+    }
+    if (other.HasEntityId) {
+      EntityId = other.EntityId;
+    }
+    if (other.HasComponent) {
+      Component = other.Component;
+    }
+    _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void MergeFrom(pb::CodedInputStream input) {
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    input.ReadRawMessage(this);
+  #else
+    uint tag;
+    while ((tag = input.ReadTag()) != 0) {
+      switch(tag) {
+        default:
+          _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+          break;
+        case 8: {
+          SceneId = input.ReadInt64();
+          break;
+        }
+        case 16: {
+          EntityId = input.ReadInt64();
+          break;
+        }
+        case 26: {
+          Component = input.ReadString();
+          break;
+        }
+      }
+    }
+  #endif
+  }
+
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+    uint tag;
+    while ((tag = input.ReadTag()) != 0) {
+      switch(tag) {
+        default:
+          _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+          break;
+        case 8: {
+          SceneId = input.ReadInt64();
+          break;
+        }
+        case 16: {
+          EntityId = input.ReadInt64();
+          break;
+        }
+        case 26: {
+          Component = input.ReadString();
           break;
         }
       }

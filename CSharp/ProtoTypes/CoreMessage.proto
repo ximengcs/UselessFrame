@@ -84,3 +84,38 @@ message TestServerTimeResponseMessage
     required int32 ResponseToken = 1;
     required int64 Time = 2;
 }
+
+message CreateEntityMessage
+{
+    required int64 SceneId = 1;
+    required int64 ParnetId = 2;
+    required int64 EntityId = 3;
+    required string EntityType = 4;
+}
+
+message DestroyEntityMessage
+{
+    required int64 SceneId = 1;
+    required int64 EntityId = 2;
+}
+
+message CreateComponentMessage
+{
+    required int64 SceneId = 1;
+    required int64 EntityId = 2;
+    required bytes Component = 3;
+}
+
+message UpdateComponentMessage
+{
+    required int64 SceneId = 1;
+    required int64 EntityId = 2;
+    required bytes Component = 3;
+}
+
+message DestroyComponentMessage
+{
+    required int64 SceneId = 1;
+    required int64 EntityId = 2;
+    required string Component = 3;
+}

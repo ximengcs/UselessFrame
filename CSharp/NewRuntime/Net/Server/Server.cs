@@ -1,5 +1,6 @@
 ﻿
 using Cysharp.Threading.Tasks;
+using Google.Protobuf;
 using IdGen;
 using System;
 using System.Collections.Generic;
@@ -56,7 +57,7 @@ namespace UselessFrame.Net
             _fiber = fiber;
             _disposed = false;
             _id = id;
-            _idGenerator = new IdGenerator(0, new IdGeneratorOptions(timeSource : new TimeTicksSource()));
+            _idGenerator = new IdGenerator(0, new IdGeneratorOptions(timeSource: new TimeTicksSource()));
             _state = new ValueSubject<IServer, ServerState>(this, fiber, ServerState.None);
             _connections = new Dictionary<long, Connection>();
             _host = new IPEndPoint(NetUtility.GetLocalIPAddress(), port);
@@ -116,6 +117,14 @@ namespace UselessFrame.Net
             _connections.Add(connection.Id, connection);
             X.SystemLog.Debug($"[Server][Host:{_host}]add new connectin, current count : {_connections.Count}");
             _onConnectionListChange?.Invoke(connection);
+        }
+
+        public void Broadcast(IMessage message)
+        {
+            foreach (var entry in _connections)
+            {
+                entry.Value.Send(message, true).Forget();
+            }
         }
 
         public void TriggerState(int newState)
