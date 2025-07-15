@@ -10,8 +10,8 @@ namespace UselessFrame.NewRuntime.Entities
         {
             IMessage msg = new CreateEntityMessage()
             {
-                SceneId = entity.Scene.Id,
-                ParnetId = entity.Parent.Id,
+                SceneId = entity.Scene?.Id ?? 0,
+                ParnetId = entity.Parent?.Id ?? 0,
                 EntityId = entity.Id,
                 EntityType = entity.GetType().FullName
             };

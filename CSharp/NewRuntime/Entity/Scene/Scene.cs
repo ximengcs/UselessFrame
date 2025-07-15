@@ -17,6 +17,7 @@ namespace UselessFrame.NewRuntime.Scenes
 
         protected override void OnInit()
         {
+            Scene = this;
             base.OnInit();
             _entitiesRefId = new Dictionary<long, Entity>();
             _entitiesRefWorld = new QuadTreeRectF<TransformComponent>(RectangleF.Empty);

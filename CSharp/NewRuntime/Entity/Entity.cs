@@ -18,9 +18,17 @@ namespace UselessFrame.NewRuntime.Entities
 
         public Entity Parent => _parent;
 
-        public Scene Scene => _scene;
+        public Scene Scene
+        {
+            get => _scene;
+            internal set => _scene = value;
+        }
 
-        public long Id => _id;
+        public long Id
+        {
+            get => _id;
+            internal set => _id = value;
+        }
 
         protected Entity()
         {
@@ -30,8 +38,10 @@ namespace UselessFrame.NewRuntime.Entities
 
         internal void Init(IEntityHelper helper)
         {
+            Console.WriteLine($"init entity {GetType().FullName}");
             _helper = helper;
             OnInit();
+            _helper.OnCreateEntity(this);
         }
 
         internal void Destroy()
@@ -61,7 +71,7 @@ namespace UselessFrame.NewRuntime.Entities
         {
             Type type = typeof(T);
             T entity = (T)X.Type.CreateInstance(type);
-            InitEntity(entity, Scene.World.IdGen.CreateId(), this, _scene);
+            InitEntity(entity, this.IdGen().CreateId(), this, _scene);
             return entity;
         }
 
@@ -96,17 +106,6 @@ namespace UselessFrame.NewRuntime.Entities
             entity.Init(_helper);
             _entities.Add(entity._id, entity);
             OnAddEntity(entity);
-            _helper.OnCreateEntity(entity);
-        }
-
-        internal void InitEntity(long id, IEntityHelper helper)
-        {
-            _id = id;
-            _parent = null;
-            _scene = null;
-
-            Init(_helper);
-            _helper.OnCreateEntity(this);
         }
 
         public T AddComponent<T>() where T : Component

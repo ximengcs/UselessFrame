@@ -32,6 +32,7 @@ namespace UselessFrame.NewRuntime.Entities
 
         private void TriggerMessage(MessageResult result)
         {
+            Console.WriteLine("TriggerMessage");
             if (result.Valid)
             {
                 if (_handles.TryGetValue(result.MessageType, out var handle))
@@ -43,6 +44,7 @@ namespace UselessFrame.NewRuntime.Entities
 
         private void CreateEntity(IMessage message)
         {
+            Console.WriteLine($"CreateEntity {message}");
             CreateEntityMessage createMsg = (CreateEntityMessage)message;
             long sceneId = createMsg.SceneId;
             if (sceneId != EntityExtensions.INVALID_ID)
@@ -63,6 +65,10 @@ namespace UselessFrame.NewRuntime.Entities
                         }
                     }
                 }
+            }
+            else
+            {
+
             }
         }
 

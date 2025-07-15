@@ -12,7 +12,7 @@ namespace UselessFrame.NewRuntime.Worlds
 
         public void OnInit()
         {
-            _connection = IServer.Connect(9999, X.MainFiber);
+            //_connection = IServer.Connect(9999, X.MainFiber);
         }
 
         public void OnDispose()
@@ -22,7 +22,6 @@ namespace UselessFrame.NewRuntime.Worlds
 
         public IEntityHelper CreateHelper()
         {
-            //_connection.connectionto
             return new ClientEntityHelper(IServer.Connect(8888, X.MainFiber));
         }
     }

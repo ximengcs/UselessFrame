@@ -12,8 +12,8 @@ namespace UselessFrame.NewRuntime.Worlds
 
         public void OnInit()
         {
-            _server = IServer.Create(9999, X.MainFiber);
-            _server.Start();
+            //_server = IServer.Create(9999, X.MainFiber);
+            //_server.Start();
         }
 
         public IEntityHelper CreateHelper()

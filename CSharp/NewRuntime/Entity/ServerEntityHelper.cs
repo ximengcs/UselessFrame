@@ -1,6 +1,7 @@
 ﻿
-using UselessFrame.Net;
+using System;
 using System.Collections.Generic;
+using UselessFrame.Net;
 using UselessFrame.NewRuntime.Scenes;
 using UselessFrame.NewRuntime.Worlds;
 
@@ -24,16 +25,26 @@ namespace UselessFrame.NewRuntime.Entities
 
         private void NewConnectionHandler(IConnection connection)
         {
-            connection.Send(EntityMessageExtensions.CreateEntity(_world));
-            foreach (Scene scene in _world.Scenes)
+            Console.WriteLine("NewConnectionHandler");
+            connection.State.Subscribe(ConnectionStateHandler);
+        }
+
+        private void ConnectionStateHandler(IConnection connection, ConnectionState state)
+        {
+            if (state == ConnectionState.Run)
             {
-                connection.Send(EntityMessageExtensions.CreateEntity(scene));
-                foreach (Entity entity in scene.Entities)
+                Console.WriteLine("NewConnectionHandler Run");
+                connection.Send(EntityMessageExtensions.CreateEntity(_world));
+                foreach (Scene scene in _world.Scenes)
                 {
-                    connection.Send(EntityMessageExtensions.CreateEntity(entity));
-                    foreach (Component component in entity.Components)
+                    connection.Send(EntityMessageExtensions.CreateEntity(scene));
+                    foreach (Entity entity in scene.Entities)
                     {
-                        connection.Send(EntityMessageExtensions.CreateComponent(component));
+                        connection.Send(EntityMessageExtensions.CreateEntity(entity));
+                        foreach (Component component in entity.Components)
+                        {
+                            connection.Send(EntityMessageExtensions.CreateComponent(component));
+                        }
                     }
                 }
             }

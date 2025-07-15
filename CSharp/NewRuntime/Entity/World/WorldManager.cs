@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using UselessFrame.Net;
+﻿using System.Collections.Generic;
 using UselessFrame.NewRuntime.Entities;
-using UselessFrame.NewRuntime.Scenes;
 
 namespace UselessFrame.NewRuntime.Worlds
 {
@@ -18,11 +15,17 @@ namespace UselessFrame.NewRuntime.Worlds
             _worldList = new Dictionary<long, World>();
         }
 
+        public void SetHelper(IWorldHelper helper)
+        {
+            _helper = helper;
+            _helper.OnInit();
+        }
+
         public World Create()
         {
             IEntityHelper entityHelper = _helper.CreateHelper();
             World world = new World();
-            world.InitEntity(world.IdGen.CreateId(), entityHelper);
+            world.Init(entityHelper);
             entityHelper.Bind(world);
             _worldList.Add(world.Id, world);
             return world;
