@@ -59,11 +59,7 @@ namespace UselessFrame.NewRuntime.Entities
         {
             Type type = typeof(T);
             T entity = (T)X.Type.CreateInstance(type);
-            InitBaseProp(Scene.World.IdGen.CreateId(), this, _scene);
-            entity.Init(_helper);
-            _entities.Add(entity._id, entity);
-            OnAddEntity(entity);
-            _helper.OnInit(entity);
+            InitEntity(entity, Scene.World.IdGen.CreateId(), this, _scene);
             return entity;
         }
 
@@ -81,18 +77,20 @@ namespace UselessFrame.NewRuntime.Entities
         {
             Type type = typeof(T);
             T entity = (T)X.Type.CreateInstance(type);
-            InitBaseProp(id, this, _scene);
-            entity.Init(_helper);
-            _entities.Add(entity._id, entity);
-            _helper.OnInit(entity);
+            InitEntity(entity, id, this, _scene);
             return entity;
         }
 
-        internal void InitBaseProp(long id, Entity parent, Scene scene)
+        internal void InitEntity(Entity entity, long id, Entity parent, Scene scene)
         {
-            _id = id;
-            _parent = this;
-            _scene = scene;
+            entity._id = id;
+            entity._parent = this;
+            entity._scene = scene;
+
+            entity.Init(_helper);
+            _entities.Add(entity._id, entity);
+            OnAddEntity(entity);
+            _helper.OnInit(entity);
         }
 
         public T AddComponent<T>() where T : Component
@@ -104,6 +102,14 @@ namespace UselessFrame.NewRuntime.Entities
 
             _scene.World.Event.TriggerComponentAwake(comp);
             return comp;
+        }
+
+        public T GetComponent<T>() where T : Component
+        {
+            Type type = typeof(T);
+            if (_components.TryGetValue(type, out Component comp))
+                return (T)comp;
+            return null;
         }
 
         public void RemoveComponent<T>() where T : Component

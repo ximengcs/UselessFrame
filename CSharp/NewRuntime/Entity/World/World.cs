@@ -25,5 +25,23 @@ namespace UselessFrame.NewRuntime.Worlds
             _idGenerator = new IdGenerator(0, new IdGeneratorOptions(timeSource: new TimeTicksSource()));
             _event = new EventManager();
         }
+
+        protected override void OnAddEntity(Entity entity)
+        {
+            base.OnAddEntity(entity);
+            if (entity is Scene scene)
+            {
+                _scenes.Add(scene.Id, scene);
+            }
+        }
+
+        protected override void OnRemoveEntity(Entity entity)
+        {
+            base.OnRemoveEntity(entity);
+            if (entity is Scene scene)
+            {
+                _scenes.Remove(scene.Id);
+            }
+        }
     }
 }

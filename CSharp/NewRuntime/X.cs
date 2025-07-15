@@ -15,7 +15,7 @@ namespace UselessFrame.NewRuntime
     {
         private static MainFiber _mainFiber;
         private static ITypeManager _typeManager;
-        private static IWorldManager _worldManager;
+        private static WorldManager _worldManager;
         private static ILogManager _logManager;
         private static IFiberManager _fiberManager;
         private static CommandManager _commandManager;
@@ -26,7 +26,7 @@ namespace UselessFrame.NewRuntime
 
         public static ITypeManager Type => _typeManager;
 
-        public static IWorldManager World => _worldManager;
+        public static WorldManager World => _worldManager;
 
         public static ILogManager SystemLog => _logManager;
 
