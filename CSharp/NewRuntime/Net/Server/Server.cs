@@ -93,12 +93,10 @@ namespace UselessFrame.Net
 
         internal void Dispose()
         {
-            _host = null;
             _listener = null;
             _connections = null;
             _onConnectionListChange = null;
             _fsm = null;
-            _state = null;
             _fiber = null;
             X.UnRegisterServer(this);
         }
