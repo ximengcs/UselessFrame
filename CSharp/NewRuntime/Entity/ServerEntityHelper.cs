@@ -25,7 +25,6 @@ namespace UselessFrame.NewRuntime.Entities
 
         private void NewConnectionHandler(IConnection connection)
         {
-            Console.WriteLine("NewConnectionHandler");
             connection.State.Subscribe(ConnectionStateHandler);
         }
 
@@ -33,19 +32,23 @@ namespace UselessFrame.NewRuntime.Entities
         {
             if (state == ConnectionState.Run)
             {
-                Console.WriteLine("NewConnectionHandler Run");
                 connection.Send(EntityMessageExtensions.CreateEntity(_world));
                 foreach (Scene scene in _world.Scenes)
                 {
-                    connection.Send(EntityMessageExtensions.CreateEntity(scene));
-                    foreach (Entity entity in scene.Entities)
-                    {
-                        connection.Send(EntityMessageExtensions.CreateEntity(entity));
-                        foreach (Component component in entity.Components)
-                        {
-                            connection.Send(EntityMessageExtensions.CreateComponent(component));
-                        }
-                    }
+                    RecursiveSyncEntity(connection, scene);
+                }
+            }
+        }
+
+        private void RecursiveSyncEntity(IConnection connection, Entity entity)
+        {
+            connection.Send(EntityMessageExtensions.CreateEntity(entity));
+            foreach (Entity child in entity.Entities)
+            {
+                RecursiveSyncEntity(connection, child);
+                foreach (Component component in entity.Components)
+                {
+                    connection.Send(EntityMessageExtensions.CreateComponent(component));
                 }
             }
         }

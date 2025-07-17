@@ -1,5 +1,6 @@
 ﻿using IdGen;
 using System;
+using System.Text;
 using System.Collections.Generic;
 using UselessFrame.NewRuntime.Scenes;
 
@@ -17,6 +18,8 @@ namespace UselessFrame.NewRuntime.Entities
         public IReadOnlyCollection<Component> Components => _components.Values;
 
         public Entity Parent => _parent;
+
+        public IReadOnlyCollection<Entity> Entities => _entities.Values;
 
         public Scene Scene
         {
@@ -38,10 +41,9 @@ namespace UselessFrame.NewRuntime.Entities
 
         internal void Init(IEntityHelper helper)
         {
-            Console.WriteLine($"init entity {GetType().FullName}");
             _helper = helper;
-            OnInit();
             _helper.OnCreateEntity(this);
+            OnInit();
         }
 
         internal void Destroy()
@@ -59,12 +61,12 @@ namespace UselessFrame.NewRuntime.Entities
 
         protected virtual void OnAddEntity(Entity entity)
         {
-
+            _scene?.RegisterEntity(entity);
         }
 
         protected virtual void OnRemoveEntity(Entity entity)
         {
-
+            _scene?.UnRegisterEntity(entity);
         }
 
         public T AddEntity<T>() where T : Entity
@@ -73,6 +75,13 @@ namespace UselessFrame.NewRuntime.Entities
             T entity = (T)X.Type.CreateInstance(type);
             InitEntity(entity, this.IdGen().CreateId(), this, _scene);
             return entity;
+        }
+
+        public Entity GetEntity(long id)
+        {
+            if (_entities.TryGetValue(id, out Entity entity))
+                return entity;
+            return null;
         }
 
         public void RemoveEntity(long id)
@@ -136,6 +145,27 @@ namespace UselessFrame.NewRuntime.Entities
                 comp.OnDestroy();
                 _components.Remove(type);
             }
+        }
+
+        public override string ToString()
+        {
+            return ToString(string.Empty);
+        }
+
+        private string ToString(string prefix)
+        {
+            prefix += "---";
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"{prefix}[E][{GetType().Name}][{_id}]\n");
+            foreach (var comp in _components)
+            {
+                sb.Append($"---{prefix}[C][{comp.Key.Name}]\n");
+            }
+            foreach (var child in _entities)
+            {
+                sb.Append($"{child.Value.ToString(prefix)}");
+            }
+            return sb.ToString();
         }
     }
 }

@@ -26,6 +26,7 @@ namespace UselessFrame.NewRuntime.Worlds
             _scenes = new Dictionary<long, Scene>();
             _idGenerator = new IdGenerator(0, new IdGeneratorOptions(timeSource: new TimeTicksSource()));
             _event = new EventManager();
+            _event.Initialize();
         }
 
         public Scene GetScene(long id)

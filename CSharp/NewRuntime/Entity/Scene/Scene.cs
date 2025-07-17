@@ -13,8 +13,6 @@ namespace UselessFrame.NewRuntime.Scenes
 
         public World World => (World)Parent;
 
-        public IReadOnlyCollection<Entity> Entities => _entitiesRefId.Values;
-
         protected override void OnInit()
         {
             Scene = this;
@@ -23,16 +21,17 @@ namespace UselessFrame.NewRuntime.Scenes
             _entitiesRefWorld = new QuadTreeRectF<TransformComponent>(RectangleF.Empty);
         }
 
-        protected override void OnAddEntity(Entity entity)
+        internal void RegisterEntity(Entity entity)
         {
-            base.OnAddEntity(entity);
             _entitiesRefId.Add(entity.Id, entity);
-            _entitiesRefWorld.Add(entity.GetComponent<TransformComponent>());
+            TransformComponent tfComp = entity.GetComponent<TransformComponent>();
+            if (tfComp == null)
+                tfComp = entity.AddComponent<TransformComponent>();
+            _entitiesRefWorld.Add(tfComp);
         }
 
-        protected override void OnRemoveEntity(Entity entity)
+        internal void UnRegisterEntity(Entity entity)
         {
-            base.OnRemoveEntity(entity);
             _entitiesRefId.Remove(entity.Id);
             _entitiesRefWorld.Remove(entity.GetComponent<TransformComponent>());
         }
