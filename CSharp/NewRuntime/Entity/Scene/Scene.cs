@@ -21,6 +21,16 @@ namespace UselessFrame.NewRuntime.Scenes
             _entitiesRefWorld = new QuadTreeRectF<TransformComponent>(RectangleF.Empty);
         }
 
+        public Entity FindEntity(long id)
+        {
+            if (_entitiesRefId.TryGetValue(id, out Entity entity))
+            {
+                return entity;
+            }
+
+            return null;
+        }
+
         internal void RegisterEntity(Entity entity)
         {
             _entitiesRefId.Add(entity.Id, entity);

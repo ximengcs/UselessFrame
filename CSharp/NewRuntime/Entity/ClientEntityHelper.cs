@@ -30,6 +30,7 @@ namespace UselessFrame.NewRuntime.Entities
                 { typeof(DestroyEntityMessage), DestoryEntity },
                 { typeof(CreateComponentMessage), CreateComponent },
                 { typeof(UpdateComponentMessage), UpdateComponent },
+                { typeof(DestroyComponentMessage), DestoryComponent },
             };
             _connection.ReceiveMessageEvent += TriggerMessage;
         }
@@ -54,7 +55,9 @@ namespace UselessFrame.NewRuntime.Entities
                 Scene scene = _world.GetScene(sceneId);
                 if (scene != null)
                 {
-                    scene.RemoveEntity(createMsg.EntityId);
+                    Entity entity = scene.FindEntity(createMsg.EntityId);
+                    if (entity.Parent != null)
+                        entity.Parent.RemoveEntity(entity.Id);
                 }
             }
         }
@@ -76,7 +79,7 @@ namespace UselessFrame.NewRuntime.Entities
                     if (parentId == sceneId)
                         parent = scene;
                     else
-                        parent = scene.GetEntity(parentId);
+                        parent = scene.FindEntity(parentId);
 
                     if (parent != null)
                     {
@@ -87,10 +90,6 @@ namespace UselessFrame.NewRuntime.Entities
                         }
                     }
                 }
-            }
-            else
-            {
-
             }
         }
 
@@ -103,7 +102,7 @@ namespace UselessFrame.NewRuntime.Entities
                 Scene scene = _world.GetScene(sceneId);
                 if (scene != null)
                 {
-                    Entity entity = scene.GetEntity(createMsg.EntityId);
+                    Entity entity = scene.FindEntity(createMsg.EntityId);
                     if (entity != null)
                     {
                         if (X.Type.TryGetType(createMsg.ComponentType, out Type compType))
@@ -137,13 +136,46 @@ namespace UselessFrame.NewRuntime.Entities
                 Scene scene = _world.GetScene(sceneId);
                 if (scene != null)
                 {
-                    Entity entity = scene.GetEntity(createMsg.EntityId);
+                    Entity entity = scene.FindEntity(createMsg.EntityId);
                     if (entity != null)
                     {
                         if (X.Type.TryGetType(createMsg.ComponentType, out Type compType))
                         {
                             Component comp = (Component)MemoryPackSerializer.Deserialize(compType, createMsg.ComponentData.Span);
                             entity.UpdateComponent(comp);
+                        }
+                        else
+                        {
+                            X.SystemLog.Error($"add component error, component type is null {createMsg.ComponentType}");
+                        }
+                    }
+                    else
+                    {
+                        X.SystemLog.Error($"add component error, entity is null {createMsg.EntityId}");
+                    }
+                }
+                else
+                {
+                    X.SystemLog.Error($"add component error, scene is null {sceneId}");
+                }
+            }
+        }
+
+        public void DestoryComponent(IMessage message)
+        {
+            DestroyComponentMessage createMsg = (DestroyComponentMessage)message;
+            long sceneId = createMsg.SceneId;
+            if (sceneId != EntityExtensions.INVALID_ID)
+            {
+                Scene scene = _world.GetScene(sceneId);
+                if (scene != null)
+                {
+                    Entity entity = scene.FindEntity(createMsg.EntityId);
+                    if (entity != null)
+                    {
+                        if (X.Type.TryGetType(createMsg.ComponentType, out Type compType))
+                        {
+                            entity.RemoveComponent(compType);
                         }
                         else
                         {
