@@ -1,6 +1,4 @@
 ﻿
-using System;
-using System.Collections.Generic;
 using UselessFrame.Net;
 using UselessFrame.NewRuntime.Scenes;
 using UselessFrame.NewRuntime.Worlds;
@@ -32,7 +30,7 @@ namespace UselessFrame.NewRuntime.Entities
         {
             if (state == ConnectionState.Run)
             {
-                connection.Send(EntityMessageExtensions.CreateEntity(_world));
+                connection.Send(_world.ToCreateMessage());
                 foreach (Scene scene in _world.Scenes)
                 {
                     RecursiveSyncEntity(connection, scene);
@@ -42,13 +40,13 @@ namespace UselessFrame.NewRuntime.Entities
 
         private void RecursiveSyncEntity(IConnection connection, Entity entity)
         {
-            connection.Send(EntityMessageExtensions.CreateEntity(entity));
+            connection.Send(entity.ToCreateMessage());
             foreach (Entity child in entity.Entities)
             {
                 RecursiveSyncEntity(connection, child);
                 foreach (Component component in entity.Components)
                 {
-                    connection.Send(EntityMessageExtensions.CreateComponent(component));
+                    connection.Send(component.ToCreateMessage());
                 }
             }
         }
@@ -60,22 +58,27 @@ namespace UselessFrame.NewRuntime.Entities
 
         public void OnCreateEntity(Entity entity)
         {
-            _server.Broadcast(EntityMessageExtensions.CreateEntity(entity));
+            _server.Broadcast(entity.ToCreateMessage());
         }
 
         public void OnDestroyEntity(Entity entity)
         {
-            _server.Broadcast(EntityMessageExtensions.DestroyEntity(entity));
+            _server.Broadcast(entity.ToDestroyMessage());
         }
 
         public void OnCreateComponent(Component component)
         {
-            _server.Broadcast(EntityMessageExtensions.CreateComponent(component));
+            _server.Broadcast(component.ToCreateMessage());
+        }
+
+        public void OnUpdateComponent(Component component)
+        {
+            _server.Broadcast(component.ToUpdateMessage());
         }
 
         public void OnDestroyComponent(Component component)
         {
-            _server.Broadcast(EntityMessageExtensions.DestroyComponent(component));
+            _server.Broadcast(component.ToDestroyMessage());
         }
     }
 }

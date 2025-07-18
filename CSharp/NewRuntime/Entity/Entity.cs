@@ -121,14 +121,10 @@ namespace UselessFrame.NewRuntime.Entities
             OnAddEntity(entity);
         }
 
-        internal void AddOrUpdateComponent(Component newComp)
+        internal void AddComponent(Component newComp)
         {
             Type type = newComp.GetType();
-            if (_components.TryGetValue(type, out Component comp))
-            {
-                _scene.World.Event.TriggerComponentUpdate(comp);
-            }
-            else
+            if (!_components.TryGetValue(type, out Component comp))
             {
                 InitComponent(type, newComp);
             }
@@ -144,10 +140,21 @@ namespace UselessFrame.NewRuntime.Entities
             return comp;
         }
 
+        public void UpdateComponent(Component newComp)
+        {
+            Type type = newComp.GetType();
+            if (_components.TryGetValue(type, out Component comp))
+            {
+                _helper.OnUpdateComponent(newComp);
+                _scene.World.Event.TriggerComponentUpdate(comp, newComp);
+            }
+        }
+
         private void InitComponent(Type type, Component comp)
         {
             _components[type] = comp;
             comp.OnInit(this);
+            _helper.OnCreateComponent(comp);
             _scene.World.Event.TriggerComponentAwake(comp);
         }
 
@@ -183,6 +190,7 @@ namespace UselessFrame.NewRuntime.Entities
             if (_components.TryGetValue(type, out Component comp))
             {
                 _scene.World.Event.TriggerComponentDestroy(comp);
+                _helper.OnDestroyComponent(comp);
                 comp.OnDestroy();
                 _components.Remove(type);
             }

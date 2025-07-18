@@ -13,6 +13,8 @@ namespace UselessFrame.NewRuntime.Entities
 
         void OnCreateComponent(Component component);
 
+        void OnUpdateComponent(Component component);
+
         void OnDestroyComponent(Component component);
     }
 }

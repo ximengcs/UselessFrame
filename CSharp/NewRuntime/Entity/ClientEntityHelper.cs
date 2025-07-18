@@ -29,6 +29,7 @@ namespace UselessFrame.NewRuntime.Entities
                 { typeof(CreateEntityMessage), CreateEntity },
                 { typeof(DestroyEntityMessage), DestoryEntity },
                 { typeof(CreateComponentMessage), CreateComponent },
+                { typeof(UpdateComponentMessage), UpdateComponent },
             };
             _connection.ReceiveMessageEvent += TriggerMessage;
         }
@@ -108,7 +109,41 @@ namespace UselessFrame.NewRuntime.Entities
                         if (X.Type.TryGetType(createMsg.ComponentType, out Type compType))
                         {
                             Component comp = (Component)MemoryPackSerializer.Deserialize(compType, createMsg.ComponentData.Span);
-                            entity.AddOrUpdateComponent(comp);
+                            entity.AddComponent(comp);
+                        }
+                        else
+                        {
+                            X.SystemLog.Error($"add component error, component type is null {createMsg.ComponentType}");
+                        }
+                    }
+                    else
+                    {
+                        X.SystemLog.Error($"add component error, entity is null {createMsg.EntityId}");
+                    }
+                }
+                else
+                {
+                    X.SystemLog.Error($"add component error, scene is null {sceneId}");
+                }
+            }
+        }
+
+        private void UpdateComponent(IMessage message)
+        {
+            UpdateComponentMessage createMsg = (UpdateComponentMessage)message;
+            long sceneId = createMsg.SceneId;
+            if (sceneId != EntityExtensions.INVALID_ID)
+            {
+                Scene scene = _world.GetScene(sceneId);
+                if (scene != null)
+                {
+                    Entity entity = scene.GetEntity(createMsg.EntityId);
+                    if (entity != null)
+                    {
+                        if (X.Type.TryGetType(createMsg.ComponentType, out Type compType))
+                        {
+                            Component comp = (Component)MemoryPackSerializer.Deserialize(compType, createMsg.ComponentData.Span);
+                            entity.UpdateComponent(comp);
                         }
                         else
                         {
@@ -143,6 +178,11 @@ namespace UselessFrame.NewRuntime.Entities
         }
 
         public void OnCreateComponent(Component component)
+        {
+
+        }
+
+        public void OnUpdateComponent(Component component)
         {
 
         }

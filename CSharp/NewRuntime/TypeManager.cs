@@ -90,9 +90,8 @@ namespace UselessFrame.NewRuntime
                 if (!find)
                     continue;
 
-                foreach (TypeInfo typeInfo in assembly.DefinedTypes)
+                foreach (Type type in assembly.GetTypes())
                 {
-                    Type type = typeInfo.AsType();
                     if (!typesDictionary.ContainsKey(type.FullName))
                     {
                         if (typeFilter != null && !typeFilter.CheckType(type))
