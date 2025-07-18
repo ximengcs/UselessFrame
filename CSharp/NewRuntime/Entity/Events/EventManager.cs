@@ -15,6 +15,7 @@ namespace UselessFrame.NewRuntime.Events
         {
             _globalAwakeSystems = new Dictionary<Type, IAwakeSystem>();
             _awakeSystems = new Dictionary<Type, List<IAwakeSystem>>();
+            _destroySystems = new Dictionary<Type, List<IDestroySystem>>();
         }
 
         public void AddGlobalAwakeSystem<T>() where T : IAwakeSystem

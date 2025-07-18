@@ -25,7 +25,8 @@ namespace UselessFrame.NewRuntime.Entities
             _world = world;
             _handles = new Dictionary<Type, Action<IMessage>>()
             {
-                { typeof(CreateEntityMessage), CreateEntity }
+                { typeof(CreateEntityMessage), CreateEntity },
+                { typeof(DestroyEntityMessage), DestoryEntity }
             };
             _connection.ReceiveMessageEvent += TriggerMessage;
         }
@@ -37,6 +38,20 @@ namespace UselessFrame.NewRuntime.Entities
                 if (_handles.TryGetValue(result.MessageType, out var handle))
                 {
                     handle(result.Message);
+                }
+            }
+        }
+
+        private void DestoryEntity(IMessage message)
+        {
+            DestroyEntityMessage createMsg = (DestroyEntityMessage)message;
+            long sceneId = createMsg.SceneId;
+            if (sceneId != EntityExtensions.INVALID_ID)
+            {
+                Scene scene = _world.GetScene(sceneId);
+                if (scene != null)
+                {
+                    scene.RemoveEntity(createMsg.EntityId);
                 }
             }
         }

@@ -6,6 +6,7 @@ using Unity.Mathematics;
 
 namespace UselessFrame.NewRuntime.Entities
 {
+    [CoreComponent]
     [MemoryPackable]
     public partial class TransformComponent : Component, IRectFQuadStorable
     {

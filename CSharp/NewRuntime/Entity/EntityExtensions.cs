@@ -1,5 +1,6 @@
 ﻿
 using IdGen;
+using System;
 using UselessFrame.NewRuntime.Worlds;
 
 namespace UselessFrame.NewRuntime.Entities
@@ -22,6 +23,17 @@ namespace UselessFrame.NewRuntime.Entities
             if (world != null)
                 return world.IdGen;
             return null;
+        }
+
+        public static bool IsCoreComponent(this Type type)
+        {
+            return X.Type.GetAttribute(type, typeof(CoreComponentAttribute)) != null;
+        }
+
+        public static bool IsCore(this Component component)
+        {
+            Type type = component.GetType();
+            return IsCoreComponent(type);
         }
     }
 }

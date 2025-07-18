@@ -69,12 +69,16 @@ namespace UselessFrame.NewRuntime.Entities
             _scene?.UnRegisterEntity(entity);
         }
 
-        public T AddEntity<T>() where T : Entity
+        public Entity AddEntity(Type type)
         {
-            Type type = typeof(T);
-            T entity = (T)X.Type.CreateInstance(type);
+            Entity entity = (Entity)X.Type.CreateInstance(type);
             InitEntity(entity, this.IdGen().CreateId(), this, _scene);
             return entity;
+        }
+
+        public T AddEntity<T>() where T : Entity
+        {
+            return (T)AddEntity(typeof(T));
         }
 
         public Entity GetEntity(long id)
@@ -117,15 +121,29 @@ namespace UselessFrame.NewRuntime.Entities
             OnAddEntity(entity);
         }
 
-        public T AddComponent<T>() where T : Component
+        public Component GetOrAddComponent(Type type)
         {
-            Type type = typeof(T);
-            T comp = (T)X.Type.CreateInstance(type);
+            Component comp = GetComponent(type);
+            if (comp != null) return comp;
+
+            comp = (Component)X.Type.CreateInstance(type);
             _components[type] = comp;
             comp.OnInit(this);
 
             _scene.World.Event.TriggerComponentAwake(comp);
             return comp;
+        }
+
+        public T GetOrAddComponent<T>() where T : Component
+        {
+            return (T)GetOrAddComponent(typeof(T));
+        }
+
+        public Component GetComponent(Type type)
+        {
+            if (_components.TryGetValue(type, out Component comp))
+                return comp;
+            return null;
         }
 
         public T GetComponent<T>() where T : Component
@@ -136,15 +154,26 @@ namespace UselessFrame.NewRuntime.Entities
             return null;
         }
 
-        public void RemoveComponent<T>() where T : Component
+        public void RemoveComponent(Component comp)
         {
-            Type type = typeof(T);
+            RemoveComponent(comp.GetType());
+        }
+
+        public void RemoveComponent(Type type)
+        {
+            if (type.IsCoreComponent())
+                return;
             if (_components.TryGetValue(type, out Component comp))
             {
                 _scene.World.Event.TriggerComponentDestroy(comp);
                 comp.OnDestroy();
                 _components.Remove(type);
             }
+        }
+
+        public void RemoveComponent<T>() where T : Component
+        {
+            RemoveComponent(typeof(T));
         }
 
         public override string ToString()

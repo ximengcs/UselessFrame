@@ -26,7 +26,7 @@ namespace UselessFrame.NewRuntime.Scenes
             _entitiesRefId.Add(entity.Id, entity);
             TransformComponent tfComp = entity.GetComponent<TransformComponent>();
             if (tfComp == null)
-                tfComp = entity.AddComponent<TransformComponent>();
+                tfComp = entity.GetOrAddComponent<TransformComponent>();
             _entitiesRefWorld.Add(tfComp);
         }
 
