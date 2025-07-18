@@ -29,6 +29,7 @@ namespace UselessFrame.Runtime.Pools
             m_Helper = helper;
             m_Module = module;
             m_Objects = new LinkedList<T>();
+            m_NodeCache = new Queue<LinkedListNode<T>>();
         }
 
         public T Require(int poolKey, object userData = default)
