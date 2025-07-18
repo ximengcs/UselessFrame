@@ -121,17 +121,34 @@ namespace UselessFrame.NewRuntime.Entities
             OnAddEntity(entity);
         }
 
+        internal void AddOrUpdateComponent(Component newComp)
+        {
+            Type type = newComp.GetType();
+            if (_components.TryGetValue(type, out Component comp))
+            {
+                _scene.World.Event.TriggerComponentUpdate(comp);
+            }
+            else
+            {
+                InitComponent(type, newComp);
+            }
+        }
+
         public Component GetOrAddComponent(Type type)
         {
             Component comp = GetComponent(type);
             if (comp != null) return comp;
 
             comp = (Component)X.Type.CreateInstance(type);
+            InitComponent(type, comp);
+            return comp;
+        }
+
+        private void InitComponent(Type type, Component comp)
+        {
             _components[type] = comp;
             comp.OnInit(this);
-
             _scene.World.Event.TriggerComponentAwake(comp);
-            return comp;
         }
 
         public T GetOrAddComponent<T>() where T : Component

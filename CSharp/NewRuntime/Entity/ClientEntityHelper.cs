@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf;
+using MemoryPack;
 using System;
 using System.Collections.Generic;
 using UselessFrame.Net;
@@ -26,7 +27,8 @@ namespace UselessFrame.NewRuntime.Entities
             _handles = new Dictionary<Type, Action<IMessage>>()
             {
                 { typeof(CreateEntityMessage), CreateEntity },
-                { typeof(DestroyEntityMessage), DestoryEntity }
+                { typeof(DestroyEntityMessage), DestoryEntity },
+                { typeof(CreateComponentMessage), CreateComponent },
             };
             _connection.ReceiveMessageEvent += TriggerMessage;
         }
@@ -88,6 +90,40 @@ namespace UselessFrame.NewRuntime.Entities
             else
             {
 
+            }
+        }
+
+        private void CreateComponent(IMessage message)
+        {
+            CreateComponentMessage createMsg = (CreateComponentMessage)message;
+            long sceneId = createMsg.SceneId;
+            if (sceneId != EntityExtensions.INVALID_ID)
+            {
+                Scene scene = _world.GetScene(sceneId);
+                if (scene != null)
+                {
+                    Entity entity = scene.GetEntity(createMsg.EntityId);
+                    if (entity != null)
+                    {
+                        if (X.Type.TryGetType(createMsg.ComponentType, out Type compType))
+                        {
+                            Component comp = (Component)MemoryPackSerializer.Deserialize(compType, createMsg.ComponentData.Span);
+                            entity.AddOrUpdateComponent(comp);
+                        }
+                        else
+                        {
+                            X.SystemLog.Error($"add component error, component type is null {createMsg.ComponentType}");
+                        }
+                    }
+                    else
+                    {
+                        X.SystemLog.Error($"add component error, entity is null {createMsg.EntityId}");
+                    }
+                }
+                else
+                {
+                    X.SystemLog.Error($"add component error, scene is null {sceneId}");
+                }
             }
         }
 

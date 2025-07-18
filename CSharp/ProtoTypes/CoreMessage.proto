@@ -103,19 +103,21 @@ message CreateComponentMessage
 {
     required int64 SceneId = 1;
     required int64 EntityId = 2;
-    required bytes Component = 3;
+    required string ComponentType = 3;
+    required bytes ComponentData = 4;
 }
 
 message UpdateComponentMessage
 {
     required int64 SceneId = 1;
     required int64 EntityId = 2;
-    required bytes Component = 3;
+    required string ComponentType = 3;
+    required bytes ComponentData = 4;
 }
 
 message DestroyComponentMessage
 {
     required int64 SceneId = 1;
     required int64 EntityId = 2;
-    required string Component = 3;
+    required string ComponentType = 3;
 }

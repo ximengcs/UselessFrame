@@ -43,12 +43,13 @@ public static partial class CoreMessageReflection {
           "dGVFbnRpdHlNZXNzYWdlEg8KB1NjZW5lSWQYASACKAMSEAoIUGFybmV0SWQY",
           "AiACKAMSEAoIRW50aXR5SWQYAyACKAMSEgoKRW50aXR5VHlwZRgEIAIoCSI5",
           "ChREZXN0cm95RW50aXR5TWVzc2FnZRIPCgdTY2VuZUlkGAEgAigDEhAKCEVu",
-          "dGl0eUlkGAIgAigDIk4KFkNyZWF0ZUNvbXBvbmVudE1lc3NhZ2USDwoHU2Nl",
-          "bmVJZBgBIAIoAxIQCghFbnRpdHlJZBgCIAIoAxIRCglDb21wb25lbnQYAyAC",
-          "KAwiTgoWVXBkYXRlQ29tcG9uZW50TWVzc2FnZRIPCgdTY2VuZUlkGAEgAigD",
-          "EhAKCEVudGl0eUlkGAIgAigDEhEKCUNvbXBvbmVudBgDIAIoDCJPChdEZXN0",
-          "cm95Q29tcG9uZW50TWVzc2FnZRIPCgdTY2VuZUlkGAEgAigDEhAKCEVudGl0",
-          "eUlkGAIgAigDEhEKCUNvbXBvbmVudBgDIAIoCQ=="));
+          "dGl0eUlkGAIgAigDImkKFkNyZWF0ZUNvbXBvbmVudE1lc3NhZ2USDwoHU2Nl",
+          "bmVJZBgBIAIoAxIQCghFbnRpdHlJZBgCIAIoAxIVCg1Db21wb25lbnRUeXBl",
+          "GAMgAigJEhUKDUNvbXBvbmVudERhdGEYBCACKAwiaQoWVXBkYXRlQ29tcG9u",
+          "ZW50TWVzc2FnZRIPCgdTY2VuZUlkGAEgAigDEhAKCEVudGl0eUlkGAIgAigD",
+          "EhUKDUNvbXBvbmVudFR5cGUYAyACKAkSFQoNQ29tcG9uZW50RGF0YRgEIAIo",
+          "DCJTChdEZXN0cm95Q29tcG9uZW50TWVzc2FnZRIPCgdTY2VuZUlkGAEgAigD",
+          "EhAKCEVudGl0eUlkGAIgAigDEhUKDUNvbXBvbmVudFR5cGUYAyACKAk="));
     descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
         new pbr::FileDescriptor[] { },
         new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -70,9 +71,9 @@ public static partial class CoreMessageReflection {
           new pbr::GeneratedClrTypeInfo(typeof(global::TestServerTimeResponseMessage), global::TestServerTimeResponseMessage.Parser, new[]{ "ResponseToken", "Time" }, null, null, null, null),
           new pbr::GeneratedClrTypeInfo(typeof(global::CreateEntityMessage), global::CreateEntityMessage.Parser, new[]{ "SceneId", "ParnetId", "EntityId", "EntityType" }, null, null, null, null),
           new pbr::GeneratedClrTypeInfo(typeof(global::DestroyEntityMessage), global::DestroyEntityMessage.Parser, new[]{ "SceneId", "EntityId" }, null, null, null, null),
-          new pbr::GeneratedClrTypeInfo(typeof(global::CreateComponentMessage), global::CreateComponentMessage.Parser, new[]{ "SceneId", "EntityId", "Component" }, null, null, null, null),
-          new pbr::GeneratedClrTypeInfo(typeof(global::UpdateComponentMessage), global::UpdateComponentMessage.Parser, new[]{ "SceneId", "EntityId", "Component" }, null, null, null, null),
-          new pbr::GeneratedClrTypeInfo(typeof(global::DestroyComponentMessage), global::DestroyComponentMessage.Parser, new[]{ "SceneId", "EntityId", "Component" }, null, null, null, null)
+          new pbr::GeneratedClrTypeInfo(typeof(global::CreateComponentMessage), global::CreateComponentMessage.Parser, new[]{ "SceneId", "EntityId", "ComponentType", "ComponentData" }, null, null, null, null),
+          new pbr::GeneratedClrTypeInfo(typeof(global::UpdateComponentMessage), global::UpdateComponentMessage.Parser, new[]{ "SceneId", "EntityId", "ComponentType", "ComponentData" }, null, null, null, null),
+          new pbr::GeneratedClrTypeInfo(typeof(global::DestroyComponentMessage), global::DestroyComponentMessage.Parser, new[]{ "SceneId", "EntityId", "ComponentType" }, null, null, null, null)
         }));
   }
   #endregion
@@ -4348,7 +4349,8 @@ public sealed partial class CreateComponentMessage : pb::IMessage<CreateComponen
     _hasBits0 = other._hasBits0;
     sceneId_ = other.sceneId_;
     entityId_ = other.entityId_;
-    component_ = other.component_;
+    componentType_ = other.componentType_;
+    componentData_ = other.componentData_;
     _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
   }
 
@@ -4412,30 +4414,56 @@ public sealed partial class CreateComponentMessage : pb::IMessage<CreateComponen
     _hasBits0 &= ~2;
   }
 
-  /// <summary>Field number for the "Component" field.</summary>
-  public const int ComponentFieldNumber = 3;
-  private readonly static pb::ByteString ComponentDefaultValue = pb::ByteString.Empty;
+  /// <summary>Field number for the "ComponentType" field.</summary>
+  public const int ComponentTypeFieldNumber = 3;
+  private readonly static string ComponentTypeDefaultValue = "";
 
-  private pb::ByteString component_;
+  private string componentType_;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public pb::ByteString Component {
-    get { return component_ ?? ComponentDefaultValue; }
+  public string ComponentType {
+    get { return componentType_ ?? ComponentTypeDefaultValue; }
     set {
-      component_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      componentType_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
     }
   }
-  /// <summary>Gets whether the "Component" field is set</summary>
+  /// <summary>Gets whether the "ComponentType" field is set</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public bool HasComponent {
-    get { return component_ != null; }
+  public bool HasComponentType {
+    get { return componentType_ != null; }
   }
-  /// <summary>Clears the value of the "Component" field</summary>
+  /// <summary>Clears the value of the "ComponentType" field</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public void ClearComponent() {
-    component_ = null;
+  public void ClearComponentType() {
+    componentType_ = null;
+  }
+
+  /// <summary>Field number for the "ComponentData" field.</summary>
+  public const int ComponentDataFieldNumber = 4;
+  private readonly static pb::ByteString ComponentDataDefaultValue = pb::ByteString.Empty;
+
+  private pb::ByteString componentData_;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public pb::ByteString ComponentData {
+    get { return componentData_ ?? ComponentDataDefaultValue; }
+    set {
+      componentData_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+    }
+  }
+  /// <summary>Gets whether the "ComponentData" field is set</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool HasComponentData {
+    get { return componentData_ != null; }
+  }
+  /// <summary>Clears the value of the "ComponentData" field</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void ClearComponentData() {
+    componentData_ = null;
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4455,7 +4483,8 @@ public sealed partial class CreateComponentMessage : pb::IMessage<CreateComponen
     }
     if (SceneId != other.SceneId) return false;
     if (EntityId != other.EntityId) return false;
-    if (Component != other.Component) return false;
+    if (ComponentType != other.ComponentType) return false;
+    if (ComponentData != other.ComponentData) return false;
     return Equals(_unknownFields, other._unknownFields);
   }
 
@@ -4465,7 +4494,8 @@ public sealed partial class CreateComponentMessage : pb::IMessage<CreateComponen
     int hash = 1;
     if (HasSceneId) hash ^= SceneId.GetHashCode();
     if (HasEntityId) hash ^= EntityId.GetHashCode();
-    if (HasComponent) hash ^= Component.GetHashCode();
+    if (HasComponentType) hash ^= ComponentType.GetHashCode();
+    if (HasComponentData) hash ^= ComponentData.GetHashCode();
     if (_unknownFields != null) {
       hash ^= _unknownFields.GetHashCode();
     }
@@ -4492,9 +4522,13 @@ public sealed partial class CreateComponentMessage : pb::IMessage<CreateComponen
       output.WriteRawTag(16);
       output.WriteInt64(EntityId);
     }
-    if (HasComponent) {
+    if (HasComponentType) {
       output.WriteRawTag(26);
-      output.WriteBytes(Component);
+      output.WriteString(ComponentType);
+    }
+    if (HasComponentData) {
+      output.WriteRawTag(34);
+      output.WriteBytes(ComponentData);
     }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(output);
@@ -4514,9 +4548,13 @@ public sealed partial class CreateComponentMessage : pb::IMessage<CreateComponen
       output.WriteRawTag(16);
       output.WriteInt64(EntityId);
     }
-    if (HasComponent) {
+    if (HasComponentType) {
       output.WriteRawTag(26);
-      output.WriteBytes(Component);
+      output.WriteString(ComponentType);
+    }
+    if (HasComponentData) {
+      output.WriteRawTag(34);
+      output.WriteBytes(ComponentData);
     }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(ref output);
@@ -4534,8 +4572,11 @@ public sealed partial class CreateComponentMessage : pb::IMessage<CreateComponen
     if (HasEntityId) {
       size += 1 + pb::CodedOutputStream.ComputeInt64Size(EntityId);
     }
-    if (HasComponent) {
-      size += 1 + pb::CodedOutputStream.ComputeBytesSize(Component);
+    if (HasComponentType) {
+      size += 1 + pb::CodedOutputStream.ComputeStringSize(ComponentType);
+    }
+    if (HasComponentData) {
+      size += 1 + pb::CodedOutputStream.ComputeBytesSize(ComponentData);
     }
     if (_unknownFields != null) {
       size += _unknownFields.CalculateSize();
@@ -4555,8 +4596,11 @@ public sealed partial class CreateComponentMessage : pb::IMessage<CreateComponen
     if (other.HasEntityId) {
       EntityId = other.EntityId;
     }
-    if (other.HasComponent) {
-      Component = other.Component;
+    if (other.HasComponentType) {
+      ComponentType = other.ComponentType;
+    }
+    if (other.HasComponentData) {
+      ComponentData = other.ComponentData;
     }
     _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
   }
@@ -4582,7 +4626,11 @@ public sealed partial class CreateComponentMessage : pb::IMessage<CreateComponen
           break;
         }
         case 26: {
-          Component = input.ReadBytes();
+          ComponentType = input.ReadString();
+          break;
+        }
+        case 34: {
+          ComponentData = input.ReadBytes();
           break;
         }
       }
@@ -4609,7 +4657,11 @@ public sealed partial class CreateComponentMessage : pb::IMessage<CreateComponen
           break;
         }
         case 26: {
-          Component = input.ReadBytes();
+          ComponentType = input.ReadString();
+          break;
+        }
+        case 34: {
+          ComponentData = input.ReadBytes();
           break;
         }
       }
@@ -4658,7 +4710,8 @@ public sealed partial class UpdateComponentMessage : pb::IMessage<UpdateComponen
     _hasBits0 = other._hasBits0;
     sceneId_ = other.sceneId_;
     entityId_ = other.entityId_;
-    component_ = other.component_;
+    componentType_ = other.componentType_;
+    componentData_ = other.componentData_;
     _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
   }
 
@@ -4722,30 +4775,56 @@ public sealed partial class UpdateComponentMessage : pb::IMessage<UpdateComponen
     _hasBits0 &= ~2;
   }
 
-  /// <summary>Field number for the "Component" field.</summary>
-  public const int ComponentFieldNumber = 3;
-  private readonly static pb::ByteString ComponentDefaultValue = pb::ByteString.Empty;
+  /// <summary>Field number for the "ComponentType" field.</summary>
+  public const int ComponentTypeFieldNumber = 3;
+  private readonly static string ComponentTypeDefaultValue = "";
 
-  private pb::ByteString component_;
+  private string componentType_;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public pb::ByteString Component {
-    get { return component_ ?? ComponentDefaultValue; }
+  public string ComponentType {
+    get { return componentType_ ?? ComponentTypeDefaultValue; }
     set {
-      component_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      componentType_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
     }
   }
-  /// <summary>Gets whether the "Component" field is set</summary>
+  /// <summary>Gets whether the "ComponentType" field is set</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public bool HasComponent {
-    get { return component_ != null; }
+  public bool HasComponentType {
+    get { return componentType_ != null; }
   }
-  /// <summary>Clears the value of the "Component" field</summary>
+  /// <summary>Clears the value of the "ComponentType" field</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public void ClearComponent() {
-    component_ = null;
+  public void ClearComponentType() {
+    componentType_ = null;
+  }
+
+  /// <summary>Field number for the "ComponentData" field.</summary>
+  public const int ComponentDataFieldNumber = 4;
+  private readonly static pb::ByteString ComponentDataDefaultValue = pb::ByteString.Empty;
+
+  private pb::ByteString componentData_;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public pb::ByteString ComponentData {
+    get { return componentData_ ?? ComponentDataDefaultValue; }
+    set {
+      componentData_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+    }
+  }
+  /// <summary>Gets whether the "ComponentData" field is set</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool HasComponentData {
+    get { return componentData_ != null; }
+  }
+  /// <summary>Clears the value of the "ComponentData" field</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void ClearComponentData() {
+    componentData_ = null;
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4765,7 +4844,8 @@ public sealed partial class UpdateComponentMessage : pb::IMessage<UpdateComponen
     }
     if (SceneId != other.SceneId) return false;
     if (EntityId != other.EntityId) return false;
-    if (Component != other.Component) return false;
+    if (ComponentType != other.ComponentType) return false;
+    if (ComponentData != other.ComponentData) return false;
     return Equals(_unknownFields, other._unknownFields);
   }
 
@@ -4775,7 +4855,8 @@ public sealed partial class UpdateComponentMessage : pb::IMessage<UpdateComponen
     int hash = 1;
     if (HasSceneId) hash ^= SceneId.GetHashCode();
     if (HasEntityId) hash ^= EntityId.GetHashCode();
-    if (HasComponent) hash ^= Component.GetHashCode();
+    if (HasComponentType) hash ^= ComponentType.GetHashCode();
+    if (HasComponentData) hash ^= ComponentData.GetHashCode();
     if (_unknownFields != null) {
       hash ^= _unknownFields.GetHashCode();
     }
@@ -4802,9 +4883,13 @@ public sealed partial class UpdateComponentMessage : pb::IMessage<UpdateComponen
       output.WriteRawTag(16);
       output.WriteInt64(EntityId);
     }
-    if (HasComponent) {
+    if (HasComponentType) {
       output.WriteRawTag(26);
-      output.WriteBytes(Component);
+      output.WriteString(ComponentType);
+    }
+    if (HasComponentData) {
+      output.WriteRawTag(34);
+      output.WriteBytes(ComponentData);
     }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(output);
@@ -4824,9 +4909,13 @@ public sealed partial class UpdateComponentMessage : pb::IMessage<UpdateComponen
       output.WriteRawTag(16);
       output.WriteInt64(EntityId);
     }
-    if (HasComponent) {
+    if (HasComponentType) {
       output.WriteRawTag(26);
-      output.WriteBytes(Component);
+      output.WriteString(ComponentType);
+    }
+    if (HasComponentData) {
+      output.WriteRawTag(34);
+      output.WriteBytes(ComponentData);
     }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(ref output);
@@ -4844,8 +4933,11 @@ public sealed partial class UpdateComponentMessage : pb::IMessage<UpdateComponen
     if (HasEntityId) {
       size += 1 + pb::CodedOutputStream.ComputeInt64Size(EntityId);
     }
-    if (HasComponent) {
-      size += 1 + pb::CodedOutputStream.ComputeBytesSize(Component);
+    if (HasComponentType) {
+      size += 1 + pb::CodedOutputStream.ComputeStringSize(ComponentType);
+    }
+    if (HasComponentData) {
+      size += 1 + pb::CodedOutputStream.ComputeBytesSize(ComponentData);
     }
     if (_unknownFields != null) {
       size += _unknownFields.CalculateSize();
@@ -4865,8 +4957,11 @@ public sealed partial class UpdateComponentMessage : pb::IMessage<UpdateComponen
     if (other.HasEntityId) {
       EntityId = other.EntityId;
     }
-    if (other.HasComponent) {
-      Component = other.Component;
+    if (other.HasComponentType) {
+      ComponentType = other.ComponentType;
+    }
+    if (other.HasComponentData) {
+      ComponentData = other.ComponentData;
     }
     _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
   }
@@ -4892,7 +4987,11 @@ public sealed partial class UpdateComponentMessage : pb::IMessage<UpdateComponen
           break;
         }
         case 26: {
-          Component = input.ReadBytes();
+          ComponentType = input.ReadString();
+          break;
+        }
+        case 34: {
+          ComponentData = input.ReadBytes();
           break;
         }
       }
@@ -4919,7 +5018,11 @@ public sealed partial class UpdateComponentMessage : pb::IMessage<UpdateComponen
           break;
         }
         case 26: {
-          Component = input.ReadBytes();
+          ComponentType = input.ReadString();
+          break;
+        }
+        case 34: {
+          ComponentData = input.ReadBytes();
           break;
         }
       }
@@ -4968,7 +5071,7 @@ public sealed partial class DestroyComponentMessage : pb::IMessage<DestroyCompon
     _hasBits0 = other._hasBits0;
     sceneId_ = other.sceneId_;
     entityId_ = other.entityId_;
-    component_ = other.component_;
+    componentType_ = other.componentType_;
     _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
   }
 
@@ -5032,30 +5135,30 @@ public sealed partial class DestroyComponentMessage : pb::IMessage<DestroyCompon
     _hasBits0 &= ~2;
   }
 
-  /// <summary>Field number for the "Component" field.</summary>
-  public const int ComponentFieldNumber = 3;
-  private readonly static string ComponentDefaultValue = "";
+  /// <summary>Field number for the "ComponentType" field.</summary>
+  public const int ComponentTypeFieldNumber = 3;
+  private readonly static string ComponentTypeDefaultValue = "";
 
-  private string component_;
+  private string componentType_;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public string Component {
-    get { return component_ ?? ComponentDefaultValue; }
+  public string ComponentType {
+    get { return componentType_ ?? ComponentTypeDefaultValue; }
     set {
-      component_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      componentType_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
     }
   }
-  /// <summary>Gets whether the "Component" field is set</summary>
+  /// <summary>Gets whether the "ComponentType" field is set</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public bool HasComponent {
-    get { return component_ != null; }
+  public bool HasComponentType {
+    get { return componentType_ != null; }
   }
-  /// <summary>Clears the value of the "Component" field</summary>
+  /// <summary>Clears the value of the "ComponentType" field</summary>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public void ClearComponent() {
-    component_ = null;
+  public void ClearComponentType() {
+    componentType_ = null;
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5075,7 +5178,7 @@ public sealed partial class DestroyComponentMessage : pb::IMessage<DestroyCompon
     }
     if (SceneId != other.SceneId) return false;
     if (EntityId != other.EntityId) return false;
-    if (Component != other.Component) return false;
+    if (ComponentType != other.ComponentType) return false;
     return Equals(_unknownFields, other._unknownFields);
   }
 
@@ -5085,7 +5188,7 @@ public sealed partial class DestroyComponentMessage : pb::IMessage<DestroyCompon
     int hash = 1;
     if (HasSceneId) hash ^= SceneId.GetHashCode();
     if (HasEntityId) hash ^= EntityId.GetHashCode();
-    if (HasComponent) hash ^= Component.GetHashCode();
+    if (HasComponentType) hash ^= ComponentType.GetHashCode();
     if (_unknownFields != null) {
       hash ^= _unknownFields.GetHashCode();
     }
@@ -5112,9 +5215,9 @@ public sealed partial class DestroyComponentMessage : pb::IMessage<DestroyCompon
       output.WriteRawTag(16);
       output.WriteInt64(EntityId);
     }
-    if (HasComponent) {
+    if (HasComponentType) {
       output.WriteRawTag(26);
-      output.WriteString(Component);
+      output.WriteString(ComponentType);
     }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(output);
@@ -5134,9 +5237,9 @@ public sealed partial class DestroyComponentMessage : pb::IMessage<DestroyCompon
       output.WriteRawTag(16);
       output.WriteInt64(EntityId);
     }
-    if (HasComponent) {
+    if (HasComponentType) {
       output.WriteRawTag(26);
-      output.WriteString(Component);
+      output.WriteString(ComponentType);
     }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(ref output);
@@ -5154,8 +5257,8 @@ public sealed partial class DestroyComponentMessage : pb::IMessage<DestroyCompon
     if (HasEntityId) {
       size += 1 + pb::CodedOutputStream.ComputeInt64Size(EntityId);
     }
-    if (HasComponent) {
-      size += 1 + pb::CodedOutputStream.ComputeStringSize(Component);
+    if (HasComponentType) {
+      size += 1 + pb::CodedOutputStream.ComputeStringSize(ComponentType);
     }
     if (_unknownFields != null) {
       size += _unknownFields.CalculateSize();
@@ -5175,8 +5278,8 @@ public sealed partial class DestroyComponentMessage : pb::IMessage<DestroyCompon
     if (other.HasEntityId) {
       EntityId = other.EntityId;
     }
-    if (other.HasComponent) {
-      Component = other.Component;
+    if (other.HasComponentType) {
+      ComponentType = other.ComponentType;
     }
     _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
   }
@@ -5202,7 +5305,7 @@ public sealed partial class DestroyComponentMessage : pb::IMessage<DestroyCompon
           break;
         }
         case 26: {
-          Component = input.ReadString();
+          ComponentType = input.ReadString();
           break;
         }
       }
@@ -5229,7 +5332,7 @@ public sealed partial class DestroyComponentMessage : pb::IMessage<DestroyCompon
           break;
         }
         case 26: {
-          Component = input.ReadString();
+          ComponentType = input.ReadString();
           break;
         }
       }

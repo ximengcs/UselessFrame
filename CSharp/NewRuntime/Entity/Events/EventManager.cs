@@ -41,6 +41,18 @@ namespace UselessFrame.NewRuntime.Events
             }
         }
 
+        public void TriggerComponentUpdate(Component comp)
+        {
+            Type type = comp.GetType();
+            //if (_awakeSystems.TryGetValue(type, out List<IAwakeSystem> list))
+            //{
+            //    foreach (IAwakeSystem system in list)
+            //    {
+            //        system.OnAwake(comp);
+            //    }
+            //}
+        }
+
         public void TriggerComponentDestroy(Component comp)
         {
             Type type = comp.GetType();

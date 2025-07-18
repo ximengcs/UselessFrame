@@ -35,7 +35,8 @@ namespace UselessFrame.NewRuntime.Entities
             {
                 SceneId = comp.Entity.Scene.Id,
                 EntityId = comp.Entity.Id,
-                Component = ByteString.CopyFrom(bytes)
+                ComponentType = comp.GetType().FullName,
+                ComponentData = ByteString.CopyFrom(bytes)
             };
             return msg;
         }
@@ -46,7 +47,7 @@ namespace UselessFrame.NewRuntime.Entities
             {
                 SceneId = comp.Entity.Scene.Id,
                 EntityId = comp.Entity.Id,
-                Component = comp.GetType().FullName
+                ComponentType = comp.GetType().FullName
             };
             return msg;
         }
