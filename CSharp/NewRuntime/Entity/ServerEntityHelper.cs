@@ -5,10 +5,11 @@ using UselessFrame.NewRuntime.Worlds;
 
 namespace UselessFrame.NewRuntime.Entities
 {
-    public class ServerEntityHelper : IEntityHelper
+    public class ServerEntityHelper : IEntityHelper, ICombineEntityHelper
     {
         private IServer _server;
         private World _world;
+        private IEntityHelper _helper;
 
         internal ServerEntityHelper()
         {
@@ -16,9 +17,17 @@ namespace UselessFrame.NewRuntime.Entities
             _server.NewConnectionEvent += NewConnectionHandler;
         }
 
+        public void AddHelper(IEntityHelper helper)
+        {
+            _helper = helper;
+            if (_world != null)
+                _helper.Bind(_world);
+        }
+
         public void Bind(World world)
         {
             _world = world;
+            _helper?.Bind(world);
         }
 
         private void NewConnectionHandler(IConnection connection)
@@ -59,26 +68,31 @@ namespace UselessFrame.NewRuntime.Entities
         public void OnCreateEntity(Entity entity)
         {
             _server.Broadcast(entity.ToCreateMessage());
+            _helper?.OnCreateEntity(entity);
         }
 
         public void OnDestroyEntity(Entity entity)
         {
             _server.Broadcast(entity.ToDestroyMessage());
+            _helper?.OnDestroyEntity(entity);
         }
 
         public void OnCreateComponent(Component component)
         {
             _server.Broadcast(component.ToCreateMessage());
+            _helper?.OnCreateComponent(component);
         }
 
         public void OnUpdateComponent(Component component)
         {
             _server.Broadcast(component.ToUpdateMessage());
+            _helper?.OnUpdateComponent(component);
         }
 
         public void OnDestroyComponent(Component component)
         {
             _server.Broadcast(component.ToDestroyMessage());
+            _helper?.OnDestroyComponent(component);
         }
     }
 }

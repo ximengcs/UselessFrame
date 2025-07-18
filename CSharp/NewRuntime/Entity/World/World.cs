@@ -29,6 +29,13 @@ namespace UselessFrame.NewRuntime.Worlds
             _event.Initialize();
         }
 
+        public void SetHelper(IEntityHelper helper)
+        {
+            ICombineEntityHelper canAdd = _helper as ICombineEntityHelper;
+            if (canAdd != null)
+                canAdd.AddHelper(helper);
+        }
+
         public Scene GetScene(long id)
         {
             if (_scenes.TryGetValue(id, out Scene scene)) return scene;

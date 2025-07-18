@@ -13,7 +13,7 @@ namespace UselessFrame.NewRuntime.Entities
         private Entity _parent;
         private Dictionary<long, Entity> _entities;
         private Dictionary<Type, Component> _components;
-        private IEntityHelper _helper;
+        internal IEntityHelper _helper;
 
         public IReadOnlyCollection<Component> Components => _components.Values;
 

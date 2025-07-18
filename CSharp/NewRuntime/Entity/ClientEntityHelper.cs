@@ -8,11 +8,12 @@ using UselessFrame.NewRuntime.Worlds;
 
 namespace UselessFrame.NewRuntime.Entities
 {
-    internal class ClientEntityHelper : IEntityHelper, ICanNet
+    internal class ClientEntityHelper : IEntityHelper, ICombineEntityHelper, ICanNet
     {
         private IConnection _connection;
         private World _world;
         private Dictionary<Type, Action<IMessage>> _handles;
+        private IEntityHelper _helper;
 
         IConnection ICanNet.Connection => _connection;
 
@@ -24,6 +25,7 @@ namespace UselessFrame.NewRuntime.Entities
         public void Bind(World world)
         {
             _world = world;
+            _helper?.Bind(world);
             _handles = new Dictionary<Type, Action<IMessage>>()
             {
                 { typeof(CreateEntityMessage), CreateEntity },
@@ -33,6 +35,13 @@ namespace UselessFrame.NewRuntime.Entities
                 { typeof(DestroyComponentMessage), DestoryComponent },
             };
             _connection.ReceiveMessageEvent += TriggerMessage;
+        }
+
+        public void AddHelper(IEntityHelper helper)
+        {
+            _helper = helper;
+            if (_world != null)
+                _helper.Bind(_world);
         }
 
         private void TriggerMessage(MessageResult result)
@@ -201,27 +210,27 @@ namespace UselessFrame.NewRuntime.Entities
 
         public void OnDestroyEntity(Entity entity)
         {
-
+            _helper?.OnDestroyEntity(entity);
         }
 
         public void OnCreateEntity(Entity entity)
         {
-
+            _helper?.OnCreateEntity(entity);
         }
 
         public void OnCreateComponent(Component component)
         {
-
+            _helper?.OnCreateComponent(component);
         }
 
         public void OnUpdateComponent(Component component)
         {
-
+            _helper?.OnUpdateComponent(component);
         }
 
         public void OnDestroyComponent(Component component)
         {
-
+            _helper?.OnDestroyComponent(component);
         }
     }
 }
