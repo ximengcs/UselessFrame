@@ -2,6 +2,8 @@
 using MemoryPack;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Text;
 using UselessFrame.Net;
 using UselessFrame.NewRuntime.Scenes;
 using UselessFrame.NewRuntime.Worlds;
@@ -117,7 +119,7 @@ namespace UselessFrame.NewRuntime.Entities
                         if (X.Type.TryGetType(createMsg.ComponentType, out Type compType))
                         {
                             EntityComponent comp = (EntityComponent)MemoryPackSerializer.Deserialize(compType, createMsg.ComponentData.Span);
-                            entity.AddComponent(comp);
+                            entity.AddOrUpdateComponent(comp);
                         }
                         else
                         {

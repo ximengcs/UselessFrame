@@ -5,7 +5,7 @@ namespace UselessFrame.NewRuntime.Entities
     {
     }
 
-    public interface IUpdateSystem<T> where T : EntityComponent
+    public interface IUpdateSystem<T> : IUpdateSystem where T : EntityComponent
     {
         void OnUpdate(T oldComp, T newComp);
     }

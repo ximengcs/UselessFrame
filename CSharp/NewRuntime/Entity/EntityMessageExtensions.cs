@@ -30,7 +30,7 @@ namespace UselessFrame.NewRuntime.Entities
 
         public static IMessage ToCreateMessage(this EntityComponent comp)
         {
-            byte[] bytes = MemoryPackSerializer.Serialize(comp);
+            byte[] bytes = MemoryPackSerializer.Serialize(comp.GetType(), comp);
             CreateComponentMessage msg = new CreateComponentMessage()
             {
                 SceneId = comp.Entity.Scene.Id,
@@ -43,7 +43,7 @@ namespace UselessFrame.NewRuntime.Entities
 
         public static IMessage ToUpdateMessage(this EntityComponent comp)
         {
-            byte[] bytes = MemoryPackSerializer.Serialize(comp);
+            byte[] bytes = MemoryPackSerializer.Serialize(comp.GetType(), comp);
             UpdateComponentMessage msg = new UpdateComponentMessage()
             {
                 SceneId = comp.Entity.Scene.Id,

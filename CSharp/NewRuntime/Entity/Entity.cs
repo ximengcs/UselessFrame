@@ -121,12 +121,16 @@ namespace UselessFrame.NewRuntime.Entities
             OnAddEntity(entity);
         }
 
-        internal void AddComponent(EntityComponent newComp)
+        internal void AddOrUpdateComponent(EntityComponent newComp)
         {
             Type type = newComp.GetType();
             if (!_components.TryGetValue(type, out EntityComponent comp))
             {
                 InitComponent(type, newComp);
+            }
+            else
+            {
+                UpdateComponent(newComp);
             }
         }
 
@@ -162,11 +166,17 @@ namespace UselessFrame.NewRuntime.Entities
 
         public void UpdateComponent(EntityComponent newComp)
         {
+            Console.WriteLine("UpdateComponent");
             Type type = newComp.GetType();
             if (_components.TryGetValue(type, out EntityComponent comp))
             {
+                newComp.OnInit(this);
                 _helper.OnUpdateComponent(newComp);
                 _scene.World.Event.TriggerComponentUpdate(comp, newComp);
+            }
+            else
+            {
+                X.SystemLog.Error($"component is null {type.Name}");
             }
         }
 

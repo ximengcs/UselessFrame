@@ -5,7 +5,7 @@ namespace UselessFrame.NewRuntime.Entities
     {
     }
 
-    public interface IDestroySystem<T> where T : EntityComponent
+    public interface IDestroySystem<T> : IDestroySystem where T : EntityComponent
     {
         void OnDestroy(T comp);
     }

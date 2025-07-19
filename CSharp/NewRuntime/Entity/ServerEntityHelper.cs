@@ -1,4 +1,6 @@
 ﻿
+using MemoryPack;
+using System;
 using UselessFrame.Net;
 using UselessFrame.NewRuntime.Scenes;
 using UselessFrame.NewRuntime.Worlds;
@@ -50,13 +52,14 @@ namespace UselessFrame.NewRuntime.Entities
         private void RecursiveSyncEntity(IConnection connection, Entity entity)
         {
             connection.Send(entity.ToCreateMessage());
+            foreach (EntityComponent component in entity.Components)
+            {
+                connection.Send(component.ToCreateMessage());
+            }
+
             foreach (Entity child in entity.Entities)
             {
                 RecursiveSyncEntity(connection, child);
-                foreach (EntityComponent component in entity.Components)
-                {
-                    connection.Send(component.ToCreateMessage());
-                }
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿
+using Google.Protobuf;
 using IdGen;
 using System;
 using UselessFrame.NewRuntime.Worlds;
@@ -30,10 +31,14 @@ namespace UselessFrame.NewRuntime.Entities
             return X.Type.GetAttribute(type, typeof(CoreComponentAttribute)) != null;
         }
 
-        public static bool IsCore(this EntityComponent component)
+        public static void Update(this EntityComponent component)
         {
-            Type type = component.GetType();
-            return IsCoreComponent(type);
+            component.Entity.UpdateComponent(component);
+        }
+
+        public static T GetComponent<T>(this EntityComponent component) where T : EntityComponent
+        {
+            return component.Entity.GetComponent<T>();
         }
     }
 }
