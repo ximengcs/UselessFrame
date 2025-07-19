@@ -3,11 +3,12 @@ namespace UselessFrame.NewRuntime.Entities
 {
     public interface IUpdateSystem
     {
-        void OnUpdate(Component oldComp, Component newComp);
     }
 
-    public interface IUpdateSystem<T> where T : Component
+    public interface IUpdateSystem<T> where T : EntityComponent
     {
         void OnUpdate(T oldComp, T newComp);
     }
+
+    public delegate void OnUpdateDelegate<T>(T comp, T comp2);
 }

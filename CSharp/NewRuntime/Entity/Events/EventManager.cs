@@ -1,68 +1,126 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UselessFrame.NewRuntime.Entities;
+using UselessFrame.Runtime.Types;
 
 namespace UselessFrame.NewRuntime.Events
 {
     public class EventManager
     {
-        private Dictionary<Type, IAwakeSystem> _globalAwakeSystems;
-        private Dictionary<Type, List<IAwakeSystem>> _awakeSystems;
-        private Dictionary<Type, List<IUpdateSystem>> _updateSystems;
-        private Dictionary<Type, List<IDestroySystem>> _destroySystems;
+        private class SystemHandle
+        {
+            private Delegate _method;
+            private object[] _params;
+
+            public SystemHandle(Delegate method, int paramCount)
+            {
+                _method = method;
+                _params = new object[paramCount];
+            }
+
+            public void Invoke(object p)
+            {
+                _params[0] = p;
+                _method.DynamicInvoke(_params);
+            }
+
+            public void Invoke(object p1, object p2)
+            {
+                _params[0] = p1;
+                _params[1] = p2;
+                _method.DynamicInvoke(_params);
+            }
+        }
+
+        private Dictionary<Type, List<SystemHandle>> _awakeSystems;
+        private Dictionary<Type, List<SystemHandle>> _updateSystems;
+        private Dictionary<Type, List<SystemHandle>> _destroySystems;
 
         public void Initialize()
         {
-            _globalAwakeSystems = new Dictionary<Type, IAwakeSystem>();
-            _awakeSystems = new Dictionary<Type, List<IAwakeSystem>>();
-            _destroySystems = new Dictionary<Type, List<IDestroySystem>>();
-            _updateSystems = new Dictionary<Type, List<IUpdateSystem>>();
+            _awakeSystems = new Dictionary<Type, List<SystemHandle>>();
+            _destroySystems = new Dictionary<Type, List<SystemHandle>>();
+            _updateSystems = new Dictionary<Type, List<SystemHandle>>();
+
+            CollectHandle(typeof(IAwakeSystem), typeof(IAwakeSystem<>), typeof(OnAwakeDelegate<>), _awakeSystems);
+            CollectHandle(typeof(IDestroySystem), typeof(IDestroySystem<>), typeof(OnDestroyDelegate<>), _destroySystems);
+            CollectHandle(typeof(IUpdateSystem), typeof(IUpdateSystem<>), typeof(OnUpdateDelegate<>), _updateSystems);
         }
 
-        public void AddGlobalAwakeSystem<T>() where T : IAwakeSystem
+        private void CollectHandle(Type type1, Type type2, Type awakeDelegateType, Dictionary<Type, List<SystemHandle>> map)
         {
-            T awakeSys = (T)X.Type.CreateInstance(typeof(T));
-            _globalAwakeSystems.Add(typeof(T), awakeSys);
-        }
-
-        public void RemoveGlobalAwakeSystem<T>() where T : IAwakeSystem
-        {
-            _globalAwakeSystems.Remove(typeof(T));
-        }
-
-        public void TriggerComponentAwake(Component comp)
-        {
-            Type type = comp.GetType();
-            if (_awakeSystems.TryGetValue(type, out List<IAwakeSystem> list))
+            ITypeCollection types = X.Type.GetCollection(type1);
+            foreach (var type in types)
             {
-                foreach (IAwakeSystem system in list)
+                if (type.IsInterface)
+                    continue;
+
+                Type[] interfaces = type.GetInterfaces();
+                Type targetF = null;
+                foreach (Type f in interfaces)
                 {
-                    system.OnAwake(comp);
+                    if (!f.IsGenericType)
+                        continue;
+
+                    Type genType = f.GetGenericTypeDefinition();
+                    if (genType == type2)
+                    {
+                        targetF = f;
+                        break;
+                    }
+                }
+
+                if (targetF != null)
+                {
+                    var target = targetF.GetMethods()[0];
+                    var tType = targetF.GetGenericArguments()[0];
+                    object obj = X.Type.CreateInstance(type);
+                    Delegate method = target.CreateDelegate(awakeDelegateType.MakeGenericType(tType), obj);
+                    SystemHandle handle = new SystemHandle(method, target.GetParameters().Length);
+                    if (!map.TryGetValue(tType, out List<SystemHandle> list))
+                    {
+                        list = new List<SystemHandle>();
+                        map[tType] = list;
+                    }
+                    list.Add(handle);
                 }
             }
         }
 
-        public void TriggerComponentUpdate(Component oldComp, Component newComp)
+        public void TriggerComponentAwake(EntityComponent comp)
+        {
+            Type type = comp.GetType();
+            if (_awakeSystems.TryGetValue(type, out List<SystemHandle> list))
+            {
+                foreach (SystemHandle system in list)
+                {
+                    system.Invoke(comp);
+                }
+            }
+        }
+
+        public void TriggerComponentUpdate(EntityComponent oldComp, EntityComponent newComp)
         {
             Type type = oldComp.GetType();
-            if (_updateSystems.TryGetValue(type, out List<IUpdateSystem> list))
+            if (_updateSystems.TryGetValue(type, out List<SystemHandle> list))
             {
-                foreach (IUpdateSystem system in list)
+                foreach (SystemHandle system in list)
                 {
-                    system.OnUpdate(oldComp, newComp);
+                    system.Invoke(oldComp, newComp);
                 }
             }
         }
 
-        public void TriggerComponentDestroy(Component comp)
+        public void TriggerComponentDestroy(EntityComponent comp)
         {
             Type type = comp.GetType();
-            if (_destroySystems.TryGetValue(type, out List<IDestroySystem> list))
+            if (_destroySystems.TryGetValue(type, out List<SystemHandle> list))
             {
-                foreach (IDestroySystem system in list)
+                foreach (SystemHandle system in list)
                 {
-                    system.Destroy(comp);
+                    system.Invoke(comp);
                 }
             }
         }

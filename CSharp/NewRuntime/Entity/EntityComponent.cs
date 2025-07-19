@@ -4,7 +4,7 @@ using MemoryPack;
 namespace UselessFrame.NewRuntime.Entities
 {
     [MemoryPackable]
-    public partial class Component
+    public partial class EntityComponent
     {
         private Entity _entity;
 
@@ -14,11 +14,20 @@ namespace UselessFrame.NewRuntime.Entities
         internal void OnInit(Entity entity)
         {
             _entity = entity;
+            OnInit();
         }
+
+        protected virtual void OnInit() { }
 
         internal void OnDestroy()
         {
+            OnDispose();
             _entity = null;
+        }
+
+        protected virtual void OnDispose()
+        {
+
         }
     }
 }

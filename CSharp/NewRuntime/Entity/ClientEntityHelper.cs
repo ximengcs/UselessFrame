@@ -116,7 +116,7 @@ namespace UselessFrame.NewRuntime.Entities
                     {
                         if (X.Type.TryGetType(createMsg.ComponentType, out Type compType))
                         {
-                            Component comp = (Component)MemoryPackSerializer.Deserialize(compType, createMsg.ComponentData.Span);
+                            EntityComponent comp = (EntityComponent)MemoryPackSerializer.Deserialize(compType, createMsg.ComponentData.Span);
                             entity.AddComponent(comp);
                         }
                         else
@@ -150,7 +150,7 @@ namespace UselessFrame.NewRuntime.Entities
                     {
                         if (X.Type.TryGetType(createMsg.ComponentType, out Type compType))
                         {
-                            Component comp = (Component)MemoryPackSerializer.Deserialize(compType, createMsg.ComponentData.Span);
+                            EntityComponent comp = (EntityComponent)MemoryPackSerializer.Deserialize(compType, createMsg.ComponentData.Span);
                             entity.UpdateComponent(comp);
                         }
                         else
@@ -218,17 +218,17 @@ namespace UselessFrame.NewRuntime.Entities
             _helper?.OnCreateEntity(entity);
         }
 
-        public void OnCreateComponent(Component component)
+        public void OnCreateComponent(EntityComponent component)
         {
             _helper?.OnCreateComponent(component);
         }
 
-        public void OnUpdateComponent(Component component)
+        public void OnUpdateComponent(EntityComponent component)
         {
             _helper?.OnUpdateComponent(component);
         }
 
-        public void OnDestroyComponent(Component component)
+        public void OnDestroyComponent(EntityComponent component)
         {
             _helper?.OnDestroyComponent(component);
         }

@@ -30,7 +30,7 @@ namespace UselessFrame.NewRuntime.Entities
             return X.Type.GetAttribute(type, typeof(CoreComponentAttribute)) != null;
         }
 
-        public static bool IsCore(this Component component)
+        public static bool IsCore(this EntityComponent component)
         {
             Type type = component.GetType();
             return IsCoreComponent(type);

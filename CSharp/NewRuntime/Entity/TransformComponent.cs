@@ -8,7 +8,7 @@ namespace UselessFrame.NewRuntime.Entities
 {
     [CoreComponent]
     [MemoryPackable]
-    public partial class TransformComponent : Component, IRectFQuadStorable
+    public partial class TransformComponent : EntityComponent, IRectFQuadStorable
     {
         private RectangleF _rect;
 

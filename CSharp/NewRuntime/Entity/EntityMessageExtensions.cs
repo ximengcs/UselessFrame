@@ -28,7 +28,7 @@ namespace UselessFrame.NewRuntime.Entities
             return msg;
         }
 
-        public static IMessage ToCreateMessage(this Component comp)
+        public static IMessage ToCreateMessage(this EntityComponent comp)
         {
             byte[] bytes = MemoryPackSerializer.Serialize(comp);
             CreateComponentMessage msg = new CreateComponentMessage()
@@ -41,7 +41,7 @@ namespace UselessFrame.NewRuntime.Entities
             return msg;
         }
 
-        public static IMessage ToUpdateMessage(this Component comp)
+        public static IMessage ToUpdateMessage(this EntityComponent comp)
         {
             byte[] bytes = MemoryPackSerializer.Serialize(comp);
             UpdateComponentMessage msg = new UpdateComponentMessage()
@@ -54,7 +54,7 @@ namespace UselessFrame.NewRuntime.Entities
             return msg;
         }
 
-        public static IMessage ToDestroyMessage(this Component comp)
+        public static IMessage ToDestroyMessage(this EntityComponent comp)
         {
             DestroyComponentMessage msg = new DestroyComponentMessage()
             {

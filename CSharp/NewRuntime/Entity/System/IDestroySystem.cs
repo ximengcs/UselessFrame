@@ -3,11 +3,12 @@ namespace UselessFrame.NewRuntime.Entities
 {
     public interface IDestroySystem
     {
-        void Destroy(Component comp);
     }
 
-    public interface IDestroySystem<T> where T : Component
+    public interface IDestroySystem<T> where T : EntityComponent
     {
-        void Destroy(T comp);
+        void OnDestroy(T comp);
     }
+
+    public delegate void OnDestroyDelegate<T>(T comp);
 }

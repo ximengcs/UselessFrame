@@ -3,11 +3,12 @@ namespace UselessFrame.NewRuntime.Entities
 {
     public interface IAwakeSystem
     {
-        void OnAwake(Component comp);
     }
 
-    public interface IAwakeSystem<T> where T : Component
+    public interface IAwakeSystem<T> : IAwakeSystem where T : EntityComponent
     {
         void OnAwake(T comp);
     }
+
+    public delegate void OnAwakeDelegate<T>(T comp);
 }

@@ -53,7 +53,7 @@ namespace UselessFrame.NewRuntime.Entities
             foreach (Entity child in entity.Entities)
             {
                 RecursiveSyncEntity(connection, child);
-                foreach (Component component in entity.Components)
+                foreach (EntityComponent component in entity.Components)
                 {
                     connection.Send(component.ToCreateMessage());
                 }
@@ -77,19 +77,19 @@ namespace UselessFrame.NewRuntime.Entities
             _helper?.OnDestroyEntity(entity);
         }
 
-        public void OnCreateComponent(Component component)
+        public void OnCreateComponent(EntityComponent component)
         {
             _server.Broadcast(component.ToCreateMessage());
             _helper?.OnCreateComponent(component);
         }
 
-        public void OnUpdateComponent(Component component)
+        public void OnUpdateComponent(EntityComponent component)
         {
             _server.Broadcast(component.ToUpdateMessage());
             _helper?.OnUpdateComponent(component);
         }
 
-        public void OnDestroyComponent(Component component)
+        public void OnDestroyComponent(EntityComponent component)
         {
             _server.Broadcast(component.ToDestroyMessage());
             _helper?.OnDestroyComponent(component);

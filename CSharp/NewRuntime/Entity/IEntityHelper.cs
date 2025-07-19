@@ -11,10 +11,10 @@ namespace UselessFrame.NewRuntime.Entities
 
         void OnDestroyEntity(Entity entity);
 
-        void OnCreateComponent(Component component);
+        void OnCreateComponent(EntityComponent component);
 
-        void OnUpdateComponent(Component component);
+        void OnUpdateComponent(EntityComponent component);
 
-        void OnDestroyComponent(Component component);
+        void OnDestroyComponent(EntityComponent component);
     }
 }

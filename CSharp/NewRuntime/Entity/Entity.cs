@@ -12,10 +12,10 @@ namespace UselessFrame.NewRuntime.Entities
         private Scene _scene;
         private Entity _parent;
         private Dictionary<long, Entity> _entities;
-        private Dictionary<Type, Component> _components;
+        private Dictionary<Type, EntityComponent> _components;
         internal IEntityHelper _helper;
 
-        public IReadOnlyCollection<Component> Components => _components.Values;
+        public IReadOnlyCollection<EntityComponent> Components => _components.Values;
 
         public Entity Parent => _parent;
 
@@ -36,7 +36,7 @@ namespace UselessFrame.NewRuntime.Entities
         protected Entity()
         {
             _entities = new Dictionary<long, Entity>();
-            _components = new Dictionary<Type, Component>();
+            _components = new Dictionary<Type, EntityComponent>();
         }
 
         internal void Init(IEntityHelper helper)
@@ -121,36 +121,56 @@ namespace UselessFrame.NewRuntime.Entities
             OnAddEntity(entity);
         }
 
-        internal void AddComponent(Component newComp)
+        internal void AddComponent(EntityComponent newComp)
         {
             Type type = newComp.GetType();
-            if (!_components.TryGetValue(type, out Component comp))
+            if (!_components.TryGetValue(type, out EntityComponent comp))
             {
                 InitComponent(type, newComp);
             }
         }
 
-        public Component GetOrAddComponent(Type type)
+        public void AttachComponent(EntityComponent comp)
         {
-            Component comp = GetComponent(type);
+            Type type = comp.GetType();
+            if (!_components.ContainsKey(type))
+            {
+                _components[type] = comp;
+                comp.OnInit(this);
+            }
+        }
+
+        public void UnAttachComponent(EntityComponent comp)
+        {
+            Type type = comp.GetType();
+            if (_components.ContainsKey(type))
+            {
+                _components.Remove(type);
+                comp.OnDestroy();
+            }
+        }
+
+        public EntityComponent GetOrAddComponent(Type type)
+        {
+            EntityComponent comp = GetComponent(type);
             if (comp != null) return comp;
 
-            comp = (Component)X.Type.CreateInstance(type);
+            comp = (EntityComponent)X.Type.CreateInstance(type);
             InitComponent(type, comp);
             return comp;
         }
 
-        public void UpdateComponent(Component newComp)
+        public void UpdateComponent(EntityComponent newComp)
         {
             Type type = newComp.GetType();
-            if (_components.TryGetValue(type, out Component comp))
+            if (_components.TryGetValue(type, out EntityComponent comp))
             {
                 _helper.OnUpdateComponent(newComp);
                 _scene.World.Event.TriggerComponentUpdate(comp, newComp);
             }
         }
 
-        private void InitComponent(Type type, Component comp)
+        private void InitComponent(Type type, EntityComponent comp)
         {
             _components[type] = comp;
             comp.OnInit(this);
@@ -158,27 +178,27 @@ namespace UselessFrame.NewRuntime.Entities
             _scene.World.Event.TriggerComponentAwake(comp);
         }
 
-        public T GetOrAddComponent<T>() where T : Component
+        public T GetOrAddComponent<T>() where T : EntityComponent
         {
             return (T)GetOrAddComponent(typeof(T));
         }
 
-        public Component GetComponent(Type type)
+        public EntityComponent GetComponent(Type type)
         {
-            if (_components.TryGetValue(type, out Component comp))
+            if (_components.TryGetValue(type, out EntityComponent comp))
                 return comp;
             return null;
         }
 
-        public T GetComponent<T>() where T : Component
+        public T GetComponent<T>() where T : EntityComponent
         {
             Type type = typeof(T);
-            if (_components.TryGetValue(type, out Component comp))
+            if (_components.TryGetValue(type, out EntityComponent comp))
                 return (T)comp;
             return null;
         }
 
-        public void RemoveComponent(Component comp)
+        public void RemoveComponent(EntityComponent comp)
         {
             RemoveComponent(comp.GetType());
         }
@@ -187,7 +207,7 @@ namespace UselessFrame.NewRuntime.Entities
         {
             if (type.IsCoreComponent())
                 return;
-            if (_components.TryGetValue(type, out Component comp))
+            if (_components.TryGetValue(type, out EntityComponent comp))
             {
                 _scene.World.Event.TriggerComponentDestroy(comp);
                 _helper.OnDestroyComponent(comp);
@@ -196,7 +216,7 @@ namespace UselessFrame.NewRuntime.Entities
             }
         }
 
-        public void RemoveComponent<T>() where T : Component
+        public void RemoveComponent<T>() where T : EntityComponent
         {
             RemoveComponent(typeof(T));
         }
