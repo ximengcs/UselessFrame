@@ -1,7 +1,6 @@
 ﻿using QuadTrees;
 using System.Drawing;
 using System.Collections.Generic;
-using UselessFrame.NewRuntime.Worlds;
 
 namespace UselessFrame.NewRuntime.ECS
 {

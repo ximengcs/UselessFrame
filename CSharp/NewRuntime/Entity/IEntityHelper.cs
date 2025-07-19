@@ -1,6 +1,4 @@
 ﻿
-using UselessFrame.NewRuntime.Worlds;
-
 namespace UselessFrame.NewRuntime.ECS
 {
     public interface IEntityHelper

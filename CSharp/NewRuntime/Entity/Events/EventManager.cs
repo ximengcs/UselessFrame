@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using UselessFrame.Runtime.Types;
-using UselessFrame.NewRuntime.Entities;
 
 namespace UselessFrame.NewRuntime.ECS
 {

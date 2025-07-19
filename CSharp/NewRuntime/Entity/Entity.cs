@@ -1,8 +1,7 @@
-﻿using IdGen;
+﻿
 using System;
 using System.Text;
 using System.Collections.Generic;
-using UselessFrame.NewRuntime.Scenes;
 
 namespace UselessFrame.NewRuntime.ECS
 {

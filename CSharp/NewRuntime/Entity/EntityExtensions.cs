@@ -1,8 +1,6 @@
 ﻿
-using Google.Protobuf;
 using IdGen;
 using System;
-using UselessFrame.NewRuntime.Worlds;
 
 namespace UselessFrame.NewRuntime.ECS
 {

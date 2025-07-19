@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UselessFrame.Net;
 using UselessFrame.NewRuntime.Commands;
+using UselessFrame.NewRuntime.ECS;
 using UselessFrame.NewRuntime.Fiber;
 using UselessFrame.NewRuntime.Utilities;
-using UselessFrame.NewRuntime.Worlds;
 
 namespace UselessFrame.NewRuntime
 {

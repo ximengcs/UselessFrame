@@ -3,8 +3,6 @@ using MemoryPack;
 using Google.Protobuf;
 using UselessFrame.Net;
 using System.Collections.Generic;
-using UselessFrame.NewRuntime.Scenes;
-using UselessFrame.NewRuntime.Worlds;
 
 namespace UselessFrame.NewRuntime.ECS
 {
