@@ -4,7 +4,7 @@ using IdGen;
 using System;
 using UselessFrame.NewRuntime.Worlds;
 
-namespace UselessFrame.NewRuntime.Entities
+namespace UselessFrame.NewRuntime.ECS
 {
     public static class EntityExtensions
     {

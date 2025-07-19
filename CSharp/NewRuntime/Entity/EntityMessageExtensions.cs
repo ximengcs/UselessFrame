@@ -2,7 +2,7 @@
 using Google.Protobuf;
 using MemoryPack;
 
-namespace UselessFrame.NewRuntime.Entities
+namespace UselessFrame.NewRuntime.ECS
 {
     public static class EntityMessageExtensions
     {

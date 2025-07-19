@@ -1,7 +1,7 @@
 ﻿
 using MemoryPack;
 
-namespace UselessFrame.NewRuntime.Entities
+namespace UselessFrame.NewRuntime.ECS
 {
     [MemoryPackable]
     public partial class EntityComponent

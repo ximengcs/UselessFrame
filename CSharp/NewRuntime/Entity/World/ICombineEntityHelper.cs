@@ -1,7 +1,5 @@
 ﻿
-using UselessFrame.NewRuntime.Entities;
-
-namespace UselessFrame.NewRuntime.Worlds
+namespace UselessFrame.NewRuntime.ECS
 {
     internal interface ICombineEntityHelper
     {

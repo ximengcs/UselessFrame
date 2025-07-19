@@ -1,11 +1,10 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using System.Reflection;
-using UselessFrame.NewRuntime.Entities;
 using UselessFrame.Runtime.Types;
+using UselessFrame.NewRuntime.Entities;
 
-namespace UselessFrame.NewRuntime.Events
+namespace UselessFrame.NewRuntime.ECS
 {
     public class EventManager
     {

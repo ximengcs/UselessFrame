@@ -4,7 +4,7 @@ using System.Text;
 using System.Collections.Generic;
 using UselessFrame.NewRuntime.Scenes;
 
-namespace UselessFrame.NewRuntime.Entities
+namespace UselessFrame.NewRuntime.ECS
 {
     public partial class Entity
     {

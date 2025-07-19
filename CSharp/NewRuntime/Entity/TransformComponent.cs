@@ -4,7 +4,7 @@ using QuadTrees.QTreeRectF;
 using System.Drawing;
 using Unity.Mathematics;
 
-namespace UselessFrame.NewRuntime.Entities
+namespace UselessFrame.NewRuntime.ECS
 {
     [CoreComponent]
     [MemoryPackable]

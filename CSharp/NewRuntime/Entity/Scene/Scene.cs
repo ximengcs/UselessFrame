@@ -1,10 +1,9 @@
 ﻿using QuadTrees;
-using System.Collections.Generic;
 using System.Drawing;
-using UselessFrame.NewRuntime.Entities;
+using System.Collections.Generic;
 using UselessFrame.NewRuntime.Worlds;
 
-namespace UselessFrame.NewRuntime.Scenes
+namespace UselessFrame.NewRuntime.ECS
 {
     public partial class Scene : Entity
     {

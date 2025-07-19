@@ -1,10 +1,7 @@
 ﻿
-using Cysharp.Threading.Tasks;
-using System.Threading.Tasks;
 using UselessFrame.Net;
-using UselessFrame.NewRuntime.Entities;
 
-namespace UselessFrame.NewRuntime.Worlds
+namespace UselessFrame.NewRuntime.ECS
 {
     public class ServerWorldHelper : IWorldHelper
     {

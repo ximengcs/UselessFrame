@@ -1,8 +1,7 @@
 ﻿
 using UselessFrame.Net;
-using UselessFrame.NewRuntime.Entities;
 
-namespace UselessFrame.NewRuntime.Worlds
+namespace UselessFrame.NewRuntime.ECS
 {
     public class ClientWorldHelper : IWorldHelper, ICanNet
     {

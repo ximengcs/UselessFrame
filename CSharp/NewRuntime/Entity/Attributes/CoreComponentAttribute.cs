@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace UselessFrame.NewRuntime.Entities
+namespace UselessFrame.NewRuntime.ECS
 {
     public class CoreComponentAttribute : Attribute
     {

@@ -1,12 +1,9 @@
 ﻿
 using IdGen;
 using System.Collections.Generic;
-using UselessFrame.NewRuntime.Entities;
-using UselessFrame.NewRuntime.Events;
-using UselessFrame.NewRuntime.Scenes;
 using UselessFrame.NewRuntime.Utilities;
 
-namespace UselessFrame.NewRuntime.Worlds
+namespace UselessFrame.NewRuntime.ECS
 {
     public class World : Entity
     {

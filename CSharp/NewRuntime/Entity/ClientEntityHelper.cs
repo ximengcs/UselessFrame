@@ -1,14 +1,12 @@
-﻿using Google.Protobuf;
+﻿using System;
 using MemoryPack;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
+using Google.Protobuf;
 using UselessFrame.Net;
+using System.Collections.Generic;
 using UselessFrame.NewRuntime.Scenes;
 using UselessFrame.NewRuntime.Worlds;
 
-namespace UselessFrame.NewRuntime.Entities
+namespace UselessFrame.NewRuntime.ECS
 {
     internal class ClientEntityHelper : IEntityHelper, ICombineEntityHelper, ICanNet
     {

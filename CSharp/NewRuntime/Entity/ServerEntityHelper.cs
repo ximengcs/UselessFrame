@@ -5,7 +5,7 @@ using UselessFrame.Net;
 using UselessFrame.NewRuntime.Scenes;
 using UselessFrame.NewRuntime.Worlds;
 
-namespace UselessFrame.NewRuntime.Entities
+namespace UselessFrame.NewRuntime.ECS
 {
     public class ServerEntityHelper : IEntityHelper, ICombineEntityHelper
     {

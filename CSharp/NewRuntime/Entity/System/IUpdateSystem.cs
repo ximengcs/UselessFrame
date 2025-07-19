@@ -1,5 +1,5 @@
 ﻿
-namespace UselessFrame.NewRuntime.Entities
+namespace UselessFrame.NewRuntime.ECS
 {
     public interface IUpdateSystem
     {
