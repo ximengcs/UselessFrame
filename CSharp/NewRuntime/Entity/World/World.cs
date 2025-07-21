@@ -10,6 +10,9 @@ namespace UselessFrame.NewRuntime.ECS
         private Dictionary<long, Scene> _scenes;
         private IdGenerator _idGenerator;
         private EventManager _event;
+        private TimeRandom _random;
+
+        public IRandom Random => _random;
 
         public IdGenerator IdGen => _idGenerator;
 
@@ -21,7 +24,9 @@ namespace UselessFrame.NewRuntime.ECS
         {
             base.OnInit();
             _scenes = new Dictionary<long, Scene>();
-            _idGenerator = new IdGenerator(0, new IdGeneratorOptions(timeSource: new TimeTicksSource()));
+            ITimeSource timeSource = new TimeTicksSource();
+            _idGenerator = new IdGenerator(0, new IdGeneratorOptions(timeSource: timeSource));
+            _random = new TimeRandom(timeSource);
             _event = new EventManager();
             _event.Initialize();
         }

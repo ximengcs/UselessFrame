@@ -38,5 +38,10 @@ namespace UselessFrame.NewRuntime.ECS
         {
             return component.Entity.GetComponent<T>();
         }
+
+        public static IRandom GetRandom(this EntityComponent component)
+        {
+            return component.Entity.Scene.World.Random;
+        }
     }
 }
