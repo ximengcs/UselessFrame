@@ -23,6 +23,12 @@ namespace UselessFrame.Net
                 fsm.Start<ConnectState>();
             }
 
+            public static void CloseOnFiber(object state)
+            {
+                NetFsm<Connection> fsm = (NetFsm<Connection>)state;
+                fsm.ChangeState(typeof(DisposeState)).Forget();
+            }
+
             public static void RegisteConnection(object state)
             {
                 IConnection connection = (IConnection)state;

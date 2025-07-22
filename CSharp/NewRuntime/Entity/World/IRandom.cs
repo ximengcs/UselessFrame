@@ -31,10 +31,10 @@ namespace UselessFrame.NewRuntime.ECS
 
         float4 NextFloat4(float4 min, float4 max);
 
-        float4 RandHSVColor();
+        int4 RandHSVColor();
 
-        float4 RandHSVColor(int2 hueRange);
+        int4 RandHSVColor(int2 hueRange);
 
-        float4 RandHSVColor(int2 hueRange, float2 saturationRange, float2 valueRange, float2 alphaRange);
+        int4 RandHSVColor(int2 hueRange, float2 saturationRange, float2 valueRange, float2 alphaRange);
     }
 }

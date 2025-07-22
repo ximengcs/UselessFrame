@@ -23,6 +23,8 @@ namespace UselessFrame.NewRuntime.Fiber
 
         public bool IsMain => false;
 
+        public int ExecuteCount => _loopItems.Count + _context.Count;
+
         public Fiber(FiberManager fiberManager)
         {
             _loopItems = new List<LoopItemInfo>(1024);
@@ -62,6 +64,17 @@ namespace UselessFrame.NewRuntime.Fiber
         public void Add(IFiberLoopItem loopItem)
         {
             _loopItems.Add(new LoopItemInfo(loopItem));
+        }
+
+        public void RunAll()
+        {
+            while (ExecuteCount > 0)
+            {
+                _frame += 1000;
+                _deltaTime += 1000;
+                RunLoopItem();
+                _context.OnUpdate(_deltaTime);
+            }
         }
 
         private void Run()

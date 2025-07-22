@@ -79,7 +79,7 @@ namespace UselessFrame.NewRuntime.ECS
             return _random.NextInt(min, max);
         }
 
-        public float4 RandHSVColor(int2 hueRange, float2 saturationRange, float2 valueRange, float2 alphaRange)
+        public int4 RandHSVColor(int2 hueRange, float2 saturationRange, float2 valueRange, float2 alphaRange)
         {
             return HSVToRGB(
                 NextInt(hueRange.x, hueRange.y),
@@ -88,24 +88,24 @@ namespace UselessFrame.NewRuntime.ECS
                 NextFloat(alphaRange.x, alphaRange.y));
         }
 
-        public float4 RandHSVColor(int2 hueRange)
+        public int4 RandHSVColor(int2 hueRange)
         {
             return HSVToRGB(NextInt(hueRange.x, hueRange.y), 1, 1, 1);
         }
 
-        public float4 RandHSVColor()
+        public int4 RandHSVColor()
         {
             return RandHSVColor(new int2(0, 360));
         }
 
-        private float4 HSVToRGB(int hue, float saturation, float value, float alpha)
+        private int4 HSVToRGB(int hue, float saturation, float value, float alpha)
         {
             hue = Math.Clamp(hue, 0, 360);
             saturation = Math.Clamp(saturation, 0, 1);
             value = Math.Clamp(value, 0, 1);
 
             float c = value * saturation;
-            float x = c * (1 - Math.Abs((hue / 60) % 2 - 1));
+            float x = c * (1 - Math.Abs((hue / 60f) % 2 - 1));
             float m = value - c;
 
             float r, g, b;
@@ -147,7 +147,7 @@ namespace UselessFrame.NewRuntime.ECS
                 b = x;
             }
 
-            return new float4((r + m) * 255, (g + m) * 255, (b + m) * 255, alpha);
+            return new int4((int)((r + m) * 255), (int)((g + m) * 255), (int)((b + m) * 255), (int)(alpha * 255));
         }
     }
 }

@@ -12,6 +12,7 @@ namespace UselessFrame.NewRuntime.ECS
         private Entity _parent;
         private Dictionary<long, Entity> _entities;
         private Dictionary<Type, EntityComponent> _components;
+        private bool _disposed;
         internal IEntityHelper _helper;
 
         public IReadOnlyCollection<EntityComponent> Components => _components.Values;
@@ -19,6 +20,8 @@ namespace UselessFrame.NewRuntime.ECS
         public Entity Parent => _parent;
 
         public IReadOnlyCollection<Entity> Entities => _entities.Values;
+
+        public bool IsDisposed => _disposed;
 
         public Scene Scene
         {
@@ -34,6 +37,7 @@ namespace UselessFrame.NewRuntime.ECS
 
         protected Entity()
         {
+            _disposed = false;
             _entities = new Dictionary<long, Entity>();
             _components = new Dictionary<Type, EntityComponent>();
         }
@@ -56,6 +60,15 @@ namespace UselessFrame.NewRuntime.ECS
 
         protected virtual void OnDestroy()
         {
+            if (_disposed) return;
+            _disposed = true;
+
+            List<EntityComponent> components = new List<EntityComponent>(_components.Values);
+            foreach(EntityComponent compEntry in components)
+            {
+                DestoryComponent(compEntry);
+            }
+            _components = null;
         }
 
         protected virtual void OnAddEntity(Entity entity)
@@ -114,6 +127,13 @@ namespace UselessFrame.NewRuntime.ECS
             entity._id = id;
             entity._parent = this;
             entity._scene = scene;
+            if (entity._scene == null)
+            {
+                if (entity is Scene entityScene)
+                {
+                    entity._scene = entityScene;
+                }
+            }
 
             entity.Init(_helper);
             _entities.Add(entity._id, entity);
@@ -122,6 +142,7 @@ namespace UselessFrame.NewRuntime.ECS
 
         internal void AddOrUpdateComponent(EntityComponent newComp)
         {
+            Console.WriteLine($"AddOrUpdateComponent {newComp.GetType().Name}");
             Type type = newComp.GetType();
             if (!_components.TryGetValue(type, out EntityComponent comp))
             {
@@ -138,8 +159,7 @@ namespace UselessFrame.NewRuntime.ECS
             Type type = comp.GetType();
             if (!_components.ContainsKey(type))
             {
-                _components[type] = comp;
-                comp.OnInit(this);
+                InitComponent(type, comp);
             }
         }
 
@@ -148,19 +168,39 @@ namespace UselessFrame.NewRuntime.ECS
             Type type = comp.GetType();
             if (_components.ContainsKey(type))
             {
+                DestoryComponent(comp);
                 _components.Remove(type);
-                comp.OnDestroy();
             }
         }
 
         public EntityComponent GetOrAddComponent(Type type)
         {
+            Console.WriteLine($"AddOrUpdateComponent2 {type.Name}");
             EntityComponent comp = GetComponent(type);
             if (comp != null) return comp;
 
             comp = (EntityComponent)X.Type.CreateInstance(type);
             InitComponent(type, comp);
             return comp;
+        }
+
+        private EventManager Event
+        {
+            get
+            {
+                if (_scene != null)
+                {
+                    return _scene.World.Event;
+                }
+                else if (this is World world)
+                {
+                    return world.Event;
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
 
         public void UpdateComponent(EntityComponent newComp)
@@ -171,7 +211,7 @@ namespace UselessFrame.NewRuntime.ECS
             {
                 newComp.OnInit(this);
                 _helper.OnUpdateComponent(newComp);
-                _scene.World.Event.TriggerComponentUpdate(comp, newComp);
+                Event.TriggerComponentUpdate(comp, newComp);
             }
             else
             {
@@ -183,8 +223,8 @@ namespace UselessFrame.NewRuntime.ECS
         {
             _components[type] = comp;
             comp.OnInit(this);
+            Event.TriggerComponentAwake(comp);
             _helper.OnCreateComponent(comp);
-            _scene.World.Event.TriggerComponentAwake(comp);
         }
 
         public T GetOrAddComponent<T>() where T : EntityComponent
@@ -204,6 +244,13 @@ namespace UselessFrame.NewRuntime.ECS
             Type type = typeof(T);
             if (_components.TryGetValue(type, out EntityComponent comp))
                 return (T)comp;
+
+            foreach (var comEntry in _components)
+            {
+                if (type.IsAssignableFrom(comEntry.Key))
+                    return (T)comEntry.Value;
+            }
+
             return null;
         }
 
@@ -218,11 +265,16 @@ namespace UselessFrame.NewRuntime.ECS
                 return;
             if (_components.TryGetValue(type, out EntityComponent comp))
             {
-                _scene.World.Event.TriggerComponentDestroy(comp);
-                _helper.OnDestroyComponent(comp);
-                comp.OnDestroy();
+                DestoryComponent(comp);
                 _components.Remove(type);
             }
+        }
+
+        private void DestoryComponent(EntityComponent comp)
+        {
+            _helper.OnDestroyComponent(comp);
+            Event.TriggerComponentDestroy(comp);
+            comp.OnDestroy();
         }
 
         public void RemoveComponent<T>() where T : EntityComponent

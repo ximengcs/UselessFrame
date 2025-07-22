@@ -18,6 +18,20 @@ namespace UselessFrame.NewRuntime.Fiber
             return fiber;
         }
 
+        public void Dispose()
+        {
+            InnerDispose();
+        }
+
+        private void InnerDispose()
+        {
+            foreach (var fiberEntry in _fibers)
+            {
+                fiberEntry.Value.Dispose();
+            }
+            _fibers = null;
+        }
+
         internal void Remove(Fiber fiber)
         {
             _fibers.TryRemove(fiber.GetHashCode(), out _);

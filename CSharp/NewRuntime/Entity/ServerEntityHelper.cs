@@ -1,4 +1,5 @@
 ﻿
+using System;
 using UselessFrame.Net;
 
 namespace UselessFrame.NewRuntime.ECS
@@ -78,18 +79,24 @@ namespace UselessFrame.NewRuntime.ECS
 
         public void OnCreateComponent(EntityComponent component)
         {
+            if (component.Entity.IsDisposed) return;
+            Console.WriteLine($"OnCreateComponent {component.Entity.Id} {component.GetType().Name}");
             _server.Broadcast(component.ToCreateMessage());
             _helper?.OnCreateComponent(component);
         }
 
         public void OnUpdateComponent(EntityComponent component)
         {
+            if (component.Entity.IsDisposed) return;
+            Console.WriteLine($"OnUpdateComponent {component.Entity.Id} {component.GetType().Name}");
             _server.Broadcast(component.ToUpdateMessage());
             _helper?.OnUpdateComponent(component);
         }
 
         public void OnDestroyComponent(EntityComponent component)
         {
+            if (component.Entity.IsDisposed) return;
+            Console.WriteLine($"OnDestroyComponent {component.Entity.Id} {component.GetType().Name}");
             _server.Broadcast(component.ToDestroyMessage());
             _helper?.OnDestroyComponent(component);
         }

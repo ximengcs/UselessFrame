@@ -17,7 +17,7 @@ namespace UselessFrame.NewRuntime
         private static ITypeManager _typeManager;
         private static WorldManager _worldManager;
         private static ILogManager _logManager;
-        private static IFiberManager _fiberManager;
+        private static FiberManager _fiberManager;
         private static CommandManager _commandManager;
         private static Dictionary<long, IServer> _servers;
         private static Dictionary<long, IConnection> _connections;
@@ -61,17 +61,19 @@ namespace UselessFrame.NewRuntime
 
         public static void Shutdown()
         {
+            SystemLog.Debug($"X Shutdown");
             AppDomain.CurrentDomain.UnhandledException -= PrintSystemException;
             TaskScheduler.UnobservedTaskException -= PrintTaskException;
             UniTaskScheduler.UnobservedTaskException -= PrintUniTaskException;
             List<IConnection> connections = new List<IConnection>(_connections.Values);
-            foreach (IConnection connection in connections)
-                connection.Close();
+            foreach (Connection connection in connections)
+                connection.ForceClose();
             List<IServer> servers = new List<IServer>(_servers.Values);
-            foreach (IServer server in servers)
+            foreach (Server server in servers)
                 server.Close();
             _connections.Clear();
             _servers.Clear();
+            _fiberManager.Dispose();
         }
 
         public static IServer GetServer(long id)

@@ -26,6 +26,7 @@ namespace UselessFrame.NewRuntime.ECS
             World world = new World();
             world.Init(entityHelper);
             entityHelper.Bind(world);
+            entityHelper.OnCreateEntity(world);
             _worldList.Add(world.Id, world);
             return world;
         }
@@ -34,6 +35,7 @@ namespace UselessFrame.NewRuntime.ECS
         {
             if (_worldList.ContainsKey(world.Id))
             {
+                world._helper.OnDestroyEntity(world);
                 _worldList.Remove(world.Id);
                 world.Destroy();
             }

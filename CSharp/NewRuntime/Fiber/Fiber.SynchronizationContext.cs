@@ -25,6 +25,8 @@ namespace UselessFrame.NewRuntime.Fiber
             public long ExecTimeout { get; set; }
 
             public IFiber Fiber => _fiber;
+
+            public int Count => m_ActQueue.Count;
             #endregion
 
             #region IModule Life Fun

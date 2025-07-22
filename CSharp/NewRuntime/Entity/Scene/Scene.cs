@@ -32,9 +32,7 @@ namespace UselessFrame.NewRuntime.ECS
         internal void RegisterEntity(Entity entity)
         {
             _entitiesRefId.Add(entity.Id, entity);
-            TransformComponent tfComp = entity.GetComponent<TransformComponent>();
-            if (tfComp == null)
-                tfComp = entity.GetOrAddComponent<TransformComponent>();
+            TransformComponent tfComp = entity.GetOrAddComponent<TransformComponent>();
             _entitiesRefWorld.Add(tfComp);
         }
 

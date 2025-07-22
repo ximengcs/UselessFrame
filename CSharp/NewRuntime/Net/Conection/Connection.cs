@@ -150,11 +150,18 @@ namespace UselessFrame.Net
             }
         }
 
+        public void ForceClose()
+        {
+            if (_disposeTokenSource.IsCancellationRequested)
+                return;
+            _runFiber.Post(ToFiberFun.CloseOnFiber, _fsm);
+        }
+
         public void Close()
         {
             if (_disposeTokenSource.IsCancellationRequested)
                 return;
-            _fsm.ChangeState(typeof(CloseRequestState)).Forget();
+            _runFiber.Post(ToFiberFun.CloseOnFiber, _fsm);
         }
 
         public T GetRuntimeData<T>()
