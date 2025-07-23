@@ -50,6 +50,10 @@ namespace UselessFrame.NewRuntime.ECS
                 {
                     handle(result.Message);
                 }
+                else
+                {
+                    _world.Event.TriggerMessage(result.Message);
+                }
             }
         }
 

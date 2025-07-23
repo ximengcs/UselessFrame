@@ -32,6 +32,15 @@ namespace UselessFrame.NewRuntime.ECS
         private void NewConnectionHandler(IConnection connection)
         {
             connection.State.Subscribe(ConnectionStateHandler);
+            connection.ReceiveMessageEvent += TriggerMessage;
+        }
+
+        private void TriggerMessage(MessageResult result)
+        {
+            if (result.Valid)
+            {
+                _world.Event.TriggerMessage(result.Message);
+            }
         }
 
         private void ConnectionStateHandler(IConnection connection, ConnectionState state)

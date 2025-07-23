@@ -1,4 +1,5 @@
 ﻿
+using Google.Protobuf;
 using System;
 using System.Collections.Generic;
 using UselessFrame.Runtime.Types;
@@ -7,13 +8,16 @@ namespace UselessFrame.NewRuntime.ECS
 {
     public class EventManager
     {
-        private class SystemHandle
+        private class MethodHandle
         {
             private Delegate _method;
             private object[] _params;
 
-            public SystemHandle(Delegate method, int paramCount)
+            public object Target { get; }
+
+            public MethodHandle(object target, Delegate method, int paramCount)
             {
+                Target = target;
                 _method = method;
                 _params = new object[paramCount];
             }
@@ -32,22 +36,42 @@ namespace UselessFrame.NewRuntime.ECS
             }
         }
 
-        private Dictionary<Type, List<SystemHandle>> _awakeSystems;
-        private Dictionary<Type, List<SystemHandle>> _updateSystems;
-        private Dictionary<Type, List<SystemHandle>> _destroySystems;
+        private World _world;
+        private Dictionary<Type, List<MethodHandle>> _awakeSystems;
+        private Dictionary<Type, List<MethodHandle>> _updateSystems;
+        private Dictionary<Type, List<MethodHandle>> _destroySystems;
+        private Dictionary<Type, List<MethodHandle>> _messageHandles;
 
-        public void Initialize()
+        public void Initialize(World world)
         {
-            _awakeSystems = new Dictionary<Type, List<SystemHandle>>();
-            _destroySystems = new Dictionary<Type, List<SystemHandle>>();
-            _updateSystems = new Dictionary<Type, List<SystemHandle>>();
+            _world = world;
+            _awakeSystems = new Dictionary<Type, List<MethodHandle>>();
+            _destroySystems = new Dictionary<Type, List<MethodHandle>>();
+            _updateSystems = new Dictionary<Type, List<MethodHandle>>();
+            _messageHandles = new Dictionary<Type, List<MethodHandle>>();
 
             CollectHandle(typeof(IAwakeSystem), typeof(IAwakeSystem<>), typeof(OnAwakeDelegate<>), _awakeSystems);
             CollectHandle(typeof(IDestroySystem), typeof(IDestroySystem<>), typeof(OnDestroyDelegate<>), _destroySystems);
             CollectHandle(typeof(IUpdateSystem), typeof(IUpdateSystem<>), typeof(OnUpdateDelegate<>), _updateSystems);
+            CollectHandle(typeof(IMessageHandler), typeof(IMessageHandler<>), typeof(OnMessage<>), _messageHandles);
+            InitMessageHandler();
         }
 
-        private void CollectHandle(Type type1, Type type2, Type awakeDelegateType, Dictionary<Type, List<SystemHandle>> map)
+        private void InitMessageHandler()
+        {
+            foreach (var handlerEntry in _messageHandles)
+            {
+                foreach (MethodHandle handle in handlerEntry.Value)
+                {
+                    if (handle.Target is IMessageHandler handler)
+                    {
+                        handler.OnInit(_world);
+                    }
+                }
+            }
+        }
+
+        private void CollectHandle(Type type1, Type type2, Type awakeDelegateType, Dictionary<Type, List<MethodHandle>> map)
         {
             ITypeCollection types = X.Type.GetCollection(type1);
             foreach (var type in types)
@@ -76,10 +100,10 @@ namespace UselessFrame.NewRuntime.ECS
                     var tType = targetF.GetGenericArguments()[0];
                     object obj = X.Type.CreateInstance(type);
                     Delegate method = target.CreateDelegate(awakeDelegateType.MakeGenericType(tType), obj);
-                    SystemHandle handle = new SystemHandle(method, target.GetParameters().Length);
-                    if (!map.TryGetValue(tType, out List<SystemHandle> list))
+                    MethodHandle handle = new MethodHandle(target, method, target.GetParameters().Length);
+                    if (!map.TryGetValue(tType, out List<MethodHandle> list))
                     {
-                        list = new List<SystemHandle>();
+                        list = new List<MethodHandle>();
                         map[tType] = list;
                     }
                     list.Add(handle);
@@ -90,9 +114,9 @@ namespace UselessFrame.NewRuntime.ECS
         public void TriggerComponentAwake(EntityComponent comp)
         {
             Type type = comp.GetType();
-            if (_awakeSystems.TryGetValue(type, out List<SystemHandle> list))
+            if (_awakeSystems.TryGetValue(type, out List<MethodHandle> list))
             {
-                foreach (SystemHandle system in list)
+                foreach (MethodHandle system in list)
                 {
                     system.Invoke(comp);
                 }
@@ -102,9 +126,9 @@ namespace UselessFrame.NewRuntime.ECS
         public void TriggerComponentUpdate(EntityComponent oldComp, EntityComponent newComp)
         {
             Type type = oldComp.GetType();
-            if (_updateSystems.TryGetValue(type, out List<SystemHandle> list))
+            if (_updateSystems.TryGetValue(type, out List<MethodHandle> list))
             {
-                foreach (SystemHandle system in list)
+                foreach (MethodHandle system in list)
                 {
                     system.Invoke(oldComp, newComp);
                 }
@@ -114,11 +138,23 @@ namespace UselessFrame.NewRuntime.ECS
         public void TriggerComponentDestroy(EntityComponent comp)
         {
             Type type = comp.GetType();
-            if (_destroySystems.TryGetValue(type, out List<SystemHandle> list))
+            if (_destroySystems.TryGetValue(type, out List<MethodHandle> list))
             {
-                foreach (SystemHandle system in list)
+                foreach (MethodHandle system in list)
                 {
                     system.Invoke(comp);
+                }
+            }
+        }
+
+        public void TriggerMessage(IMessage message)
+        {
+            Type type = message.GetType();
+            if (_messageHandles.TryGetValue(type, out List<MethodHandle> list))
+            {
+                foreach (MethodHandle handler in list)
+                {
+                    handler.Invoke(message);
                 }
             }
         }

@@ -28,7 +28,7 @@ namespace UselessFrame.NewRuntime.ECS
             _idGenerator = new IdGenerator(0, new IdGeneratorOptions(timeSource: timeSource));
             _random = new TimeRandom(timeSource);
             _event = new EventManager();
-            _event.Initialize();
+            _event.Initialize(this);
         }
 
         public void SetHelper(IEntityHelper helper)
