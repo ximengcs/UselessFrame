@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CSharp\UselessFrame.csproj" />
-    <ProjectReference Include="..\CsvHelper\CsvHelper.csproj" />
     <ProjectReference Include="..\XApplication\XApplication.csproj" />
     <ProjectReference Include="..\XGraphics\XGraphics.csproj" />
   </ItemGroup>
