@@ -191,7 +191,7 @@ namespace XFrame.Core
 
             if (_intPool == null)
             {
-                IPoolSystem poolSys = _pool.System;
+                IPoolManager poolSys = _pool.System;
                 _intPool = poolSys.GetOrNew<IntParser>();
                 _floatPool = poolSys.GetOrNew<FloatParser>();
                 _boolPool = poolSys.GetOrNew<BoolParser>();

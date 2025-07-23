@@ -13,11 +13,6 @@ namespace UselessFrame.Runtime.Pools
         int PoolKey { get; }
 
         /// <summary>
-        /// 对象名
-        /// </summary>
-        string Name { get; set; }
-
-        /// <summary>
         /// 对象所处对象池
         /// </summary>
         IPool InPool { get; protected internal set; }

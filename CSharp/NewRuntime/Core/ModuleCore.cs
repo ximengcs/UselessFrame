@@ -1,35 +1,20 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
-using UselessFrame.Runtime.Types;
-using UselessFrame.Runtime.Configs;
-using UselessFrame.Runtime.Diagnotics;
-using UselessFrame.Runtime.Pools;
+using UselessFrame.NewRuntime;
 
 namespace UselessFrame.Runtime
 {
-    internal class FrameCore : IFrameCore
+    internal class ModuleCore : IModuleCore
     {
         private int _id;
         private bool _starting;
-        private TypeSystem _typeSystem;
-        private LogSystem _logSystem;
-        private PoolSystem _poolSystem;
         private ModuleDriver _driver;
-
-        public ITypeSystem TypeSystem => _typeSystem;
-
-        public ILogSystem Log => _logSystem;
-
-        public IPoolSystem Pool => _poolSystem;
 
         public int Id => _id;
 
-        public FrameCore(int id, FrameConfig config)
+        public ModuleCore(int id)
         {
             _id = id;
-            _typeSystem = new TypeSystem(config.TypeFilter);
-            _logSystem = new LogSystem(this);
-            _poolSystem = new PoolSystem(this);
             _driver = new ModuleDriver(this);
         }
 
@@ -43,9 +28,9 @@ namespace UselessFrame.Runtime
             _driver.Trigger(typeof(T), data);
         }
 
-        public void AddHandler(Type handleType)
+        public void AddHandler<T>() where T : IModuleHandler
         {
-            IModuleHandler handler = (IModuleHandler)TypeSystem.CreateInstance(handleType);
+            IModuleHandler handler = (IModuleHandler)X.Type.CreateInstance(typeof(T));
             _driver.AddHandle(handler);
         }
 

@@ -1,37 +1,38 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using UselessFrame.NewRuntime;
 using UselessFrame.Runtime.Types;
 
 namespace UselessFrame.Runtime.Pools
 {
-    internal partial class PoolSystem : IPoolSystem
+    internal partial class PoolManager : IPoolManager, IManagerInitializer
     {
         private object[] m_ParamCache;
         private DefaultPoolHelper _defaultHelper;
+        private Dictionary<Type, IPoolHelper> _helpers;
         private Dictionary<Type, IPool> m_PoolContainers;
-        private IFrameCore _core;
 
-        public IFrameCore Core => _core;
-
-        public PoolSystem(IFrameCore core)
+        public PoolManager()
         {
-            _core = core;
             m_ParamCache = new object[2];
             m_PoolContainers = new Dictionary<Type, IPool>();
-            ITypeSystem typeSys = _core.TypeSystem;
-            _defaultHelper = new DefaultPoolHelper(typeSys);
+            _defaultHelper = new DefaultPoolHelper();
+            _helpers = new Dictionary<Type, IPoolHelper>();
+        }
 
+        public void Initialize(XSetting setting)
+        {
             Type helperType = typeof(IPoolHelper);
             Type helperPType = typeof(PoolHelperAttribute);
-            ITypeCollection typeSet = typeSys.GetOrNewWithAttr(helperPType);
+            ITypeCollection typeSet = X.Type.GetCollection(helperPType);
             foreach (Type type in typeSet)
             {
                 if (helperType.IsAssignableFrom(type))
                 {
-                    PoolHelperAttribute attr = (PoolHelperAttribute)typeSys.GetAttribute(type, helperPType);
-                    IPoolHelper helper = typeSys.CreateInstance(type) as IPoolHelper;
-                    InnerGetOrNew(attr.Target, helper);
+                    PoolHelperAttribute attr = (PoolHelperAttribute)X.Type.GetAttribute(type, helperPType);
+                    IPoolHelper helper = X.Type.CreateInstance(type) as IPoolHelper;
+                    _helpers[attr.Target] = helper;
                 }
             }
         }
@@ -44,28 +45,37 @@ namespace UselessFrame.Runtime.Pools
         }
 
         #region Interface
-        /// <inheritdoc/>
-        public IPool<T> GetOrNew<T>(IPoolHelper helper = null) where T : IPoolObject
+        public void RegisterHelper<T>(IPoolHelper helper) where T : IPoolObject
         {
-            return InnerGetOrNew(typeof(T), helper) as IPool<T>;
+            _helpers[typeof(T)] = helper;
         }
 
         /// <inheritdoc/>
-        public IPool GetOrNew(Type objType, IPoolHelper helper = null)
+        public IPool<T> GetOrNew<T>() where T : IPoolObject
         {
-            return InnerGetOrNew(objType, helper);
+            return InnerGetOrNew(typeof(T)) as IPool<T>;
+        }
+
+        /// <inheritdoc/>
+        public IPool GetOrNew(Type objType)
+        {
+            return InnerGetOrNew(objType);
         }
         #endregion
 
         #region Inner Implement
-        internal IPool InnerGetOrNew(Type objType, IPoolHelper helper = null)
+        internal IPool InnerGetOrNew(Type objType)
         {
+            IPoolHelper helper = null;
+            if (!_helpers.TryGetValue(objType, out helper))
+                helper = _defaultHelper;
+
             if (!m_PoolContainers.TryGetValue(objType, out IPool pool))
             {
                 Type poolType = typeof(ObjectPool<>).MakeGenericType(objType);
                 m_ParamCache[0] = this;
-                m_ParamCache[1] = _defaultHelper;
-                pool = _core.TypeSystem.CreateInstance(poolType, m_ParamCache) as IPool;
+                m_ParamCache[1] = helper;
+                pool = X.Type.CreateInstance(poolType, m_ParamCache) as IPool;
 
                 m_PoolContainers.Add(objType, pool);
             }

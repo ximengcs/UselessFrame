@@ -94,8 +94,6 @@ namespace XFrame.Core
 
         int IPoolObject.PoolKey => default;
 
-        string IPoolObject.Name { get; set; }
-
         /// <summary>
         /// 构造器
         /// </summary>

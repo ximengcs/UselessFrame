@@ -1,11 +1,10 @@
 ﻿
 using UselessFrame.Runtime;
-using UselessFrame.Runtime.Diagnotics;
 
 namespace UselessFrameTest.Modules
 {
     [Module(1)]
-    public class TestModule1 : ModuleBase, IUpdater
+    public class TestModule1 : ModuleBase, IModuleUpdater
     {
         public void OnUpdate(float detalTime)
         {

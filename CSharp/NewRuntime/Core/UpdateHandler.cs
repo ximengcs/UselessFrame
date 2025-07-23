@@ -13,14 +13,14 @@ namespace UselessFrame.Runtime
             get
             {
                 if (_target == null)
-                    _target = typeof(IUpdater);
+                    _target = typeof(IModuleUpdater);
                 return _target;
             }
         }
 
         public void Handle(IModule module, float data)
         {
-            IUpdater updater = (IUpdater)module;
+            IModuleUpdater updater = (IModuleUpdater)module;
             updater.OnUpdate(data);
         }
     }

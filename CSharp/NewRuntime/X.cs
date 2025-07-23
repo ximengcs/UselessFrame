@@ -1,5 +1,4 @@
-﻿
-using IdGen;
+﻿using IdGen;
 using System;
 using UselessFrame.Net;
 using System.Threading.Tasks;
@@ -10,6 +9,8 @@ using UselessFrame.NewRuntime.Fiber;
 using UselessFrame.NewRuntime.Randoms;
 using UselessFrame.NewRuntime.Utilities;
 using UselessFrame.NewRuntime.Net;
+using UselessFrame.Runtime.Pools;
+using UselessFrame.Runtime;
 
 namespace UselessFrame.NewRuntime
 {
@@ -23,6 +24,8 @@ namespace UselessFrame.NewRuntime
         private static FiberManager     _fiberManager;
         private static CommandManager   _commandManager;
         private static NetManager       _netManager;
+        private static PoolManager      _poolManager;
+        private static ModuleCore        _moduleCore;
 
         public static IRandom Random => _random;
 
@@ -40,6 +43,10 @@ namespace UselessFrame.NewRuntime
 
         public static INetManager Net => _netManager;
 
+        public static IPoolManager Pool => _poolManager;
+
+        public static IModuleCore Module => _moduleCore;
+
         public static void Initialize(XSetting setting)
         {
             AppDomain.CurrentDomain.UnhandledException += PrintSystemException;
@@ -55,6 +62,8 @@ namespace UselessFrame.NewRuntime
             _netManager     = new NetManager();
             _worldManager   = new WorldManager();
             _commandManager = new CommandManager();
+            _poolManager    = new PoolManager();
+            _moduleCore     = new ModuleCore(default);
 
             InitManager(_logManager, setting);
             InitManager(_typeManager, setting);
@@ -62,11 +71,13 @@ namespace UselessFrame.NewRuntime
             InitManager(_netManager, setting);
             InitManager(_worldManager, setting);
             InitManager(_commandManager, setting);
+            InitManager(_poolManager, setting);
         }
 
         public static void Update(float deltaTime)
         {
             _fiberManager.UpdateMain(deltaTime);
+            _moduleCore.Trigger<IModuleUpdater>(deltaTime);
         }
 
         public static void Shutdown()
@@ -90,6 +101,5 @@ namespace UselessFrame.NewRuntime
             if (manager is IManagerDisposable initializer)
                 initializer.Dispose();
         }
-
     }
 }

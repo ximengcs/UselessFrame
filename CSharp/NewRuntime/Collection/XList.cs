@@ -6,7 +6,7 @@ using UselessFrame.Runtime.Pools;
 
 namespace UselessFrame.Runtime.Collections
 {
-    public class List<T> : IList<T>, IPoolObject
+    public class XList<T> : IList<T>, IPoolObject
     {
         private System.Collections.Generic.List<T> _list;
         private Action _onChange;
@@ -37,12 +37,12 @@ namespace UselessFrame.Runtime.Collections
 
         IPool IPoolObject.InPool { get; set; }
 
-        public List()
+        public XList()
         {
             _list = new System.Collections.Generic.List<T>();
         }
 
-        public List(int capacity)
+        public XList(int capacity)
         {
             _list = new System.Collections.Generic.List<T>(capacity);
         }

@@ -77,8 +77,6 @@ namespace XFrame.Core
 
         int IPoolObject.PoolKey => default;
 
-        string IPoolObject.Name { get; set; }
-
         IPool IPoolObject.InPool
         {
             get => _pool;

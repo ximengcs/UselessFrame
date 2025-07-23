@@ -6,9 +6,9 @@ namespace UselessFrame.Runtime
     internal struct ModuleHandle
     {
         public IModuleHandler Handler;
-        public List<IModule> Modules;
+        public XList<IModule> Modules;
 
-        public ModuleHandle(IModuleHandler handler, List<IModule> modules)
+        public ModuleHandle(IModuleHandler handler, XList<IModule> modules)
         {
             Handler = handler;
             Modules = modules;

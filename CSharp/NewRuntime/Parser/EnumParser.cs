@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using UselessFrame.NewRuntime;
 using UselessFrame.Runtime.Pools;
 using UselessFrame.Runtime.Types;
 
@@ -11,7 +12,7 @@ namespace XFrame.Core
     /// <typeparam name="T">枚举类型</typeparam>
     public class EnumParser<T> : IParser<T> where T : Enum
     {
-        private IPoolSystem _poolSystem;
+        private IPoolManager _poolSystem;
         private IPool _pool;
         private T m_Value;
 
@@ -55,8 +56,7 @@ namespace XFrame.Core
 
         private void InnerSetDefault()
         {
-            ITypeSystem typeSys = _poolSystem.Core.TypeSystem;
-            var attr = (DefaultValueAttribute)typeSys.GetAttribute(typeof(T), typeof(DefaultValueAttribute));
+            var attr = (DefaultValueAttribute)X.Type.GetAttribute(typeof(T), typeof(DefaultValueAttribute));
             if (attr != null)
                 m_Value = (T)attr.Value;
             else

@@ -3,23 +3,23 @@ using System.Reflection;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UselessFrame.Runtime.Collections;
-using ModuleList = UselessFrame.Runtime.Collections.List<UselessFrame.Runtime.IModule>;
+using ModuleList = UselessFrame.Runtime.Collections.XList<UselessFrame.Runtime.IModule>;
 
 namespace UselessFrame.Runtime
 {
     internal class ModuleDriver : IModuleDriver
     {
         private bool _start;
-        private IFrameCore _core;
+        private IModuleCore _core;
         private ModuleCollection _modules;
         private Dictionary<Type, ModuleHandle> m_ModulesWithEvents;
 
-        public IFrameCore Core => _core;
+        public IModuleCore Core => _core;
 
-        public ModuleDriver(IFrameCore core)
+        public ModuleDriver(IModuleCore core)
         {
             _core = core;
-            _modules = new ModuleCollection(this);
+            _modules = new ModuleCollection();
             m_ModulesWithEvents = new Dictionary<Type, ModuleHandle>();
         }
 

@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using Cysharp.Threading.Tasks;
-using UselessFrame.Runtime.Diagnotics;
 
 namespace UselessFrame.Runtime
 {
@@ -8,15 +7,15 @@ namespace UselessFrame.Runtime
     {
         private int _id;
         private bool _start;
-        private IFrameCore _core;
+        private IModuleCore _core;
 
         protected CancellationTokenSource _destroyTokenSource;
 
         public int Id => _id;
 
-        public IFrameCore Core => _core;
+        public IModuleCore Core => _core;
 
-        internal void OnModuleInit(IFrameCore core, int id, object param)
+        internal void OnModuleInit(IModuleCore core, int id, object param)
         {
             _id = id;
             _start = false;

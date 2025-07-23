@@ -1,24 +1,23 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UselessFrame.NewRuntime;
 using UselessFrame.Runtime.Pools;
-using ModuleList = UselessFrame.Runtime.Collections.List<UselessFrame.Runtime.ModuleBase>;
+using ModuleList = UselessFrame.Runtime.Collections.XList<UselessFrame.Runtime.ModuleBase>;
 
 namespace UselessFrame.Runtime.Collections
 {
     internal partial class ModuleCollection : IMultiEnumerable<ModuleBase>
     {
-        private ModuleDriver _driver;
         private Dictionary<Type, Dictionary<int, ModuleBase>> _modules;
         private ModuleList _moduleList;
         private IPool<ModuleList> _listPool;
 
-        public ModuleCollection(ModuleDriver driver)
+        public ModuleCollection()
         {
-            _driver = driver;
             _moduleList = new ModuleList();
             _modules = new Dictionary<Type, Dictionary<int, ModuleBase>>();
-            _listPool = (IPool<ModuleList>)driver.Core.Pool.GetOrNew(typeof(ModuleList));
+            _listPool = X.Pool.GetOrNew<ModuleList>();
         }
 
         public ModuleBase Get(Type type, int id)
@@ -44,7 +43,7 @@ namespace UselessFrame.Runtime.Collections
 
             if (!moduleList.ContainsKey(id))
             {
-                ModuleBase module = (ModuleBase)_driver.Core.TypeSystem.CreateInstance(type);
+                ModuleBase module = (ModuleBase)X.Type.CreateInstance(type);
                 moduleList.Add(id, module);
                 _moduleList.Add(module);
                 return module;

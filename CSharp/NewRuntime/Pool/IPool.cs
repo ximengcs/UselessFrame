@@ -32,7 +32,7 @@ namespace UselessFrame.Runtime.Pools
         /// <summary>
         /// 所属模块
         /// </summary>
-        IPoolSystem System { get; }
+        IPoolManager System { get; }
 
         /// <summary>
         /// 获取一个对象

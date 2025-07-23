@@ -1,25 +1,18 @@
 ﻿
 using System;
-using UselessFrame.Runtime.Types;
+using UselessFrame.NewRuntime;
 
 namespace UselessFrame.Runtime.Pools
 {
-    internal partial class PoolSystem
+    internal partial class PoolManager
     {
         private class DefaultPoolHelper : IPoolHelper
         {
-            private ITypeSystem _typeSys;
-
             public int CacheCount => 64;
-
-            public DefaultPoolHelper(ITypeSystem typeSys)
-            {
-                _typeSys = typeSys;
-            }
 
             IPoolObject IPoolHelper.Factory(Type type, int poolKey, object userData)
             {
-                return (IPoolObject)_typeSys.CreateInstance(type);
+                return (IPoolObject)X.Type.CreateInstance(type);
             }
 
             void IPoolHelper.OnObjectCreate(IPoolObject obj)

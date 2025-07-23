@@ -1,7 +1,7 @@
 ﻿
 namespace UselessFrame.Runtime
 {
-    public interface IUpdater
+    public interface IModuleUpdater
     {
         void OnUpdate(float detalTime);
     }

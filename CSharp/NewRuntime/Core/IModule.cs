@@ -5,6 +5,6 @@ namespace UselessFrame.Runtime
     {
         int Id { get; }
 
-        IFrameCore Core { get; }
+        IModuleCore Core { get; }
     }
 }

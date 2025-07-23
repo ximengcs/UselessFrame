@@ -7,7 +7,7 @@ namespace UselessFrame.Runtime.Pools
     {
         private Type m_Type;
         private IPoolHelper m_Helper;
-        private IPoolSystem m_Module;
+        private IPoolManager m_Module;
         private LinkedList<T> m_Objects;
         private Queue<LinkedListNode<T>> m_NodeCache;
         private int m_UseCount;
@@ -20,9 +20,9 @@ namespace UselessFrame.Runtime.Pools
 
         public IPoolHelper Helper => m_Helper;
 
-        public IPoolSystem System => m_Module;
+        public IPoolManager System => m_Module;
 
-        public ObjectPool(IPoolSystem module, IPoolHelper helper)
+        public ObjectPool(IPoolManager module, IPoolHelper helper)
         {
             m_UseCount = 0;
             m_Type = typeof(T);
