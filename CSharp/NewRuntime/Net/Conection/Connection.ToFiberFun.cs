@@ -29,17 +29,11 @@ namespace UselessFrame.Net
                 fsm.ChangeState(typeof(DisposeState)).Forget();
             }
 
-            public static void RegisteConnection(object state)
-            {
-                IConnection connection = (IConnection)state;
-                X.RegisterConnection(connection);
-            }
-
             public static void UnRegisteConnection(object state)
             {
                 var tuple = (Tuple<Server, Connection>)state;
                 tuple.Item1.RemoveConnection(tuple.Item2);
-                X.UnRegisterConnection(tuple.Item2);
+                tuple.Item2.OnDestroy?.Invoke(tuple.Item2);
             }
 
             public static async void SendMessageToRunFiber(object state)

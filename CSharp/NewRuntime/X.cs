@@ -1,28 +1,32 @@
 ﻿
-using Cysharp.Threading.Tasks;
+using IdGen;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using UselessFrame.Net;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UselessFrame.NewRuntime.Commands;
 using UselessFrame.NewRuntime.ECS;
 using UselessFrame.NewRuntime.Fiber;
+using UselessFrame.NewRuntime.Randoms;
 using UselessFrame.NewRuntime.Utilities;
+using UselessFrame.NewRuntime.Net;
 
 namespace UselessFrame.NewRuntime
 {
     public static partial class X
     {
-        private static MainFiber _mainFiber;
-        private static ITypeManager _typeManager;
-        private static WorldManager _worldManager;
-        private static ILogManager _logManager;
-        private static FiberManager _fiberManager;
-        private static CommandManager _commandManager;
-        private static Dictionary<long, IServer> _servers;
-        private static Dictionary<long, IConnection> _connections;
+        private static TimeTicksSource  _timeSource;
+        private static TimeRandom       _random;
+        private static TypeManager      _typeManager;
+        private static WorldManager     _worldManager;
+        private static LogManager       _logManager;
+        private static FiberManager     _fiberManager;
+        private static CommandManager   _commandManager;
+        private static NetManager       _netManager;
 
-        public readonly static int Seed = (int)DateTime.UtcNow.Ticks;
+        public static IRandom Random => _random;
+
+        public static ITimeSource GlobalTimeSource => _timeSource;
 
         public static ITypeManager Type => _typeManager;
 
@@ -32,75 +36,60 @@ namespace UselessFrame.NewRuntime
 
         public static IFiberManager FiberManager => _fiberManager;
 
-        public static IFiber MainFiber => _mainFiber;
-
         public static ICommandManager Command => _commandManager;
+
+        public static INetManager Net => _netManager;
 
         public static void Initialize(XSetting setting)
         {
-            RandomUtility.Initialize(Seed);
-            _logManager = new LogManager();
             AppDomain.CurrentDomain.UnhandledException += PrintSystemException;
             TaskScheduler.UnobservedTaskException += PrintTaskException;
             UniTaskScheduler.UnobservedTaskException += PrintUniTaskException;
 
-            _typeManager = new TypeManager(setting.TypeFilter);
-            _fiberManager = new FiberManager();
-            _worldManager = new WorldManager();
-            _mainFiber = new MainFiber();
-            _servers = new Dictionary<long, IServer>();
-            _connections = new Dictionary<long, IConnection>();
+            _timeSource = new TimeTicksSource();
+            _random = new TimeRandom(_timeSource);
+
+            _logManager     = new LogManager();
+            _typeManager    = new TypeManager();
+            _fiberManager   = new FiberManager();
+            _netManager     = new NetManager();
+            _worldManager   = new WorldManager();
             _commandManager = new CommandManager();
-            NetPoolUtility.InitializePool();
+
+            InitManager(_logManager, setting);
+            InitManager(_typeManager, setting);
+            InitManager(_fiberManager, setting);
+            InitManager(_netManager, setting);
+            InitManager(_worldManager, setting);
+            InitManager(_commandManager, setting);
         }
 
         public static void Update(float deltaTime)
         {
-            _mainFiber.Update(deltaTime);
+            _fiberManager.UpdateMain(deltaTime);
         }
 
         public static void Shutdown()
         {
-            SystemLog.Debug($"X Shutdown");
             AppDomain.CurrentDomain.UnhandledException -= PrintSystemException;
             TaskScheduler.UnobservedTaskException -= PrintTaskException;
             UniTaskScheduler.UnobservedTaskException -= PrintUniTaskException;
-            List<IConnection> connections = new List<IConnection>(_connections.Values);
-            foreach (Connection connection in connections)
-                connection.ForceClose();
-            List<IServer> servers = new List<IServer>(_servers.Values);
-            foreach (Server server in servers)
-                server.Close();
-            _connections.Clear();
-            _servers.Clear();
-            _fiberManager.Dispose();
+
+            DisposeManager(_fiberManager);
+            DisposeManager(_netManager);
         }
 
-        public static IServer GetServer(long id)
+        private static void InitManager(object manager, XSetting setting)
         {
-            if (_servers.TryGetValue(id, out IServer server))
-                return server;
-            return null;
+            if (manager is IManagerInitializer initializer)
+                initializer.Initialize(setting);
         }
 
-        internal static void RegisterServer(IServer server)
+        private static void DisposeManager(object manager)
         {
-            _servers.Add(server.Id, server);
+            if (manager is IManagerDisposable initializer)
+                initializer.Dispose();
         }
 
-        internal static void UnRegisterServer(IServer server)
-        {
-            _servers.Remove(server.Id);
-        }
-
-        internal static void RegisterConnection(IConnection connection)
-        {
-            _connections.Add(connection.Id, connection);
-        }
-
-        internal static void UnRegisterConnection(IConnection connection)
-        {
-            _connections.Remove(connection.Id);
-        }
     }
 }

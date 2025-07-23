@@ -4,7 +4,7 @@ namespace UselessFrame.Runtime.Types
 {
     public interface ITypeFilter
     {
-        string[] AssemblyList { get; }
+        bool CheckAssembly(string assemblyName);
 
         bool CheckType(Type type);
     }

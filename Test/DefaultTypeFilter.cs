@@ -5,15 +5,14 @@ namespace UselessFrameTest
 {
     public class DefaultTypeFilter : ITypeFilter
     {
-        public string[] AssemblyList => new string[]
+        public bool CheckAssembly(string assemblyName)
         {
-            "UselessFrame",
-            "UselessFrameTest"
-        };
+            throw new NotImplementedException();
+        }
 
         public bool CheckType(Type type)
         {
-            return true;
+            throw new NotImplementedException();
         }
     }
 }

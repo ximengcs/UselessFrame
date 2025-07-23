@@ -38,30 +38,13 @@ namespace UselessFrame.Runtime.Types
             _constructors = new ConcurrentDictionary<Type, ConstructorInfo[]>();
             _assemblys = AppDomain.CurrentDomain.GetAssemblies();
 
-            string[] assemblyList = typeFilter != null ? typeFilter.AssemblyList : null;
             List<Type> tmpList = new List<Type>(1024);
             foreach (Assembly assembly in _assemblys)
             {
                 bool find = false;
                 AssemblyName aName = assembly.GetName();
                 string assemblyName = aName.Name;
-                if (assemblyList != null)
-                {
-                    foreach (string name in assemblyList)
-                    {
-                        if (assemblyName == name)
-                        {
-                            find = true;
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    find = true;
-                }
-
-                if (!find)
+                if (!typeFilter.CheckAssembly(assemblyName))
                     continue;
 
                 foreach (TypeInfo typeInfo in assembly.DefinedTypes)

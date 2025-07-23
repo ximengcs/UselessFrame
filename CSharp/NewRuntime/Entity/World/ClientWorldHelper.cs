@@ -21,7 +21,7 @@ namespace UselessFrame.NewRuntime.ECS
 
         public IEntityHelper CreateHelper()
         {
-            return new ClientEntityHelper(IServer.Connect(8888, X.MainFiber));
+            return new ClientEntityHelper(X.Net.Connect(8888, X.FiberManager.MainFiber));
         }
     }
 }

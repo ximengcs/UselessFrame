@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace UselessFrame.NewRuntime
 {
-    internal partial class TypeManager : ITypeManager
+    internal partial class TypeManager : ITypeManager, IManagerInitializer
     {
         #region Fileds
         private IReadOnlyList<Type> _types;
@@ -35,13 +35,11 @@ namespace UselessFrame.NewRuntime
         #endregion
 
         #region Initialize
-        public TypeManager(ITypeFilter typeFilter)
+        public void Initialize(XSetting setting)
         {
-            InnerInit(typeFilter);
-        }
-
-        private void InnerInit(ITypeFilter typeFilter)
-        {
+            ITypeFilter typeFilter = setting.TypeFilter;
+            if (typeFilter == null)
+                typeFilter = new DefaultTypeFilter();
             var typesAllAttrs = new Dictionary<Type, Attribute[]>();
             var typesWithAttrs = new Dictionary<Type, List<Type>>();
             var typesDictionary = new Dictionary<string, Type>();
@@ -50,44 +48,12 @@ namespace UselessFrame.NewRuntime
             _typesWithAttrs = typesWithAttrs;
             _assemblys = AppDomain.CurrentDomain.GetAssemblies();
 
-            string[] excludeList = new string[] { "System", "Microsoft" };
-
-            string[] assemblyList = typeFilter != null ? typeFilter.AssemblyList : null;
             List<Type> tmpList = new List<Type>(1024);
             foreach (Assembly assembly in _assemblys)
             {
-                bool find = false;
                 AssemblyName aName = assembly.GetName();
                 string assemblyName = aName.Name;
-                bool skip = false;
-                foreach (string excludeName in excludeList)
-                {
-                    if (assemblyName.StartsWith(excludeName))
-                    {
-                        skip = true;
-                        break;
-                    }
-                }
-                if (skip)
-                    continue;
-
-                if (assemblyList != null)
-                {
-                    foreach (string name in assemblyList)
-                    {
-                        if (assemblyName == name)
-                        {
-                            find = true;
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    find = true;
-                }
-
-                if (!find)
+                if (!typeFilter.CheckAssembly(assemblyName))
                     continue;
 
                 foreach (Type type in assembly.GetTypes())
@@ -110,10 +76,6 @@ namespace UselessFrame.NewRuntime
                         }
                         typesDictionary.Add(type.FullName, type);
                         tmpList.Add(type);
-                    }
-                    else
-                    {
-                        //Console.WriteLine($"already addtype {type.FullName} {type.GetHashCode()} {typesDictionary[type.FullName].GetHashCode()}");
                     }
                 }
             }

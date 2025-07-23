@@ -12,7 +12,7 @@ namespace UselessFrame.NewRuntime.ECS
 
         internal ServerEntityHelper()
         {
-            _server = IServer.Create(8888, X.MainFiber);
+            _server = X.Net.Create(8888, X.FiberManager.MainFiber);
             _server.NewConnectionEvent += NewConnectionHandler;
         }
 

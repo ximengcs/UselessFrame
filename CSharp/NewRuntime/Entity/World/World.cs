@@ -1,6 +1,7 @@
 ﻿
 using IdGen;
 using System.Collections.Generic;
+using UselessFrame.NewRuntime.Randoms;
 using UselessFrame.NewRuntime.Utilities;
 
 namespace UselessFrame.NewRuntime.ECS

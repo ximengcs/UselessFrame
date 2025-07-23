@@ -3,7 +3,7 @@ using IdGen;
 using System;
 using Unity.Mathematics;
 
-namespace UselessFrame.NewRuntime.ECS
+namespace UselessFrame.NewRuntime.Randoms
 {
     public class TimeRandom : IRandom
     {

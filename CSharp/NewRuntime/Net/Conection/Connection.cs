@@ -32,6 +32,8 @@ namespace UselessFrame.Net
         private CancellationTokenSource _disposeTokenSource;
         private long _serverTimeGap;
 
+        internal Action<IConnection> OnDestroy;
+
         internal NetFsm<Connection> Fsm => _fsm;
 
         internal MessageStream Stream => _stream;

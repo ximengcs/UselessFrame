@@ -96,7 +96,6 @@ namespace UselessFrame.Net
             {
                 ServerToken token = (ServerToken)result.Message;
                 _connection._id = token.Id;
-                _connection._dataFiber.Post(ToFiberFun.RegisteConnection, _connection);
                 X.SystemLog.Debug($"{DebugPrefix}receive server token {_connection._id}");
                 bool success = await result.Response(new ServerTokenVerify() { ResponseToken = token.RequestToken });
                 if (success)

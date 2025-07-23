@@ -29,6 +29,8 @@ namespace UselessFrame.Net
         private Action<IConnection> _onConnectionListChange;
         private IdGenerator _idGenerator;
 
+        internal Action<IServer> OnDestroy;
+
         public long Id => _id;
 
         public IPEndPoint Host => _host;
@@ -93,12 +95,13 @@ namespace UselessFrame.Net
 
         internal void Dispose()
         {
+            OnDestroy?.Invoke(this);
+            OnDestroy = null;
             _listener = null;
             _connections = null;
             _onConnectionListChange = null;
             _fsm = null;
             _fiber = null;
-            X.UnRegisterServer(this);
         }
 
         public void RemoveConnection(IConnection connection)
