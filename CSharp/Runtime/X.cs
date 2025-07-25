@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using UselessFrame.Net;
 using UselessFrame.NewRuntime.Commands;
 using UselessFrame.NewRuntime.ECS;
+using UselessFrame.NewRuntime.Events;
 using UselessFrame.NewRuntime.Fiber;
 using UselessFrame.NewRuntime.Net;
 using UselessFrame.NewRuntime.Randoms;
+using UselessFrame.NewRuntime.StateMachine;
 using UselessFrame.NewRuntime.Utilities;
 using UselessFrame.Runtime;
 using UselessFrame.Runtime.Pools;
@@ -26,6 +28,8 @@ namespace UselessFrame.NewRuntime
         private static CommandManager _commandManager;
         private static NetManager _netManager;
         private static PoolManager _poolManager;
+        private static EventManager _eventManager;
+        private static FsmManager _fsmManager;
         private static ModuleCore _moduleCore;
         private static XSetting _setting;
         private static bool _initialized;
@@ -48,6 +52,8 @@ namespace UselessFrame.NewRuntime
 
         public static IPoolManager Pool => _poolManager;
 
+        public static IEventManager Event => _eventManager;
+
         public static IModuleCore Module => _moduleCore;
 
         public static async UniTask Initialize(XSetting setting)
@@ -67,6 +73,8 @@ namespace UselessFrame.NewRuntime
             _worldManager   = new WorldManager();
             _commandManager = new CommandManager();
             _poolManager    = new PoolManager();
+            _eventManager   = new EventManager();
+            _fsmManager     = new FsmManager();
 
             InitManager(_logManager);
             InitManager(_typeManager);
@@ -75,6 +83,8 @@ namespace UselessFrame.NewRuntime
             InitManager(_worldManager);
             InitManager(_commandManager);
             InitManager(_poolManager);
+            InitManager(_eventManager);
+            InitManager(_fsmManager);
             _moduleCore = new ModuleCore(default);
             InitLogger();
             InitModules();
@@ -85,7 +95,9 @@ namespace UselessFrame.NewRuntime
         public static void Update(float deltaTime)
         {
             if (!_initialized) return;
+            _eventManager.OnUpdate(deltaTime);
             _fiberManager.UpdateMain(deltaTime);
+            _fsmManager.OnUpdate(deltaTime);
             _moduleCore.Trigger<IModuleUpdater>(deltaTime);
         }
 
@@ -98,6 +110,7 @@ namespace UselessFrame.NewRuntime
             _ = _moduleCore.Destroy();
             DisposeManager(_fiberManager);
             DisposeManager(_netManager);
+            DisposeManager(_fsmManager);
         }
 
         private static void InitLogger()

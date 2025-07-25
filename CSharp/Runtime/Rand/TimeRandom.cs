@@ -1,7 +1,9 @@
 ﻿
 using IdGen;
 using System;
+using System.Text;
 using Unity.Mathematics;
+using UselessFrame.Runtime.Pools;
 
 namespace UselessFrame.NewRuntime.Randoms
 {
@@ -12,6 +14,19 @@ namespace UselessFrame.NewRuntime.Randoms
         public TimeRandom(ITimeSource timeSource)
         {
             _random = new Unity.Mathematics.Random((uint)timeSource.GetTicks());
+        }
+
+        public string NextString(int length)
+        {
+            var builder = new StringBuilder();
+
+            for (var i = 0; i < length; i++)
+            {
+                var c = (int)NextInt(0, sizeof(char));
+                builder.Append(c);
+            }
+
+            return builder.ToString();
         }
 
         public bool NextBoolean()

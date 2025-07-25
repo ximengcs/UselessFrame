@@ -5,6 +5,8 @@ namespace UselessFrame.NewRuntime.Randoms
 {
     public interface IRandom
     {
+        string NextString(int length);
+
         int NextInt();
 
         int NextInt(int min, int max);

@@ -50,6 +50,18 @@ namespace UselessFrame.Runtime.Pools
             _helpers[typeof(T)] = helper;
         }
 
+        public T Require<T>(int poolKey = default, object userData = default) where T : IPoolObject
+        {
+            IPool<T> pool = GetOrNew<T>();
+            return pool.Require(poolKey, userData);
+        }
+
+        public void Release(IPoolObject inst)
+        {
+            IPool pool = GetOrNew(inst.GetType());
+            pool.Release(inst);
+        }
+
         /// <inheritdoc/>
         public IPool<T> GetOrNew<T>() where T : IPoolObject
         {
