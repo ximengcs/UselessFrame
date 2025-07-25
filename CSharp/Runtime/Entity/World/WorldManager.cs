@@ -1,32 +1,45 @@
 ﻿using System.Collections.Generic;
+using UselessFrame.Net;
 
 namespace UselessFrame.NewRuntime.ECS
 {
     public class WorldManager
     {
-        private IWorldHelper _helper;
         private Dictionary<long, World> _worldList;
-
-        public IWorldHelper Helper => _helper;
 
         public WorldManager()
         {
             _worldList = new Dictionary<long, World>();
         }
 
-        public void SetHelper(IWorldHelper helper)
+        public World Create(WorldSetting setting)
         {
-            _helper = helper;
-            _helper.OnInit();
-        }
+            IEntityHelper entityHelper = null;
+            switch (setting.Type)
+            {
+                case WorldType.None:
+                    {
+                        entityHelper = new DefaultEntityHelper();
+                        break;
+                    }
 
-        public World Create()
-        {
-            IEntityHelper entityHelper = _helper.CreateHelper();
+                case WorldType.Server:
+                    {
+                        entityHelper = new ServerEntityHelper(setting.Ip.Port, setting.Fiber);
+                        break;
+                    }
+
+                case WorldType.Client:
+                    {
+                        IConnection connection = X.Net.Connect(setting.Ip, setting.Fiber);
+                        entityHelper = new ClientEntityHelper(connection);
+                        break;
+                    }
+                    
+            }
             World world = new World();
-            world.Init(entityHelper);
             entityHelper.Bind(world);
-            entityHelper.OnCreateEntity(world);
+            world.Init(entityHelper);
             _worldList.Add(world.Id, world);
             return world;
         }

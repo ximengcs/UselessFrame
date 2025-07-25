@@ -1,6 +1,7 @@
 ﻿
 using System;
 using UselessFrame.Net;
+using UselessFrame.NewRuntime.Fiber;
 
 namespace UselessFrame.NewRuntime.ECS
 {
@@ -10,9 +11,9 @@ namespace UselessFrame.NewRuntime.ECS
         private World _world;
         private IEntityHelper _helper;
 
-        internal ServerEntityHelper()
+        internal ServerEntityHelper(int port, IFiber fiber)
         {
-            _server = X.Net.Create(8888, X.Fiber.MainFiber);
+            _server = X.Net.Create(port, fiber);
             _server.NewConnectionEvent += NewConnectionHandler;
         }
 

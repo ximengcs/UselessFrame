@@ -6,14 +6,12 @@ using System.Collections.Generic;
 
 namespace UselessFrame.NewRuntime.ECS
 {
-    internal class ClientEntityHelper : IEntityHelper, ICombineEntityHelper, ICanNet
+    internal class ClientEntityHelper : IEntityHelper, ICombineEntityHelper
     {
         private IConnection _connection;
         private World _world;
         private Dictionary<Type, Action<IMessage>> _handles;
         private IEntityHelper _helper;
-
-        IConnection ICanNet.Connection => _connection;
 
         public ClientEntityHelper(IConnection connection)
         {
