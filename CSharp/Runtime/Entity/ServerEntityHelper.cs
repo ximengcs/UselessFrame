@@ -15,6 +15,7 @@ namespace UselessFrame.NewRuntime.ECS
         {
             _server = X.Net.Create(port, fiber);
             _server.NewConnectionEvent += NewConnectionHandler;
+            _server.Start();
         }
 
         public void AddHelper(IEntityHelper helper)
@@ -68,11 +69,6 @@ namespace UselessFrame.NewRuntime.ECS
             {
                 RecursiveSyncEntity(connection, child);
             }
-        }
-
-        public void Start()
-        {
-            _server.Start();
         }
 
         public void OnCreateEntity(Entity entity)

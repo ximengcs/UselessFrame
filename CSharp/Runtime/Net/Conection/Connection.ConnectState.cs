@@ -35,6 +35,7 @@ namespace UselessFrame.Net
 
                     default:
                         {
+                            X.Log.Error($"{DebugPrefix}connect error, {result.State} {result.Exception}");
                             ChangeState<DisposeState>().Forget();
                             break;
                         }

@@ -8,7 +8,7 @@ using UselessFrame.NewRuntime.Net;
 
 namespace UselessFrame.Net
 {
-    internal class NetManager : IManagerInitializer, INetManager
+    internal class NetManager : IManagerInitializer, INetManager, IManagerDisposable
     {
         private IdGenerator _idGenerator;
         private Dictionary<long, IServer> _servers;

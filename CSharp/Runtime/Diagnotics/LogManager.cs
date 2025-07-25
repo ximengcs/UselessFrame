@@ -20,6 +20,11 @@ namespace UselessFrame.NewRuntime
             InnerAddLogger(typeof(T));
         }
 
+        public void AddLogger(Type type)
+        {
+            InnerAddLogger(type);
+        }
+
         /// <inheritdoc/>
         public T GetLogger<T>() where T : ILogger
         {

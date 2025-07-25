@@ -25,7 +25,7 @@ namespace UselessFrame.Net
 
                 public WaitResponseHandle(IMessage requestMessage)
                 {
-                    Id = RandomUtility.NextInt();
+                    Id = X.Random.NextInt();
                     HasResponse = true;
                     MessageTypeInfo typeInfo = NetUtility.GetMessageTypeInfo(requestMessage);
                     typeInfo.SetRequestToken(requestMessage, Id);

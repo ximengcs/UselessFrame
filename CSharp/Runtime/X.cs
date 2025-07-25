@@ -1,31 +1,34 @@
-﻿using IdGen;
+﻿using Cysharp.Threading.Tasks;
+using IdGen;
 using System;
-using UselessFrame.Net;
 using System.Threading.Tasks;
-using Cysharp.Threading.Tasks;
+using UselessFrame.Net;
 using UselessFrame.NewRuntime.Commands;
 using UselessFrame.NewRuntime.ECS;
 using UselessFrame.NewRuntime.Fiber;
+using UselessFrame.NewRuntime.Net;
 using UselessFrame.NewRuntime.Randoms;
 using UselessFrame.NewRuntime.Utilities;
-using UselessFrame.NewRuntime.Net;
-using UselessFrame.Runtime.Pools;
 using UselessFrame.Runtime;
+using UselessFrame.Runtime.Pools;
+using UselessFrame.Runtime.Types;
 
 namespace UselessFrame.NewRuntime
 {
     public static partial class X
     {
-        private static TimeTicksSource  _timeSource;
-        private static TimeRandom       _random;
-        private static TypeManager      _typeManager;
-        private static WorldManager     _worldManager;
-        private static LogManager       _logManager;
-        private static FiberManager     _fiberManager;
-        private static CommandManager   _commandManager;
-        private static NetManager       _netManager;
-        private static PoolManager      _poolManager;
-        private static ModuleCore        _moduleCore;
+        private static TimeTicksSource _timeSource;
+        private static TimeRandom _random;
+        private static TypeManager _typeManager;
+        private static WorldManager _worldManager;
+        private static LogManager _logManager;
+        private static FiberManager _fiberManager;
+        private static CommandManager _commandManager;
+        private static NetManager _netManager;
+        private static PoolManager _poolManager;
+        private static ModuleCore _moduleCore;
+        private static XSetting _setting;
+        private static bool _initialized;
 
         public static IRandom Random => _random;
 
@@ -47,8 +50,9 @@ namespace UselessFrame.NewRuntime
 
         public static IModuleCore Module => _moduleCore;
 
-        public static void Initialize(XSetting setting)
+        public static async UniTask Initialize(XSetting setting)
         {
+            _setting = setting;
             AppDomain.CurrentDomain.UnhandledException += PrintSystemException;
             TaskScheduler.UnobservedTaskException += PrintTaskException;
             UniTaskScheduler.UnobservedTaskException += PrintUniTaskException;
@@ -64,18 +68,23 @@ namespace UselessFrame.NewRuntime
             _commandManager = new CommandManager();
             _poolManager    = new PoolManager();
 
-            InitManager(_logManager, setting);
-            InitManager(_typeManager, setting);
-            InitManager(_fiberManager, setting);
-            InitManager(_netManager, setting);
-            InitManager(_worldManager, setting);
-            InitManager(_commandManager, setting);
-            InitManager(_poolManager, setting);
+            InitManager(_logManager);
+            InitManager(_typeManager);
+            InitManager(_fiberManager);
+            InitManager(_netManager);
+            InitManager(_worldManager);
+            InitManager(_commandManager);
+            InitManager(_poolManager);
             _moduleCore = new ModuleCore(default);
+            InitLogger();
+            InitModules();
+            await _moduleCore.Start();
+            _initialized = true;
         }
 
         public static void Update(float deltaTime)
         {
+            if (!_initialized) return;
             _fiberManager.UpdateMain(deltaTime);
             _moduleCore.Trigger<IModuleUpdater>(deltaTime);
         }
@@ -86,14 +95,39 @@ namespace UselessFrame.NewRuntime
             TaskScheduler.UnobservedTaskException -= PrintTaskException;
             UniTaskScheduler.UnobservedTaskException -= PrintUniTaskException;
 
+            _ = _moduleCore.Destroy();
             DisposeManager(_fiberManager);
             DisposeManager(_netManager);
         }
 
-        private static void InitManager(object manager, XSetting setting)
+        private static void InitLogger()
+        {
+            if (_setting.Loggers == null)
+                return;
+
+            foreach (Type type in _setting.Loggers)
+                _logManager.AddLogger(type);
+        }
+
+        private static void InitModules()
+        {
+            if (_setting.ModuleAttributes == null)
+                return;
+
+            for (int i = 0; i < _setting.ModuleAttributes.Length; i++)
+            {
+                Type attrType = _setting.ModuleAttributes[i];
+                object param = _setting.ModuleParams != null ? _setting.ModuleParams[i] : null;
+                ITypeCollection collection = _typeManager.GetOrNewWithAttr(attrType);
+                foreach (Type type in collection)
+                    _moduleCore.AddModule(type, param);
+            }
+        }
+
+        private static void InitManager(object manager)
         {
             if (manager is IManagerInitializer initializer)
-                initializer.Initialize(setting);
+                initializer.Initialize(_setting);
         }
 
         private static void DisposeManager(object manager)
