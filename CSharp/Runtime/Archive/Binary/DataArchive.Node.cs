@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
-using XFrame.Utility;
-using XFrame.Modules.Diagnotics;
 using System.Collections.Generic;
+using UselessFrame.NewRuntime;
+using UselessFrame.NewRuntime.Utilities;
 
 namespace XFrame.Modules.Archives
 {
@@ -37,7 +37,7 @@ namespace XFrame.Modules.Archives
                     return child.Data;
                 else
                 {
-                    Log.Warning(Log.XFrame, "Read Error");
+                    X.Log.Debug(FrameLogType.Archive, "Read Error");
                     return default;
                 }
             }

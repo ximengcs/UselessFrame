@@ -27,7 +27,7 @@ namespace XFrame.Core
         /// <summary>
         /// 是否为空
         /// </summary>
-        public bool Empty => Value != null ? Value.Count == 0 : true;
+        public bool Empty => Value != null ? Value.Count == 0 : false;
 
         /// <summary>
         /// 获取元素列表

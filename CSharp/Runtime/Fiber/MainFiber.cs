@@ -1,6 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using System.Threading;
+using System.Timers;
 using static UselessFrame.NewRuntime.Fiber.Fiber;
 
 namespace UselessFrame.NewRuntime.Fiber
@@ -10,6 +11,7 @@ namespace UselessFrame.NewRuntime.Fiber
         private int _threadId;
         private long _frame;
         private float _deltaTime;
+        private float _time;
         private CancellationTokenSource _disposeTokenSource;
         private FiberSynchronizationContext _context;
         private List<LoopItemInfo> _loopItems;
@@ -19,6 +21,8 @@ namespace UselessFrame.NewRuntime.Fiber
         public long FrameCount => _frame;
 
         public float DeltaTime => _deltaTime;
+
+        public float Time => _time;
 
         public bool IsMain => true;
 
@@ -63,6 +67,7 @@ namespace UselessFrame.NewRuntime.Fiber
                 return;
 
             _deltaTime = deltaTime;
+            _time += deltaTime;
             RunLoopItem();
             _context.OnUpdate(deltaTime);
             _frame++;

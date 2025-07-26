@@ -1,6 +1,5 @@
-﻿using XFrame.Utility;
-using XFrame.Modules.Diagnotics;
-using XFrame.Modules.StateMachine;
+﻿using UselessFrame.NewRuntime;
+using UselessFrame.NewRuntime.StateMachine;
 
 namespace XFrame.Modules.Procedure
 {
@@ -15,21 +14,21 @@ namespace XFrame.Modules.Procedure
         protected internal override void OnInit(IFsm fsm)
         {
             base.OnInit(fsm);
-            m_InstName = TypeUtility.GetSimpleName(GetType().Name);
+            m_InstName = GetType().Name;
         }
 
         /// <inheritdoc/>
         protected internal override void OnEnter()
         {
             base.OnEnter();
-            Log.Debug(Log.Procedure, $"Enter {m_InstName} Procedure");
+            X.Log.Debug(FrameLogType.Procedure, $"Enter {m_InstName} Procedure");
         }
 
         /// <inheritdoc/>
         protected internal override void OnLeave()
         {
             base.OnLeave();
-            Log.Debug(Log.Procedure, $"Leave {m_InstName} Procedure");
+            X.Log.Debug(FrameLogType.Procedure, $"Leave {m_InstName} Procedure");
         }
     }
 }

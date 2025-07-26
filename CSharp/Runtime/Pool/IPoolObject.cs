@@ -15,7 +15,7 @@ namespace UselessFrame.Runtime.Pools
         /// <summary>
         /// 对象所处对象池
         /// </summary>
-        IPool InPool { get; protected internal set; }
+        IPool InPool { get; internal set; }
 
         /// <summary>
         /// 从对象池中创建时被调用
@@ -25,7 +25,7 @@ namespace UselessFrame.Runtime.Pools
         /// <summary>
         /// 从对象池中请求时被调用
         /// </summary>
-        protected internal void OnRequest();
+        protected internal void OnRequest(object userData = null);
 
         /// <summary>
         /// 释放到对象池中时被调用

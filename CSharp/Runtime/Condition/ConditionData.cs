@@ -1,6 +1,7 @@
-﻿using XFrame.Core;
-using XFrame.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UselessFrame.Runtime.Collections;
+using XFrame.Core;
+using static XFrame.Modules.Conditions.ConditionData;
 using ItemParser = XFrame.Core.PairParser<XFrame.Core.IntOrHashParser, XFrame.Core.UniversalParser>;
 
 namespace XFrame.Modules.Conditions
@@ -12,7 +13,7 @@ namespace XFrame.Modules.Conditions
     /// 可调用<see cref="UniversalParser.AddParser"/>自定义数值转换器
     /// </para>
     /// </summary>
-    public partial struct ConditionData : IXEnumerable<ItemParser>
+    public partial struct ConditionData : IMultiEnumerable<Item>
     {
         private ItemParser m_First;
         private ItemParser m_Last;
@@ -44,7 +45,7 @@ namespace XFrame.Modules.Conditions
 
             if (!m_Parser.Empty)
             {
-                m_First = m_Parser.Value.First.Value;
+                m_First = m_Parser.Value[0].Value;
                 m_Last = m_Parser.Value.Last.Value;
             }
             else

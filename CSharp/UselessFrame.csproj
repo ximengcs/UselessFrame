@@ -10,6 +10,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Analyzer Include="..\Analyzer\Analyzer.csproj" />
 		<ProjectReference Include="..\CsvHelper\CsvHelper.csproj" />
 	</ItemGroup>
 
@@ -24,6 +25,9 @@
 			<HintPath>..\Dlls\MemoryPack.Core.dll</HintPath>
 		</Reference>
 		<Analyzer Include="..\Dlls\MemoryPack.Generator.dll" />
+		<Reference Include="Newtonsoft.Json">
+		  <HintPath>..\Dlls\Newtonsoft.Json.dll</HintPath>
+		</Reference>
 		<Reference Include="QuadTrees">
 			<HintPath>..\Dlls\QuadTrees.dll</HintPath>
 		</Reference>

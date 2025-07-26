@@ -13,5 +13,9 @@ namespace UselessFrame.NewRuntime
         public Type[] ModuleAttributes;
 
         public object[] ModuleParams;
+
+        public string ArchivePath;
+
+        public Type EntranceProcedure;
     }
 }

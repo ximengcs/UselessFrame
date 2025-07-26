@@ -4,7 +4,7 @@ namespace XFrame.Modules.Archives
     /// <summary>
     /// 存档模块辅助器
     /// </summary>
-    public interface IArchiveUtilityHelper
+    public interface IFileHelper
     {
         /// <summary>
         /// 读取二进制数据
@@ -33,5 +33,9 @@ namespace XFrame.Modules.Archives
         /// <param name="path">路径</param>
         /// <param name="data">文本</param>
         void WriteAllText(string path, string data);
+
+        bool Exists(string path);
+
+        void Delete(string path);
     }
 }

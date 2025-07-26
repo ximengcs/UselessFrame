@@ -1,5 +1,6 @@
-﻿using System.IO;
-using XFrame.SimpleJSON;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using UselessFrame.NewRuntime;
 
 namespace XFrame.Modules.Archives
 {
@@ -14,37 +15,36 @@ namespace XFrame.Modules.Archives
         #endregion
 
         #region Archive Interface
-        void IArchive.OnInit(IArchiveModule module, string path, string name, object param)
+        void IArchive.OnInit(IFileHelper helper, string path, string name, object param)
         {
             Name = name;
             m_Path = path;
-            m_Module = module;
-            if (File.Exists(m_Path))
+            _helper = helper;
+            if (_helper.Exists(m_Path))
             {
-                m_Root = JSONNode.Parse(ArchiveUtility.ReadText(m_Module, m_Path));
+                m_Root = JObject.Parse(_helper.ReadAllText(m_Path));
             }
             if (m_Root == null)
-                m_Root = new JSONObject();
+                m_Root = new JObject();
         }
 
         /// <inheritdoc/>
         public void Save()
         {
-            ArchiveUtility.WriteText(m_Module, m_Path, m_Root.ToString(4));
+            _helper.WriteAllText(m_Path, m_Root.ToString(Formatting.Indented));
         }
 
         /// <inheritdoc/>
         public void Delete()
         {
-            if (File.Exists(m_Path))
-                File.Delete(m_Path);
+            _helper.Delete(m_Path);
         }
         #endregion
 
         /// <inheritdoc/>
         public override void ClearData()
         {
-            m_Module.Delete(this);
+            X.Archive.Delete(this);
         }
     }
 }

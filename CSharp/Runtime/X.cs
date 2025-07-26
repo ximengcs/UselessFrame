@@ -4,6 +4,7 @@ using System;
 using System.Threading.Tasks;
 using UselessFrame.Net;
 using UselessFrame.NewRuntime.Commands;
+using UselessFrame.NewRuntime.Cryptos;
 using UselessFrame.NewRuntime.ECS;
 using UselessFrame.NewRuntime.Events;
 using UselessFrame.NewRuntime.Fiber;
@@ -14,6 +15,8 @@ using UselessFrame.NewRuntime.Utilities;
 using UselessFrame.Runtime;
 using UselessFrame.Runtime.Pools;
 using UselessFrame.Runtime.Types;
+using XFrame.Modules.Archives;
+using XFrame.Modules.Procedure;
 
 namespace UselessFrame.NewRuntime
 {
@@ -30,6 +33,9 @@ namespace UselessFrame.NewRuntime
         private static PoolManager _poolManager;
         private static EventManager _eventManager;
         private static FsmManager _fsmManager;
+        private static CryptoManager _cryptoManager;
+        private static ArchiveModule _archiveModule;
+        private static ProcedureModule _procedure;
         private static ModuleCore _moduleCore;
         private static XSetting _setting;
         private static bool _initialized;
@@ -54,6 +60,12 @@ namespace UselessFrame.NewRuntime
 
         public static IEventManager Event => _eventManager;
 
+        public static ICryptoManager Crypto => _cryptoManager;
+
+        public static IFsmManager Fsm => _fsmManager;
+
+        public static ArchiveModule Archive => _archiveModule;
+
         public static IModuleCore Module => _moduleCore;
 
         public static async UniTask Initialize(XSetting setting)
@@ -75,6 +87,9 @@ namespace UselessFrame.NewRuntime
             _poolManager    = new PoolManager();
             _eventManager   = new EventManager();
             _fsmManager     = new FsmManager();
+            _cryptoManager  = new CryptoManager();
+            _archiveModule  = new ArchiveModule();
+            _procedure      = new ProcedureModule();
 
             InitManager(_logManager);
             InitManager(_typeManager);
@@ -85,11 +100,15 @@ namespace UselessFrame.NewRuntime
             InitManager(_poolManager);
             InitManager(_eventManager);
             InitManager(_fsmManager);
+            InitManager(_cryptoManager);
+            InitManager(_archiveModule);
+            InitManager(_procedure);
             _moduleCore = new ModuleCore(default);
             InitLogger();
             InitModules();
             await _moduleCore.Start();
             _initialized = true;
+            _procedure.Start();
         }
 
         public static void Update(float deltaTime)
@@ -98,6 +117,7 @@ namespace UselessFrame.NewRuntime
             _eventManager.OnUpdate(deltaTime);
             _fiberManager.UpdateMain(deltaTime);
             _fsmManager.OnUpdate(deltaTime);
+            _archiveModule.OnUpdate(deltaTime);
             _moduleCore.Trigger<IModuleUpdater>(deltaTime);
         }
 
@@ -111,6 +131,7 @@ namespace UselessFrame.NewRuntime
             DisposeManager(_fiberManager);
             DisposeManager(_netManager);
             DisposeManager(_fsmManager);
+            DisposeManager(_archiveModule);
         }
 
         private static void InitLogger()

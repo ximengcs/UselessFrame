@@ -9,5 +9,7 @@ namespace UselessFrame.Runtime.Types
         Type MainType { get; }
 
         Type Get(string typeFullName);
+
+        Type[] ToArray();
     }
 }

@@ -54,5 +54,10 @@ namespace UselessFrame.Runtime.Types
         {
             return GetEnumerator();
         }
+
+        public Type[] ToArray()
+        {
+            return _subClasses.ToArray();
+        }
     }
 }

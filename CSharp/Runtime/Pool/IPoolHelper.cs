@@ -21,7 +21,7 @@ namespace UselessFrame.Runtime.Pools
         /// <param name="poolKey">对象key</param>
         /// <param name="userData">参数数据</param>
         /// <returns>对象实例</returns>
-        protected internal IPoolObject Factory(Type type, int poolKey = default, object userData = default);
+        protected internal IPoolObject Factory(Type type, int poolKey = default);
 
         /// <summary>
         /// 对象创建生命周期

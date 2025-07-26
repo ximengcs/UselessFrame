@@ -43,6 +43,11 @@ namespace UselessFrame.NewRuntime
                 logger.Debug(content);
         }
 
+        public void Debug(Enum e, params object[] content)
+        {
+            Debug(e.ToString(), content);
+        }
+
         /// <inheritdoc/>
         public void Warning(params object[] content)
         {

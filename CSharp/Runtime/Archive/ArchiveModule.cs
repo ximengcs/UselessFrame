@@ -1,61 +1,44 @@
 ﻿using System;
 using System.IO;
-using XFrame.Core;
-using XFrame.Modules.Reflection;
-using XFrame.Modules.Times;
-using XFrame.Modules.Config;
-using XFrame.Modules.Crypto;
+using UselessFrame.NewRuntime;
 using System.Collections.Generic;
-using XFrame.Collections;
+using UselessFrame.NewRuntime.Timers;
 
 namespace XFrame.Modules.Archives
 {
     /// <summary>
     /// 存档模块
     /// </summary>
-    [CoreModule]
-    [RequireModule(typeof(CryptoModule))]
-    [XType(typeof(IArchiveModule))]
-    public class ArchiveModule : ModuleBase, IArchiveModule
+    public class ArchiveModule : IArchiveModule, IManagerInitializer, IManagerDisposable
     {
         #region Inner Field
         private const int SAVE_KEY = 0;
         private const int SAVE_GAP = 60;
 
         private string m_RootPath;
-        private CDTimer m_Timer;
+        private ITimeRecord m_Timer;
+        private IFileHelper _fileHelper;
         private Dictionary<string, IArchive> m_Archives;
         private Dictionary<string, Type> m_ArchiveTypes;
         #endregion
 
         #region Life Fun
-        /// <inheritdoc/>
-        protected override void OnInit(object data)
+        public void Initialize(XSetting setting)
         {
-            base.OnInit(data);
-            m_Timer = CDTimer.Create();
-            m_Timer.MarkName = nameof(ArchiveModule);
+            m_RootPath = setting.ArchivePath;
+            m_Timer = X.Pool.Require<ITimeRecord>();
             m_Timer.Record(SAVE_KEY, SAVE_GAP);
             m_Archives = new Dictionary<string, IArchive>();
             m_ArchiveTypes = new Dictionary<string, Type>();
 
-            Type type;
-            if (!string.IsNullOrEmpty(XConfig.ArchiveUtilityHelper))
-            {
-                type = Domain.TypeModule.GetType(XConfig.ArchiveUtilityHelper);
-            }
-            else
-            {
-                type = typeof(DefaultArchiveUtilityHelper);
-            }
-            IArchiveUtilityHelper helper = (IArchiveUtilityHelper)Domain.TypeModule.CreateInstance(type);
-            ArchiveUtility.Helper = helper;
+            Type type = typeof(DefaultArchiveUtilityHelper);
+            _fileHelper = (IFileHelper)X.Type.CreateInstance(type);
             InnerInit();
         }
 
         private void InnerInit()
         {
-            TypeSystem system = Domain.TypeModule.GetOrNewWithAttr<ArchiveAttribute>();
+            var system = X.Type.GetCollection(typeof(ArchiveAttribute));
             foreach (Type type in system)
                 InnerAddType(type);
             InnerRefreshFiles();
@@ -63,7 +46,7 @@ namespace XFrame.Modules.Archives
 
         private void InnerAddType(Type type)
         {
-            ArchiveAttribute attri = Domain.TypeModule.GetAttribute<ArchiveAttribute>(type);
+            ArchiveAttribute attri = (ArchiveAttribute)X.Type.GetAttribute(type, typeof(ArchiveAttribute));
             if (attri != null)
             {
                 if (!m_ArchiveTypes.ContainsKey(attri.Suffix))
@@ -73,7 +56,6 @@ namespace XFrame.Modules.Archives
 
         private void InnerRefreshFiles()
         {
-            m_RootPath = XConfig.ArchivePath;
             if (!string.IsNullOrEmpty(m_RootPath))
             {
                 if (Directory.Exists(m_RootPath))
@@ -91,9 +73,8 @@ namespace XFrame.Modules.Archives
         }
 
         /// <inheritdoc/>
-        protected override void OnDestroy()
+        public void Dispose()
         {
-            base.OnDestroy();
             InnerSaveAll();
         }
         #endregion
@@ -147,7 +128,7 @@ namespace XFrame.Modules.Archives
         #region Inner Implement
         private string InnerGetPath(Type type, string name)
         {
-            ArchiveAttribute attri = Domain.TypeModule.GetAttribute<ArchiveAttribute>(type);
+            ArchiveAttribute attri = (ArchiveAttribute)X.Type.GetAttribute(type, typeof(ArchiveAttribute));
             return Path.Combine(m_RootPath, $"{name}{attri.Suffix}");
         }
 
@@ -176,8 +157,8 @@ namespace XFrame.Modules.Archives
             }
             else
             {
-                IArchive source = (IArchive)Domain.TypeModule.CreateInstance(archiveType);
-                source.OnInit(this, InnerGetPath(archiveType, name), name, param);
+                IArchive source = (IArchive)X.Type.CreateInstance(archiveType);
+                source.OnInit(_fileHelper, InnerGetPath(archiveType, name), name, param);
                 m_Archives.Add(name, source);
                 return source;
             }

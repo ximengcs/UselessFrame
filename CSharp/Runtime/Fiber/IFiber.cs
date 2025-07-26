@@ -1,10 +1,11 @@
 ﻿
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using UselessFrame.Runtime.Timer;
 
 namespace UselessFrame.NewRuntime.Fiber
 {
-    public interface IFiber
+    public interface IFiber : ICanGetTime
     {
         int ThreadId { get; }
 

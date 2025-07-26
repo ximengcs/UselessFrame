@@ -1,6 +1,7 @@
-﻿using XFrame.SimpleJSON;
-using XFrame.Modules.Rand;
-using XFrame.Modules.Serialize;
+﻿
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using UselessFrame.NewRuntime;
 
 namespace XFrame.Modules.Archives
 {
@@ -12,12 +13,12 @@ namespace XFrame.Modules.Archives
         /// <summary>
         /// 根节点对象
         /// </summary>
-        protected JSONNode m_Root;
+        protected JObject m_Root;
 
         /// <summary>
         /// 所属存档模块
         /// </summary>
-        protected IArchiveModule m_Module;
+        protected IFileHelper _helper;
 
         /// <summary>
         /// 存档名
@@ -52,9 +53,9 @@ namespace XFrame.Modules.Archives
         /// <returns>如果未设置过此键，则会返回0</returns>
         public int GetInt(string key, int defaultValue = default)
         {
-            if (!m_Root.HasKey(key))
+            if (!m_Root.ContainsKey(key))
                 return defaultValue;
-            return m_Root[key];
+            return (int)m_Root[key];
         }
 
         /// <summary>
@@ -65,9 +66,9 @@ namespace XFrame.Modules.Archives
         /// <returns>如果未设置过此键，则会返回0</returns>
         public long GetLong(string key, long defaultValue = default)
         {
-            if (!m_Root.HasKey(key))
+            if (!m_Root.ContainsKey(key))
                 return defaultValue;
-            return m_Root[key];
+            return (long)m_Root[key];
         }
 
         /// <summary>
@@ -98,9 +99,9 @@ namespace XFrame.Modules.Archives
         /// <returns>如果未设置过此键，则会返回0</returns>
         public float GetFloat(string key, float defaultValue = default)
         {
-            if (!m_Root.HasKey(key))
+            if (!m_Root.ContainsKey(key))
                 return defaultValue;
-            return m_Root[key];
+            return (float)m_Root[key];
         }
 
         /// <summary>
@@ -109,11 +110,11 @@ namespace XFrame.Modules.Archives
         /// <param name="key">键</param>
         /// <param name="defaultValue">默认值</param>
         /// <returns>如果未设置过此键，则会返回0</returns>
-        public float GetDouble(string key, float defaultValue = default)
+        public double GetDouble(string key, double defaultValue = default)
         {
-            if (!m_Root.HasKey(key))
+            if (!m_Root.ContainsKey(key))
                 return defaultValue;
-            return m_Root[key];
+            return (double)m_Root[key];
         }
 
         /// <summary>
@@ -134,9 +135,9 @@ namespace XFrame.Modules.Archives
         /// <returns>如果未设置过此键，则会返回false</returns>
         public bool GetBool(string key, bool defaultValue = default)
         {
-            if (!m_Root.HasKey(key))
+            if (!m_Root.ContainsKey(key))
                 return defaultValue;
-            return m_Root[key];
+            return (bool)m_Root[key];
         }
 
         /// <summary>
@@ -146,7 +147,7 @@ namespace XFrame.Modules.Archives
         /// <param name="v">此值将会被序列化并保存</param>
         public void Set(string key, object v)
         {
-            m_Root[key] = JSONNode.Parse(m_Module.Domain.GetModule<ISerializeModule>().SerializeObjectToRaw(v));
+            m_Root[key] = JObject.FromObject(v);
         }
 
         /// <summary>
@@ -158,12 +159,12 @@ namespace XFrame.Modules.Archives
         /// <returns>获取到的数据</returns>
         public T Get<T>(string key, T defaultValue = default)
         {
-            if (!m_Root.HasKey(key))
+            if (!m_Root.ContainsKey(key))
                 return defaultValue;
             string objStr = m_Root[key].ToString();
             if (string.IsNullOrEmpty(objStr))
                 return defaultValue;
-            return (T)m_Module.Domain.GetModule<ISerializeModule>().DeserializeToObject(objStr, typeof(T));
+            return JsonConvert.DeserializeObject<T>(objStr);
         }
 
         /// <summary>
@@ -172,16 +173,16 @@ namespace XFrame.Modules.Archives
         /// </summary>
         /// <param name="key">键, 如果键已经存在，则会覆盖原始数据</param>
         /// <returns></returns>
-        public JSONObject GetOrNewObject(string key)
+        public JObject GetOrNewObject(string key)
         {
-            JSONObject node;
-            if (m_Root.HasKey(key))
+            JObject node;
+            if (m_Root.ContainsKey(key))
             {
-                node = m_Root[key] as JSONObject;
-                if (node != null && node.GetType() == typeof(JSONObject))
+                node = m_Root[key] as JObject;
+                if (node != null && node.GetType() == typeof(JObject))
                     return node;
             }
-            node = new JSONObject();
+            node = new JObject();
             m_Root[key] = node;
             return node;
         }
@@ -189,7 +190,7 @@ namespace XFrame.Modules.Archives
         /// <inheritdoc/>
         public void Remove(string key)
         {
-            if (m_Root.HasKey(key))
+            if (m_Root.ContainsKey(key))
                 m_Root.Remove(key);
         }
 
@@ -199,16 +200,16 @@ namespace XFrame.Modules.Archives
         /// </summary>
         /// <param name="key">键, 如果键已经存在，则会覆盖原始数据</param>
         /// <returns>获取到的JsonArray对象</returns>
-        public JSONArray GetOrNewArray(string key)
+        public JArray GetOrNewArray(string key)
         {
-            JSONArray node;
-            if (m_Root.HasKey(key))
+            JArray node;
+            if (m_Root.ContainsKey(key))
             {
-                node = m_Root[key] as JSONArray;
-                if (node != null && node.GetType() == typeof(JSONArray))
+                node = m_Root[key] as JArray;
+                if (node != null && node.GetType() == typeof(JArray))
                     return node;
             }
-            node = new JSONArray();
+            node = new JArray();
             m_Root[key] = node;
             return node;
         }
@@ -223,7 +224,7 @@ namespace XFrame.Modules.Archives
         public bool HasData<T>(string name)
         {
             string key = $"{name}_{typeof(T).Name}";
-            return m_Root.HasKey(key);
+            return m_Root.ContainsKey(key);
         }
 
         /// <inheritdoc/>
@@ -261,7 +262,7 @@ namespace XFrame.Modules.Archives
         /// <inheritdoc/>
         public IJsonArchive SpwanDataProvider()
         {
-            return SpwanDataProvider(m_Module.Domain.GetModule<IRandModule>().RandString());
+            return SpwanDataProvider(X.Random.NextString(8));
         }
 
         /// <inheritdoc/>

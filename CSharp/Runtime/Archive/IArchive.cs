@@ -18,7 +18,7 @@ namespace XFrame.Modules.Archives
         /// <param name="path">存储路径</param>
         /// <param name="name">存储名</param>
         /// <param name="data">用户参数</param>
-        protected internal void OnInit(IArchiveModule module, string path, string name, object data);
+        protected internal void OnInit(IFileHelper helper, string path, string name, object data);
 
         /// <summary>
         /// 保存存档

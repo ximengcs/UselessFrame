@@ -1,5 +1,5 @@
 ﻿using System;
-using XFrame.Core;
+using UselessFrame.Runtime;
 
 namespace XFrame.Modules.Archives
 {

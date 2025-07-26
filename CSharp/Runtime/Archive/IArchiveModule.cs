@@ -5,7 +5,7 @@ namespace XFrame.Modules.Archives
     /// <summary>
     /// 存档模块接口
     /// </summary>
-    public interface IArchiveModule : IModule, IUpdater, ISaveable
+    public interface IArchiveModule : ISaveable
     {
         /// <summary>
         /// 获取或创建一个存档实例

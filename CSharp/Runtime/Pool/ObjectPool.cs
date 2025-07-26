@@ -58,20 +58,20 @@ namespace UselessFrame.Runtime.Pools
                 m_UseCount--;
         }
 
-        public void Spawn(int poolKey, int count, object userData = default, List<IPoolObject> toList = null)
+        public void Spawn(int poolKey, int count, List<IPoolObject> toList = null)
         {
             for (int i = 0; i < count; i++)
             {
-                IPoolObject obj = InnerCreate(poolKey, userData);
+                IPoolObject obj = InnerCreate(poolKey);
                 InnerRelease(obj, false);
                 if (toList != null)
                     toList.Add(obj);
             }
         }
 
-        private IPoolObject InnerCreate(int poolKey, object userData)
+        private IPoolObject InnerCreate(int poolKey)
         {
-            IPoolObject obj = m_Helper.Factory(m_Type, poolKey, userData);
+            IPoolObject obj = m_Helper.Factory(m_Type, poolKey);
             obj.InPool = this;
             m_Helper.OnObjectCreate(obj);
             obj.OnCreate();
@@ -83,7 +83,7 @@ namespace UselessFrame.Runtime.Pools
             IPoolObject obj;
             if (m_Objects.Count == 0)
             {
-                obj = InnerCreate(poolKey, userData);
+                obj = InnerCreate(poolKey);
             }
             else
             {
@@ -104,12 +104,12 @@ namespace UselessFrame.Runtime.Pools
                 }
                 else
                 {
-                    obj = InnerCreate(poolKey, userData);
+                    obj = InnerCreate(poolKey);
                 }
             }
 
             m_Helper.OnObjectRequest(obj);
-            obj.OnRequest();
+            obj.OnRequest(userData);
             return obj;
         }
 

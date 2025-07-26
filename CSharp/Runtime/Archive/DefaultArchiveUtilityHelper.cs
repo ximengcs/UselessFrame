@@ -2,7 +2,7 @@
 
 namespace XFrame.Modules.Archives
 {
-    internal class DefaultArchiveUtilityHelper : IArchiveUtilityHelper
+    internal class DefaultArchiveUtilityHelper : IFileHelper
     {
         public byte[] ReadAllBytes(string path)
         {
@@ -22,6 +22,16 @@ namespace XFrame.Modules.Archives
         public void WriteAllText(string path, string text)
         {
             File.WriteAllText(path, text);
+        }
+
+        public bool Exists(string path)
+        {
+            return File.Exists(path);
+        }
+
+        public void Delete(string path)
+        {
+            return File.Delete(path);
         }
     }
 }

@@ -11,23 +11,23 @@ namespace XFrame.Modules.Archives
         #region InnerField
         private const int FILE_CODE = default;
 
-        private IArchiveModule m_Module;
+        private IFileHelper _helper;
         private string m_Path;
         private Node m_Root;
         private BytesBuilder m_Builder;
         #endregion
 
         #region Archive Interface
-        void IArchive.OnInit(IArchiveModule module, string path, string name, object param)
+        void IArchive.OnInit(IFileHelper helper, string path, string name, object param)
         {
             Name = name;
             m_Path = path;
-            m_Module = module;
+            _helper = helper;
             m_Builder = new BytesBuilder(FILE_CODE);
 
             if (File.Exists(m_Path))
             {
-                byte[] buffer = ArchiveUtility.ReadBytes(m_Module, m_Path);
+                byte[] buffer = helper.ReadAllBytes(m_Path);
                 m_Root = m_Builder.From(buffer);
             }
             else
@@ -42,7 +42,7 @@ namespace XFrame.Modules.Archives
             string dir = Path.GetDirectoryName(m_Path);
             if (!Directory.Exists(dir))
                 Directory.CreateDirectory(dir);
-            ArchiveUtility.WriteBytes(m_Module, m_Path, ToBytes());
+            _helper.WriteAllBytes(m_Path, ToBytes());
         }
 
         /// <inheritdoc/>

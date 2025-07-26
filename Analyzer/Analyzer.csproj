@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<!-- 必须使用 .NET Standard 2.0 -->
+		<TargetFramework>netstandard2.0</TargetFramework>
+
+		<!-- 确保生成分析器专用包 -->
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+		<DevelopmentDependency>true</DevelopmentDependency>
+		<NoPackageAnalysis>true</NoPackageAnalysis>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
+		<!-- 禁用混淆和优化 -->
+		<DebugType>portable</DebugType>
+		<Optimize>false</Optimize>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- 使用最新稳定版 -->
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.6.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.6.0" PrivateAssets="all" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- 正确设置输出路径 -->
+		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true"
+			  PackagePath="analyzers/dotnet/cs" Visible="false" />
+	</ItemGroup>
+</Project>

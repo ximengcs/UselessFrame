@@ -1,9 +1,7 @@
 ﻿using System;
 using XFrame.Core;
-using XFrame.Collections;
 using System.Collections.Generic;
-using XFrame.Modules.ID;
-using XFrame.Modules.Diagnotics;
+using UselessFrame.Runtime.Collections;
 
 namespace XFrame.Modules.Containers
 {
@@ -110,12 +108,12 @@ namespace XFrame.Modules.Containers
 
         void IContainer.OnUpdate(double elapseTime)
         {
-            //m_Coms.SetIt(XItType.Forward);
-            //foreach (ICom com in m_Coms)
-            //{
-            //    if (com.Active)
-            //        com.OnUpdate(elapseTime);
-            //}
+            m_Coms.SetIt(XItType.Forward);
+            foreach (ICom com in m_Coms)
+            {
+                if (com.Active)
+                    com.OnUpdate(elapseTime);
+            }
             OnUpdate(elapseTime);
         }
 
