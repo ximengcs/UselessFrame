@@ -1,8 +1,8 @@
-﻿using Cysharp.Threading.Tasks;
-using IdGen;
+﻿using IdGen;
 using System;
-using System.Threading.Tasks;
 using UselessFrame.Net;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UselessFrame.NewRuntime.Commands;
 using UselessFrame.NewRuntime.Cryptos;
 using UselessFrame.NewRuntime.ECS;
@@ -17,6 +17,7 @@ using UselessFrame.Runtime.Pools;
 using UselessFrame.Runtime.Types;
 using XFrame.Modules.Archives;
 using XFrame.Modules.Procedure;
+using XFrame.Modules.Conditions;
 
 namespace UselessFrame.NewRuntime
 {
@@ -36,6 +37,7 @@ namespace UselessFrame.NewRuntime
         private static CryptoManager _cryptoManager;
         private static ArchiveModule _archiveModule;
         private static ProcedureModule _procedure;
+        private static ConditionModule _condition;
         private static ModuleCore _moduleCore;
         private static XSetting _setting;
         private static bool _initialized;
@@ -66,6 +68,8 @@ namespace UselessFrame.NewRuntime
 
         public static ArchiveModule Archive => _archiveModule;
 
+        public static IConditionModule Condition => _condition;
+
         public static IModuleCore Module => _moduleCore;
 
         public static async UniTask Initialize(XSetting setting)
@@ -89,6 +93,7 @@ namespace UselessFrame.NewRuntime
             _fsmManager     = new FsmManager();
             _cryptoManager  = new CryptoManager();
             _archiveModule  = new ArchiveModule();
+            _condition      = new ConditionModule();
             _procedure      = new ProcedureModule();
 
             InitManager(_logManager);
@@ -102,6 +107,7 @@ namespace UselessFrame.NewRuntime
             InitManager(_fsmManager);
             InitManager(_cryptoManager);
             InitManager(_archiveModule);
+            InitManager(_condition);
             InitManager(_procedure);
             _moduleCore = new ModuleCore(default);
             InitLogger();

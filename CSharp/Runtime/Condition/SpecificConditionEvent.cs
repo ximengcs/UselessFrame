@@ -1,5 +1,6 @@
-﻿using XFrame.Modules.Event;
-using XFrame.Modules.Pools;
+﻿
+using UselessFrame.NewRuntime;
+using UselessFrame.NewRuntime.Events;
 
 namespace XFrame.Modules.Conditions
 {
@@ -45,7 +46,7 @@ namespace XFrame.Modules.Conditions
         /// <returns>事件实例</returns>
         public static SpecificConditionEvent Create(IConditionHandle handle, object param)
         {
-            SpecificConditionEvent e = References.Require<SpecificConditionEvent>();
+            SpecificConditionEvent e = X.Pool.Require<SpecificConditionEvent>();
             e.Handle = handle;
             e.Param = param;
             e.Id = EventId;

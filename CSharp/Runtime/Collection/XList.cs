@@ -8,7 +8,7 @@ namespace UselessFrame.Runtime.Collections
 {
     public class XList<T> : IList<T>, IPoolObject
     {
-        private System.Collections.Generic.List<T> _list;
+        private List<T> _list;
         private Action _onChange;
 
         public event Action OnChangeEvent
@@ -118,7 +118,7 @@ namespace UselessFrame.Runtime.Collections
             _list.Clear();
         }
 
-        void IPoolObject.OnRequest()
+        void IPoolObject.OnRequest(object param)
         {
 
         }

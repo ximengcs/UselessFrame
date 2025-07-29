@@ -28,7 +28,7 @@ namespace UselessFrame.Runtime.Pools
             OnReleaseFromPool();
         }
 
-        void IPoolObject.OnRequest()
+        void IPoolObject.OnRequest(object param)
         {
             OnRequestFromPool();
         }

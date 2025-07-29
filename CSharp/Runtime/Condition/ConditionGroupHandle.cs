@@ -1,9 +1,8 @@
 ﻿using System;
-using XFrame.Core;
-using XFrame.Modules.Pools;
 using XFrame.Modules.Archives;
 using System.Collections.Generic;
-using XFrame.Modules.Diagnotics;
+using UselessFrame.Runtime.Collections;
+using UselessFrame.NewRuntime;
 
 namespace XFrame.Modules.Conditions
 {
@@ -19,6 +18,8 @@ namespace XFrame.Modules.Conditions
         private Action<IConditionGroupHandle> m_CompleteEvent;
         private Dictionary<int, List<IConditionHandle>> m_NotInfos;
         private ConditionModule m_Module;
+
+        public IDataProvider Data => m_Data;
 
         public string Name => m_Setting.Name;
 
@@ -55,10 +56,10 @@ namespace XFrame.Modules.Conditions
                 m_Data = new DataProvider();
             }
 
-            var list = setting.Data.Parser.Value;
-            foreach (var node in list)
+            var list = setting.Data.Items;
+            foreach (var item in list)
             {
-                ConditionHandle handle = new ConditionHandle(this, node.Value);
+                ConditionHandle handle = new ConditionHandle(this, item);
                 int target = handle.Target;
                 ConditionHelperSetting conditionSetting = setting.GetConditionHelperSettting(target);
                 CompareInfo compare = m_Module.GetOrNewCompare(target, conditionSetting.UseInstance);
@@ -92,7 +93,7 @@ namespace XFrame.Modules.Conditions
             }
 
             if (m_Helper == null)
-                Log.Debug(Log.Condition, $"warning -> condition {Name} helper is null");
+                X.Log.Debug(FrameLogType.Condition, $"warning -> condition {Name} helper is null");
 
             if (m_Helper != null && m_Helper.CheckFinish(this))
             {
@@ -115,7 +116,7 @@ namespace XFrame.Modules.Conditions
         {
             if (m_Archive != null)
                 return;
-            m_Archive = m_Module.Domain.GetModule<ArchiveModule>().GetOrNew<JsonArchive>($"condition_group_{m_Setting.Name}_{m_Setting.HelperSetting.UseInstance}");
+            m_Archive = X.Archive.GetOrNew<JsonArchive>($"condition_group_{m_Setting.Name}_{m_Setting.HelperSetting.UseInstance}");
         }
 
         internal void InnerTrigger(int target, object param)
@@ -155,7 +156,7 @@ namespace XFrame.Modules.Conditions
             if (m_Disposed)
                 return;
             if (m_Setting.HelperSetting.IsUseInstance)
-                References.Release(m_Helper);
+                X.Pool.Release(m_Helper);
 
             foreach (IConditionHandle h in m_AllInfos)
             {
@@ -173,41 +174,6 @@ namespace XFrame.Modules.Conditions
                 callback?.Invoke(this);
             else
                 m_CompleteEvent += callback;
-        }
-
-        public bool HasData<T>()
-        {
-            return m_Data.HasData<T>();
-        }
-
-        public bool HasData<T>(string name)
-        {
-            return m_Data.HasData<T>(name);
-        }
-
-        public void SetData<T>(T value)
-        {
-            m_Data.SetData(value);
-        }
-
-        public T GetData<T>()
-        {
-            return m_Data.GetData<T>();
-        }
-
-        public void SetData<T>(string name, T value)
-        {
-            m_Data.SetData<T>(name, value);
-        }
-
-        public T GetData<T>(string name)
-        {
-            return m_Data.GetData<T>(name);
-        }
-
-        public void ClearData()
-        {
-            m_Data.ClearData();
         }
     }
 }

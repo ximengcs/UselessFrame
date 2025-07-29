@@ -1,20 +1,14 @@
 ﻿using System;
-using XFrame.Core;
-using XFrame.Collections;
-using XFrame.Modules.Reflection;
-using XFrame.Modules.Pools;
-using XFrame.Modules.Event;
-using XFrame.Modules.Diagnotics;
 using System.Collections.Generic;
+using UselessFrame.NewRuntime;
+using UselessFrame.NewRuntime.Events;
 
 namespace XFrame.Modules.Conditions
 {
     /// <inheritdoc/>
-    [CommonModule]
-    [XType(typeof(IConditionModule))]
-    public class ConditionModule : ModuleBase, IConditionModule
+    public class ConditionModule : IConditionModule, IManagerInitializer
     {
-        private IEventSystem m_Event;
+        private IEventDispatcher m_Event;
         private Dictionary<int, Dictionary<int, IConditionHelper>> m_Helpers;
         private Dictionary<int, Dictionary<int, CompareInfo>> m_Compares;
         private Dictionary<int, Type> m_HelpersType;
@@ -24,14 +18,12 @@ namespace XFrame.Modules.Conditions
         private Dictionary<string, ConditionGroupHandle> m_Groups;
 
         /// <inheritdoc/>
-        public IEventSystem Event => m_Event;
+        public IEventDispatcher Event => m_Event;
 
         /// <inheritdoc/>
-        protected override void OnInit(object data)
+        public void Initialize(XSetting setting)
         {
-            base.OnInit(data);
-
-            m_Event = Domain.GetModule<IEventModule>().NewSys();
+            m_Event = X.Event.Create();
             m_Event.Listen(ConditionEvent.EventId, InnerConditionTouchHandler);
             m_Event.Listen(ConditionGroupEvent.EventId, InnerConditionGroupTouchHandler);
             m_Event.Listen(SpecificConditionEvent.EventId, InnerSpecificCondition);
@@ -42,22 +34,22 @@ namespace XFrame.Modules.Conditions
             m_ComparesType = new Dictionary<int, Type>();
             m_GroupList = new List<ConditionGroupHandle>();
 
-            TypeSystem typeSys = Domain.TypeModule.GetOrNew<IConditionCompare>();
+            var typeSys = X.Type.GetCollection(typeof(IConditionCompare));
             foreach (Type type in typeSys)
             {
                 if (type.IsInterface || type.IsAbstract)
                     continue;
-                IConditionCompare compare = (IConditionCompare)Domain.TypeModule.CreateInstance(type);
+                IConditionCompare compare = (IConditionCompare)X.Type.CreateInstance(type);
                 m_Compares.Add(compare.Target, new Dictionary<int, CompareInfo>() { { ConditionHelperSetting.DEFAULT_INSTANCE, new CompareInfo(compare) } });
                 m_ComparesType.Add(compare.Target, compare.GetType());
             }
 
-            typeSys = Domain.TypeModule.GetOrNew<IConditionHelper>();
+            typeSys = X.Type.GetCollection(typeof(IConditionHelper));
             foreach (Type type in typeSys)
             {
                 if (type.IsInterface || type.IsAbstract)
                     continue;
-                IConditionHelper helper = (IConditionHelper)Domain.TypeModule.CreateInstance(type);
+                IConditionHelper helper = (IConditionHelper)X.Type.CreateInstance(type);
                 m_Helpers.Add(helper.Type, new Dictionary<int, IConditionHelper>() { { ConditionHelperSetting.DEFAULT_INSTANCE, helper } });
                 m_HelpersType.Add(helper.Type, helper.GetType());
             }
@@ -72,7 +64,7 @@ namespace XFrame.Modules.Conditions
 
                 if (m_ComparesType.TryGetValue(target, out Type type))
                 {
-                    IConditionCompare compareInst = (IConditionCompare)References.Require(type);
+                    IConditionCompare compareInst = (IConditionCompare)X.Pool.Require(type);
                     compare = new CompareInfo(compareInst);
                     compares.Add(instance, compare);
                     return compare;
@@ -90,7 +82,7 @@ namespace XFrame.Modules.Conditions
 
                 if (m_HelpersType.TryGetValue(type, out Type helperType))
                 {
-                    helper = (IConditionHelper)References.Require(helperType);
+                    helper = (IConditionHelper)X.Pool.Require(helperType);
                     helpers.Add(instance, helper);
                     return helper;
                 }
@@ -111,7 +103,7 @@ namespace XFrame.Modules.Conditions
         {
             if (m_Groups.TryGetValue(setting.Name, out ConditionGroupHandle group))
                 return group;
-            Log.Debug(Log.Condition, $"Register {setting.Name} : {setting.Data}");
+            X.Log.Debug(FrameLogType.Condition, $"Register {setting.Name} : {setting.Data}");
             group = new ConditionGroupHandle(this, setting, InnerGroupCompleteHandler);
             if (!group.IsDisposed)
             {
@@ -126,14 +118,14 @@ namespace XFrame.Modules.Conditions
         {
             if (m_Groups.TryGetValue(name, out ConditionGroupHandle handle))
             {
-                Log.Debug(Log.Condition, $"UnRegister {name}");
+                X.Log.Debug(FrameLogType.Condition, $"UnRegister {name}");
                 m_Groups.Remove(handle.Name);
                 m_GroupList.Remove(handle);
                 handle.Dispose();
             }
             else
             {
-                Log.Debug(Log.Condition, $"UnRegister {name}, but has not exist.");
+                X.Log.Debug(FrameLogType.Condition, $"UnRegister {name}, but has not exist.");
             }
         }
 
@@ -145,7 +137,7 @@ namespace XFrame.Modules.Conditions
 
         private void InnerGroupCompleteHandler(IConditionGroupHandle group)
         {
-            Log.Debug(Log.Condition, $"{group.Name} has complete => [{group.Setting.Data}]");
+            X.Log.Debug(FrameLogType.Condition, $"{group.Name} has complete => [{group.Setting.Data}]");
             ConditionSetting setting = group.Setting;
             ConditionGroupHandle realGroup = (ConditionGroupHandle)group;
             if (setting.AutoRemove)
@@ -187,7 +179,7 @@ namespace XFrame.Modules.Conditions
             }
             else
             {
-                Log.Error(Log.Condition, $"Module do not has {group.Name}");
+                X.Log.Debug(FrameLogType.Condition, $"Module do not has {group.Name}");
             }
         }
 
@@ -210,7 +202,7 @@ namespace XFrame.Modules.Conditions
             }
             else
             {
-                Log.Error(Log.Condition, $"Module do not has {evt.Handle.Name}");
+                X.Log.Debug(FrameLogType.Condition, $"Module do not has {evt.Handle.Name}");
             }
         }
 

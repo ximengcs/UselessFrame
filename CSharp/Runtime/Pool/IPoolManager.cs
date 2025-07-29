@@ -5,6 +5,8 @@ namespace UselessFrame.Runtime.Pools
 {
     public interface IPoolManager
     {
+        IPoolObject Require(Type type, int poolKey = default, object userData = default);
+
         T Require<T>(int poolKey = default, object userData = default) where T : IPoolObject;
 
         void Release(IPoolObject inst);

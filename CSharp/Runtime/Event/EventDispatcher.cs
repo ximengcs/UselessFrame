@@ -64,7 +64,7 @@ namespace UselessFrame.NewRuntime.Events
 
             }
 
-            void IPoolObject.OnRequest()
+            void IPoolObject.OnRequest(object param)
             {
                 Handler1 = null;
                 Handler2 = null;

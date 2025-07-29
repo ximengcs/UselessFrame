@@ -18,6 +18,7 @@ namespace XFrame.Modules.Archives
         private string m_RootPath;
         private ITimeRecord m_Timer;
         private IFileHelper _fileHelper;
+        private IArchiveDataHelper _dataHelper;
         private Dictionary<string, IArchive> m_Archives;
         private Dictionary<string, Type> m_ArchiveTypes;
         #endregion
@@ -31,8 +32,9 @@ namespace XFrame.Modules.Archives
             m_Archives = new Dictionary<string, IArchive>();
             m_ArchiveTypes = new Dictionary<string, Type>();
 
-            Type type = typeof(DefaultArchiveUtilityHelper);
+            Type type = typeof(DefaultArchiveFileHelper);
             _fileHelper = (IFileHelper)X.Type.CreateInstance(type);
+            _dataHelper = new DefaultArchiveDataHelper();
             InnerInit();
         }
 

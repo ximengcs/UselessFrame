@@ -70,10 +70,12 @@ namespace UselessFrame.Net
                 }
                 catch (NotSupportedException e)
                 {
+                    X.Log.Exception(e);
                     FailureHandler();
                 }
                 catch (ObjectDisposedException e)
                 {
+                    X.Log.Exception(e);
                     FailureHandler();
                 }
                 catch (SocketException e)
@@ -84,6 +86,7 @@ namespace UselessFrame.Net
                 }
                 catch (Exception e)
                 {
+                    X.Log.Exception(e);
                     FailureHandler();
                 }
             }

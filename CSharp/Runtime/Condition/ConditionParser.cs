@@ -1,6 +1,6 @@
 ﻿
+using UselessFrame.Runtime.Pools;
 using XFrame.Core;
-using XFrame.Modules.Pools;
 
 namespace XFrame.Modules.Conditions
 {
@@ -50,7 +50,7 @@ namespace XFrame.Modules.Conditions
             m_Value = default;
         }
 
-        void IPoolObject.OnRequest()
+        void IPoolObject.OnRequest(object param)
         {
 
         }

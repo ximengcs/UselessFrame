@@ -1,5 +1,6 @@
-﻿using XFrame.Modules.Event;
-using XFrame.Modules.Pools;
+﻿
+using UselessFrame.NewRuntime;
+using UselessFrame.NewRuntime.Events;
 
 namespace XFrame.Modules.Conditions
 {
@@ -56,7 +57,7 @@ namespace XFrame.Modules.Conditions
         /// <returns>事件实例</returns>
         public static ConditionGroupEvent Create(IConditionGroupHandle handle, int target, object param)
         {
-            ConditionGroupEvent e = References.Require<ConditionGroupEvent>();
+            ConditionGroupEvent e = X.Pool.Require<ConditionGroupEvent>();
             e.Handle = handle;
             e.Target = target;
             e.Param = param;

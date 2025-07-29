@@ -10,7 +10,7 @@ namespace UselessFrame.Runtime.Pools
         {
             public int CacheCount => 64;
 
-            IPoolObject IPoolHelper.Factory(Type type, int poolKey, object userData)
+            IPoolObject IPoolHelper.Factory(Type type, int poolKey)
             {
                 return (IPoolObject)X.Type.CreateInstance(type);
             }

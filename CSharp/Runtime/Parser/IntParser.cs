@@ -107,7 +107,7 @@ namespace XFrame.Core
 
         }
 
-        void IPoolObject.OnRequest()
+        void IPoolObject.OnRequest(object param)
         {
             m_Value = default;
         }

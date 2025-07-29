@@ -2,7 +2,7 @@
 
 namespace XFrame.Modules.Archives
 {
-    internal class DefaultArchiveUtilityHelper : IFileHelper
+    internal class DefaultArchiveFileHelper : IFileHelper
     {
         public byte[] ReadAllBytes(string path)
         {
@@ -31,7 +31,7 @@ namespace XFrame.Modules.Archives
 
         public void Delete(string path)
         {
-            return File.Delete(path);
+            File.Delete(path);
         }
     }
 }

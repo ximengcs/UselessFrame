@@ -101,7 +101,7 @@ namespace XFrame.Core
             m_RemoveInfos = new List<Info>();
         }
 
-        void IPoolObject.OnRequest()
+        void IPoolObject.OnRequest(object param)
         {
             Split = SPLIT;
             Split2 = SPLIT2;

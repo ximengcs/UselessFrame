@@ -111,7 +111,7 @@ namespace XFrame.Core
             _poolSystem = poolObj.InPool.System;
         }
 
-        void IPoolObject.OnRequest()
+        void IPoolObject.OnRequest(object param)
         {
             InnerSetDefault();
         }

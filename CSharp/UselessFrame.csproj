@@ -10,7 +10,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Analyzer Include="..\Analyzer\Analyzer.csproj" />
 		<ProjectReference Include="..\CsvHelper\CsvHelper.csproj" />
 	</ItemGroup>
 

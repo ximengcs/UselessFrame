@@ -5,8 +5,16 @@ namespace XFrame.Modules.Conditions
     {
         public struct Item
         {
-            public int Type;
-            public Param Value;
+            public readonly bool Valid;
+            public readonly int Type;
+            public readonly Param Value;
+
+            public Item(int type, string value)
+            {
+                Type = type;
+                Value = new Param(value);
+                Valid = true;
+            }
         }
     }
 }

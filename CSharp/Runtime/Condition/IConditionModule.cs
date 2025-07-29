@@ -1,12 +1,12 @@
-﻿using XFrame.Core;
-using XFrame.Modules.Event;
+﻿
+using UselessFrame.NewRuntime.Events;
 
 namespace XFrame.Modules.Conditions
 {
     /// <summary>
     /// 条件监听模块 
     /// </summary>
-    public interface IConditionModule : IModule
+    public interface IConditionModule
     {
         /// <summary>
         /// 当需要触发某个条件时 
@@ -15,7 +15,7 @@ namespace XFrame.Modules.Conditions
         ///     <see cref="SpecificConditionEvent"/> 
         /// 事件到此事件系统
         /// </summary>
-        IEventSystem Event { get; }
+        IEventDispatcher Event { get; }
 
         /// <summary>
         /// 获取条件组句柄

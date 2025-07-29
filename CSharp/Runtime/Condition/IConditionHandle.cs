@@ -1,4 +1,5 @@
 ﻿using System;
+using UselessFrame.Runtime.Collections;
 using XFrame.Core;
 
 namespace XFrame.Modules.Conditions
@@ -11,12 +12,14 @@ namespace XFrame.Modules.Conditions
     /// 接着调用所有满足条件项的句柄<see cref="IConditionCompare{T}.Check"/>检查是否完成，
     /// </para>
     /// </summary>
-    public interface IConditionHandle : IDataProvider
+    public interface IConditionHandle
     {
         /// <summary>
         /// 条件项辅助器<see cref="IConditionCompare"/>的实例Id，默认使用全局辅助器
         /// </summary>
         int InstanceId { get; }
+
+        IDataProvider Data { get; }
 
         /// <summary>
         /// 条件目标
@@ -37,7 +40,7 @@ namespace XFrame.Modules.Conditions
         /// <summary>
         /// 条件需要达成的目标参数，如数量等
         /// </summary>
-        UniversalParser Param { get; }
+        ConditionData.Param Param { get; }
 
         /// <summary>
         /// 条件句柄所有条件组

@@ -1,14 +1,14 @@
 ﻿using System;
+using UselessFrame.NewRuntime;
+using UselessFrame.Runtime.Collections;
 using XFrame.Core;
-using XFrame.Modules.Pools;
-using XFrame.Modules.Diagnotics;
 
 namespace XFrame.Modules.Conditions
 {
     internal partial class ConditionHandle : IConditionHandle
     {
         private int m_Target;
-        private UniversalParser m_Param;
+        private ConditionData.Param m_Param;
         private IDataProvider m_Data;
         private ConditionGroupHandle m_Group;
         private Action<IConditionHandle> m_OnComplete;
@@ -19,22 +19,23 @@ namespace XFrame.Modules.Conditions
         private ConditionHelperSetting m_Setting;
         private CompareInfo m_HandleInfo;
 
+        public IDataProvider Data => m_Data;
+
         public int Target => m_Target;
 
         public bool IsComplete => m_Complete;
 
-        public UniversalParser Param => m_Param;
+        public ConditionData.Param Param => m_Param;
 
         public IConditionGroupHandle Group => m_Group;
 
         public int InstanceId => m_Setting.UseInstance;
 
-        internal ConditionHandle(ConditionGroupHandle group, PairParser<IntOrHashParser, UniversalParser> parser)
+        internal ConditionHandle(ConditionGroupHandle group, ConditionData.Item item)
         {
             m_Group = group;
-            Pair<IntOrHashParser, UniversalParser> pair = parser;
-            m_Target = pair.Key;
-            m_Param = pair.Value;
+            m_Target = item.Type;
+            m_Param = item.Value;
             m_Complete = false;
         }
 
@@ -49,7 +50,7 @@ namespace XFrame.Modules.Conditions
         {
             if (m_Setting.IsUseInstance)
             {
-                References.Release(m_HandleInfo.Inst);
+                X.Pool.Release(m_HandleInfo.Inst);
                 m_HandleInfo = default;
             }
         }
@@ -67,7 +68,7 @@ namespace XFrame.Modules.Conditions
         {
             if (!m_HandleInfo.Valid)
             {
-                Log.Error(Log.Condition, $"Target {Target} compare is null");
+                X.Log.Error(FrameLogType.Condition, $"Target {Target} compare is null");
                 return false;
             }
 
@@ -78,7 +79,7 @@ namespace XFrame.Modules.Conditions
         {
             if (!m_HandleInfo.Valid)
             {
-                Log.Error(Log.Condition, $"Target {Target} compare is null");
+                X.Log.Error(FrameLogType.Condition, $"Target {Target} compare is null");
                 return false;
             }
 
@@ -108,41 +109,6 @@ namespace XFrame.Modules.Conditions
             {
                 m_OnComplete += callback;
             }
-        }
-
-        public bool HasData<T>()
-        {
-            return m_Data.HasData<T>();
-        }
-
-        public bool HasData<T>(string name)
-        {
-            return m_Data.HasData<T>(name);
-        }
-
-        public void SetData<T>(T value)
-        {
-            m_Data.SetData(value);
-        }
-
-        public T GetData<T>()
-        {
-            return m_Data.GetData<T>();
-        }
-
-        public void SetData<T>(string name, T value)
-        {
-            m_Data.SetData(name, value);
-        }
-
-        public T GetData<T>(string name)
-        {
-            return m_Data.GetData<T>(name);
-        }
-
-        public void ClearData()
-        {
-            m_Data.ClearData();
         }
     }
 }

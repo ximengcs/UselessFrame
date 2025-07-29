@@ -140,7 +140,7 @@ namespace XFrame.Core
             InnerInitParser();
         }
 
-        void IPoolObject.OnRequest()
+        void IPoolObject.OnRequest(object param)
         {
             m_Split = SPLIT;
         }
