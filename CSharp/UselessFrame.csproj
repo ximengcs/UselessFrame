@@ -20,7 +20,8 @@
 			<HintPath>..\Dlls\MemoryPack.Core.dll</HintPath>
 		</Reference>
 		<Analyzer Include="..\Dlls\MemoryPack.Generator.dll" />
-		<ProjectReference Include="..\Analyzer\Analyzer.csproj" />
+		<ProjectReference  Include="..\Analyzer\Analyzer.csproj" ReferenceOutputAssembly="false"
+                      OutputItemType="Analyzer"/>
 		<Reference Include="Newtonsoft.Json">
 		  <HintPath>..\Dlls\Newtonsoft.Json.dll</HintPath>
 		</Reference>

@@ -4,7 +4,6 @@
 		<TargetFramework>netstandard2.0</TargetFramework>
 
 		<!-- 确保生成分析器专用包 -->
-		<IncludeBuildOutput>false</IncludeBuildOutput>
 		<DevelopmentDependency>true</DevelopmentDependency>
 		<NoPackageAnalysis>true</NoPackageAnalysis>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
