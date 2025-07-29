@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XApplication", "..\XApplica
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XGraphics", "..\XGraphics\XGraphics.csproj", "{F69CE19A-0E0F-4D75-AAF2-9A75A5195E06}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Analyzer", "..\Analyzer\Analyzer.csproj", "{65D29423-3D0B-F002-822C-351F89306095}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{F69CE19A-0E0F-4D75-AAF2-9A75A5195E06}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F69CE19A-0E0F-4D75-AAF2-9A75A5195E06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F69CE19A-0E0F-4D75-AAF2-9A75A5195E06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65D29423-3D0B-F002-822C-351F89306095}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65D29423-3D0B-F002-822C-351F89306095}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65D29423-3D0B-F002-822C-351F89306095}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65D29423-3D0B-F002-822C-351F89306095}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

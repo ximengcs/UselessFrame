@@ -10,10 +10,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\CsvHelper\CsvHelper.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<Reference Include="IdGen">
 			<HintPath>..\Dlls\IdGen.dll</HintPath>
 		</Reference>
@@ -24,6 +20,7 @@
 			<HintPath>..\Dlls\MemoryPack.Core.dll</HintPath>
 		</Reference>
 		<Analyzer Include="..\Dlls\MemoryPack.Generator.dll" />
+		<ProjectReference Include="..\Analyzer\Analyzer.csproj" />
 		<Reference Include="Newtonsoft.Json">
 		  <HintPath>..\Dlls\Newtonsoft.Json.dll</HintPath>
 		</Reference>
