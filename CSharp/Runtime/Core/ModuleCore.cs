@@ -4,7 +4,7 @@ using UselessFrame.NewRuntime;
 
 namespace UselessFrame.Runtime
 {
-    internal class ModuleCore : IModuleCore, IManagerUpdater, IManagerDisposable
+    internal class ModuleCore : IModuleCore, IManagerUpdater, IManagerDisposable, IManagerInitializer
     {
         private int _id;
         private bool _starting;
@@ -15,6 +15,10 @@ namespace UselessFrame.Runtime
         public ModuleCore(int id)
         {
             _id = id;
+        }
+
+        public async UniTask Initialize(XSetting setting)
+        {
             _driver = new ModuleDriver(this);
         }
 
