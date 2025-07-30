@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
 using UselessFrame.NewRuntime;
 using UselessFrame.NewRuntime.StateMachine;
 
@@ -12,7 +13,7 @@ namespace XFrame.Modules.Procedure
         #endregion
 
         #region Life Fun
-        public void Initialize(XSetting setting)
+        public async UniTask Initialize(XSetting setting)
         {
             _startProc = setting.EntranceProcedure;
             m_Fsm = X.Fsm.GetOrNew(X.Type.GetCollection(typeof(ProcedureBase)).ToArray());
@@ -20,7 +21,8 @@ namespace XFrame.Modules.Procedure
 
         public void Start()
         {
-            m_Fsm.Start(_startProc);
+            if (_startProc != null)
+                m_Fsm.Start(_startProc);
         }
         #endregion
 

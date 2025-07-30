@@ -18,29 +18,33 @@ using UselessFrame.Runtime.Types;
 using XFrame.Modules.Archives;
 using XFrame.Modules.Procedure;
 using XFrame.Modules.Conditions;
+using System.Collections.Generic;
 
 namespace UselessFrame.NewRuntime
 {
     public static partial class X
     {
-        private static TimeTicksSource _timeSource;
-        private static TimeRandom _random;
-        private static TypeManager _typeManager;
-        private static WorldManager _worldManager;
-        private static LogManager _logManager;
-        private static FiberManager _fiberManager;
-        private static CommandManager _commandManager;
-        private static NetManager _netManager;
-        private static PoolManager _poolManager;
-        private static EventManager _eventManager;
-        private static FsmManager _fsmManager;
-        private static CryptoManager _cryptoManager;
-        private static ArchiveModule _archiveModule;
-        private static ProcedureModule _procedure;
-        private static ConditionModule _condition;
-        private static ModuleCore _moduleCore;
-        private static XSetting _setting;
-        private static bool _initialized;
+        private static TimeTicksSource  _timeSource;
+        private static TimeRandom       _random;
+        private static TypeManager      _typeManager;
+        private static WorldManager     _worldManager;
+        private static LogManager       _logManager;
+        private static FiberManager     _fiberManager;
+        private static CommandManager   _commandManager;
+        private static NetManager       _netManager;
+        private static PoolManager      _poolManager;
+        private static EventManager     _eventManager;
+        private static FsmManager       _fsmManager;
+        private static CryptoManager    _cryptoManager;
+        private static ArchiveModule    _archiveModule;
+        private static ProcedureModule  _procedure;
+        private static ConditionModule  _condition;
+        private static ModuleCore       _moduleCore;
+        private static XSetting         _setting;
+        private static bool             _initialized;
+
+        private static List<IManagerUpdater>    _managerUpdaters;
+        private static List<IManagerDisposable> _managerDisposes;
 
         public static IRandom Random => _random;
 
@@ -76,11 +80,13 @@ namespace UselessFrame.NewRuntime
         {
             _setting = setting;
             AppDomain.CurrentDomain.UnhandledException += PrintSystemException;
-            TaskScheduler.UnobservedTaskException += PrintTaskException;
-            UniTaskScheduler.UnobservedTaskException += PrintUniTaskException;
+            TaskScheduler.UnobservedTaskException      += PrintTaskException;
+            UniTaskScheduler.UnobservedTaskException   += PrintUniTaskException;
 
-            _timeSource = new TimeTicksSource();
-            _random = new TimeRandom(_timeSource);
+            _managerUpdaters = new List<IManagerUpdater>();
+            _managerDisposes = new List<IManagerDisposable>();
+            _timeSource      = new TimeTicksSource();
+            _random          = new TimeRandom(_timeSource);
 
             _logManager     = new LogManager();
             _typeManager    = new TypeManager();
@@ -95,23 +101,25 @@ namespace UselessFrame.NewRuntime
             _archiveModule  = new ArchiveModule();
             _condition      = new ConditionModule();
             _procedure      = new ProcedureModule();
+            _moduleCore     = new ModuleCore(default);
 
-            InitManager(_logManager);
-            InitManager(_typeManager);
-            InitManager(_fiberManager);
-            InitManager(_netManager);
-            InitManager(_worldManager);
-            InitManager(_commandManager);
-            InitManager(_poolManager);
-            InitManager(_eventManager);
-            InitManager(_fsmManager);
-            InitManager(_cryptoManager);
-            InitManager(_archiveModule);
-            InitManager(_condition);
-            InitManager(_procedure);
-            _moduleCore = new ModuleCore(default);
+            await InitManager(_logManager);
+            await InitManager(_typeManager);
+            await InitManager(_fiberManager);
+            await InitManager(_netManager);
+            await InitManager(_worldManager);
+            await InitManager(_commandManager);
+            await InitManager(_poolManager);
+            await InitManager(_eventManager);
+            await InitManager(_fsmManager);
+            await InitManager(_cryptoManager);
+            await InitManager(_archiveModule);
+            await InitManager(_condition);
+            await InitManager(_procedure);
+            await InitManager(_moduleCore);
             InitLogger();
             InitModules();
+
             await _moduleCore.Start();
             _initialized = true;
             _procedure.Start();
@@ -120,24 +128,18 @@ namespace UselessFrame.NewRuntime
         public static void Update(float deltaTime)
         {
             if (!_initialized) return;
-            _eventManager.OnUpdate(deltaTime);
-            _fiberManager.UpdateMain(deltaTime);
-            _fsmManager.OnUpdate(deltaTime);
-            _archiveModule.OnUpdate(deltaTime);
-            _moduleCore.Trigger<IModuleUpdater>(deltaTime);
+            foreach (IManagerUpdater updater in _managerUpdaters)
+                updater.Update(deltaTime);
         }
 
-        public static void Shutdown()
+        public static async UniTask Shutdown()
         {
             AppDomain.CurrentDomain.UnhandledException -= PrintSystemException;
-            TaskScheduler.UnobservedTaskException -= PrintTaskException;
-            UniTaskScheduler.UnobservedTaskException -= PrintUniTaskException;
+            TaskScheduler.UnobservedTaskException      -= PrintTaskException;
+            UniTaskScheduler.UnobservedTaskException   -= PrintUniTaskException;
 
-            _ = _moduleCore.Destroy();
-            DisposeManager(_fiberManager);
-            DisposeManager(_netManager);
-            DisposeManager(_fsmManager);
-            DisposeManager(_archiveModule);
+            foreach (IManagerDisposable disposer in _managerDisposes)
+                await disposer.Dispose();
         }
 
         private static void InitLogger()
@@ -164,16 +166,14 @@ namespace UselessFrame.NewRuntime
             }
         }
 
-        private static void InitManager(object manager)
+        private static async UniTask InitManager(object manager)
         {
             if (manager is IManagerInitializer initializer)
-                initializer.Initialize(_setting);
-        }
-
-        private static void DisposeManager(object manager)
-        {
-            if (manager is IManagerDisposable initializer)
-                initializer.Dispose();
+                await initializer.Initialize(_setting);
+            if (manager is IManagerUpdater updater)
+                _managerUpdaters.Add(updater);
+            if (manager is IManagerDisposable disposer)
+                _managerDisposes.Add(disposer);
         }
     }
 }

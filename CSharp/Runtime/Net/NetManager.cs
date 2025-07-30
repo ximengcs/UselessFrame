@@ -1,4 +1,5 @@
 ﻿
+using Cysharp.Threading.Tasks;
 using IdGen;
 using System.Collections.Generic;
 using System.Net;
@@ -14,7 +15,7 @@ namespace UselessFrame.Net
         private Dictionary<long, IServer> _servers;
         private Dictionary<long, IConnection> _connections;
 
-        public void Initialize(XSetting setting)
+        public async UniTask Initialize(XSetting setting)
         {
             NetPoolUtility.InitializePool();
             IdGeneratorOptions opt = new IdGeneratorOptions(timeSource: X.GlobalTimeSource);
@@ -23,7 +24,7 @@ namespace UselessFrame.Net
             _connections = new Dictionary<long, IConnection>();
         }
 
-        public void Dispose()
+        public async UniTask Dispose()
         {
             List<IConnection> connections = new List<IConnection>(_connections.Values);
             foreach (Connection connection in connections)

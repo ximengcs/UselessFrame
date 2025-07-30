@@ -2,7 +2,9 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using System;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Linq;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
@@ -23,6 +25,11 @@ public class AsyncAnalyzer : DiagnosticAnalyzer
 
     public override void Initialize(AnalysisContext context)
     {
+        //if (!Debugger.IsAttached)
+        //{
+        //    Debugger.Launch();
+        //}
+        Debug.WriteLine("分析器初始化完成");
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
         context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.MethodDeclaration);
@@ -30,6 +37,7 @@ public class AsyncAnalyzer : DiagnosticAnalyzer
 
     private void AnalyzeMethod(SyntaxNodeAnalysisContext context)
     {
+        Debug.WriteLine($"AnalyzeMethod");
         var method = (MethodDeclarationSyntax)context.Node;
 
         // 检查 async 关键字

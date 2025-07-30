@@ -3,13 +3,14 @@ using System.IO;
 using UselessFrame.NewRuntime;
 using System.Collections.Generic;
 using UselessFrame.NewRuntime.Timers;
+using Cysharp.Threading.Tasks;
 
 namespace XFrame.Modules.Archives
 {
     /// <summary>
     /// 存档模块
     /// </summary>
-    public class ArchiveModule : IArchiveModule, IManagerInitializer, IManagerDisposable
+    public class ArchiveModule : IArchiveModule, IManagerInitializer, IManagerDisposable, IManagerUpdater
     {
         #region Inner Field
         private const int SAVE_KEY = 0;
@@ -24,7 +25,7 @@ namespace XFrame.Modules.Archives
         #endregion
 
         #region Life Fun
-        public void Initialize(XSetting setting)
+        public async UniTask Initialize(XSetting setting)
         {
             m_RootPath = setting.ArchivePath;
             m_Timer = X.Pool.Require<ITimeRecord>();
@@ -36,6 +37,7 @@ namespace XFrame.Modules.Archives
             _fileHelper = (IFileHelper)X.Type.CreateInstance(type);
             _dataHelper = new DefaultArchiveDataHelper();
             InnerInit();
+            await UniTask.CompletedTask;
         }
 
         private void InnerInit()
@@ -68,16 +70,17 @@ namespace XFrame.Modules.Archives
         }
 
         /// <inheritdoc/>
-        public void OnUpdate(double escapeTime)
+        public void Update(float escapeTime)
         {
             if (m_Timer.Check(SAVE_KEY, true))
                 InnerSaveAll();
         }
 
         /// <inheritdoc/>
-        public void Dispose()
+        public async UniTask Dispose()
         {
             InnerSaveAll();
+            await UniTask.CompletedTask;
         }
         #endregion
 

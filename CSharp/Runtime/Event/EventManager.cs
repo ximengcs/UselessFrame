@@ -1,19 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace UselessFrame.NewRuntime.Events
 {
     /// <inheritdoc/>
-    public class EventManager : IManagerInitializer, IEventManager
+    public class EventManager : IManagerInitializer, IEventManager, IManagerUpdater
     {
         private List<EventDispatcher> m_List;
 
-        public void Initialize(XSetting setting)
+        public async UniTask Initialize(XSetting setting)
         {
             m_List = new List<EventDispatcher>();
         }
 
         /// <inheritdoc/>
-        public void OnUpdate(double escapeTime)
+        public void Update(float escapeTime)
         {
             for (int i = m_List.Count - 1; i >= 0; i--)
                 m_List[i].OnUpdate();

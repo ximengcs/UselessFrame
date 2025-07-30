@@ -4,7 +4,7 @@ using UselessFrame.NewRuntime;
 
 namespace UselessFrame.Runtime
 {
-    internal class ModuleCore : IModuleCore
+    internal class ModuleCore : IModuleCore, IManagerUpdater, IManagerDisposable
     {
         private int _id;
         private bool _starting;
@@ -18,12 +18,17 @@ namespace UselessFrame.Runtime
             _driver = new ModuleDriver(this);
         }
 
+        public void Update(float deltaTime)
+        {
+            Trigger<IModuleUpdater>(deltaTime);
+        }
+
         public void Trigger<T>(object data)
         {
             _driver.Trigger(typeof(T), data);
         }
 
-        public void Trigger<T>(float data)
+        private void Trigger<T>(float data)
         {
             _driver.Trigger(typeof(T), data);
         }
@@ -42,7 +47,7 @@ namespace UselessFrame.Runtime
             await _driver.Start();
         }
 
-        public async UniTask Destroy()
+        public async UniTask Dispose()
         {
             if (!_starting)
                 return;

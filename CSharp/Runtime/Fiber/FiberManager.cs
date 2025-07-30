@@ -1,8 +1,9 @@
-﻿using System.Collections.Concurrent;
+﻿using Cysharp.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace UselessFrame.NewRuntime.Fiber
 {
-    public partial class FiberManager : IFiberManager, IManagerDisposable
+    public partial class FiberManager : IFiberManager, IManagerDisposable, IManagerUpdater
     {
         private static MainFiber _mainFiber;
         private ConcurrentDictionary<int, Fiber> _fibers;
@@ -22,14 +23,15 @@ namespace UselessFrame.NewRuntime.Fiber
             return fiber;
         }
 
-        public void UpdateMain(float deltaTime)
+        public void Update(float deltaTime)
         {
             _mainFiber.Update(deltaTime);
         }
 
-        public void Dispose()
+        public async UniTask Dispose()
         {
             InnerDispose();
+            await UniTask.CompletedTask;
         }
 
         private void InnerDispose()

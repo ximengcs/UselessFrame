@@ -1,4 +1,5 @@
 ﻿
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.CommandLine.Parsing;
@@ -17,7 +18,7 @@ namespace UselessFrame.NewRuntime.Commands
             _commands = new Dictionary<string, CommandInfo>();
         }
 
-        public void Initialize(XSetting setting)
+        public async UniTask Initialize(XSetting setting)
         {
             ITypeCollection collection = X.Type.GetCollection(typeof(CommandClassAttribute));
             foreach (Type type in collection)

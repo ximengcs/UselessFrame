@@ -1,5 +1,5 @@
-﻿using System;
-using UselessFrame.NewRuntime;
+﻿using Cysharp.Threading.Tasks;
+using System;
 
 namespace UselessFrame.NewRuntime.Cryptos
 {
@@ -11,7 +11,7 @@ namespace UselessFrame.NewRuntime.Cryptos
         #region Life Fun
         private Type m_Type;
 
-        public void Initialize(XSetting setting)
+        public async UniTask Initialize(XSetting setting)
         {
             m_Type = typeof(DefaultCryptor);
         }

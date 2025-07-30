@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using UselessFrame.Runtime.Collections;
 
 namespace UselessFrame.NewRuntime.StateMachine
 {
     /// <inheritdoc/>
-    public class FsmManager : IFsmManager, IManagerInitializer, IManagerDisposable
+    public class FsmManager : IFsmManager, IManagerInitializer, IManagerDisposable, IManagerUpdater
     {
         #region Inner Field
         private Dictionary<string, IFsmBase> m_Fsms;
@@ -13,20 +14,20 @@ namespace UselessFrame.NewRuntime.StateMachine
         #endregion
 
         #region Module Life Fun
-        public void Initialize(XSetting setting)
+        public async UniTask Initialize(XSetting setting)
         {
             m_FsmList = new List<IFsmBase>();
             m_Fsms = new Dictionary<string, IFsmBase>();
         }
 
         /// <inheritdoc/>
-        public void OnUpdate(double escapeTime)
+        public void Update(float escapeTime)
         {
             foreach (IFsmBase fsm in m_FsmList)
                 fsm.OnUpdate();
         }
 
-        public void Dispose()
+        public async UniTask Dispose()
         {
             foreach (IFsmBase fsm in m_FsmList)
                 fsm.OnDestroy();

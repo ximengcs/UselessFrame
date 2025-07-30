@@ -1,8 +1,10 @@
 ﻿
+using Cysharp.Threading.Tasks;
+
 namespace UselessFrame.NewRuntime
 {
     internal interface IManagerInitializer
     {
-        void Initialize(XSetting setting);
+        UniTask Initialize(XSetting setting);
     }
 }

@@ -1,4 +1,5 @@
 ﻿
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using UselessFrame.NewRuntime;
@@ -21,7 +22,7 @@ namespace UselessFrame.Runtime.Pools
             _helpers = new Dictionary<Type, IPoolHelper>();
         }
 
-        public void Initialize(XSetting setting)
+        public async UniTask Initialize(XSetting setting)
         {
             Type helperType = typeof(IPoolHelper);
             Type helperPType = typeof(PoolHelperAttribute);
@@ -37,7 +38,7 @@ namespace UselessFrame.Runtime.Pools
             }
         }
 
-        public void Dispose()
+        public async UniTask Dispose()
         {
             foreach (IPool pool in m_PoolContainers.Values)
                 pool.ClearObject();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using UselessFrame.NewRuntime;
 using UselessFrame.NewRuntime.Events;
@@ -21,7 +22,7 @@ namespace XFrame.Modules.Conditions
         public IEventDispatcher Event => m_Event;
 
         /// <inheritdoc/>
-        public void Initialize(XSetting setting)
+        public async UniTask Initialize(XSetting setting)
         {
             m_Event = X.Event.Create();
             m_Event.Listen(ConditionEvent.EventId, InnerConditionTouchHandler);

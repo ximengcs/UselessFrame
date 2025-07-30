@@ -1,9 +1,10 @@
-﻿using System;
-using System.Reflection;
-using System.Collections.Generic;
-using UselessFrame.Runtime.Types;
+﻿using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using UselessFrame.Runtime.Types;
 
 namespace UselessFrame.NewRuntime
 {
@@ -35,7 +36,7 @@ namespace UselessFrame.NewRuntime
         #endregion
 
         #region Initialize
-        public void Initialize(XSetting setting)
+        public async UniTask Initialize(XSetting setting)
         {
             ITypeFilter typeFilter = setting.TypeFilter;
             if (typeFilter == null)
