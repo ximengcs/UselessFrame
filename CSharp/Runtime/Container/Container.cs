@@ -7,10 +7,9 @@ using UselessFrame.Runtime.Collections;
 
 namespace UselessFrame.NewRuntime
 {
-    public class Container
+    public class Container : IContainer
     {
         private long _id;
-        private IdGenerator _idGenerator;
         private Container _parent;
         private Container _root;
         private IDataProvider _data;
@@ -21,9 +20,9 @@ namespace UselessFrame.NewRuntime
 
         public IDataProvider Data => _root._data;
 
-        public Container Root => _root;
+        public IContainer Root => _root;
 
-        public Container Parent => _parent;
+        public IContainer Parent => _parent;
 
         private Container()
         {
@@ -31,21 +30,27 @@ namespace UselessFrame.NewRuntime
             _childrenWithType = new Dictionary<Type, Dictionary<long, Container>>();
         }
 
-        public static Container Create(IDataProvider dataProvider)
+        private static IdGenerator _IdGen;
+
+        public static Container Create(IDataProvider dataProvider = null)
         {
+            if (_IdGen == null)
+            {
+                ITimeSource timeSource = new TimeTicksSource();
+                _IdGen = new IdGenerator(0, new IdGeneratorOptions(timeSource: timeSource));
+            }
             if (dataProvider == null)
                 dataProvider = new DataProvider();
 
             Container container = new Container();
             container.InitRoot();
             container._data = dataProvider;
+            container._id = _IdGen.CreateId();
             return container;
         }
 
         private void InitRoot()
         {
-            ITimeSource timeSource = new TimeTicksSource();
-            _idGenerator = new IdGenerator(0, new IdGeneratorOptions(timeSource: timeSource));
             _root = this;
             OnInit();
         }
@@ -59,28 +64,29 @@ namespace UselessFrame.NewRuntime
                 child.Trigger<T>();
         }
 
-        public Container AddChild()
+        public IContainer AddCom()
         {
             Container container = new Container();
             InnerInitChild(container);
             return container;
         }
 
-        public T AddChild<T>() where T : Container
+        public T AddCom<T>() where T : IContainer
         {
-            T container = (T)X.Type.CreateInstance(typeof(T));
-            InnerInitChild(container);
-            return container;
+            IContainer container = (IContainer)X.Type.CreateInstance(typeof(T));
+            InnerInitChild((Container)container);
+            return (T)container;
         }
 
-        public void RemoveChild(Container child)
+        public void RemoveCom(IContainer child)
         {
-            _children.Remove(child);
+            Container orgChild = (Container)child;
+            _children.Remove(orgChild);
             if (_childrenWithType.TryGetValue(child.GetType(), out Dictionary<long, Container> map))
             {
                 map.Remove(child.Id);
             }
-            InnerRecursiveDestory(child);
+            InnerRecursiveDestory(orgChild);
         }
 
         private void InnerRecursiveDestory(Container container)
@@ -95,7 +101,7 @@ namespace UselessFrame.NewRuntime
         private void InnerInitChild(Container child)
         {
             child._root = _root;
-            child._id = _root._idGenerator.CreateId();
+            child._id = _IdGen.CreateId();
             _children.Add(child);
             if (!_childrenWithType.TryGetValue(typeof(Container), out Dictionary<long, Container> map))
             {

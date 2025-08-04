@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 
 namespace UselessFrame.Runtime.Pools
@@ -39,9 +40,23 @@ namespace UselessFrame.Runtime.Pools
             return obj;
         }
 
+        public async UniTask<T> RequireAsync(int poolKey, object userData = default)
+        {
+            T obj = (T) await InnerRequireAsync(poolKey, userData);
+            m_UseCount++;
+            return obj;
+        }
+
         IPoolObject IPool.Require(int poolKey, object userData)
         {
             IPoolObject obj = InnerRequire(poolKey, userData);
+            m_UseCount++;
+            return obj;
+        }
+
+        async UniTask<IPoolObject> IPool.RequireAsync(int poolKey, object userData)
+        {
+            IPoolObject obj = await InnerRequireAsync(poolKey, userData);
             m_UseCount++;
             return obj;
         }
@@ -78,6 +93,15 @@ namespace UselessFrame.Runtime.Pools
             return obj;
         }
 
+        private async UniTask<IPoolObject> InnerCreateAsync(int poolKey)
+        {
+            IPoolObject obj = await m_Helper.FactoryAsync(m_Type, poolKey);
+            obj.InPool = this;
+            m_Helper.OnObjectCreate(obj);
+            obj.OnCreate();
+            return obj;
+        }
+
         private IPoolObject InnerRequire(int poolKey, object userData)
         {
             IPoolObject obj;
@@ -105,6 +129,41 @@ namespace UselessFrame.Runtime.Pools
                 else
                 {
                     obj = InnerCreate(poolKey);
+                }
+            }
+
+            m_Helper.OnObjectRequest(obj);
+            obj.OnRequest(userData);
+            return obj;
+        }
+
+        private async UniTask<IPoolObject> InnerRequireAsync(int poolKey, object userData)
+        {
+            IPoolObject obj;
+            if (m_Objects.Count == 0)
+            {
+                obj = await InnerCreateAsync(poolKey);
+            }
+            else
+            {
+                LinkedListNode<T> node = m_Objects.First;
+                while (node != null)
+                {
+                    if (node.Value.PoolKey == poolKey)
+                        break;
+                    node = node.Next;
+                }
+
+                if (node != null)
+                {
+                    obj = node.Value;
+                    obj.InPool = this;
+                    m_Objects.Remove(node);
+                    m_NodeCache.Enqueue(node);
+                }
+                else
+                {
+                    obj = await InnerCreateAsync(poolKey);
                 }
             }
 

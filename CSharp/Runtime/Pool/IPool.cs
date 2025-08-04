@@ -1,6 +1,7 @@
 ﻿
 using System.Collections.Generic;
 using System;
+using Cysharp.Threading.Tasks;
 
 namespace UselessFrame.Runtime.Pools
 {
@@ -42,6 +43,8 @@ namespace UselessFrame.Runtime.Pools
         /// <returns>对象实例</returns>
         IPoolObject Require(int poolKey = default, object userData = default);
 
+        UniTask<IPoolObject> RequireAsync(int poolKey = default, object userData = default);
+
         /// <summary>
         /// 释放一个对象 
         /// </summary>
@@ -82,5 +85,7 @@ namespace UselessFrame.Runtime.Pools
         /// <param name="userData">数据参数</param>
         /// <returns>是否是新创建的对象，返回false表示从对象池中创建</returns>
         new T Require(int poolKey = default, object userData = default);
+
+        new UniTask<T> RequireAsync(int poolKey = default, object userData = default);
     }
 }

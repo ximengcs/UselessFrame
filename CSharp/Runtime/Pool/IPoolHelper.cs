@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using Cysharp.Threading.Tasks;
 
 namespace UselessFrame.Runtime.Pools
 {
@@ -22,6 +21,8 @@ namespace UselessFrame.Runtime.Pools
         /// <param name="userData">参数数据</param>
         /// <returns>对象实例</returns>
         protected internal IPoolObject Factory(Type type, int poolKey = default);
+
+        protected internal UniTask<IPoolObject> FactoryAsync(Type type, int poolKey = default);
 
         /// <summary>
         /// 对象创建生命周期

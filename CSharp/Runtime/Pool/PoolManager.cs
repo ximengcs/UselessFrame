@@ -12,6 +12,7 @@ namespace UselessFrame.Runtime.Pools
         private object[] m_ParamCache;
         private DefaultPoolHelper _defaultHelper;
         private Dictionary<Type, IPoolHelper> _helpers;
+        private Dictionary<Type, IPoolHelper> _commonHelpers;
         private Dictionary<Type, IPool> m_PoolContainers;
 
         public PoolManager()
@@ -20,6 +21,7 @@ namespace UselessFrame.Runtime.Pools
             m_PoolContainers = new Dictionary<Type, IPool>();
             _defaultHelper = new DefaultPoolHelper();
             _helpers = new Dictionary<Type, IPoolHelper>();
+            _commonHelpers = new Dictionary<Type, IPoolHelper>();
         }
 
         public async UniTask Initialize(XSetting setting)
@@ -51,16 +53,33 @@ namespace UselessFrame.Runtime.Pools
             _helpers[typeof(T)] = helper;
         }
 
+        public void RegisterCommonHelper<T>(IPoolHelper helper) where T : IPoolObject
+        {
+            _commonHelpers[typeof(T)] = helper;
+        }
+
         public IPoolObject Require(Type type, int poolKey = default, object userData = default)
         {
             IPool pool = GetOrNew(type);
             return pool.Require(poolKey, userData);
         }
 
+        public UniTask<IPoolObject> RequireAsync(Type type, int poolKey = default, object userData = default)
+        {
+            IPool pool = GetOrNew(type);
+            return pool.RequireAsync(poolKey, userData);
+        }
+
         public T Require<T>(int poolKey = default, object userData = default) where T : IPoolObject
         {
             IPool<T> pool = GetOrNew<T>();
             return pool.Require(poolKey, userData);
+        }
+
+        public UniTask<T> RequireAsync<T>(int poolKey = default, object userData = default) where T : IPoolObject
+        {
+            IPool<T> pool = GetOrNew<T>();
+            return pool.RequireAsync(poolKey, userData);
         }
 
         public void Release(IPoolObject inst)
@@ -87,7 +106,21 @@ namespace UselessFrame.Runtime.Pools
         {
             IPoolHelper helper = null;
             if (!_helpers.TryGetValue(objType, out helper))
+            {
                 helper = _defaultHelper;
+            }
+
+            if (helper == null)
+            {
+                foreach (var entry in _commonHelpers)
+                {
+                    if (entry.Key.IsAssignableFrom(objType))
+                    {
+                        helper = entry.Value;
+                        break;
+                    }
+                }
+            }
 
             if (!m_PoolContainers.TryGetValue(objType, out IPool pool))
             {

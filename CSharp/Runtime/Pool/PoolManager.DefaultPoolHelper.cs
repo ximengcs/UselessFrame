@@ -1,4 +1,5 @@
 ﻿
+using Cysharp.Threading.Tasks;
 using System;
 using UselessFrame.NewRuntime;
 
@@ -10,7 +11,14 @@ namespace UselessFrame.Runtime.Pools
         {
             public int CacheCount => 64;
 
+            int IPoolHelper.CacheCount => throw new NotImplementedException();
+
             IPoolObject IPoolHelper.Factory(Type type, int poolKey)
+            {
+                return (IPoolObject)X.Type.CreateInstance(type);
+            }
+
+            async UniTask<IPoolObject> IPoolHelper.FactoryAsync(Type type, int poolKey)
             {
                 return (IPoolObject)X.Type.CreateInstance(type);
             }

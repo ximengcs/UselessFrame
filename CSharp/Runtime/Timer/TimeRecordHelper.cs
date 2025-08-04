@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
 using UselessFrame.NewRuntime.Timers;
 using UselessFrame.Runtime.Pools;
 
@@ -10,6 +11,11 @@ namespace UselessFrame.Runtime.Timer
         int IPoolHelper.CacheCount => 128;
 
         IPoolObject IPoolHelper.Factory(Type type, int poolKey)
+        {
+            return new TimeRecord();
+        }
+
+        async UniTask<IPoolObject> IPoolHelper.FactoryAsync(Type type, int poolKey)
         {
             return new TimeRecord();
         }
