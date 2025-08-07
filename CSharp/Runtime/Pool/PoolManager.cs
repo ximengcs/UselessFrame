@@ -105,11 +105,8 @@ namespace UselessFrame.Runtime.Pools
         internal IPool InnerGetOrNew(Type objType)
         {
             IPoolHelper helper = null;
-            if (!_helpers.TryGetValue(objType, out helper))
-            {
-                helper = _defaultHelper;
-            }
-
+            _helpers.TryGetValue(objType, out helper);
+            
             if (helper == null)
             {
                 foreach (var entry in _commonHelpers)
@@ -120,6 +117,11 @@ namespace UselessFrame.Runtime.Pools
                         break;
                     }
                 }
+            }
+
+            if (helper == null)
+            {
+                helper = _defaultHelper;
             }
 
             if (!m_PoolContainers.TryGetValue(objType, out IPool pool))

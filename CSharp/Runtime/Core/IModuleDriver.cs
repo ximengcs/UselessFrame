@@ -6,10 +6,10 @@ namespace UselessFrame.Runtime
 {
     public interface IModuleDriver
     {
-        IModule GetModule(Type type, int id = default);
+        IModule Get(Type type, int id = default);
 
-        UniTask<IModule> AddModule(Type type, object param = null);
+        UniTask<IModule> Add(Type type, object param = null);
 
-        UniTask RemoveModule(Type type, int id = default);
+        UniTask Remove(Type type, int id = default);
     }
 }

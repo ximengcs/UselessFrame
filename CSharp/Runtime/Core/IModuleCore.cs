@@ -8,5 +8,7 @@ namespace UselessFrame.Runtime
         void Trigger<T>(object data);
 
         void AddHandler<T>() where T : IModuleHandler;
+
+        T Get<T>(int id = 0) where T : IModule;
     }
 }

@@ -162,7 +162,7 @@ namespace UselessFrame.NewRuntime
                 object param = _setting.ModuleParams != null ? _setting.ModuleParams[i] : null;
                 ITypeCollection collection = _typeManager.GetOrNewWithAttr(attrType);
                 foreach (Type type in collection)
-                    _moduleCore.AddModule(type, param);
+                    _moduleCore.Add(type, param);
             }
         }
 

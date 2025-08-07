@@ -59,19 +59,24 @@ namespace UselessFrame.Runtime
             await _driver.Destroy();
         }
 
-        public IModule GetModule(Type type, int id = 0)
+        public T Get<T>(int id = 0) where T : IModule
         {
-            return _driver.GetModule(type, id);
+            return (T)Get(typeof(T), id);
         }
 
-        public UniTask<IModule> AddModule(Type type, object param)
+        public IModule Get(Type type, int id = 0)
         {
-            return _driver.AddModule(type, param);
+            return _driver.Get(type, id);
         }
 
-        public UniTask RemoveModule(Type type, int id = 0)
+        public UniTask<IModule> Add(Type type, object param)
         {
-            return _driver.RemoveModule(type, id);
+            return _driver.Add(type, param);
+        }
+
+        public UniTask Remove(Type type, int id = 0)
+        {
+            return _driver.Remove(type, id);
         }
     }
 }

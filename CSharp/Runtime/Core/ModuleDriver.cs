@@ -55,12 +55,12 @@ namespace UselessFrame.Runtime
             }
         }
 
-        public IModule GetModule(Type type, int id)
+        public IModule Get(Type type, int id)
         {
             return _modules.Get(type, id);
         }
 
-        public async UniTask<IModule> AddModule(Type type, object param)
+        public async UniTask<IModule> Add(Type type, object param)
         {
             int id = default;
             Attribute attr = type.GetCustomAttribute(typeof(ModuleAttribute));
@@ -90,7 +90,7 @@ namespace UselessFrame.Runtime
             return module;
         }
 
-        public async UniTask RemoveModule(Type type, int id)
+        public async UniTask Remove(Type type, int id)
         {
             ModuleBase module = _modules.Remove(type, id);
             if (module)
