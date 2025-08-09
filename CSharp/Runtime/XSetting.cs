@@ -12,10 +12,10 @@ namespace UselessFrame.NewRuntime
 
         public Type[] ModuleAttributes;
 
-        public object[] ModuleParams;
+        public ValueTuple<Type, object>[] Modules;
 
         public string ArchivePath;
 
-        public Type EntranceProcedure;
+        public string EntranceProcedure;
     }
 }

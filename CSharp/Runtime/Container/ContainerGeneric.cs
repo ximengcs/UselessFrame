@@ -2,6 +2,7 @@
 using IdGen;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UselessFrame.NewRuntime.Utilities;
 using UselessFrame.Runtime.Collections;
 
@@ -27,7 +28,7 @@ namespace UselessFrame.NewRuntime
 
         public IContainer<OwnerT> Parent => _parent;
 
-        private Container()
+        protected Container()
         {
             _children = new List<Container<OwnerT>>();
             _childrenWithType = new Dictionary<Type, Dictionary<long, Container<OwnerT>>>();
@@ -68,6 +69,19 @@ namespace UselessFrame.NewRuntime
                 child.Trigger<T>();
         }
 
+        public T GetCom<T>(long id = default) where T : IContainer<OwnerT>
+        {
+            if (_childrenWithType.TryGetValue(typeof(T), out var children))
+            {
+                if (id == default && children.Count > 0)
+                    return (T)(IContainer<OwnerT>)children.First().Value;
+
+                if (children.TryGetValue(id, out var result))
+                    return (T)(IContainer<OwnerT>)result;
+            }
+            return default(T);
+        }
+
         public IContainer<OwnerT> AddCom()
         {
             Container<OwnerT> container = new Container<OwnerT>();
@@ -104,13 +118,16 @@ namespace UselessFrame.NewRuntime
 
         private void InnerInitChild(Container<OwnerT> child)
         {
+            Type childType = child.GetType();
             child._root = _root;
             child._id = _IdGen.CreateId();
+            child._owner = _owner;
+            child._parent = this;
             _children.Add(child);
-            if (!_childrenWithType.TryGetValue(typeof(Container<OwnerT>), out Dictionary<long, Container<OwnerT>> map))
+            if (!_childrenWithType.TryGetValue(childType, out Dictionary<long, Container<OwnerT>> map))
             {
                 map = new Dictionary<long, Container<OwnerT>>();
-                _childrenWithType[typeof(Container<OwnerT>)] = map;
+                _childrenWithType[childType] = map;
             }
             map.Add(child._id, child);
             child.OnInit();

@@ -17,6 +17,8 @@ namespace UselessFrame.NewRuntime
 
         void Trigger<T>() where T : IContainerEventHandler;
 
+        T GetCom<T>(long id = default) where T : IContainer<OwnerT>;
+
         IContainer<OwnerT> AddCom();
 
         T AddCom<T>() where T : IContainer<OwnerT>;

@@ -24,7 +24,7 @@ namespace UselessFrame.NewRuntime
 
         public IContainer Parent => _parent;
 
-        private Container()
+        protected Container()
         {
             _children = new List<Container>();
             _childrenWithType = new Dictionary<Type, Dictionary<long, Container>>();

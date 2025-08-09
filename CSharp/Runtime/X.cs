@@ -24,26 +24,26 @@ namespace UselessFrame.NewRuntime
 {
     public static partial class X
     {
-        private static TimeTicksSource  _timeSource;
-        private static TimeRandom       _random;
-        private static TypeManager      _typeManager;
-        private static WorldManager     _worldManager;
-        private static LogManager       _logManager;
-        private static FiberManager     _fiberManager;
-        private static CommandManager   _commandManager;
-        private static NetManager       _netManager;
-        private static PoolManager      _poolManager;
-        private static EventManager     _eventManager;
-        private static FsmManager       _fsmManager;
-        private static CryptoManager    _cryptoManager;
-        private static ArchiveModule    _archiveModule;
-        private static ProcedureModule  _procedure;
-        private static ConditionModule  _condition;
-        private static ModuleCore       _moduleCore;
-        private static XSetting         _setting;
-        private static bool             _initialized;
+        private static TimeTicksSource _timeSource;
+        private static TimeRandom _random;
+        private static TypeManager _typeManager;
+        private static WorldManager _worldManager;
+        private static LogManager _logManager;
+        private static FiberManager _fiberManager;
+        private static CommandManager _commandManager;
+        private static NetManager _netManager;
+        private static PoolManager _poolManager;
+        private static EventManager _eventManager;
+        private static FsmManager _fsmManager;
+        private static CryptoManager _cryptoManager;
+        private static ArchiveModule _archiveModule;
+        private static ProcedureModule _procedure;
+        private static ConditionModule _condition;
+        private static ModuleCore _moduleCore;
+        private static XSetting _setting;
+        private static bool _initialized;
 
-        private static List<IManagerUpdater>    _managerUpdaters;
+        private static List<IManagerUpdater> _managerUpdaters;
         private static List<IManagerDisposable> _managerDisposes;
 
         public static IRandom Random => _random;
@@ -153,16 +153,23 @@ namespace UselessFrame.NewRuntime
 
         private static void InitModules()
         {
-            if (_setting.ModuleAttributes == null)
-                return;
-
-            for (int i = 0; i < _setting.ModuleAttributes.Length; i++)
+            if (_setting.ModuleAttributes != null)
             {
-                Type attrType = _setting.ModuleAttributes[i];
-                object param = _setting.ModuleParams != null ? _setting.ModuleParams[i] : null;
-                ITypeCollection collection = _typeManager.GetOrNewWithAttr(attrType);
-                foreach (Type type in collection)
-                    _moduleCore.Add(type, param);
+                for (int i = 0; i < _setting.ModuleAttributes.Length; i++)
+                {
+                    Type attrType = _setting.ModuleAttributes[i];
+                    ITypeCollection collection = _typeManager.GetOrNewWithAttr(attrType);
+                    foreach (Type type in collection)
+                        _moduleCore.Add(type, null);
+                }
+            }
+
+            if (_setting.Modules != null)
+            {
+                foreach (ValueTuple<Type, object> entry in _setting.Modules)
+                {
+                    _moduleCore.Add(entry.Item1, entry.Item2);
+                }
             }
         }
 
