@@ -79,6 +79,7 @@ namespace UselessFrame.NewRuntime
         public static async UniTask Initialize(XSetting setting)
         {
             _setting = setting;
+            _logManager = new LogManager(setting.Loggers);
             AppDomain.CurrentDomain.UnhandledException += PrintSystemException;
             TaskScheduler.UnobservedTaskException      += PrintTaskException;
             UniTaskScheduler.UnobservedTaskException   += PrintUniTaskException;
@@ -88,7 +89,6 @@ namespace UselessFrame.NewRuntime
             _timeSource      = new TimeTicksSource();
             _random          = new TimeRandom(_timeSource);
 
-            _logManager     = new LogManager();
             _typeManager    = new TypeManager();
             _fiberManager   = new FiberManager();
             _netManager     = new NetManager();
@@ -103,6 +103,7 @@ namespace UselessFrame.NewRuntime
             _procedure      = new ProcedureModule();
             _moduleCore     = new ModuleCore(default);
 
+            
             await InitManager(_typeManager);
             await InitManager(_logManager);
             await InitManager(_fiberManager);
@@ -117,7 +118,6 @@ namespace UselessFrame.NewRuntime
             await InitManager(_condition);
             await InitManager(_procedure);
             await InitManager(_moduleCore);
-            InitLogger();
             InitModules();
 
             await _moduleCore.Start();
@@ -140,15 +140,6 @@ namespace UselessFrame.NewRuntime
 
             foreach (IManagerDisposable disposer in _managerDisposes)
                 await disposer.Dispose();
-        }
-
-        private static void InitLogger()
-        {
-            if (_setting.Loggers == null)
-                return;
-
-            foreach (Type type in _setting.Loggers)
-                _logManager.AddLogger(type);
         }
 
         private static void InitModules()

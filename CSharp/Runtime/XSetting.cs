@@ -8,7 +8,7 @@ namespace UselessFrame.NewRuntime
     {
         public ITypeFilter TypeFilter;
 
-        public Type[] Loggers;
+        public ILogger[] Loggers;
 
         public Type[] ModuleAttributes;
 

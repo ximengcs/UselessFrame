@@ -8,9 +8,12 @@ namespace UselessFrame.NewRuntime
     {
         private ConcurrentBag<ILogger> m_Loggers;
 
-        public LogManager()
+        public LogManager(ILogger[] loggers)
         {
-            m_Loggers = new ConcurrentBag<ILogger>();
+            if (loggers != null)
+                m_Loggers = new ConcurrentBag<ILogger>(loggers);
+            else
+                m_Loggers = new ConcurrentBag<ILogger>();
         }
 
         #region Interface
@@ -41,11 +44,6 @@ namespace UselessFrame.NewRuntime
         {
             foreach (ILogger logger in m_Loggers)
                 logger.Debug(content);
-        }
-
-        public void Debug(Enum e, params object[] content)
-        {
-            Debug(e.ToString(), content);
         }
 
         /// <inheritdoc/>
