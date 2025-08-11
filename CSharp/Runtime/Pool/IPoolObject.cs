@@ -20,12 +20,12 @@ namespace UselessFrame.Runtime.Pools
         /// <summary>
         /// 从对象池中创建时被调用
         /// </summary>
-        protected internal void OnCreate();
+        protected internal void OnCreate(object userData = null);
 
         /// <summary>
         /// 从对象池中请求时被调用
         /// </summary>
-        protected internal void OnRequest(object userData = null);
+        protected internal void OnRequest();
 
         /// <summary>
         /// 释放到对象池中时被调用

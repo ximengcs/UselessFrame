@@ -250,12 +250,12 @@ namespace XFrame.Core
             return true;
         }
 
-        void IPoolObject.OnCreate()
+        void IPoolObject.OnCreate(object param)
         {
 
         }
 
-        void IPoolObject.OnRequest(object param)
+        void IPoolObject.OnRequest()
         {
             m_Split = SPLIT;
         }

@@ -103,7 +103,7 @@ namespace UselessFrame.Runtime.Collections
             return GetEnumerator();
         }
 
-        void IPoolObject.OnCreate()
+        void IPoolObject.OnCreate(object param)
         {
 
         }
@@ -118,7 +118,7 @@ namespace UselessFrame.Runtime.Collections
             _list.Clear();
         }
 
-        void IPoolObject.OnRequest(object param)
+        void IPoolObject.OnRequest()
         {
 
         }

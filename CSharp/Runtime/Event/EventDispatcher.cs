@@ -59,12 +59,12 @@ namespace UselessFrame.NewRuntime.Events
                 Handler2 -= handler2;
             }
 
-            void IPoolObject.OnCreate()
+            void IPoolObject.OnCreate(object param)
             {
 
             }
 
-            void IPoolObject.OnRequest(object param)
+            void IPoolObject.OnRequest()
             {
                 Handler1 = null;
                 Handler2 = null;

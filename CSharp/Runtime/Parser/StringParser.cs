@@ -78,12 +78,12 @@ namespace XFrame.Core
             _pool.Release(this);
         }
 
-        void IPoolObject.OnCreate()
+        void IPoolObject.OnCreate(object param)
         {
 
         }
 
-        void IPoolObject.OnRequest(object param)
+        void IPoolObject.OnRequest()
         {
             Value = null;
         }

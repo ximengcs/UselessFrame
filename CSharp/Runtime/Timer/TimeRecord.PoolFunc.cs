@@ -11,9 +11,17 @@ namespace UselessFrame.NewRuntime.Timers
 
         IPool IPoolObject.InPool { get; set; }
 
-        void IPoolObject.OnCreate()
+        void IPoolObject.OnCreate(object userData)
         {
             m_Times = new Dictionary<int, CDInfo>();
+            if (userData != null && userData is ICanGetTime time)
+            {
+                m_Updater = time;
+            }
+            else
+            {
+                m_Updater = X.Fiber.MainFiber;
+            }
         }
 
         void IPoolObject.OnDelete()
@@ -24,16 +32,9 @@ namespace UselessFrame.NewRuntime.Timers
         {
         }
 
-        void IPoolObject.OnRequest(object userData)
+        void IPoolObject.OnRequest()
         {
-            if (userData != null && userData is ICanGetTime time)
-            {
-                m_Updater = time;
-            }
-            else
-            {
-                m_Updater = X.Fiber.MainFiber;
-            }
+            
         }
     }
 }

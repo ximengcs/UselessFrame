@@ -241,7 +241,7 @@ namespace XFrame.Core
             throw new NotImplementedException();
         }
 
-        void IPoolObject.OnCreate()
+        void IPoolObject.OnCreate(object param)
         {
             OnCreate();
         }
@@ -250,7 +250,7 @@ namespace XFrame.Core
         {
         }
 
-        void IPoolObject.OnRequest(object param)
+        void IPoolObject.OnRequest()
         {
 
         }

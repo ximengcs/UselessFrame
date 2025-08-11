@@ -1,5 +1,4 @@
 ﻿
-using Cysharp.Threading.Tasks;
 using System.Threading;
 
 namespace UselessFrame.NewRuntime.Fiber
@@ -8,8 +7,8 @@ namespace UselessFrame.NewRuntime.Fiber
     {
         public static IFiber GetCurrentContextFiber()
         {
-            Fiber.FiberSynchronizationContext context = (Fiber.FiberSynchronizationContext)SynchronizationContext.Current;
-            return context.Fiber;
+            FiberManager manager = (FiberManager)X.Fiber;
+            return manager.GetFiber(SynchronizationContext.Current);
         }
     }
 }

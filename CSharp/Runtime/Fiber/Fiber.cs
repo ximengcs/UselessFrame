@@ -17,6 +17,8 @@ namespace UselessFrame.NewRuntime.Fiber
         private float _time;
         private List<LoopItemInfo> _loopItems;
 
+        public SynchronizationContext Context => _context;
+
         public long FrameCount => _frame;
 
         public float DeltaTime => _deltaTime;

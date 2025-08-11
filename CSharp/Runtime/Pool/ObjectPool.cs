@@ -73,32 +73,32 @@ namespace UselessFrame.Runtime.Pools
                 m_UseCount--;
         }
 
-        public void Spawn(int poolKey, int count, List<IPoolObject> toList = null)
+        public void Spawn(int poolKey, int count, List<object> paramList, List<IPoolObject> toList = null)
         {
             for (int i = 0; i < count; i++)
             {
-                IPoolObject obj = InnerCreate(poolKey);
+                IPoolObject obj = InnerCreate(poolKey, paramList != null ? paramList[i] : null);
                 InnerRelease(obj, false);
                 if (toList != null)
                     toList.Add(obj);
             }
         }
 
-        private IPoolObject InnerCreate(int poolKey)
+        private IPoolObject InnerCreate(int poolKey, object userData)
         {
             IPoolObject obj = m_Helper.Factory(m_Type, poolKey);
             obj.InPool = this;
             m_Helper.OnObjectCreate(obj);
-            obj.OnCreate();
+            obj.OnCreate(userData);
             return obj;
         }
 
-        private async UniTask<IPoolObject> InnerCreateAsync(int poolKey)
+        private async UniTask<IPoolObject> InnerCreateAsync(int poolKey, object userData)
         {
             IPoolObject obj = await m_Helper.FactoryAsync(m_Type, poolKey);
             obj.InPool = this;
             m_Helper.OnObjectCreate(obj);
-            obj.OnCreate();
+            obj.OnCreate(userData);
             return obj;
         }
 
@@ -107,7 +107,7 @@ namespace UselessFrame.Runtime.Pools
             IPoolObject obj;
             if (m_Objects.Count == 0)
             {
-                obj = InnerCreate(poolKey);
+                obj = InnerCreate(poolKey, userData);
             }
             else
             {
@@ -128,12 +128,12 @@ namespace UselessFrame.Runtime.Pools
                 }
                 else
                 {
-                    obj = InnerCreate(poolKey);
+                    obj = InnerCreate(poolKey, userData);
                 }
             }
 
             m_Helper.OnObjectRequest(obj);
-            obj.OnRequest(userData);
+            obj.OnRequest();
             return obj;
         }
 
@@ -142,7 +142,7 @@ namespace UselessFrame.Runtime.Pools
             IPoolObject obj;
             if (m_Objects.Count == 0)
             {
-                obj = await InnerCreateAsync(poolKey);
+                obj = await InnerCreateAsync(poolKey, userData);
             }
             else
             {
@@ -163,12 +163,12 @@ namespace UselessFrame.Runtime.Pools
                 }
                 else
                 {
-                    obj = await InnerCreateAsync(poolKey);
+                    obj = await InnerCreateAsync(poolKey, userData);
                 }
             }
 
             m_Helper.OnObjectRequest(obj);
-            obj.OnRequest(userData);
+            obj.OnRequest();
             return obj;
         }
 

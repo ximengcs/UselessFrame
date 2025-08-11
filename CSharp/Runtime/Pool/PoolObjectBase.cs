@@ -13,7 +13,7 @@ namespace UselessFrame.Runtime.Pools
 
         IPool IPoolObject.InPool { get; set; }
 
-        void IPoolObject.OnCreate()
+        void IPoolObject.OnCreate(object param)
         {
             OnCreateFromPool();
         }
@@ -28,7 +28,7 @@ namespace UselessFrame.Runtime.Pools
             OnReleaseFromPool();
         }
 
-        void IPoolObject.OnRequest(object param)
+        void IPoolObject.OnRequest()
         {
             OnRequestFromPool();
         }

@@ -1,7 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using System.Threading;
-using System.Timers;
+using UselessFrame.Runtime;
 using static UselessFrame.NewRuntime.Fiber.Fiber;
 
 namespace UselessFrame.NewRuntime.Fiber
@@ -13,8 +13,11 @@ namespace UselessFrame.NewRuntime.Fiber
         private float _deltaTime;
         private float _time;
         private CancellationTokenSource _disposeTokenSource;
-        private FiberSynchronizationContext _context;
+        private SynchronizationContext _context;
+        private IUpdater _updater;
         private List<LoopItemInfo> _loopItems;
+
+        public SynchronizationContext Context => _context;
 
         public int ThreadId => _threadId;
 
@@ -30,9 +33,14 @@ namespace UselessFrame.NewRuntime.Fiber
         {
             _loopItems = new List<LoopItemInfo>(1024);
             _threadId = Thread.CurrentThread.ManagedThreadId;
-            _context = new FiberSynchronizationContext(this, _threadId);
+            _context = SynchronizationContext.Current;
+            if (_context == null)
+                _context = new FiberSynchronizationContext(this, _threadId);
+            _updater = _context as IUpdater;
             _disposeTokenSource = new CancellationTokenSource();
+            X.Log.Debug($"SetSynchronizationContext before {SynchronizationContext.Current.GetType().Name}");
             SynchronizationContext.SetSynchronizationContext(_context);
+            X.Log.Debug($"SetSynchronizationContext after {SynchronizationContext.Current.GetType().Name}");
         }
 
         public SwitchToSynchronizationContextAwaitable Switch()
@@ -69,7 +77,7 @@ namespace UselessFrame.NewRuntime.Fiber
             _deltaTime = deltaTime;
             _time += deltaTime;
             RunLoopItem();
-            _context.OnUpdate(deltaTime);
+            _updater?.OnUpdate(deltaTime);
             _frame++;
         }
 

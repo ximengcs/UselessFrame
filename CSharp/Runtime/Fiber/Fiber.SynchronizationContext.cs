@@ -1,14 +1,15 @@
 ﻿
 using System;
-using XFrame.Core;
-using System.Threading;
 using System.Collections.Concurrent;
+using System.Threading;
+using UselessFrame.Runtime;
+using XFrame.Core;
 
 namespace UselessFrame.NewRuntime.Fiber
 {
     public partial class Fiber
     {
-        internal class FiberSynchronizationContext : SynchronizationContext
+        internal class FiberSynchronizationContext : SynchronizationContext, IUpdater
         {
             #region Inner Fields
             private int _threadId;

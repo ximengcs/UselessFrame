@@ -105,13 +105,13 @@ namespace XFrame.Core
             return parser != null ? m_Value.Equals(parser.Value) : m_Value.Equals(obj);
         }
 
-        void IPoolObject.OnCreate()
+        void IPoolObject.OnCreate(object param)
         {
             IPoolObject poolObj = this;
             _poolSystem = poolObj.InPool.System;
         }
 
-        void IPoolObject.OnRequest(object param)
+        void IPoolObject.OnRequest()
         {
             InnerSetDefault();
         }

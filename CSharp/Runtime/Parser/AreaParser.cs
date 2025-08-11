@@ -93,7 +93,7 @@ namespace XFrame.Core
             return content.StartsWith(KEY1) || content.StartsWith(KEY2);
         }
 
-        void IPoolObject.OnCreate()
+        void IPoolObject.OnCreate(object param)
         {
             m_MapValues = new HashSet<string>();
             m_Values = new List<string>();
@@ -101,7 +101,7 @@ namespace XFrame.Core
             m_RemoveInfos = new List<Info>();
         }
 
-        void IPoolObject.OnRequest(object param)
+        void IPoolObject.OnRequest()
         {
             Split = SPLIT;
             Split2 = SPLIT2;

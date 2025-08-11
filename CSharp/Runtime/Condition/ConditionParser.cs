@@ -35,7 +35,7 @@ namespace XFrame.Modules.Conditions
             return m_Value;
         }
 
-        void IPoolObject.OnCreate()
+        void IPoolObject.OnCreate(object param)
         {
 
         }
@@ -50,7 +50,7 @@ namespace XFrame.Modules.Conditions
             m_Value = default;
         }
 
-        void IPoolObject.OnRequest(object param)
+        void IPoolObject.OnRequest()
         {
 
         }

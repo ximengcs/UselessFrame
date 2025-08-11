@@ -103,7 +103,6 @@ namespace UselessFrame.NewRuntime
             _procedure      = new ProcedureModule();
             _moduleCore     = new ModuleCore(default);
 
-            
             await InitManager(_typeManager);
             await InitManager(_logManager);
             await InitManager(_fiberManager);

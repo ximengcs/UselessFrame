@@ -17,6 +17,7 @@ namespace UselessFrame.NewRuntime
         private IDataProvider _data;
         private Dictionary<Type, Dictionary<long, Container<OwnerT>>> _childrenWithType;
         private List<Container<OwnerT>> _children;
+        private IdGenerator _IdGen;
 
         public OwnerT Owner => _owner;
 
@@ -34,23 +35,23 @@ namespace UselessFrame.NewRuntime
             _childrenWithType = new Dictionary<Type, Dictionary<long, Container<OwnerT>>>();
         }
 
-        private static IdGenerator _IdGen;
-
         public static IContainer<OwnerT> Create(OwnerT owner, IDataProvider dataProvider = null)
         {
-            if (_IdGen == null)
-            {
-                ITimeSource timeSource = new TimeTicksSource();
-                _IdGen = new IdGenerator(0, new IdGeneratorOptions(timeSource: timeSource));
-            }
+            return Create(owner, default, dataProvider);
+        }
+
+        public static IContainer<OwnerT> Create(OwnerT owner, long id, IDataProvider dataProvider = null)
+        {
             if (dataProvider == null)
                 dataProvider = new DataProvider();
-
+            ITimeSource timeSource = new TimeTicksSource(id);
+            IdGenerator idGen = new IdGenerator(0, new IdGeneratorOptions(timeSource: timeSource));
             Container<OwnerT> container = new Container<OwnerT>();
             container._owner = owner;
-            container.InitRoot();
             container._data = dataProvider;
-            container._id = _IdGen.CreateId();
+            container._id = id;
+            container._IdGen = idGen;
+            container.InitRoot();
             return container;
         }
 

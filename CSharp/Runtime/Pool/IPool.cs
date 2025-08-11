@@ -58,7 +58,7 @@ namespace UselessFrame.Runtime.Pools
         /// <param name="count">生成数量</param>
         /// <param name="userData">数据参数</param>
         /// <param name="toList">添加到列表</param>
-        void Spawn(int poolKey = default, int count = 1, List<IPoolObject> toList = null);
+        void Spawn(int poolKey, int count, List<object> paramList, List<IPoolObject> toList = null);
 
         /// <summary>
         /// 清除所有池化对象
