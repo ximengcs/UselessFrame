@@ -15,8 +15,11 @@ namespace XFrame.Modules.Procedure
         #region Life Fun
         public async UniTask Initialize(XSetting setting)
         {
-            X.Type.TryGetType(setting.EntranceProcedure, out _startProc);
-            m_Fsm = X.Fsm.GetOrNew(X.Type.GetCollection(typeof(ProcedureBase)).ToArray());
+            if (!string.IsNullOrEmpty(setting.EntranceProcedure))
+            {
+                X.Type.TryGetType(setting.EntranceProcedure, out _startProc);
+                m_Fsm = X.Fsm.GetOrNew(X.Type.GetCollection(typeof(ProcedureBase)).ToArray());
+            }
         }
 
         public void Start()

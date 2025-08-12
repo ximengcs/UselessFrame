@@ -38,9 +38,7 @@ namespace UselessFrame.NewRuntime.Fiber
                 _context = new FiberSynchronizationContext(this, _threadId);
             _updater = _context as IUpdater;
             _disposeTokenSource = new CancellationTokenSource();
-            X.Log.Debug($"SetSynchronizationContext before {SynchronizationContext.Current.GetType().Name}");
             SynchronizationContext.SetSynchronizationContext(_context);
-            X.Log.Debug($"SetSynchronizationContext after {SynchronizationContext.Current.GetType().Name}");
         }
 
         public SwitchToSynchronizationContextAwaitable Switch()

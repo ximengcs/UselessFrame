@@ -24,6 +24,20 @@ namespace UselessFrame.Net
             _connections = new Dictionary<long, IConnection>();
         }
 
+        public IServer GetServer(long serverId)
+        {
+            if (_servers.TryGetValue(serverId, out IServer server))
+                return server;
+            return default;
+        }
+
+        public IConnection GetConnection(long connectId)
+        {
+            if (_connections.TryGetValue(connectId, out IConnection connect))
+                return connect;
+            return default;
+        }
+
         public async UniTask Dispose()
         {
             List<IConnection> connections = new List<IConnection>(_connections.Values);

@@ -12,5 +12,9 @@ namespace UselessFrame.NewRuntime.Net
         IConnection Connect(IPEndPoint ip, IFiber fiber);
 
         IConnection Connect(int port, IFiber fiber);
+
+        IServer GetServer(long serverId);
+
+        IConnection GetConnection(long connectId);
     }
 }
