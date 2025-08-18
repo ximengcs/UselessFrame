@@ -21,14 +21,14 @@ namespace XFrame.Modules.Procedure
         protected internal override void OnEnter()
         {
             base.OnEnter();
-            X.Log.Debug(FrameLogType.Procedure, $"Enter {m_InstName} Procedure");
+            X.Log.Debug(FrameLogType.Procedure, $"Enter Procedure -> {m_InstName}");
         }
 
         /// <inheritdoc/>
         protected internal override void OnLeave()
         {
             base.OnLeave();
-            X.Log.Debug(FrameLogType.Procedure, $"Leave {m_InstName} Procedure");
+            X.Log.Debug(FrameLogType.Procedure, $"Leave Procedure -> {m_InstName}");
         }
     }
 }

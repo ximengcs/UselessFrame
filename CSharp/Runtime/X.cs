@@ -125,9 +125,13 @@ namespace UselessFrame.NewRuntime
             await InitManager(_moduleCore);
             InitModules();
 
+            X.Log.Debug(FrameLogType.System, "run start module...");
             await _moduleCore.Start();
+            X.Log.Debug(FrameLogType.System, "run module complete...");
             _initialized = true;
+            X.Log.Debug(FrameLogType.System, "run start procedure..");
             _procedure.Start();
+            X.Log.Debug(FrameLogType.System, "run procedure complete..");
         }
 
         public static void Update(float deltaTime)
@@ -173,7 +177,6 @@ namespace UselessFrame.NewRuntime
         {
             _sw.Restart();
             string name = manager.GetType().Name;
-            X.Log.Debug(FrameLogType.System, $"start initialize {name}");
             if (manager is IManagerInitializer initializer)
                 await initializer.Initialize(_setting);
             if (manager is IManagerUpdater updater)
@@ -181,7 +184,7 @@ namespace UselessFrame.NewRuntime
             if (manager is IManagerDisposable disposer)
                 _managerDisposes.Add(disposer);
             _sw.Stop();
-            X.Log.Debug(FrameLogType.System, $"end initialize {name}, spent time {_sw.ElapsedMilliseconds} ms");
+            X.Log.Debug(FrameLogType.System, $"initialize manager {name}, spent time {_sw.ElapsedMilliseconds} ms");
         }
     }
 }

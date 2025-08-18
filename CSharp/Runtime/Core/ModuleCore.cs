@@ -72,14 +72,21 @@ namespace UselessFrame.Runtime
             return _driver.Get(type, id);
         }
 
-        public UniTask<IModule> Add(Type type, object param)
+        public async UniTask<IModule> Add(Type type, object param)
         {
-            return _driver.Add(type, param);
+            _sw.Restart();
+            IModule module = await _driver.Add(type, param);
+            _sw.Stop();
+            X.Log.Debug(FrameLogType.System, $"add module {type.Name}, spent time {_sw.ElapsedMilliseconds}");
+            return module;
         }
 
-        public UniTask Remove(Type type, int id = 0)
+        public async UniTask Remove(Type type, int id = 0)
         {
-            return _driver.Remove(type, id);
+            _sw.Restart();
+            await _driver.Remove(type, id);
+            _sw.Stop();
+            X.Log.Debug(FrameLogType.System, $"remove module {type.Name}, spent time {_sw.ElapsedMilliseconds}");
         }
     }
 }
