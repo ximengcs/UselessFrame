@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Cysharp.Threading.Tasks;
 using UselessFrame.NewRuntime;
 
@@ -9,12 +10,14 @@ namespace UselessFrame.Runtime
         private int _id;
         private bool _starting;
         private ModuleDriver _driver;
+        private Stopwatch _sw;
 
         public int Id => _id;
 
         public ModuleCore(int id)
         {
             _id = id;
+            _sw = new Stopwatch();
         }
 
         public async UniTask Initialize(XSetting setting)

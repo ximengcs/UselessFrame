@@ -19,6 +19,7 @@ using XFrame.Modules.Archives;
 using XFrame.Modules.Procedure;
 using XFrame.Modules.Conditions;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace UselessFrame.NewRuntime
 {
@@ -42,6 +43,7 @@ namespace UselessFrame.NewRuntime
         private static ModuleCore _moduleCore;
         private static XSetting _setting;
         private static bool _initialized;
+        private static Stopwatch _sw;
 
         private static List<IManagerUpdater> _managerUpdaters;
         private static List<IManagerDisposable> _managerDisposes;
@@ -80,6 +82,10 @@ namespace UselessFrame.NewRuntime
         {
             _setting = setting;
             _logManager = new LogManager(setting.Loggers);
+
+            X.Log.Debug(FrameLogType.System, "start initialize useless frame");
+            _sw = Stopwatch.StartNew();
+
             AppDomain.CurrentDomain.UnhandledException += PrintSystemException;
             TaskScheduler.UnobservedTaskException      += PrintTaskException;
             UniTaskScheduler.UnobservedTaskException   += PrintUniTaskException;
@@ -165,12 +171,17 @@ namespace UselessFrame.NewRuntime
 
         private static async UniTask InitManager(object manager)
         {
+            _sw.Restart();
+            string name = manager.GetType().Name;
+            X.Log.Debug(FrameLogType.System, $"start initialize {name}");
             if (manager is IManagerInitializer initializer)
                 await initializer.Initialize(_setting);
             if (manager is IManagerUpdater updater)
                 _managerUpdaters.Add(updater);
             if (manager is IManagerDisposable disposer)
                 _managerDisposes.Add(disposer);
+            _sw.Stop();
+            X.Log.Debug(FrameLogType.System, $"end initialize {name}, spent time {_sw.ElapsedMilliseconds} ms");
         }
     }
 }
