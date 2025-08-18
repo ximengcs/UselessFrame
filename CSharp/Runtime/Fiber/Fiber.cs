@@ -2,7 +2,6 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using System.Threading;
-using System.Timers;
 
 namespace UselessFrame.NewRuntime.Fiber
 {
@@ -12,6 +11,7 @@ namespace UselessFrame.NewRuntime.Fiber
         private FiberManager _fiberManager;
         private FiberSynchronizationContext _context;
         private CancellationTokenSource _disposeTokenSource;
+        private UniTaskCompletionSource _runAllTask;
         private long _frame;
         private float _deltaTime;
         private float _time;
@@ -72,15 +72,11 @@ namespace UselessFrame.NewRuntime.Fiber
             _loopItems.Add(new LoopItemInfo(loopItem));
         }
 
-        public void RunAll()
+        public UniTask RunAll()
         {
-            while (ExecuteCount > 0)
-            {
-                _frame += 1000;
-                _deltaTime += 1000;
-                RunLoopItem();
-                _context.OnUpdate(_deltaTime);
-            }
+            X.Log.Debug($"Check Run All {ExecuteCount}");
+            _runAllTask = new UniTaskCompletionSource();
+            return _runAllTask.Task;
         }
 
         private void Run()
@@ -99,6 +95,12 @@ namespace UselessFrame.NewRuntime.Fiber
             RunLoopItem();
             _context.OnUpdate(_deltaTime);
             _frame++;
+
+            if (_runAllTask != null && ExecuteCount <= 0)
+            {
+                _runAllTask.TrySetResult();
+                _runAllTask = null;
+            }
         }
 
         private void RunLoopItem()

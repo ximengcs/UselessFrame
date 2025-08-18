@@ -137,8 +137,8 @@ namespace UselessFrame.NewRuntime
             TaskScheduler.UnobservedTaskException      -= PrintTaskException;
             UniTaskScheduler.UnobservedTaskException   -= PrintUniTaskException;
 
-            foreach (IManagerDisposable disposer in _managerDisposes)
-                await disposer.Dispose();
+            for (int i = _managerDisposes.Count - 1; i >= 0; i--)
+                await _managerDisposes[i].Dispose();
         }
 
         private static void InitModules()
