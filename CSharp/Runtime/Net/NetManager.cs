@@ -38,16 +38,24 @@ namespace UselessFrame.Net
             return default;
         }
 
-        public async UniTask Dispose()
+        public void Dispose()
         {
+            X.Log.Debug(FrameLogType.System, $"start dispose manager -> {GetType().Name}");
             List<IConnection> connections = new List<IConnection>(_connections.Values);
             foreach (Connection connection in connections)
+            {
+                X.Log.Debug(FrameLogType.System, $"start close connection -> {connection.Id}");
                 connection.ForceClose();
+            }
             List<IServer> servers = new List<IServer>(_servers.Values);
             foreach (Server server in servers)
+            {
+                X.Log.Debug(FrameLogType.System, $"start close server -> {server.Id}");
                 server.Close();
+            }
             _connections.Clear();
             _servers.Clear();
+            X.Log.Debug(FrameLogType.System, $"dispose manager complete -> {GetType().Name}");
         }
 
         public IServer Create(int port, IFiber fiber)

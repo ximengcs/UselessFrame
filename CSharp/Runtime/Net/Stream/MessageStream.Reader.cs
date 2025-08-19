@@ -37,7 +37,7 @@ namespace UselessFrame.Net
                     if (_setting.ShowReceiveMessageInfo)
                     {
                         Type msgType = result.Message != null ? result.Message.GetType() : typeof(Nullable);
-                        X.Log.Debug($"{_connection.GetDebugPrefix(_connection._fsm.Current)}receive state : {result.State}, receive messageType {msgType.Name}");
+                        X.Log.Debug(FrameLogType.Net, $"{_connection.GetDebugPrefix(_connection._fsm.Current)}receive state : {result.State}, receive messageType {msgType.Name}");
                     }
 
                     IMessage message = result.Message;
@@ -49,7 +49,7 @@ namespace UselessFrame.Net
                         {
                             if (!_waitResponseList.Remove(typeInfo.GetResponseToken(message), out handle))
                             {
-                                X.Log.Debug($"waitResponseList TryRemove ERROR");
+                                X.Log.Debug(FrameLogType.Net, $"waitResponseList TryRemove ERROR");
                                 handle = WaitResponseHandle.CreateEmpty();
                             }
                         }

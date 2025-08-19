@@ -5,6 +5,6 @@ namespace UselessFrame.NewRuntime
 {
     internal interface IManagerDisposable
     {
-        UniTask Dispose();
+        void Dispose();
     }
 }

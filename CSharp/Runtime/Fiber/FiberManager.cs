@@ -40,19 +40,19 @@ namespace UselessFrame.NewRuntime.Fiber
             _mainFiber.Update(deltaTime);
         }
 
-        public async UniTask Dispose()
+        public void Dispose()
         {
-            X.Log.Debug(FrameLogType.Fiber, "FiberManager Dispose");
+            X.Log.Debug(FrameLogType.System, $"start dispose manager -> {GetType().Name}");
 
             foreach (var fiberEntry in _fibers)
             {
                 Fiber fiber = fiberEntry.Value;
-                await fiber.RunAll();
+                fiber.RunAll();
                 fiber.Dispose();
             }
             _fibers = null;
             _contextMap = null;
-            await UniTask.CompletedTask;
+            X.Log.Debug(FrameLogType.System, $"dispose manager complete -> {GetType().Name}");
         }
 
         internal void Remove(Fiber fiber)

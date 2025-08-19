@@ -27,15 +27,15 @@ namespace UselessFrame.Net
             {
                 AsyncBegin();
 
-                X.Log.Debug($"{DebugPrefix}try response close");
+                X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}try response close");
                 bool success = await passMessage.Response(new CloseResponse());
-                X.Log.Debug($"{DebugPrefix}try response close complete");
+                X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}try response close complete");
                 try
                 {
                     Socket socket = _connection._client.Client;
-                    X.Log.Debug($"{DebugPrefix}shutdown send");
+                    X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}shutdown send");
                     socket.Shutdown(SocketShutdown.Send);
-                    X.Log.Debug($"{DebugPrefix}try read finish");
+                    X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}try read finish");
                     _connection._stream.StartRead();
                 }
                 catch (ObjectDisposedException e)

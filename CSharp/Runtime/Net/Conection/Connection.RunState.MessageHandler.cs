@@ -34,14 +34,14 @@ namespace UselessFrame.Net
             private bool KeepAliveHandler(MessageResult result)
             {
                 if (_connection.GetRuntimeData<ConnectionSetting>().ShowReceiveKeepaliveLog)
-                    X.Log.Debug($"{DebugPrefix}receive keepalive.");
+                    X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}receive keepalive.");
                 return true;
             }
 
             private bool CommandMessageHandler(MessageResult result)
             {
                 CommandMessage cmd = (CommandMessage)result.Message;
-                X.Log.Debug($"{DebugPrefix}execute command -> {cmd.CommandStr}.");
+                X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}execute command -> {cmd.CommandStr}.");
                 _connection._dataFiber.Post(ToFiberFun.RunCommand, Tuple.Create(_connection, result));
                 return true;
             }

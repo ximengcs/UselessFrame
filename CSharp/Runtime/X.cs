@@ -125,9 +125,9 @@ namespace UselessFrame.NewRuntime
             await InitManager(_moduleCore);
             InitModules();
 
-            X.Log.Debug(FrameLogType.System, "run start module...");
+            X.Log.Debug(FrameLogType.System, "run start all modules...");
             await _moduleCore.Start();
-            X.Log.Debug(FrameLogType.System, "run module complete...");
+            X.Log.Debug(FrameLogType.System, "run all modules complete...");
             _initialized = true;
             X.Log.Debug(FrameLogType.System, "run start procedure..");
             _procedure.Start();
@@ -141,14 +141,17 @@ namespace UselessFrame.NewRuntime
                 updater.Update(deltaTime);
         }
 
-        public static async UniTask Shutdown()
+        public static void Shutdown()
         {
+            X.Log.Debug(FrameLogType.System, "start shutdown useless frame");
             AppDomain.CurrentDomain.UnhandledException -= PrintSystemException;
             TaskScheduler.UnobservedTaskException      -= PrintTaskException;
             UniTaskScheduler.UnobservedTaskException   -= PrintUniTaskException;
 
+            X.Log.Debug(FrameLogType.System, "start dispose all manager...");
             for (int i = _managerDisposes.Count - 1; i >= 0; i--)
-                await _managerDisposes[i].Dispose();
+                _managerDisposes[i].Dispose();
+            X.Log.Debug(FrameLogType.System, "dispose all manager complete...");
         }
 
         private static void InitModules()

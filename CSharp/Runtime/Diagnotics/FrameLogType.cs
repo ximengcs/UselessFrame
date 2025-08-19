@@ -7,6 +7,7 @@ namespace UselessFrame.NewRuntime
         Fiber,
         Archive,
         Procedure,
-        Condition
+        Condition,
+        Net
     }
 }

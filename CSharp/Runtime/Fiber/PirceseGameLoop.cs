@@ -11,6 +11,7 @@ namespace UselessFrame.NewRuntime.Fiber
         private Action<float> _updater;
         private LoopState _state;
         private CancellationToken _exitToken;
+        private bool _flush;
 
         public LoopState State => _state;
 
@@ -20,6 +21,11 @@ namespace UselessFrame.NewRuntime.Fiber
             _frameRate = frameRate;
             _updater = handler;
             _exitToken = token;
+        }
+
+        public void Flush(bool flush)
+        {
+            _flush = flush;
         }
 
         public void Start()
@@ -112,7 +118,10 @@ namespace UselessFrame.NewRuntime.Fiber
                 long currentTimestamp = Stopwatch.GetTimestamp();
                 long deltaTicks = (long)((currentTimestamp - prevTimestamp) * timestampToTicks);
                 float deltaTime = (float)deltaTicks / TimeSpan.TicksPerSecond;
-                _updater(deltaTime);
+                if (_flush)
+                    _updater(1_000);
+                else
+                    _updater(deltaTime);
                 prevTimestamp = currentTimestamp;
 
                 if (_frameRate > 0)

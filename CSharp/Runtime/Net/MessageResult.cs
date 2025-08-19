@@ -54,7 +54,7 @@ namespace UselessFrame.Net
         {
             if (!RequireResponse)
             {
-                X.Log.Debug($"can not require response");
+                X.Log.Debug(FrameLogType.Net, $"can not require response");
                 return false;
             }
 
@@ -80,7 +80,7 @@ namespace UselessFrame.Net
             }
             else
             {
-                X.Log.Debug($"response message error");
+                X.Log.Debug(FrameLogType.Net, $"response message error");
                 return false;
             }
         }

@@ -39,11 +39,11 @@ namespace UselessFrame.Net
             {
                 if (_setting.ShowSendMessageInfo)
                 {
-                    X.Log.Debug($"{_connection.GetDebugPrefix(_connection._fsm.Current)}send message start : {message.GetType().Name} {message.GetHashCode()}");
+                    X.Log.Debug(FrameLogType.Net, $"{_connection.GetDebugPrefix(_connection._fsm.Current)}send message start : {message.GetType().Name} {message.GetHashCode()}");
                 }
                 if (!force && !_writeActive)
                 {
-                    X.Log.Debug($"send message refuse {force} {_writeActive}");
+                    X.Log.Debug(FrameLogType.Net, $"send message refuse {force} {_writeActive}");
                     return WriteMessageResult.Create(NetOperateState.Cancel, "[Net]this operate is inactive");
                 }
 
@@ -53,7 +53,7 @@ namespace UselessFrame.Net
 
                 if (!NetUtility.CheckMessageSize(msgSize))
                 {
-                    X.Log.Debug($"send message is too larget, will refuse, msgSize is {msgSize}");
+                    X.Log.Debug(FrameLogType.Net, $"send message is too larget, will refuse, msgSize is {msgSize}");
                     return WriteMessageResult.Create(NetOperateState.Cancel, $"[Net][DENGER]send a large message. will interrupt this operate, msgSize is {msgSize}");
                 }
 
@@ -66,7 +66,7 @@ namespace UselessFrame.Net
                 buffer.Dispose();
                 if (_setting.ShowSendMessageInfo)
                 {
-                    X.Log.Debug($"{_connection.GetDebugPrefix(_connection._fsm.Current)}send message end : {message.GetType().Name} {message.GetHashCode()}");
+                    X.Log.Debug(FrameLogType.Net, $"{_connection.GetDebugPrefix(_connection._fsm.Current)}send message end : {message.GetType().Name} {message.GetHashCode()}");
                 }
                 return result;
             }

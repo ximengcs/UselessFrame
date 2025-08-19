@@ -125,7 +125,7 @@ namespace UselessFrame.Net
 
                     default:
                         {
-                            X.Log.Debug($"{DebugPrefix}receive message error, {messageResult.State} {messageResult.StateMessage}");
+                            X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}receive message error, {messageResult.State} {messageResult.StateMessage}");
                             ChangeState<DisposeState>().Forget();
                             CancelAllAsyncWait();
                             return false;
@@ -155,7 +155,7 @@ namespace UselessFrame.Net
 
                     default:
                         {
-                            X.Log.Debug($"{DebugPrefix}send keepalive message error, {result.State} {result.StateMessage}");
+                            X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}send keepalive message error, {result.State} {result.StateMessage}");
 
                             ChangeState<DisposeState>().Forget();
                             CancelAllAsyncWait();

@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UselessFrame.Runtime.Collections;
 using ModuleList = UselessFrame.Runtime.Collections.XList<UselessFrame.Runtime.IModule>;
+using UselessFrame.NewRuntime;
 
 namespace UselessFrame.Runtime
 {
@@ -73,6 +74,7 @@ namespace UselessFrame.Runtime
             ModuleBase module = _modules.Add(type, id);
             if (module != null)
             {
+                X.Log.Debug(FrameLogType.System, $"start add module -> {module.GetType().Name}");
                 module.OnModuleInit(_core, id, param);
 
                 foreach (var entry in m_ModulesWithEvents)
@@ -82,6 +84,7 @@ namespace UselessFrame.Runtime
                         entry.Value.Modules.Add(module);
                     }
                 }
+                X.Log.Debug(FrameLogType.System, $"add module complete -> {module.GetType().Name}");
 
                 if (_start)
                     await module.OnModuleStart();
@@ -90,12 +93,14 @@ namespace UselessFrame.Runtime
             return module;
         }
 
-        public async UniTask Remove(Type type, int id)
+        public void Remove(Type type, int id)
         {
             ModuleBase module = _modules.Remove(type, id);
             if (module)
             {
-                await module.OnModuleDestroy();
+                X.Log.Debug(FrameLogType.System, $"start destroy module -> {module.GetType().Name}");
+                module.OnModuleDestroy();
+                X.Log.Debug(FrameLogType.System, $"destroy module complete -> {module.GetType().Name}");
                 foreach (var entry in m_ModulesWithEvents)
                 {
                     if (entry.Key.IsAssignableFrom(type))
@@ -110,18 +115,22 @@ namespace UselessFrame.Runtime
         {
             foreach (ModuleBase module in _modules)
             {
+                X.Log.Debug(FrameLogType.System, $"start run module -> {module.GetType().Name}");
                 await module.OnModuleStart();
+                X.Log.Debug(FrameLogType.System, $"run module complete -> {module.GetType().Name}");
             }
             _start = true;
         }
 
-        public async UniTask Destroy()
+        public void Destroy()
         {
             IEnumerator<ModuleBase> it = _modules.GetEnumerator(EnumeratorType.Front);
             while (it.MoveNext())
             {
                 ModuleBase module = it.Current;
-                await module.OnModuleDestroy();
+                X.Log.Debug(FrameLogType.System, $"start destroy module -> {module.GetType().Name}");
+                module.OnModuleDestroy();
+                X.Log.Debug(FrameLogType.System, $"destroy module complete -> {module.GetType().Name}");
             }
         }
     }

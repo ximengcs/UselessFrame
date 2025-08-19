@@ -10,6 +10,6 @@ namespace UselessFrame.Runtime
 
         UniTask<IModule> Add(Type type, object param = null);
 
-        UniTask Remove(Type type, int id = default);
+        void Remove(Type type, int id = default);
     }
 }

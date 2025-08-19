@@ -109,14 +109,14 @@ namespace UselessFrame.Net
             if (_connections.ContainsKey(connection.Id))
             {
                 _connections.Remove(connection.Id);
-                X.Log.Debug($"[Server][Host:{_host}]remove a connectin, current count : {_connections.Count}");
+                X.Log.Debug(FrameLogType.Net, $"[Server][Host:{_host}]remove a connectin, current count : {_connections.Count}");
             }
         }
 
         public void AddConnection(Connection connection)
         {
             _connections.Add(connection.Id, connection);
-            X.Log.Debug($"[Server][Host:{_host}]add new connectin, current count : {_connections.Count}");
+            X.Log.Debug(FrameLogType.Net, $"[Server][Host:{_host}]add new connectin, current count : {_connections.Count}");
             _onConnectionListChange?.Invoke(connection);
         }
 

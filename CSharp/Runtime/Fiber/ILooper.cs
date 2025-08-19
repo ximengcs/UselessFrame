@@ -12,5 +12,7 @@ namespace UselessFrame.NewRuntime.Fiber
         void Pause();
 
         void Continue();
+
+        void Flush(bool flush);
     }
 }

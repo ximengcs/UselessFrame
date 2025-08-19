@@ -23,7 +23,7 @@ namespace UselessFrame.Runtime.Collections
             if (_list == null)
                 _list = new XList<T>();
 
-            foreach (T item in _list)
+            foreach (T item in target)
                 _list.Add(item);
             _count = _list.Count;
             _index = -1;

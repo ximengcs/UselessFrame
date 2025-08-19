@@ -1,5 +1,6 @@
 ﻿
 using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 
@@ -11,11 +12,11 @@ namespace UselessFrame.NewRuntime.Fiber
         private FiberManager _fiberManager;
         private FiberSynchronizationContext _context;
         private CancellationTokenSource _disposeTokenSource;
-        private UniTaskCompletionSource _runAllTask;
         private long _frame;
         private float _deltaTime;
         private float _time;
         private List<LoopItemInfo> _loopItems;
+        private ILooper _looper;
 
         public SynchronizationContext Context => _context;
 
@@ -54,9 +55,18 @@ namespace UselessFrame.NewRuntime.Fiber
             if (_disposeTokenSource.IsCancellationRequested)
                 return;
 
+            int threadId = ThreadId;
+            X.Log.Debug(FrameLogType.System, $"start dispose fiber({threadId}) ...");
             _disposeTokenSource.Cancel();
             _fiberManager.Remove(this);
+            if (_looper != null)
+            {
+                DateTime now = DateTime.Now.AddSeconds(1);
+                while (_looper.State != LoopState.Dispose && DateTime.Now < now)
+                    ;
+            }
             _thread = null;
+            X.Log.Debug(FrameLogType.System, $"dispose fiber({threadId}) complete");
         }
 
         public void Post(SendOrPostCallback d, object state)
@@ -72,11 +82,19 @@ namespace UselessFrame.NewRuntime.Fiber
             _loopItems.Add(new LoopItemInfo(loopItem));
         }
 
-        public UniTask RunAll()
+        private bool runall;
+        public void RunAll()
         {
-            X.Log.Debug($"Check Run All {ExecuteCount}");
-            _runAllTask = new UniTaskCompletionSource();
-            return _runAllTask.Task;
+            runall = true;
+            int threadId = ThreadId;
+            X.Log.Debug(FrameLogType.System, $"start run fiber({threadId}) suplus handler, amount {ExecuteCount}");
+
+            _frame += 1_000;
+            DateTime time = DateTime.Now.AddSeconds(1);
+            while (ExecuteCount > 0 && (_looper != null && _looper.State != LoopState.Dispose) && DateTime.Now < time)
+                ;
+
+            X.Log.Debug(FrameLogType.System, $"run fiber({threadId}) suplus handler complete");
         }
 
         private void Run()
@@ -85,7 +103,8 @@ namespace UselessFrame.NewRuntime.Fiber
                 return;
 
             SynchronizationContext.SetSynchronizationContext(_context);
-            FiberUtility.RunLoopSleep1(RunUpdate, _disposeTokenSource.Token);
+            X.Log.Debug(FrameLogType.System, $"start run fiber({ThreadId})");
+            _looper = FiberUtility.RunLoopSleep1(RunUpdate, _disposeTokenSource.Token);
         }
 
         private void RunUpdate(float deltaTime)
@@ -95,12 +114,6 @@ namespace UselessFrame.NewRuntime.Fiber
             RunLoopItem();
             _context.OnUpdate(_deltaTime);
             _frame++;
-
-            if (_runAllTask != null && ExecuteCount <= 0)
-            {
-                _runAllTask.TrySetResult();
-                _runAllTask = null;
-            }
         }
 
         private void RunLoopItem()

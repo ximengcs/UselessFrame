@@ -20,17 +20,17 @@ namespace UselessFrame.Net
             {
                 AsyncBegin();
                 ServerToken token = NetUtility.CreateToken(_connection.Id);
-                X.Log.Debug($"{DebugPrefix}send verify token");
+                X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}send verify token");
                 _connection._stream.StartRead();
                 ReadMessageResult result = await _connection._stream.SendWait(token, true);
-                X.Log.Debug($"{DebugPrefix}send verify token complete, state {result.State}");
+                X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}send verify token complete, state {result.State}");
 
                 switch (result.State)
                 {
                     case NetOperateState.OK:
                         {
                             ServerTokenVerify tokenVerify = (ServerTokenVerify)result.Message;
-                            X.Log.Debug($"{DebugPrefix}verify success");
+                            X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}verify success");
                             ChangeState<RunState>().Forget();
                         }
                         break;

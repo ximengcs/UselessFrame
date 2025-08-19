@@ -37,7 +37,7 @@ namespace UselessFrame.Runtime
 
         protected virtual async UniTask OnStart() { }
 
-        internal async UniTask OnModuleDestroy()
+        internal void OnModuleDestroy()
         {
             if (_destroyTokenSource.IsCancellationRequested)
             {
@@ -46,10 +46,10 @@ namespace UselessFrame.Runtime
 
             _start = false;
             _destroyTokenSource.Cancel();
-            await OnDestroy();
+            OnDestroy();
         }
 
-        protected virtual async UniTask OnDestroy() { }
+        protected virtual void OnDestroy() { }
 
         public static implicit operator bool(ModuleBase module)
         {

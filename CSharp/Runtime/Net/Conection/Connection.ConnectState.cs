@@ -21,9 +21,9 @@ namespace UselessFrame.Net
             {
                 AsyncBegin();
 
-                X.Log.Debug($"{DebugPrefix}TryConnect");
+                X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}TryConnect");
                 RequestConnectResult result = await AsyncStateUtility.RequestConnectAsync(_connection._client, _connection._remoteIP);
-                X.Log.Debug($"{DebugPrefix}TryConnect complete, {result.State}");
+                X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}TryConnect complete, {result.State}");
                 switch (result.State)
                 {
                     case NetOperateState.OK:

@@ -27,10 +27,12 @@ namespace UselessFrame.NewRuntime.StateMachine
                 fsm.OnUpdate();
         }
 
-        public async UniTask Dispose()
+        public void Dispose()
         {
+            X.Log.Debug(FrameLogType.System, $"start dispose manager -> {GetType().Name}");
             foreach (IFsmBase fsm in m_FsmList)
                 fsm.OnDestroy();
+            X.Log.Debug(FrameLogType.System, $"dispose manager complete -> {GetType().Name}");
         }
         #endregion
 

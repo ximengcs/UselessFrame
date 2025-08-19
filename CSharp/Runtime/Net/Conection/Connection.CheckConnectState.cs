@@ -28,21 +28,21 @@ namespace UselessFrame.Net
 
             private async UniTask SuccessHandler()
             {
-                X.Log.Debug($"{DebugPrefix}check success");
+                X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}check success");
                 await _remoteTestTaskSource.Task;
-                X.Log.Debug($"{DebugPrefix}wait remote check complete");
+                X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}wait remote check complete");
                 ChangeState<TokenCheck>().Forget();
             }
 
             private void FailureHandler()
             {
-                X.Log.Debug($"{DebugPrefix}check failure");
+                X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}check failure");
                 ChangeState<DisposeState>().Forget();
             }
 
             private void RetryHandler()
             {
-                X.Log.Debug($"{DebugPrefix}try check connect, times {_tryTimes}");
+                X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}try check connect, times {_tryTimes}");
                 if (_tryTimes > 0)
                 {
                     _tryTimes--;
@@ -56,7 +56,7 @@ namespace UselessFrame.Net
 
             private void CheckStep1()
             {
-                X.Log.Debug($"{DebugPrefix}try check step1");
+                X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}try check step1");
                 try
                 {
                     Socket socket = _connection._client.Client;
@@ -93,7 +93,7 @@ namespace UselessFrame.Net
 
             private async UniTask CheckStep2()
             {
-                X.Log.Debug($"{DebugPrefix}try check step2");
+                X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}try check step2");
                 AsyncBegin();
 
                 TestConnect testMessage = new TestConnect()
@@ -102,7 +102,7 @@ namespace UselessFrame.Net
                 };
                 _connection._stream.StartRead();
                 ReadMessageResult result = await _connection._stream.SendWait(testMessage, true);
-                X.Log.Debug($"{DebugPrefix}try check step2 complete, {result.State}");
+                X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}try check step2 complete, {result.State}");
 
                 switch (result.State)
                 {
@@ -160,7 +160,7 @@ namespace UselessFrame.Net
                     case NetOperateState.OK:
                         {
                             MessageResult result = MessageResult.Create(messageResult.Message, _connection);
-                            X.Log.Debug($"{DebugPrefix}receive message {result.MessageType.Name}");
+                            X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}receive message {result.MessageType.Name}");
                             if (result.MessageType == typeof(TestConnect))
                             {
                                 TestConnect msg = (TestConnect)result.Message;

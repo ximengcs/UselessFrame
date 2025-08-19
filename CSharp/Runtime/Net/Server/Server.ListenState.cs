@@ -29,16 +29,16 @@ namespace UselessFrame.Net
 
                 while (_listening)
                 {
-                    X.Log.Debug($"{DebugPrefix}ready accept");
+                    X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}ready accept");
                     AcceptConnectResult result = await AsyncStateUtility.AcceptConnectAsync(_connection._listener);
-                    X.Log.Debug($"{DebugPrefix}find new client, result state : {result.State} ");
+                    X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}find new client, result state : {result.State} ");
                     switch (result.State)
                     {
                         case NetOperateState.OK:
                             {
                                 Connection connection = new Connection(_connection, _connection._idGenerator.CreateId(), result.Client, _connection._fiber);
                                 _connection.AddConnection(connection);
-                                X.Log.Debug($"{DebugPrefix}add new client, id : {connection.Id}, ip : {connection.RemoteIP}");
+                                X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}add new client, id : {connection.Id}, ip : {connection.RemoteIP}");
                                 _listening = true;
                             }
                             break;

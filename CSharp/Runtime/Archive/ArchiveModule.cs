@@ -77,10 +77,11 @@ namespace XFrame.Modules.Archives
         }
 
         /// <inheritdoc/>
-        public async UniTask Dispose()
+        public void Dispose()
         {
+            X.Log.Debug(FrameLogType.System, $"start dispose manager -> {GetType().Name}");
             InnerSaveAll();
-            await UniTask.CompletedTask;
+            X.Log.Debug(FrameLogType.System, $"dispose manager complete -> {GetType().Name}");
         }
         #endregion
 

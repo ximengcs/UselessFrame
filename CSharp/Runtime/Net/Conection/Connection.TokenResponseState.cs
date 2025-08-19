@@ -87,7 +87,7 @@ namespace UselessFrame.Net
                     keys.Sort(SortUtility.LongDownToUp);
                     _connection._serverTimeGap = keys[keys.Count / 2];
                 }
-                X.Log.Debug($"{DebugPrefix}check server time gap is {_connection._serverTimeGap}");
+                X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}check server time gap is {_connection._serverTimeGap}");
 
                 return true;
             }
@@ -96,7 +96,7 @@ namespace UselessFrame.Net
             {
                 ServerToken token = (ServerToken)result.Message;
                 _connection._id = token.Id;
-                X.Log.Debug($"{DebugPrefix}receive server token {_connection._id}");
+                X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}receive server token {_connection._id}");
                 bool success = await result.Response(new ServerTokenVerify() { ResponseToken = token.RequestToken });
                 if (success)
                 {

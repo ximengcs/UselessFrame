@@ -54,12 +54,14 @@ namespace UselessFrame.Runtime
             await _driver.Start();
         }
 
-        public async UniTask Dispose()
+        public void Dispose()
         {
             if (!_starting)
                 return;
             _starting = false;
-            await _driver.Destroy();
+            X.Log.Debug(FrameLogType.System, "start dispose all modules...");
+            _driver.Destroy();
+            X.Log.Debug(FrameLogType.System, "dispose all modules complete...");
         }
 
         public T Get<T>(int id = 0) where T : IModule
@@ -81,10 +83,10 @@ namespace UselessFrame.Runtime
             return module;
         }
 
-        public async UniTask Remove(Type type, int id = 0)
+        public void Remove(Type type, int id = 0)
         {
             _sw.Restart();
-            await _driver.Remove(type, id);
+            _driver.Remove(type, id);
             _sw.Stop();
             X.Log.Debug(FrameLogType.System, $"remove module {type.Name}, spent time {_sw.ElapsedMilliseconds}");
         }

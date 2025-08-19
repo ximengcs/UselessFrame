@@ -60,23 +60,23 @@ namespace UselessFrame.Net
 
         public virtual void OnInit()
         {
-            X.Log.Debug($"{DebugPrefix}-----Init-----");
+            X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}-----Init-----");
         }
 
         public virtual void OnEnter(NetFsmState<T> preState, MessageResult passMessage)
         {
             _active = true;
-            X.Log.Debug($"{DebugPrefix}-----Enter-----");
+            X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}-----Enter-----");
         }
 
         public virtual void OnExit()
         {
-            X.Log.Debug($"{DebugPrefix}-----Exit-----\n");
+            X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}-----Exit-----\n");
         }
 
         public virtual void OnDispose()
         {
-            X.Log.Debug($"{DebugPrefix}-----Dispose-----");
+            X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}-----Dispose-----");
         }
 
         public virtual async UniTask OnWaitEnd()

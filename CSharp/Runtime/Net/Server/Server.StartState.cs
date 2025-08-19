@@ -20,7 +20,7 @@ namespace UselessFrame.Net
 
             private void TryStart()
             {
-                X.Log.Debug($"{DebugPrefix}try start");
+                X.Log.Debug(FrameLogType.Net, $"{DebugPrefix}try start");
                 try
                 {
                     _connection._listener.Start();

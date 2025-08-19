@@ -5,6 +5,7 @@ namespace UselessFrame.NewRuntime.Fiber
     {
         Running,
         Paused,
-        Stop
+        Stop,
+        Dispose
     }
 }

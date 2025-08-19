@@ -70,7 +70,7 @@ namespace UselessFrame.Net
                     }
                     else
                     {
-                        X.Log.Debug($"{Descriptor.FullName} do not has response token");
+                        X.Log.Debug(FrameLogType.Net, $"{Descriptor.FullName} do not has response token");
                         return;
                     }
                 }
@@ -103,7 +103,7 @@ namespace UselessFrame.Net
                     }
                     else
                     {
-                        X.Log.Debug($"{Descriptor.FullName} do not has request token");
+                        X.Log.Debug(FrameLogType.Net, $"{Descriptor.FullName} do not has request token");
                         return;
                     }
                 }
