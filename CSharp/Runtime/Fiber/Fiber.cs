@@ -82,16 +82,14 @@ namespace UselessFrame.NewRuntime.Fiber
             _loopItems.Add(new LoopItemInfo(loopItem));
         }
 
-        private bool runall;
         public void RunAll()
         {
-            runall = true;
             int threadId = ThreadId;
             X.Log.Debug(FrameLogType.System, $"start run fiber({threadId}) suplus handler, amount {ExecuteCount}");
 
             _frame += 1_000;
             DateTime time = DateTime.Now.AddSeconds(1);
-            while (ExecuteCount > 0 && (_looper != null && _looper.State != LoopState.Dispose) && DateTime.Now < time)
+            while (ExecuteCount > 0 && _looper != null && _looper.State != LoopState.Dispose && DateTime.Now < time)
                 ;
 
             X.Log.Debug(FrameLogType.System, $"run fiber({threadId}) suplus handler complete");
