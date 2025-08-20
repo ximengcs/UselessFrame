@@ -29,7 +29,7 @@ namespace UselessFrame.NewRuntime
         private static TimeRandom _random;
         private static TypeManager _typeManager;
         private static WorldManager _worldManager;
-        private static LogManager _logManager;
+        private static ILogManager _logManager;
         private static FiberManager _fiberManager;
         private static CommandManager _commandManager;
         private static NetManager _netManager;
@@ -81,7 +81,19 @@ namespace UselessFrame.NewRuntime
         public static async UniTask Initialize(XSetting setting)
         {
             _setting = setting;
-            _logManager = new LogManager(setting.Loggers);
+            if (setting.Log != null)
+            {
+                _logManager = setting.Log;
+                if (setting.Loggers != null)
+                {
+                    foreach (ILogger logger in setting.Loggers)
+                        _logManager.AddLogger(logger);
+                }
+            }
+            else
+            {
+                _logManager = new LogManager(setting.Loggers);
+            }
 
             X.Log.Debug(FrameLogType.System, "start initialize useless frame");
             _sw = Stopwatch.StartNew();
