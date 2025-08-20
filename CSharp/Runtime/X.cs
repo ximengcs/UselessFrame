@@ -164,6 +164,8 @@ namespace UselessFrame.NewRuntime
             for (int i = _managerDisposes.Count - 1; i >= 0; i--)
                 _managerDisposes[i].Dispose();
             X.Log.Debug(FrameLogType.System, "dispose all manager complete...");
+
+            X.Log.Debug(FrameLogType.System, "shutdown useless frame complete");
         }
 
         private static void InitModules()
