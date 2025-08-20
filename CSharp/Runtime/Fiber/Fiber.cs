@@ -17,6 +17,7 @@ namespace UselessFrame.NewRuntime.Fiber
         private float _time;
         private List<LoopItemInfo> _loopItems;
         private ILooper _looper;
+        private bool _preventDispose;
 
         public SynchronizationContext Context => _context;
 
@@ -52,6 +53,8 @@ namespace UselessFrame.NewRuntime.Fiber
 
         public void Dispose()
         {
+            if (_preventDispose)
+                return;
             if (_disposeTokenSource.IsCancellationRequested)
                 return;
 
@@ -66,7 +69,7 @@ namespace UselessFrame.NewRuntime.Fiber
                     ;
             }
             _thread = null;
-            X.Log.Debug(FrameLogType.System, $"dispose fiber({threadId}) complete");
+            X.Log.Debug(FrameLogType.System, $"dispose fiber({threadId}) complete, state {_looper?.State}");
         }
 
         public void Post(SendOrPostCallback d, object state)
@@ -84,6 +87,7 @@ namespace UselessFrame.NewRuntime.Fiber
 
         public void RunAll()
         {
+            _preventDispose = true;
             int threadId = ThreadId;
             X.Log.Debug(FrameLogType.System, $"start run fiber({threadId}) suplus handler, amount {ExecuteCount}");
 
@@ -93,6 +97,8 @@ namespace UselessFrame.NewRuntime.Fiber
                 ;
 
             X.Log.Debug(FrameLogType.System, $"run fiber({threadId}) suplus handler complete");
+            _preventDispose = false;
+            Dispose();
         }
 
         private void Run()
@@ -102,7 +108,7 @@ namespace UselessFrame.NewRuntime.Fiber
 
             SynchronizationContext.SetSynchronizationContext(_context);
             X.Log.Debug(FrameLogType.System, $"start run fiber({ThreadId})");
-            _looper = FiberUtility.RunLoopSleep1(RunUpdate, _disposeTokenSource.Token);
+            FiberUtility.RunLoopSleep1(RunUpdate, _disposeTokenSource.Token, out _looper);
         }
 
         private void RunUpdate(float deltaTime)

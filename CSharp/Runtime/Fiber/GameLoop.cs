@@ -1,4 +1,5 @@
 ﻿
+using Cysharp.Threading.Tasks;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -111,8 +112,8 @@ namespace UselessFrame.NewRuntime.Fiber
                 if (ExecuteState())
                     break;
             }
+            X.Log.Debug(FrameLogType.Fiber, $"fiber loop({GetHashCode()}) is dispose. token cancel state -> {_exitToken.IsCancellationRequested}");
             _state = LoopState.Dispose;
-            X.Log.Debug(FrameLogType.Fiber, $"fiber loop({GetHashCode()}) is dispose. token state -> {_exitToken.IsCancellationRequested}");
         }
     }
 }
