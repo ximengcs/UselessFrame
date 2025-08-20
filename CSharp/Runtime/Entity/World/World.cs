@@ -1,6 +1,7 @@
 ﻿
 using IdGen;
 using System.Collections.Generic;
+using UselessFrame.Net;
 using UselessFrame.NewRuntime.Randoms;
 using UselessFrame.NewRuntime.Utilities;
 
@@ -20,6 +21,16 @@ namespace UselessFrame.NewRuntime.ECS
         public EntityEventManager Event => _event;
 
         public IReadOnlyCollection<Scene> Scenes => _scenes.Values;
+
+        public INetNode NetNode
+        {
+            get
+            {
+                if (_helper is ICombineEntityHelper helper)
+                    return helper.NetNode;
+                return null;
+            }
+        }
 
         protected override void OnInit()
         {

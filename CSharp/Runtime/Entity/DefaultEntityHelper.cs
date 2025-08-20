@@ -1,8 +1,12 @@
 ﻿
+using UselessFrame.Net;
+
 namespace UselessFrame.NewRuntime.ECS
 {
     internal class DefaultEntityHelper : IEntityHelper
     {
+        public INetNode NetNode => null;
+
         public void Bind(World world)
         {
         }

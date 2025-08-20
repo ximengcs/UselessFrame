@@ -210,7 +210,7 @@ namespace UselessFrame.Net
                 LatencyResult latency = new LatencyResult()
                 {
                     Success = true,
-                    DeltaTime = (int)((nowTicks - time) / TimeSpan.TicksPerMillisecond)
+                    DeltaMillTime = (int)((nowTicks - time) / TimeSpan.TicksPerMillisecond)
                 };
                 return latency;
             }

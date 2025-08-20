@@ -4,6 +4,6 @@ namespace UselessFrame.Net
     public struct LatencyResult
     {
         public bool Success;
-        public int DeltaTime;
+        public int DeltaMillTime;
     }
 }

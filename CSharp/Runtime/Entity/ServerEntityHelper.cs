@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Data.Common;
 using UselessFrame.Net;
 using UselessFrame.NewRuntime.Fiber;
 
@@ -10,6 +11,8 @@ namespace UselessFrame.NewRuntime.ECS
         private IServer _server;
         private World _world;
         private IEntityHelper _helper;
+
+        public INetNode NetNode => _server;
 
         internal ServerEntityHelper(int port, IFiber fiber)
         {

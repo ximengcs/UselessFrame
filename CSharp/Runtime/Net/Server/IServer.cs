@@ -7,10 +7,8 @@ using UselessFrame.Runtime.Observable;
 
 namespace UselessFrame.Net
 {
-    public partial interface IServer
+    public partial interface IServer : INetNode
     {
-        long Id { get; }
-
         IPEndPoint Host { get; }
 
         ISubject<IServer, ServerState> State { get; }

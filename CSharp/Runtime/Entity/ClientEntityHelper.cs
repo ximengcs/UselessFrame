@@ -13,6 +13,8 @@ namespace UselessFrame.NewRuntime.ECS
         private Dictionary<Type, Action<IMessage>> _handles;
         private IEntityHelper _helper;
 
+        public INetNode NetNode => _connection;
+
         public ClientEntityHelper(IConnection connection)
         {
             _connection = connection;

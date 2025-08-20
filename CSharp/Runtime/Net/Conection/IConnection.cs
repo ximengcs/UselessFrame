@@ -7,10 +7,8 @@ using UselessFrame.Runtime.Observable;
 
 namespace UselessFrame.Net
 {
-    public interface IConnection
+    public interface IConnection : INetNode
     {
-        long Id { get; }
-
         IPEndPoint LocalIP { get; }
 
         IPEndPoint RemoteIP { get; }
