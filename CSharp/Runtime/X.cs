@@ -135,7 +135,7 @@ namespace UselessFrame.NewRuntime
             await InitManager(_condition);
             await InitManager(_procedure);
             await InitManager(_moduleCore);
-            InitModules();
+            await InitModules();
 
             X.Log.Debug(FrameLogType.System, "run start all modules...");
             await _moduleCore.Start();
@@ -168,7 +168,7 @@ namespace UselessFrame.NewRuntime
             X.Log.Debug(FrameLogType.System, "shutdown useless frame complete");
         }
 
-        private static void InitModules()
+        private static async UniTask InitModules()
         {
             if (_setting.ModuleAttributes != null)
             {
@@ -177,7 +177,7 @@ namespace UselessFrame.NewRuntime
                     Type attrType = _setting.ModuleAttributes[i];
                     ITypeCollection collection = _typeManager.GetOrNewWithAttr(attrType);
                     foreach (Type type in collection)
-                        _moduleCore.Add(type, null);
+                        await _moduleCore.Add(type, null);
                 }
             }
 
@@ -185,7 +185,7 @@ namespace UselessFrame.NewRuntime
             {
                 foreach (ValueTuple<Type, object> entry in _setting.Modules)
                 {
-                    _moduleCore.Add(entry.Item1, entry.Item2);
+                    await _moduleCore.Add(entry.Item1, entry.Item2);
                 }
             }
         }
