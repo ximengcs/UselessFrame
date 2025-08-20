@@ -1,9 +1,9 @@
 ﻿
 using IdGen;
 using System;
+using System.Linq;
 using System.Text;
 using Unity.Mathematics;
-using UselessFrame.Runtime.Pools;
 
 namespace UselessFrame.NewRuntime.Randoms
 {
@@ -11,9 +11,32 @@ namespace UselessFrame.NewRuntime.Randoms
     {
         private Unity.Mathematics.Random _random;
 
+        private static class EnumValuesCache<T> where T : Enum
+        {
+            public static readonly T[] Values = (T[])Enum.GetValues(typeof(T));
+        }
+
         public TimeRandom(ITimeSource timeSource)
         {
             _random = new Unity.Mathematics.Random((uint)timeSource.GetTicks());
+        }
+
+        public T NextEnum<T>(params T[] excludes) where T : Enum
+        {
+            T[] values = EnumValuesCache<T>.Values;
+            if (excludes != null)
+            {
+                T[] newValues = new T[values.Length - excludes.Length];
+                int index = 0;
+                for (int i = 0; i < values.Length; i++)
+                {
+                    T value = values[i];
+                    if (!excludes.Contains(value))
+                        newValues[index++] = value;
+                }
+                values = newValues;
+            }
+            return values[NextInt(0, values.Length - 1)];
         }
 
         public string NextString(int length)

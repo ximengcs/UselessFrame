@@ -1,4 +1,5 @@
 ﻿
+using System;
 using Unity.Mathematics;
 
 namespace UselessFrame.NewRuntime.Randoms
@@ -6,6 +7,8 @@ namespace UselessFrame.NewRuntime.Randoms
     public interface IRandom
     {
         string NextString(int length);
+
+        T NextEnum<T>(params T[] excludes) where T : Enum;
 
         int NextInt();
 
