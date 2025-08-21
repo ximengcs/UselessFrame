@@ -1,4 +1,5 @@
 ﻿
+using Google.Protobuf;
 using IdGen;
 using System.Collections.Generic;
 using UselessFrame.Net;
@@ -41,6 +42,12 @@ namespace UselessFrame.NewRuntime.ECS
             _random = new TimeRandom(timeSource);
             _event = new EntityEventManager();
             _event.Initialize(this);
+        }
+
+        public void Trigger(IMessage message)
+        {
+            if (_helper is ICombineEntityHelper helper)
+                helper.Trigger(message);
         }
 
         public void SetHelper(IEntityHelper helper)

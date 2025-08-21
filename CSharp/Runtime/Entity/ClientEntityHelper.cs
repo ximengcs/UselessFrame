@@ -20,6 +20,11 @@ namespace UselessFrame.NewRuntime.ECS
             _connection = connection;
         }
 
+        public void Trigger(IMessage message)
+        {
+            _connection.Send(message);
+        }
+
         public void Bind(World world)
         {
             _world = world;

@@ -59,16 +59,20 @@ namespace UselessFrame.NewRuntime.ECS
 
         private void InitMessageHandler()
         {
+            Console.WriteLine($"InitMessageHandler {_messageHandles.Count}");
             foreach (var handlerEntry in _messageHandles)
             {
+                Console.WriteLine($"InitMessageHandler2 {handlerEntry.Value.Count}");
                 foreach (MethodHandle handle in handlerEntry.Value)
                 {
+                    Console.WriteLine($"InitMessageHandler3 {handle.Target.GetType().Name}");
                     if (handle.Target is IMessageHandler handler)
                     {
                         handler.OnInit(_world);
                     }
                 }
             }
+            Console.WriteLine($"InitMessageHandler--------");
         }
 
         private void CollectHandle(Type type1, Type type2, Type awakeDelegateType, Dictionary<Type, List<MethodHandle>> map)
@@ -100,7 +104,7 @@ namespace UselessFrame.NewRuntime.ECS
                     var tType = targetF.GetGenericArguments()[0];
                     object obj = X.Type.CreateInstance(type);
                     Delegate method = target.CreateDelegate(awakeDelegateType.MakeGenericType(tType), obj);
-                    MethodHandle handle = new MethodHandle(target, method, target.GetParameters().Length);
+                    MethodHandle handle = new MethodHandle(obj, method, target.GetParameters().Length);
                     if (!map.TryGetValue(tType, out List<MethodHandle> list))
                     {
                         list = new List<MethodHandle>();

@@ -1,4 +1,5 @@
 ﻿
+using Google.Protobuf;
 using System;
 using System.Data.Common;
 using UselessFrame.Net;
@@ -19,6 +20,11 @@ namespace UselessFrame.NewRuntime.ECS
             _server = X.Net.Create(port, fiber);
             _server.NewConnectionEvent += NewConnectionHandler;
             _server.Start();
+        }
+
+        public void Trigger(IMessage message)
+        {
+            _server.Broadcast(message);
         }
 
         public void AddHelper(IEntityHelper helper)

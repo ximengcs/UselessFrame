@@ -1,4 +1,5 @@
 ﻿
+using Google.Protobuf;
 using UselessFrame.Net;
 
 namespace UselessFrame.NewRuntime.ECS
@@ -8,5 +9,7 @@ namespace UselessFrame.NewRuntime.ECS
         INetNode NetNode { get; }
 
         void AddHelper(IEntityHelper helper);
+
+        void Trigger(IMessage message);
     }
 }
