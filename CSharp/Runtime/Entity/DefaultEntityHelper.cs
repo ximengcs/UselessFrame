@@ -7,6 +7,8 @@ namespace UselessFrame.NewRuntime.ECS
     {
         public INetNode NetNode => null;
 
+        public World World => null;
+
         public void Bind(World world)
         {
         }

@@ -3,6 +3,8 @@ namespace UselessFrame.NewRuntime.ECS
 {
     public interface IEntityHelper
     {
+        World World { get; }
+
         void Bind(World world);
 
         void OnCreateEntity(Entity entity);

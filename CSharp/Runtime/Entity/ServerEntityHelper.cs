@@ -1,6 +1,7 @@
 ﻿
 using Google.Protobuf;
 using System;
+using System.Collections.Generic;
 using System.Data.Common;
 using UselessFrame.Net;
 using UselessFrame.NewRuntime.Fiber;
@@ -12,6 +13,9 @@ namespace UselessFrame.NewRuntime.ECS
         private IServer _server;
         private World _world;
         private IEntityHelper _helper;
+        private Dictionary<long, long> _playersById;
+
+        public World World => _world;
 
         public INetNode NetNode => _server;
 
@@ -36,6 +40,7 @@ namespace UselessFrame.NewRuntime.ECS
 
         public void Bind(World world)
         {
+            _playersById = new Dictionary<long, long>();
             _world = world;
             _helper?.Bind(world);
         }
@@ -56,19 +61,38 @@ namespace UselessFrame.NewRuntime.ECS
 
         private void ConnectionStateHandler(IConnection connection, ConnectionState state)
         {
-            if (state == ConnectionState.Run)
+            switch (state)
             {
-                connection.Send(_world.ToCreateMessage());
-                foreach (Scene scene in _world.Scenes)
-                {
-                    RecursiveSyncEntity(connection, scene);
-                }
+                case ConnectionState.Run:
+                    {
+                        if (!_playersById.ContainsKey(connection.Id))
+                        {
+                            PlayerEntity entity = _world.AddEntity<PlayerEntity>();
+                            IdComponent idComp = entity.GetOrAddComponent<IdComponent>();
+                            idComp.Id = connection.Id;
+                            _playersById.Add(connection.Id, entity.Id);
+                        }
+
+                        RecursiveSyncEntity(connection, _world);
+                        break;
+                    }
+
+                case ConnectionState.Dispose:
+                    {
+                        if (_playersById.TryGetValue(connection.Id, out long playerEntityId))
+                        {
+                            _world.RemoveEntity(playerEntityId);
+                        }
+                        break;
+                    }
             }
         }
 
         private void RecursiveSyncEntity(IConnection connection, Entity entity)
         {
+            Console.WriteLine($"CreateEntity {entity.ToCreateMessage()}");
             connection.Send(entity.ToCreateMessage());
+
             foreach (EntityComponent component in entity.Components)
             {
                 connection.Send(component.ToCreateMessage());
@@ -82,6 +106,9 @@ namespace UselessFrame.NewRuntime.ECS
 
         public void OnCreateEntity(Entity entity)
         {
+            if (entity == _world)
+                _world.InitId();
+
             _server.Broadcast(entity.ToCreateMessage());
             _helper?.OnCreateEntity(entity);
         }

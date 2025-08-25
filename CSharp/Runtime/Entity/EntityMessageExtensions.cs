@@ -1,6 +1,7 @@
 ﻿
 using Google.Protobuf;
 using MemoryPack;
+using System;
 
 namespace UselessFrame.NewRuntime.ECS
 {
@@ -22,7 +23,7 @@ namespace UselessFrame.NewRuntime.ECS
         {
             IMessage msg = new DestroyEntityMessage()
             {
-                SceneId = entity.Scene.Id,
+                SceneId = entity.Scene?.Id ?? 0,
                 EntityId = entity.Id,
             };
             return msg;
@@ -33,7 +34,7 @@ namespace UselessFrame.NewRuntime.ECS
             byte[] bytes = MemoryPackSerializer.Serialize(comp.GetType(), comp);
             CreateComponentMessage msg = new CreateComponentMessage()
             {
-                SceneId = comp.Entity.Scene.Id,
+                SceneId = comp.Entity.Scene?.Id ?? 0,
                 EntityId = comp.Entity.Id,
                 ComponentType = comp.GetType().FullName,
                 ComponentData = ByteString.CopyFrom(bytes)
@@ -46,7 +47,7 @@ namespace UselessFrame.NewRuntime.ECS
             byte[] bytes = MemoryPackSerializer.Serialize(comp.GetType(), comp);
             UpdateComponentMessage msg = new UpdateComponentMessage()
             {
-                SceneId = comp.Entity.Scene.Id,
+                SceneId = comp.Entity.Scene?.Id ?? 0,
                 EntityId = comp.Entity.Id,
                 ComponentType = comp.GetType().FullName,
                 ComponentData = ByteString.CopyFrom(bytes)
@@ -58,7 +59,7 @@ namespace UselessFrame.NewRuntime.ECS
         {
             DestroyComponentMessage msg = new DestroyComponentMessage()
             {
-                SceneId = comp.Entity.Scene.Id,
+                SceneId = comp.Entity.Scene?.Id ?? 0,
                 EntityId = comp.Entity.Id,
                 ComponentType = comp.GetType().FullName
             };

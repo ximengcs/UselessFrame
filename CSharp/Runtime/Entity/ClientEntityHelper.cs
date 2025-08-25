@@ -13,6 +13,8 @@ namespace UselessFrame.NewRuntime.ECS
         private Dictionary<Type, Action<IMessage>> _handles;
         private IEntityHelper _helper;
 
+        public World World => _world;
+
         public INetNode NetNode => _connection;
 
         public ClientEntityHelper(IConnection connection)
@@ -82,13 +84,13 @@ namespace UselessFrame.NewRuntime.ECS
         {
             CreateEntityMessage createMsg = (CreateEntityMessage)message;
             long sceneId = createMsg.SceneId;
+            long parentId = createMsg.ParnetId;
+            long entityId = createMsg.EntityId;
             if (sceneId != EntityExtensions.INVALID_ID)
             {
                 Scene scene = _world.GetScene(sceneId);
                 if (scene == null)
                     scene = _world.AddEntity<Scene>(sceneId);
-                long parentId = createMsg.ParnetId;
-                long entityId = createMsg.EntityId;
                 if (entityId != EntityExtensions.INVALID_ID && parentId != EntityExtensions.INVALID_ID)
                 {
                     Entity parent = null;
@@ -104,6 +106,26 @@ namespace UselessFrame.NewRuntime.ECS
                         {
                             parent.AddEntity(type, entityId);
                         }
+                    }
+                }
+            }
+            else
+            {
+                if (parentId == EntityExtensions.INVALID_ID && entityId != EntityExtensions.INVALID_ID)
+                {
+                    string entityTypeName = createMsg.EntityType;
+                    if (X.Type.TryGetType(entityTypeName, out Type type) && type == typeof(World))
+                    {
+                        _world.Id = entityId;
+                        OnCreateEntity(_world);
+                    }
+                }
+                else if (parentId != EntityExtensions.INVALID_ID && parentId == _world.Id)
+                {
+                    string entityTypeName = createMsg.EntityType;
+                    if (X.Type.TryGetType(entityTypeName, out Type type))
+                    {
+                        _world.AddEntity(type, entityId);
                     }
                 }
             }

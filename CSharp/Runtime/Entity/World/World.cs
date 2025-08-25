@@ -44,6 +44,11 @@ namespace UselessFrame.NewRuntime.ECS
             _event.Initialize(this);
         }
 
+        internal void InitId()
+        {
+            Id = _idGenerator.CreateId();
+        }
+
         public void Trigger(IMessage message)
         {
             if (_helper is ICombineEntityHelper helper)

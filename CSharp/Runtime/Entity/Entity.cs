@@ -11,6 +11,7 @@ namespace UselessFrame.NewRuntime.ECS
         private Scene _scene;
         private Entity _parent;
         private Dictionary<long, Entity> _entities;
+        private Dictionary<Type, List<Entity>> _entitiesByType;
         private Dictionary<Type, EntityComponent> _components;
         private bool _disposed;
         internal IEntityHelper _helper;
@@ -22,6 +23,8 @@ namespace UselessFrame.NewRuntime.ECS
         public IReadOnlyCollection<Entity> Entities => _entities.Values;
 
         public bool IsDisposed => _disposed;
+
+        public World World => _helper.World;
 
         public Scene Scene
         {
@@ -40,13 +43,14 @@ namespace UselessFrame.NewRuntime.ECS
             _disposed = false;
             _entities = new Dictionary<long, Entity>();
             _components = new Dictionary<Type, EntityComponent>();
+            _entitiesByType = new Dictionary<Type, List<Entity>>();
         }
 
         internal void Init(IEntityHelper helper)
         {
             _helper = helper;
-            _helper.OnCreateEntity(this);
             OnInit();
+            _helper.OnCreateEntity(this);
         }
 
         internal void Destroy()
@@ -64,7 +68,7 @@ namespace UselessFrame.NewRuntime.ECS
             _disposed = true;
 
             List<EntityComponent> components = new List<EntityComponent>(_components.Values);
-            foreach(EntityComponent compEntry in components)
+            foreach (EntityComponent compEntry in components)
             {
                 DestoryComponent(compEntry);
             }
@@ -100,11 +104,32 @@ namespace UselessFrame.NewRuntime.ECS
             return null;
         }
 
+        public T GetEntity<T>() where T : Entity
+        {
+            if (_entitiesByType.TryGetValue(typeof(T), out List<Entity> entityList))
+            {
+                if (entityList.Count > 0)
+                    return (T)entityList[0];
+            }
+            return default;
+        }
+
+        public bool HasEntity<T>() where T : Entity
+        {
+            if (_entitiesByType.TryGetValue(typeof(T), out List<Entity> entityList))
+            {
+                return entityList.Count > 0;
+            }
+            return false;
+        }
+
         public void RemoveEntity(long id)
         {
             if (_entities.TryGetValue(id, out Entity entity))
             {
                 _entities.Remove(id);
+                if (_entitiesByType.TryGetValue(entity.GetType(), out List<Entity> entityList))
+                    entityList.Remove(entity);
                 _helper.OnDestroyEntity(entity);
                 entity.OnDestroy();
             }
@@ -137,6 +162,15 @@ namespace UselessFrame.NewRuntime.ECS
 
             entity.Init(_helper);
             _entities.Add(entity._id, entity);
+
+            Type entityType = entity.GetType();
+            if (!_entitiesByType.TryGetValue(entityType, out List<Entity> entityList))
+            {
+                entityList = new List<Entity>();
+                _entitiesByType.Add(entityType, entityList);
+            }
+            entityList.Add(entity);
+
             OnAddEntity(entity);
         }
 
@@ -184,24 +218,7 @@ namespace UselessFrame.NewRuntime.ECS
             return comp;
         }
 
-        private EntityEventManager Event
-        {
-            get
-            {
-                if (_scene != null)
-                {
-                    return _scene.World.Event;
-                }
-                else if (this is World world)
-                {
-                    return world.Event;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
+        private EntityEventManager Event => World.Event;
 
         public void UpdateComponent(EntityComponent newComp)
         {
