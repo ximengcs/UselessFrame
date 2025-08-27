@@ -113,10 +113,19 @@ namespace UselessFrame.Net
             }
         }
 
-        public void AddConnection(Connection connection)
+        public async void AddConnection(Connection connection)
         {
             _connections.Add(connection.Id, connection);
             X.Log.Debug(FrameLogType.Net, $"[Server][Host:{_host}]add new connectin, current count : {_connections.Count}");
+            if (connection.Fsm.Current == null)
+            {
+                AutoResetUniTaskCompletionSource waitReady = AutoResetUniTaskCompletionSource.Create();
+                Action completeHandler = () => waitReady.TrySetResult();
+                connection.Fsm.OnReady += completeHandler;
+                await waitReady.Task;
+                if (_disposed) return;
+                connection.Fsm.OnReady -= completeHandler;
+            }
             _onConnectionListChange?.Invoke(connection);
         }
 

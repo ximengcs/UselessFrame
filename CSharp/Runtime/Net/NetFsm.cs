@@ -9,6 +9,13 @@ namespace UselessFrame.Net
         private NetFsmState<T> _current;
         private T _connection;
         private Dictionary<Type, NetFsmState<T>> _states;
+        private Action _onReady;
+
+        public event Action OnReady
+        {
+            add => _onReady += value;
+            remove => _onReady -= value;
+        }
 
         public NetFsmState<T> Current => _current;
 
@@ -26,6 +33,7 @@ namespace UselessFrame.Net
         public void Start<TState>() where TState : NetFsmState<T>
         {
             ChangeState(typeof(TState)).Forget();
+            _onReady?.Invoke();
         }
 
         public async UniTask ChangeState(Type type, MessageResult passMessage = default)
