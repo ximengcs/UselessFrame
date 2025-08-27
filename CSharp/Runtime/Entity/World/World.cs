@@ -1,8 +1,8 @@
 ﻿
-using Google.Protobuf;
 using IdGen;
-using System.Collections.Generic;
+using Google.Protobuf;
 using UselessFrame.Net;
+using System.Collections.Generic;
 using UselessFrame.NewRuntime.Randoms;
 using UselessFrame.NewRuntime.Utilities;
 
@@ -10,6 +10,7 @@ namespace UselessFrame.NewRuntime.ECS
 {
     public class World : Entity
     {
+        private Dictionary<long, Entity> _entities;
         private Dictionary<long, Scene> _scenes;
         private IdGenerator _idGenerator;
         private EntityEventManager _event;
@@ -36,12 +37,22 @@ namespace UselessFrame.NewRuntime.ECS
         protected override void OnInit()
         {
             base.OnInit();
+            _entities = new Dictionary<long, Entity>();
             _scenes = new Dictionary<long, Scene>();
             ITimeSource timeSource = new TimeTicksSource();
             _idGenerator = new IdGenerator(0, new IdGeneratorOptions(timeSource: timeSource));
             _random = new TimeRandom(timeSource);
             _event = new EntityEventManager();
             _event.Initialize(this);
+        }
+
+        public Entity FindEntity(long entityId)
+        {
+            if (_entities.TryGetValue(entityId, out Entity entity))
+            {
+                return entity;
+            }
+            return null;
         }
 
         internal void InitId()
@@ -68,22 +79,23 @@ namespace UselessFrame.NewRuntime.ECS
             return null;
         }
 
-        protected override void OnAddEntity(Entity entity)
+        internal void RegisterEntity(Entity entity)
         {
-            base.OnAddEntity(entity);
+            X.Log.Debug($"world RegisterEntity {entity.Id}");
             if (entity is Scene scene)
             {
                 _scenes.Add(scene.Id, scene);
             }
+            _entities.Add(entity.Id, entity);
         }
 
-        protected override void OnRemoveEntity(Entity entity)
+        internal void UnRegisterEntity(Entity entity)
         {
-            base.OnRemoveEntity(entity);
             if (entity is Scene scene)
             {
                 _scenes.Remove(scene.Id);
             }
+            _entities.Remove(entity.Id);
         }
     }
 }

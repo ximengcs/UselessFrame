@@ -47,6 +47,14 @@ namespace UselessFrame.NewRuntime.ECS
 
         private void NewConnectionHandler(IConnection connection)
         {
+            if (!_playersById.ContainsKey(connection.Id))
+            {
+                PlayerEntity entity = _world.AddEntity<PlayerEntity>();
+                IdComponent idComp = entity.GetOrAddComponent<IdComponent>();
+                idComp.Id = connection.Id;
+                _playersById.Add(connection.Id, entity.Id);
+            }
+
             connection.State.Subscribe(ConnectionStateHandler);
             connection.ReceiveMessageEvent += TriggerMessage;
         }
@@ -65,14 +73,6 @@ namespace UselessFrame.NewRuntime.ECS
             {
                 case ConnectionState.Run:
                     {
-                        if (!_playersById.ContainsKey(connection.Id))
-                        {
-                            PlayerEntity entity = _world.AddEntity<PlayerEntity>();
-                            IdComponent idComp = entity.GetOrAddComponent<IdComponent>();
-                            idComp.Id = connection.Id;
-                            _playersById.Add(connection.Id, entity.Id);
-                        }
-
                         RecursiveSyncEntity(connection, _world);
                         break;
                     }

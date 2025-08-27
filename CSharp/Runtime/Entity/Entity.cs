@@ -78,11 +78,13 @@ namespace UselessFrame.NewRuntime.ECS
         protected virtual void OnAddEntity(Entity entity)
         {
             _scene?.RegisterEntity(entity);
+            World.RegisterEntity(entity);
         }
 
         protected virtual void OnRemoveEntity(Entity entity)
         {
             _scene?.UnRegisterEntity(entity);
+            World.UnRegisterEntity(entity);
         }
 
         public Entity AddEntity(Type type)

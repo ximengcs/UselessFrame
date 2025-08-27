@@ -86,6 +86,7 @@ namespace UselessFrame.NewRuntime.ECS
             long sceneId = createMsg.SceneId;
             long parentId = createMsg.ParnetId;
             long entityId = createMsg.EntityId;
+            X.Log.Debug($"CreateEntity, {_world.Id} {entityId} {createMsg.EntityType} {createMsg}");
             if (sceneId != EntityExtensions.INVALID_ID)
             {
                 Scene scene = _world.GetScene(sceneId);
@@ -125,6 +126,7 @@ namespace UselessFrame.NewRuntime.ECS
                     string entityTypeName = createMsg.EntityType;
                     if (X.Type.TryGetType(entityTypeName, out Type type))
                     {
+                        X.Log.Debug($"world add entity {entityId}");
                         _world.AddEntity(type, entityId);
                     }
                 }
@@ -134,34 +136,24 @@ namespace UselessFrame.NewRuntime.ECS
         private void CreateComponent(IMessage message)
         {
             CreateComponentMessage createMsg = (CreateComponentMessage)message;
-            long sceneId = createMsg.SceneId;
-            if (sceneId != EntityExtensions.INVALID_ID)
+            long entityId = createMsg.EntityId;
+            X.Log.Debug($"CreateComponent, {entityId} {createMsg.ComponentType}");
+            Entity entity = _world.FindEntity(entityId);
+            if (entity != null)
             {
-                Scene scene = _world.GetScene(sceneId);
-                if (scene != null)
+                if (X.Type.TryGetType(createMsg.ComponentType, out Type compType))
                 {
-                    Entity entity = scene.FindEntity(createMsg.EntityId);
-                    if (entity != null)
-                    {
-                        if (X.Type.TryGetType(createMsg.ComponentType, out Type compType))
-                        {
-                            EntityComponent comp = (EntityComponent)MemoryPackSerializer.Deserialize(compType, createMsg.ComponentData.Span);
-                            entity.AddOrUpdateComponent(comp);
-                        }
-                        else
-                        {
-                            X.Log.Error($"add component error, component type is null {createMsg.ComponentType}");
-                        }
-                    }
-                    else
-                    {
-                        X.Log.Error($"add component error, entity is null {createMsg.EntityId}");
-                    }
+                    EntityComponent comp = (EntityComponent)MemoryPackSerializer.Deserialize(compType, createMsg.ComponentData.Span);
+                    entity.AddOrUpdateComponent(comp);
                 }
                 else
                 {
-                    X.Log.Error($"add component error, scene is null {sceneId}");
+                    X.Log.Error($"add component error, component type is null {createMsg.ComponentType}");
                 }
+            }
+            else
+            {
+                X.Log.Error($"add component error, entity is null {createMsg.EntityId}");
             }
         }
 

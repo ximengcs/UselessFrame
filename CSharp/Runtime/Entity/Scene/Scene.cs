@@ -9,8 +9,6 @@ namespace UselessFrame.NewRuntime.ECS
         private Dictionary<long, Entity> _entitiesRefId;
         private QuadTreeRectF<TransformComponent> _entitiesRefWorld;
 
-        public World World => (World)Parent;
-
         protected override void OnInit()
         {
             Scene = this;
