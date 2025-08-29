@@ -32,7 +32,6 @@ namespace UselessFrame.NewRuntime.ECS
 
         public static void Update(this EntityComponent component)
         {
-            Console.WriteLine($"update {component.GetType().Name}");
             component.Entity.UpdateComponent(component);
         }
 

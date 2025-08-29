@@ -178,7 +178,6 @@ namespace UselessFrame.NewRuntime.ECS
 
         internal void AddOrUpdateComponent(EntityComponent newComp)
         {
-            Console.WriteLine($"AddOrUpdateComponent {newComp.GetType().Name}");
             Type type = newComp.GetType();
             if (!_components.TryGetValue(type, out EntityComponent comp))
             {
@@ -211,7 +210,6 @@ namespace UselessFrame.NewRuntime.ECS
 
         public EntityComponent GetOrAddComponent(Type type)
         {
-            Console.WriteLine($"AddOrUpdateComponent2 {type.Name}");
             EntityComponent comp = GetComponent(type);
             if (comp != null) return comp;
 
@@ -224,7 +222,6 @@ namespace UselessFrame.NewRuntime.ECS
 
         public void UpdateComponent(EntityComponent newComp)
         {
-            Console.WriteLine("UpdateComponent");
             Type type = newComp.GetType();
             if (_components.TryGetValue(type, out EntityComponent comp))
             {

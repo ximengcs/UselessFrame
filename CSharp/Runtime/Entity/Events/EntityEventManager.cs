@@ -59,20 +59,16 @@ namespace UselessFrame.NewRuntime.ECS
 
         private void InitMessageHandler()
         {
-            Console.WriteLine($"InitMessageHandler {_messageHandles.Count}");
             foreach (var handlerEntry in _messageHandles)
             {
-                Console.WriteLine($"InitMessageHandler2 {handlerEntry.Value.Count}");
                 foreach (MethodHandle handle in handlerEntry.Value)
                 {
-                    Console.WriteLine($"InitMessageHandler3 {handle.Target.GetType().Name}");
                     if (handle.Target is IMessageHandler handler)
                     {
                         handler.OnInit(_world);
                     }
                 }
             }
-            Console.WriteLine($"InitMessageHandler--------");
         }
 
         private void CollectHandle(Type type1, Type type2, Type awakeDelegateType, Dictionary<Type, List<MethodHandle>> map)

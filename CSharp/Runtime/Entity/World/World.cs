@@ -81,7 +81,6 @@ namespace UselessFrame.NewRuntime.ECS
 
         internal void RegisterEntity(Entity entity)
         {
-            X.Log.Debug($"world RegisterEntity {entity.Id}");
             if (entity is Scene scene)
             {
                 _scenes.Add(scene.Id, scene);

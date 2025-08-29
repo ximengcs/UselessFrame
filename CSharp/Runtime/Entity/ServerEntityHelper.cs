@@ -90,7 +90,6 @@ namespace UselessFrame.NewRuntime.ECS
 
         private void RecursiveSyncEntity(IConnection connection, Entity entity)
         {
-            Console.WriteLine($"CreateEntity {entity.ToCreateMessage()}");
             connection.Send(entity.ToCreateMessage());
 
             foreach (EntityComponent component in entity.Components)
@@ -122,7 +121,6 @@ namespace UselessFrame.NewRuntime.ECS
         public void OnCreateComponent(EntityComponent component)
         {
             if (component.Entity.IsDisposed) return;
-            Console.WriteLine($"OnCreateComponent {component.Entity.Id} {component.GetType().Name}");
             _server.Broadcast(component.ToCreateMessage());
             _helper?.OnCreateComponent(component);
         }
@@ -130,7 +128,6 @@ namespace UselessFrame.NewRuntime.ECS
         public void OnUpdateComponent(EntityComponent component)
         {
             if (component.Entity.IsDisposed) return;
-            Console.WriteLine($"OnUpdateComponent {component.Entity.Id} {component.GetType().Name}");
             _server.Broadcast(component.ToUpdateMessage());
             _helper?.OnUpdateComponent(component);
         }
@@ -138,7 +135,6 @@ namespace UselessFrame.NewRuntime.ECS
         public void OnDestroyComponent(EntityComponent component)
         {
             if (component.Entity.IsDisposed) return;
-            Console.WriteLine($"OnDestroyComponent {component.Entity.Id} {component.GetType().Name}");
             _server.Broadcast(component.ToDestroyMessage());
             _helper?.OnDestroyComponent(component);
         }
