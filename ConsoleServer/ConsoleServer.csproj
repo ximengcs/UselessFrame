@@ -8,11 +8,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Compile Remove="Common\**" />
 		<Compile Remove="UselessFrame\**" />
 		<EmbeddedResource Remove="ApplicationLib\**" />
+		<EmbeddedResource Remove="Common\**" />
 		<EmbeddedResource Remove="Core\**" />
 		<EmbeddedResource Remove="UselessFrame\**" />
 		<None Remove="ApplicationLib\**" />
+		<None Remove="Common\**" />
 		<None Remove="Core\**" />
 		<None Remove="UselessFrame\**" />
 	</ItemGroup>
@@ -20,15 +23,16 @@
 	<ItemGroup>
 		<ProjectReference Include="..\XApplication\XApplication.csproj" />
 		<ProjectReference Include="..\XGraphics\XGraphics.csproj" />
+		<ProjectReference Include="Common\Common.csproj" />
 		<ProjectReference Include="UselessFrame\UselessFrame.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Reference Include="Common">
-	    <HintPath>..\Unity\Library\ScriptAssemblies\Common.dll</HintPath>
-	  </Reference>
 	  <Reference Include="UniTask">
 	    <HintPath>..\Unity\Library\ScriptAssemblies\UniTask.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Unity.Mathematics">
+	    <HintPath>..\Unity\Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
 	  </Reference>
 	</ItemGroup>
 

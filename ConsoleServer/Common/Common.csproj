@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Include="..\..\Unity\Assets\Common\**\*.cs">
+			<Link>%(RecursiveDir)%(FileName)%(Extension)</Link>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\UselessFrame\UselessFrame.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="Box2DSharp">
+		  <HintPath>..\..\Unity\Assets\Plugins\Box2DSharp\Box2DSharp.dll</HintPath>
+		</Reference>
+		<Reference Include="Google.Protobuf">
+			<HintPath>..\..\Unity\Assets\Plugins\Protobuf\Google.Protobuf.dll</HintPath>
+		</Reference>
+		<Reference Include="IdGen">
+			<HintPath>..\..\Unity\Assets\Plugins\IdGenerator\IdGen.dll</HintPath>
+		</Reference>
+		<Reference Include="MemoryPack">
+			<HintPath>..\..\Unity\Assets\Plugins\MemoryPack\MemoryPack.dll</HintPath>
+		</Reference>
+		<Reference Include="MemoryPack.Core">
+			<HintPath>..\..\Unity\Assets\Plugins\MemoryPack\MemoryPack.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Newtonsoft.Json">
+			<HintPath>..\..\Unity\Library\PackageCache\com.unity.nuget.newtonsoft-json@3.2.1\Runtime\Newtonsoft.Json.dll</HintPath>
+		</Reference>
+		<Reference Include="QuadTrees">
+			<HintPath>..\..\Unity\Assets\Plugins\QuadTrees\QuadTrees.dll</HintPath>
+		</Reference>
+		<Reference Include="System.CommandLine">
+			<HintPath>..\..\Unity\Assets\Plugins\Micro\System.CommandLine.dll</HintPath>
+		</Reference>
+		<Reference Include="UniTask">
+			<HintPath>..\..\Unity\Library\ScriptAssemblies\UniTask.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.Mathematics">
+			<HintPath>..\..\Unity\Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+</Project>
