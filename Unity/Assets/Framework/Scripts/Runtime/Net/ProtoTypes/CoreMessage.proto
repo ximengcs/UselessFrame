@@ -1,0 +1,123 @@
+
+message TestConnect
+{
+    required int32 RequestToken = 1;
+    required int64 Time = 2;
+}
+
+message TestConnectResponse
+{
+    required int32 ResponseToken = 1;
+}
+
+message CloseRequest
+{
+    required int32 RequestToken = 1;
+}
+
+message CloseResponse
+{
+    required int32 ResponseToken = 1;
+}
+
+message ServerTokenRequest
+{
+}
+
+message ServerToken
+{
+    required int64 Id = 1;
+    required int32 RequestToken = 2;
+}
+
+message ServerTokenVerify
+{
+    required int32 ResponseToken = 1;
+}
+
+message MessageTarget
+{
+    required int32 World = 2;
+    required int32 Scene = 3;
+}
+
+message StringMessage
+{
+    required MessageTarget Target = 1;
+    required string Content = 2;
+}
+
+message KeepAlive
+{
+}
+
+message CommandMessage
+{
+    required int32 RequestToken = 1;
+    required string CommandStr = 2;
+}
+
+message CommandResponseMessage
+{
+    required int32 ResponseToken = 1;
+    required string CommandResult = 2;
+    required int32 CommandCode = 3;
+}
+
+message TestLatencyMessage
+{
+    required int32 RequestToken = 1;
+}
+
+message TestLatencyResponseMessage
+{
+    required int32 ResponseToken = 1;
+}
+
+message TestServerTimeMessage
+{
+    required int32 RequestToken = 1;
+}
+
+message TestServerTimeResponseMessage
+{
+    required int32 ResponseToken = 1;
+    required int64 Time = 2;
+}
+
+message CreateEntityMessage
+{
+    required int64 SceneId = 1;
+    required int64 ParnetId = 2;
+    required int64 EntityId = 3;
+    required string EntityType = 4;
+}
+
+message DestroyEntityMessage
+{
+    required int64 SceneId = 1;
+    required int64 EntityId = 2;
+}
+
+message CreateComponentMessage
+{
+    required int64 SceneId = 1;
+    required int64 EntityId = 2;
+    required string ComponentType = 3;
+    required bytes ComponentData = 4;
+}
+
+message UpdateComponentMessage
+{
+    required int64 SceneId = 1;
+    required int64 EntityId = 2;
+    required string ComponentType = 3;
+    required bytes ComponentData = 4;
+}
+
+message DestroyComponentMessage
+{
+    required int64 SceneId = 1;
+    required int64 EntityId = 2;
+    required string ComponentType = 3;
+}

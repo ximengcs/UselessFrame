@@ -1,0 +1,1 @@
+ .\protoc.exe .\CoreMessage.proto  --csharp_out=./

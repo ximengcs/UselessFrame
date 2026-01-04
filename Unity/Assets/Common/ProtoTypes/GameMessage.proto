@@ -1,0 +1,8 @@
+
+message MoveMessage
+{
+    required int64 Scene = 1;
+    required int64 Entity = 2;
+    required float DirectionX = 3;
+    required float DirectionY = 4;
+}
