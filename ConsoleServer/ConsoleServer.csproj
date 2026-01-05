@@ -22,18 +22,23 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\XApplication\XApplication.csproj" />
-		<ProjectReference Include="..\XGraphics\XGraphics.csproj" />
 		<ProjectReference Include="Common\Common.csproj" />
 		<ProjectReference Include="UselessFrame\UselessFrame.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Reference Include="UniTask">
-	    <HintPath>..\Unity\Library\ScriptAssemblies\UniTask.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Unity.Mathematics">
-	    <HintPath>..\Unity\Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
-	  </Reference>
+		<Reference Include="Newtonsoft.Json">
+			<HintPath>..\Unity\Library\PackageCache\com.unity.nuget.newtonsoft-json@3.2.1\Runtime\Newtonsoft.Json.dll</HintPath>
+		</Reference>
+		<Reference Include="Google.Protobuf">
+			<HintPath>..\Unity\Assets\Plugins\Protobuf\Google.Protobuf.dll</HintPath>
+		</Reference>
+		<Reference Include="UniTask">
+			<HintPath>..\Unity\Library\ScriptAssemblies\UniTask.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.Mathematics">
+			<HintPath>..\Unity\Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
+		</Reference>
 	</ItemGroup>
 
 </Project>

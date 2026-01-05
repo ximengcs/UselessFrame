@@ -12,6 +12,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="MemoryPack.Generator" Version="1.21.4">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="UniTask" Version="2.5.10" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Reference Include="Google.Protobuf">
 	    <HintPath>..\..\Unity\Assets\Plugins\Protobuf\Google.Protobuf.dll</HintPath>
 	  </Reference>
@@ -32,9 +40,6 @@
 	  </Reference>
 	  <Reference Include="System.CommandLine">
 	    <HintPath>..\..\Unity\Assets\Plugins\Micro\System.CommandLine.dll</HintPath>
-	  </Reference>
-	  <Reference Include="UniTask">
-	    <HintPath>..\..\Unity\Library\ScriptAssemblies\UniTask.dll</HintPath>
 	  </Reference>
 	  <Reference Include="Unity.Mathematics">
 	    <HintPath>..\..\Unity\Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>

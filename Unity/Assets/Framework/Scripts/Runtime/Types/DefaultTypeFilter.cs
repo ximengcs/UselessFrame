@@ -7,7 +7,9 @@ namespace UselessFrame.Runtime.Types
     {
         public bool CheckAssembly(string assemblyName)
         {
-            if (assemblyName.StartsWith("Microsoft") || assemblyName.StartsWith("System"))
+            if (assemblyName.StartsWith("Microsoft") ||
+                assemblyName.StartsWith("System") ||
+                assemblyName.StartsWith("Unity"))
                 return false;
             return true;
         }

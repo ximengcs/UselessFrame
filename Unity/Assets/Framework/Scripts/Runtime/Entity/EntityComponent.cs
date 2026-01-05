@@ -4,7 +4,7 @@ using MemoryPack;
 namespace UselessFrame.NewRuntime.ECS
 {
     [MemoryPackable]
-    public partial class EntityComponent
+    public partial class EntityComponent  
     {
         private Entity _entity;
 
