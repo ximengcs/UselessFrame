@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Box2DSharp</id>
+    <version>0.6.0</version>
+    <title>Box2DSharp</title>
+    <authors>Zonciu Liang</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="file">LICENSE.txt</license>
+    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+    <projectUrl>https://github.com/Zonciu/Box2DSharp</projectUrl>
+    <description>A C# port of Box2D</description>
+    <copyright>Copyright © Zonciu Liang 2020</copyright>
+    <tags>2D C# Box2D Physic</tags>
+    <repository url="https://github.com/Zonciu/Box2DSharp" />
+    <dependencies>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="System.Memory" version="4.5.3" exclude="Build,Analyzers" />
+        <dependency id="System.Numerics.Vectors" version="4.5.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

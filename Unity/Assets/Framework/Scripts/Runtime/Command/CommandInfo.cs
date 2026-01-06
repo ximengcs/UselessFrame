@@ -84,14 +84,14 @@ namespace UselessFrame.NewRuntime.Commands
             ParseResult result = _command.Parse(cmd);
             if (result.Errors.Count > 0)
             {
-                TextWriter outputWriter = result.Configuration.Output;
-                TextWriter errorWriter = result.Configuration.Error;
+                TextWriter outputWriter = result.InvocationConfiguration.Output;
+                TextWriter errorWriter = result.InvocationConfiguration.Error;
                 StringWriter writer = new StringWriter();
-                result.Configuration.Output = writer;
-                result.Configuration.Error = writer;
+                result.InvocationConfiguration.Output = writer;
+                result.InvocationConfiguration.Error = writer;
                 result.Invoke();
-                result.Configuration.Output = outputWriter;
-                result.Configuration.Error = errorWriter;
+                result.InvocationConfiguration.Output = outputWriter;
+                result.InvocationConfiguration.Error = errorWriter;
                 return new CommandExecuteResult(CommandExecuteCode.FormatError, writer.ToString());
             }
             else

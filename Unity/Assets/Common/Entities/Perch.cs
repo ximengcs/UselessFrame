@@ -1,7 +1,5 @@
 ﻿
-using Box2DSharp.Dynamics;
-
-namespace IMGUITestShare.Entities
+namespace TestIMGUI.Entities
 {
     public class Perch
     {
