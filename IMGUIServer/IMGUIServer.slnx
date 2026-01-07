@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="../XApplication/XApplication.csproj" />
+  <Project Path="../XGraphics/XGraphics.csproj" />
+  <Project Path="Common/Common.csproj" />
+  <Project Path="IMGUIServer.csproj" />
+  <Project Path="UselessFrame/UselessFrame.csproj" />
+</Solution>

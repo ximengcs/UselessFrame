@@ -8,7 +8,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="NLog" Version="5.5.0" />
-		<ProjectReference Include="..\ConsoleServer\UselessFrame\UselessFrame.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\IMGUIServer\UselessFrame\UselessFrame.csproj" />
 	</ItemGroup>
 
 </Project>
