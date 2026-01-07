@@ -1,8 +1,8 @@
 ﻿
-using TestIMGUI.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 using UselessFrame.NewRuntime.ECS;
+using UselessFrameCommon.Entities;
 
 namespace TestGame
 {

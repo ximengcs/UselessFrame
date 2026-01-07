@@ -14,7 +14,7 @@ namespace UnityXFrame.Core.Diagnotics
             "Framework",
             "UselessFrame",
             "Assembly-CSharp",
-            "IMGUITestShare",
+            "Common",
         };
 
         public bool CheckAssembly(string assemblyName)

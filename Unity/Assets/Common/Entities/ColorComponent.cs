@@ -3,7 +3,7 @@ using MemoryPack;
 using Unity.Mathematics;
 using UselessFrame.NewRuntime.ECS;
 
-namespace TestIMGUI.Entities
+namespace UselessFrameCommon.Entities
 {
     [MemoryPackable]
     public partial class ColorComponent : EntityComponent

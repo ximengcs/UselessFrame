@@ -123,7 +123,7 @@ namespace TestGame
         private async void CheckLentency()
         {
             IConnection connection = _world.NetNode as IConnection;
-            if (connection != null)
+            if (connection != null && connection.State.Value != ConnectionState.None)
             {
                 LatencyResult result = await connection.TestLatency();
                 if (CheckOpenState())

@@ -1,5 +1,5 @@
 ﻿
-namespace TestIMGUI.Entities
+namespace UselessFrameCommon
 {
     public class Perch
     {

@@ -1,7 +1,7 @@
 ﻿
-using TestIMGUI.Entities;
 using UnityEngine;
 using UselessFrame.NewRuntime.ECS;
+using UselessFrameCommon.Entities;
 
 namespace TestGame
 {

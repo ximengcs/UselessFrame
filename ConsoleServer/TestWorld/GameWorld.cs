@@ -1,7 +1,7 @@
 ﻿
-using TestIMGUI.Entities;
 using UselessFrame.NewRuntime;
 using UselessFrame.NewRuntime.ECS;
+using UselessFrameCommon.Entities;
 
 namespace TestServer.TestWorld
 {

@@ -1,6 +1,6 @@
 ﻿
-using TestIMGUI.Entities;
 using UselessFrame.NewRuntime.ECS;
+using UselessFrameCommon.Entities;
 
 namespace TestIMGUI
 {
