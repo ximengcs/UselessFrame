@@ -1,5 +1,6 @@
 ﻿
 using Unity.Mathematics;
+using UselessFrame.NewRuntime;
 using UselessFrame.NewRuntime.ECS;
 
 namespace TestGame
@@ -10,7 +11,8 @@ namespace TestGame
         {
             comp.Position = comp.GetRandom().NextFloat3(new float3(-10, -10, 0), new float3(10, 10, 0));
             comp.Update();
-            Console.WriteLine($"TransformAwakeSystem OnAwake {comp.Position}");
+
+            X.Log.Debug($"{comp.Entity.Id} transform component awake -> {comp.Position}");
         }
     }
 }

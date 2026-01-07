@@ -1,4 +1,5 @@
 ﻿
+using UselessFrame.NewRuntime;
 using UselessFrame.NewRuntime.ECS;
 using UselessFrameCommon.Entities;
 
@@ -9,7 +10,7 @@ namespace TestIMGUI
         public void OnAwake(ColorComponent comp)
         {
             comp.Color = comp.GetRandom().RandHSVColor();
-            Console.WriteLine($"color {comp.Color}");
+            X.Log.Debug($" color change to {comp.Color}");
         }
     }
 }

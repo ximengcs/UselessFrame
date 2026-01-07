@@ -31,7 +31,6 @@ namespace TestServer
 
             CancellationTokenSource closeTokenSource = new CancellationTokenSource();
             FiberUtility.RunLoopSleep1(X.Update, closeTokenSource.Token, out _);
-            Console.WriteLine("Exit");
         }
 
         private static async UniTask ShowDebugInfo()
