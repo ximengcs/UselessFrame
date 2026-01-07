@@ -12,7 +12,6 @@ namespace TestGame
             if (parent != null)
             {
                 EntityView parentView = parent.GetComponent<EntityView>();
-                Debug.Log($"SceneViewSystem {parentView == null} {parent.GetType().Name} {parent.GetHashCode()}");
                 comp.GameObject.transform.SetParent(parentView.GameObject.transform);
             }
         }

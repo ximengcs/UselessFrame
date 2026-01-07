@@ -92,8 +92,9 @@ namespace UselessFrame.Net
                 { typeof(DisposeState), new DisposeState() },
                 { typeof(RunState), new RunState() },
                 { typeof(TokenCheck), new TokenVerifyState() }
-
             });
+
+            X.Log.Debug(FrameLogType.Net, $"create server's connection({_id}|{_remoteIP}) fiber");
             _runFiber = X.Fiber.Create();
             _runFiber.Post(ToFiberFun.RunCheckOnFiber, _fsm);
         }
@@ -123,6 +124,8 @@ namespace UselessFrame.Net
                 { typeof(TokenCheck), new TokenResponseState() }
 
             });
+
+            X.Log.Debug(FrameLogType.Net, $"create connection({_id}|{_remoteIP}) fiber");
             _runFiber = X.Fiber.Create();
             _runFiber.Post(ToFiberFun.RunConnectOnFiber, _fsm);
         }
