@@ -6,7 +6,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Include="..\..\Unity\Assets\Common\**\*.cs">
+		<Compile Include="..\Unity\Assets\Common\**\*.cs">
 			<Link>%(RecursiveDir)%(FileName)%(Extension)</Link>
 		</Compile>
 	</ItemGroup>
@@ -21,7 +21,7 @@
 		</PackageReference>
 
 		<Reference Include="MemoryPack.Core">
-			<HintPath>..\..\Unity\Assets\Packages\MemoryPack.Core.1.21.4\lib\netstandard2.1\MemoryPack.Core.dll</HintPath>
+			<HintPath>..\Unity\Assets\Packages\MemoryPack.Core.1.21.4\lib\netstandard2.1\MemoryPack.Core.dll</HintPath>
 		</Reference>
 
 		<PackageReference Include="UniTask" Version="2.5.10" />
@@ -32,7 +32,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\UselessFrame\UselessFrame.csproj" />
+	  <ProjectReference Include="..\Core\UselessFrame.csproj" />
 	</ItemGroup>
 
 </Project>

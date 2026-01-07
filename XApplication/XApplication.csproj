@@ -11,7 +11,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\IMGUIServer\UselessFrame\UselessFrame.csproj" />
+	  <ProjectReference Include="..\Core\UselessFrame.csproj" />
 	</ItemGroup>
 
 </Project>

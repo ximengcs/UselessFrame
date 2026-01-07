@@ -10,7 +10,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Include="..\..\Unity\Assets\Framework\Scripts\Runtime\**\*.cs">
+		<Compile Include="..\Unity\Assets\Framework\Scripts\Runtime\**\*.cs">
 			<Link>%(RecursiveDir)%(FileName)%(Extension)</Link>
 		</Compile>
 	</ItemGroup>
@@ -22,7 +22,7 @@
 		</PackageReference>
 
 		<Reference Include="MemoryPack.Core">
-			<HintPath>..\..\Unity\Assets\Packages\MemoryPack.Core.1.21.4\lib\netstandard2.1\MemoryPack.Core.dll</HintPath>
+			<HintPath>..\Unity\Assets\Packages\MemoryPack.Core.1.21.4\lib\netstandard2.1\MemoryPack.Core.dll</HintPath>
 		</Reference>
 
 		<PackageReference Include="Google.Protobuf" Version="3.33.2" />

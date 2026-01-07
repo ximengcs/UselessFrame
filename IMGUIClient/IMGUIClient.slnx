@@ -3,5 +3,5 @@
   <Project Path="../Core/UselessFrame.csproj" />
   <Project Path="../XApplication/XApplication.csproj" />
   <Project Path="../XGraphics/XGraphics.csproj" />
-  <Project Path="IMGUIServer.csproj" />
+  <Project Path="IMGUIClient.csproj" />
 </Solution>

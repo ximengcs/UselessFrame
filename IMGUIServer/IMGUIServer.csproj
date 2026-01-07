@@ -21,10 +21,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Common\Common.csproj" />
+		<ProjectReference Include="..\Core\UselessFrame.csproj" />
 		<ProjectReference Include="..\XApplication\XApplication.csproj" />
 		<ProjectReference Include="..\XGraphics\XGraphics.csproj" />
-		<ProjectReference Include="Common\Common.csproj" />
-		<ProjectReference Include="UselessFrame\UselessFrame.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
