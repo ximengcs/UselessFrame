@@ -1,6 +1,8 @@
 ﻿
 using QFSW.QC;
+using System;
 using UnityEngine;
+using UselessFrame.NewRuntime;
 
 namespace Game.Commands
 {
@@ -16,7 +18,10 @@ namespace Game.Commands
         [CommandDescription("print test logs with debug")]
         public void PrintDebug()
         {
-            Debug.Log("test");
+            foreach (Type type in X.Type.Types)
+            {
+                Debug.Log(type.FullName);
+            }
         }
 
         [Command("t2", MonoTargetType.Registry)]
