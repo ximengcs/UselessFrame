@@ -177,15 +177,15 @@ namespace UselessFrame.NewRuntime
                     Type attrType = _setting.ModuleAttributes[i];
                     ITypeCollection collection = _typeManager.GetOrNewWithAttr(attrType);
                     foreach (Type type in collection)
-                        await _moduleCore.Add(type, null);
+                        await _moduleCore.Add(type, null, default);
                 }
             }
 
             if (_setting.Modules != null)
             {
-                foreach (ValueTuple<Type, object> entry in _setting.Modules)
+                foreach (ValueTuple<Type, object, int> entry in _setting.Modules)
                 {
-                    await _moduleCore.Add(entry.Item1, entry.Item2);
+                    await _moduleCore.Add(entry.Item1, entry.Item2, entry.Item3);
                 }
             }
         }

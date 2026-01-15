@@ -63,27 +63,15 @@ namespace UselessFrame.ResourceManager
 
         protected abstract UniTask<object> LoadAsync(Type type, string resPath);
 
-        void IResourceHelper.Unload<T>(string resPath)
+        void IResourceHelper.Unload(object asset)
         {
-            resPath = GetResPath(resPath);
             if (_toResHelper != null)
-                _toResHelper.Unload<T>(resPath);
+                _toResHelper.Unload(asset);
             else
-                Unload<T>(resPath);
+                Unload(asset);
         }
 
-        protected abstract void Unload<T>(string resPath);
-
-        void IResourceHelper.Unload(Type type, string resPath)
-        {
-            resPath = GetResPath(resPath);
-            if (_toResHelper != null)
-                _toResHelper.Unload(type, resPath);
-            else
-                Unload(type, resPath);
-        }
-
-        protected abstract void Unload(Type type, string resPath);
+        protected abstract void Unload(object asset);
 
         void IResourceHelper.Unload()
         {

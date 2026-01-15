@@ -74,10 +74,10 @@ namespace UselessFrame.Runtime
             return _driver.Get(type, id);
         }
 
-        public async UniTask<IModule> Add(Type type, object param)
+        public async UniTask<IModule> Add(Type type, object param, int id)
         {
             _sw.Restart();
-            IModule module = await _driver.Add(type, param);
+            IModule module = await _driver.Add(type, param, id);
             _sw.Stop();
             X.Log.Debug(FrameLogType.System, $"add module {type.Name}, spent time {_sw.ElapsedMilliseconds}");
             return module;

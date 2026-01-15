@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UselessFrame.NewRuntime;
 using UselessFrame.Runtime.Pools;
 using ModuleList = UselessFrame.Runtime.Collections.XList<UselessFrame.Runtime.ModuleBase>;
@@ -35,10 +36,18 @@ namespace UselessFrame.Runtime.Collections
 
         public ModuleBase Add(Type type, int id)
         {
-            if (!_modules.TryGetValue(type, out var moduleList))
+            Attribute attr = type.GetCustomAttribute(typeof(ModuleAttribute));
+            Type targetType = type;
+            if (attr != null)
+            {
+                ModuleAttribute mAttr = (ModuleAttribute)attr;
+                targetType = mAttr.Type;
+            }
+
+            if (!_modules.TryGetValue(targetType, out var moduleList))
             {
                 moduleList = new Dictionary<int, ModuleBase>();
-                _modules[type] = moduleList;
+                _modules[targetType] = moduleList;
             }
 
             if (!moduleList.ContainsKey(id))

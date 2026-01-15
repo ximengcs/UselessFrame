@@ -18,6 +18,8 @@ namespace UselessFrameUnity
         [SerializeField]
         private FrameworkSetting frameworkSetting;
 
+        private IResourceHelper _resourcesHelper;
+
         public FrameworkSetting Setting => frameworkSetting;
 
         private void Awake()
@@ -26,6 +28,12 @@ namespace UselessFrameUnity
         }
 
         private async void Start()
+        {
+            _resourcesHelper = new ResourcesHelper();
+            InitFramework();
+        }
+
+        private async void InitFramework()
         {
             InitApplicationSetting();
             await X.Initialize(InitFrameSetting());
@@ -45,8 +53,8 @@ namespace UselessFrameUnity
             };
             setting.Modules = new[]
             {
-                ValueTuple.Create<Type, object>(typeof(ResourceModule), null),
-                ValueTuple.Create(typeof(UIModule), globalCanvas),
+                ValueTuple.Create<Type, object, int>(typeof(ResourceModule), _resourcesHelper, C.LOCAL_ID),
+                ValueTuple.Create(typeof(UIModule), globalCanvas, C.DEFAULT_ID),
             };
             setting.EntranceProcedure = "TestGame.TestProcedure";
             return setting;
@@ -54,7 +62,7 @@ namespace UselessFrameUnity
 
         private void InitApplicationSetting()
         {
-            int refreshRate = Screen.currentResolution.refreshRate;
+            int refreshRate = (int)Math.Round(Screen.currentResolution.refreshRateRatio.value);
             Application.targetFrameRate = refreshRate;
             QualitySettings.vSyncCount = 1;
         }

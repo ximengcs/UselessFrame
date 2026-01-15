@@ -14,7 +14,7 @@ namespace UselessFrame.NewRuntime
 
         public Type[] ModuleAttributes;
 
-        public ValueTuple<Type, object>[] Modules;
+        public ValueTuple<Type, object, int>[] Modules;
 
         public string ArchivePath;
 

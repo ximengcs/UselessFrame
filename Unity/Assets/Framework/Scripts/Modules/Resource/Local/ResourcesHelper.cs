@@ -20,29 +20,26 @@ namespace UselessFrame.ResourceManager
             return Resources.Load(resPath, type);
         }
 
-        protected override UniTask<T> LoadAsync<T>(string resPath)
+        protected override async UniTask<T> LoadAsync<T>(string resPath)
         {
-            throw new NotImplementedException();
+            object asset = Load(typeof(T), resPath);
+            return (T)asset;
         }
 
-        protected override UniTask<object> LoadAsync(Type type, string resPath)
+        protected override async UniTask<object> LoadAsync(Type type, string resPath)
         {
-            Resources.LoadAsync(resPath, type);
+            AsyncState state = new AsyncState(Resources.LoadAsync(resPath, type));
+            return await state.Load();
         }
 
-        protected override void Unload<T>(string resPath)
+        protected override void Unload(object asset)
         {
-            throw new NotImplementedException();
-        }
-
-        protected override void Unload(Type type, string resPath)
-        {
-            throw new NotImplementedException();
+            Resources.UnloadAsset((UnityEngine.Object)asset);
         }
 
         protected override void Unload()
         {
-            throw new NotImplementedException();
+            Resources.UnloadUnusedAssets();
         }
 
         protected override string GetResPath(string resPath)

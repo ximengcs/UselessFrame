@@ -61,16 +61,8 @@ namespace UselessFrame.Runtime
             return _modules.Get(type, id);
         }
 
-        public async UniTask<IModule> Add(Type type, object param)
+        public async UniTask<IModule> Add(Type type, object param, int id)
         {
-            int id = default;
-            Attribute attr = type.GetCustomAttribute(typeof(ModuleAttribute));
-            if (attr != null)
-            {
-                ModuleAttribute mAttr = (ModuleAttribute)attr;
-                id = mAttr.Id;
-            }
-
             ModuleBase module = _modules.Add(type, id);
             if (module != null)
             {

@@ -1,10 +1,9 @@
 ﻿
 using System;
 using UnityEngine;
-using UselessFrame.NewRuntime;
 using Cysharp.Threading.Tasks;
-using UselessFrame.ResourceManager;
 using UselessFrame.Runtime.Pools;
+using UselessFrameUnity;
 
 namespace UselessFrame.UIElements
 {
@@ -25,7 +24,7 @@ namespace UselessFrame.UIElements
             Debug.Log($"factory  {type.Name} {poolKey}");
             int useResModule = poolKey;
             string uiPath = InnerUIPath(type);
-            GameObject prefab = X.Module.Get<ResourceModule>().Load<GameObject>(uiPath);
+            GameObject prefab = G.LocalRes.Load<GameObject>(uiPath);
             if (prefab == null)
                 throw new Exception($"UI prefab is null, {uiPath} {type.FullName}");
             GameObject inst = GameObject.Instantiate(prefab);
@@ -42,7 +41,7 @@ namespace UselessFrame.UIElements
         {
             int useResModule = poolKey;
             string uiPath = InnerUIPath(type);
-            GameObject prefab = await X.Module.Get<ResourceModule>().LoadAsync<GameObject>(uiPath);
+            GameObject prefab = await G.LocalRes.LoadAsync<GameObject>(uiPath);
             if (prefab == null)
                 throw new Exception($"UI prefab is null, {uiPath} {type.FullName}");
             GameObject inst = GameObject.Instantiate(prefab);

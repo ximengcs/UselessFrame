@@ -16,9 +16,7 @@ namespace UselessFrame.ResourceManager
 
         UniTask<object> LoadAsync(Type type, string resPath);
 
-        void Unload<T>(string resPath);
-
-        void Unload(Type type, string resPath);
+        void Unload(object asset);
 
         void Unload();
     }

@@ -1,22 +1,27 @@
-﻿using Cysharp.Threading.Tasks;
-using UnityEngine;
-using UselessFrame.Runtime;
+﻿using UselessFrame.Runtime;
+using Cysharp.Threading.Tasks;
 
 namespace UselessFrame.ResourceManager
 {
-    public class ResourceModule : ModuleBase
+    [Module(typeof(IResourceModule))]
+    public class ResourceModule : ModuleBase, IResourceModule
     {
-        public T Load<T>(string path)
+        private IResourceHelper _helper;
+
+        protected override void OnInit(object param)
         {
-            return (T)(object)Resources.Load(path, typeof(T));
+            base.OnInit(param);
+            _helper = (IResourceHelper)param;
         }
 
-        public async UniTask<T> LoadAsync<T>(string path)
+        public T Load<T>(string path)
         {
-            ResourceRequest request = Resources.LoadAsync(path, typeof(T));
-            UniTaskCompletionSource<T> source = new UniTaskCompletionSource<T>();
-            request.completed += (op) => source.TrySetResult((T)(object)((ResourceRequest)op).asset);
-            return await source.Task;
+            return _helper.Load<T>(path);
+        }
+
+        public UniTask<T> LoadAsync<T>(string path)
+        {
+            return _helper.LoadAsync<T>(path);
         }
     }
 }

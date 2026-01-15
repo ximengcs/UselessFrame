@@ -5,11 +5,11 @@ namespace UselessFrame.Runtime
 {
     public class ModuleAttribute : Attribute
     {
-        public int Id { get; }
+        public Type Type { get; }
 
-        public ModuleAttribute(int id)
+        public ModuleAttribute(Type type)
         {
-            Id = id;
+            Type = type;
         }
     }
 }
