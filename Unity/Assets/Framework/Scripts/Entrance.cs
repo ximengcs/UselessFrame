@@ -19,6 +19,7 @@ namespace UselessFrameUnity
         private FrameworkSetting frameworkSetting;
 
         private IResourceHelper _resourcesHelper;
+        private IResourceHelper _remoteResourceHelper;
 
         public FrameworkSetting Setting => frameworkSetting;
 
@@ -30,6 +31,8 @@ namespace UselessFrameUnity
         private async void Start()
         {
             _resourcesHelper = new ResourcesHelper();
+            _remoteResourceHelper = new YooAssetHelper();
+
             InitFramework();
         }
 
@@ -54,6 +57,7 @@ namespace UselessFrameUnity
             setting.Modules = new[]
             {
                 ValueTuple.Create<Type, object, int>(typeof(ResourceModule), _resourcesHelper, C.LOCAL_ID),
+                ValueTuple.Create<Type, object, int>(typeof(ResourceModule), _remoteResourceHelper, C.COMMON_ID),
                 ValueTuple.Create(typeof(UIModule), globalCanvas, C.DEFAULT_ID),
             };
             setting.EntranceProcedure = "TestGame.TestProcedure";

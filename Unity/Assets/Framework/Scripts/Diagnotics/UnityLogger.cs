@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace UnityXFrame.Core.Diagnotics
 {
-    public partial class UnityLogger : UselessFrame.NewRuntime.ILogger
+    public partial class UnityLogger : UselessFrame.NewRuntime.ILogger, YooAsset.ILogger
     {
         private bool m_MustRegister;
         private Formater m_Formater;
@@ -18,6 +18,21 @@ namespace UnityXFrame.Core.Diagnotics
         public void Register(string name, Color color)
         {
             m_Formater.Register(name, color);
+        }
+
+        void YooAsset.ILogger.Log(string message)
+        {
+            Debug(LogSort.Resource, message);
+        }
+
+        void YooAsset.ILogger.Warning(string message)
+        {
+            Warning(LogSort.Resource, message);
+        }
+
+        void YooAsset.ILogger.Error(string message)
+        {
+            Error(LogSort.Resource, message);
         }
 
         [HideInCallstack]
